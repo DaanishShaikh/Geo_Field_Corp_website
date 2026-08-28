@@ -1,0 +1,28 @@
+{
+  "name": "uco-trace-frontend",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "html5-qrcode": "^2.3.8",
+    "idb": "^8.0.3",
+    "lucide-vue-next": "^1.0.0",
+    "mapbox-gl": "^3.19.0",
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
+    "@tailwindcss/vite": "^4.3.3",
+    "@vitejs/plugin-vue": "^5.2.1",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^4.3.3",
+    "vite": "^6.2.0"
+  }
+}

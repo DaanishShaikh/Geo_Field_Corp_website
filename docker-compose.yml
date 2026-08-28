@@ -1,0 +1,80 @@
+version: '3.8'
+
+services:
+  # 1. PostgreSQL Database
+  db:
+    image: postgres:16-alpine
+    container_name: ruco_postgres
+    restart: always
+    environment:
+      POSTGRES_DB: ruco_platform
+      POSTGRES_USER: ruco_user
+      POSTGRES_PASSWORD: ruco_secure_password_2026
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ruco_user -d ruco_platform"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # 2. Redis Message Broker & Cache
+  redis:
+    image: redis:7-alpine
+    container_name: ruco_redis
+    restart: always
+    ports:
+      - "6379:6379"
+
+  # 3. Flask + Gunicorn Web App
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ruco_web
+    restart: always
+    environment:
+      - DATABASE_URL=postgresql://ruco_user:ruco_secure_password_2026@db:5432/ruco_platform
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+      - SECRET_KEY=geofield-ruco-uco-production-secret-key-2026
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    ports:
+      - "5000:5000"
+
+  # 4. Celery Background Worker (PDF generation, async batch processing)
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ruco_celery_worker
+    restart: always
+    command: celery -A backend.services.celery_tasks.celery_app worker --loglevel=info
+    environment:
+      - DATABASE_URL=postgresql://ruco_user:ruco_secure_password_2026@db:5432/ruco_platform
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - db
+      - redis
+
+  # 5. Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: ruco_nginx
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./deploy/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - web
+
+volumes:
+  pgdata:
