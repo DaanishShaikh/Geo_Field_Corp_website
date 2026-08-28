@@ -1,5 +1,6 @@
 import os
 import hashlib
+import tempfile
 from datetime import datetime
 from fpdf import FPDF
 from backend.services.qr_service import generate_qr_bytes
@@ -360,7 +361,7 @@ def render_fpdf_certificate(receipt, seller, agent, cert_id, output_path):
     
     # QR code placeholder / generation
     qr_bytes = generate_qr_bytes(f"RUCO-CERT:{cert_id}:{receipt.id}:{vol}L:{fssai_no}")
-    qr_temp_path = output_path.replace(".pdf", "_qr.png")
+    qr_temp_path = os.path.join(tempfile.gettempdir(), f"{cert_id}_qr.png")
     with open(qr_temp_path, "wb") as f:
         f.write(qr_bytes)
     
@@ -399,13 +400,12 @@ def render_fpdf_certificate(receipt, seller, agent, cert_id, output_path):
     pdf.output(output_path)
 
 def generate_disposal_pdf(receipt, seller, agent, cert_id, output_dir):
-    os.makedirs(output_dir, exist_ok=True)
-    pdf_path = os.path.join(output_dir, f"{cert_id}.pdf")
-    
+    # On serverless (Vercel), /tmp is the only writable dir
     try:
-        render_weasyprint_pdf(receipt, seller, agent, cert_id, pdf_path)
-    except Exception as e:
-        # Fallback to fpdf2 if WeasyPrint system cairo/pango libraries aren't installed on Windows
-        render_fpdf_certificate(receipt, seller, agent, cert_id, pdf_path)
-        
+        os.makedirs(output_dir, exist_ok=True)
+        pdf_path = os.path.join(output_dir, f"{cert_id}.pdf")
+    except OSError:
+        pdf_path = os.path.join(tempfile.gettempdir(), f"{cert_id}.pdf")
+
+    render_fpdf_certificate(receipt, seller, agent, cert_id, pdf_path)
     return pdf_path

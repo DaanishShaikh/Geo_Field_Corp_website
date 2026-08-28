@@ -1,23 +1,30 @@
 import os
 from flask import Flask, send_from_directory, jsonify
 from flask_login import LoginManager
-from flask_migrate import Migrate
 from backend.config import Config
 from backend.models import db, User
 from backend.routes import auth_bp, seller_bp, agent_bp, admin_bp, api_bp
 
 def create_app(config_class=Config):
-    app = Flask(__name__, static_folder=os.path.join(os.path.dirname(__file__), "..", "frontend", "dist"), static_url_path="")
+    app = Flask(__name__, static_folder=None)
     app.config.from_object(config_class)
 
-    # Ensure required data directories exist
-    os.makedirs(app.config["CERTIFICATES_DIR"], exist_ok=True)
-    os.makedirs(app.config["QR_CODES_DIR"], exist_ok=True)
-    os.makedirs(os.path.join(os.path.dirname(__file__), "data"), exist_ok=True)
+    # Ensure required data directories exist (skip on read-only serverless)
+    try:
+        os.makedirs(app.config.get("CERTIFICATES_DIR", "/tmp/certs"), exist_ok=True)
+        os.makedirs(app.config.get("QR_CODES_DIR", "/tmp/qr"), exist_ok=True)
+    except OSError:
+        pass
 
-    # Initialize extensions
+    # Initialize database
     db.init_app(app)
-    Migrate(app, db)
+
+    # Auto-create tables on first cold start (serverless-safe)
+    with app.app_context():
+        try:
+            db.create_all()
+        except Exception as e:
+            app.logger.warning(f"db.create_all() skipped: {e}")
 
     login_manager = LoginManager()
     login_manager.init_app(app)
@@ -25,7 +32,7 @@ def create_app(config_class=Config):
 
     @login_manager.user_loader
     def load_user(user_id):
-        return User.query.get(user_id)
+        return db.session.get(User, user_id)
 
     @login_manager.unauthorized_handler
     def unauthorized():
@@ -38,7 +45,8 @@ def create_app(config_class=Config):
     app.register_blueprint(admin_bp)
     app.register_blueprint(api_bp)
 
-    # Serve Vue Frontend Single Page Application / PWA assets
+    # Serve Vue Frontend SPA — served by Vercel CDN in production,
+    # but keep fallback for local development
     @app.route("/", defaults={"path": ""})
     @app.route("/<path:path>")
     def serve_frontend(path):
@@ -47,22 +55,15 @@ def create_app(config_class=Config):
             return send_from_directory(dist_dir, path)
         elif os.path.exists(os.path.join(dist_dir, "index.html")):
             return send_from_directory(dist_dir, "index.html")
-        else:
-            # Fallback to public index if dist not built yet
-            public_dir = os.path.join(os.path.dirname(__file__), "..", "frontend", "public")
-            if os.path.exists(os.path.join(public_dir, "index.html")):
-                return send_from_directory(public_dir, "index.html")
-            return jsonify({
-                "message": "RUCO Logistics Platform Backend API is running.",
-                "status_url": "/api/status",
-                "login_url": "/api/auth/login"
-            })
+        return jsonify({
+            "message": "RUCO Logistics Platform API is running.",
+            "status_url": "/api/status"
+        })
 
     return app
 
+# Vercel / gunicorn entrypoint
 app = create_app()
 
 if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()
     app.run(host="0.0.0.0", port=5000, debug=True)
