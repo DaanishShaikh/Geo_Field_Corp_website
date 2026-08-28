@@ -2,7 +2,7 @@
   "framework": null,
   "buildCommand": "cd frontend && rm -rf node_modules && npm install --foreground-scripts && npm run build",
   "outputDirectory": "frontend/dist",
-  "installCommand": "pip install -r requirements.txt",
+  "installCommand": "pip install --break-system-packages -r requirements.txt",
   "routes": [
     {
       "src": "/api/(.*)",
