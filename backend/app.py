@@ -9,6 +9,14 @@ def create_app(config_class=Config):
     app = Flask(__name__, static_folder=None)
     app.config.from_object(config_class)
 
+    # On Vercel (HTTPS), session cookies must be Secure
+    is_production = os.environ.get("VERCEL") or os.environ.get("DATABASE_URL", "").startswith("postgresql")
+    app.config["SESSION_COOKIE_SECURE"] = bool(is_production)
+    app.config["SESSION_COOKIE_SAMESITE"] = "None" if is_production else "Lax"
+    app.config["SESSION_COOKIE_HTTPONLY"] = True
+    app.config["REMEMBER_COOKIE_SECURE"] = bool(is_production)
+    app.config["REMEMBER_COOKIE_SAMESITE"] = "None" if is_production else "Lax"
+
     # Ensure required data directories exist (skip on read-only serverless)
     try:
         os.makedirs(app.config.get("CERTIFICATES_DIR", "/tmp/certs"), exist_ok=True)
@@ -45,8 +53,39 @@ def create_app(config_class=Config):
     app.register_blueprint(admin_bp)
     app.register_blueprint(api_bp)
 
-    # Serve Vue Frontend SPA — served by Vercel CDN in production,
-    # but keep fallback for local development
+    # Global JSON error handlers — prevents raw HTML 500 pages reaching the frontend
+    @app.errorhandler(400)
+    def bad_request(e):
+        return jsonify({"error": "Bad request", "details": str(e)}), 400
+
+    @app.errorhandler(401)
+    def unauthorized_error(e):
+        return jsonify({"error": "Authentication required"}), 401
+
+    @app.errorhandler(403)
+    def forbidden(e):
+        return jsonify({"error": "Forbidden"}), 403
+
+    @app.errorhandler(404)
+    def not_found(e):
+        # For SPA routing — return index.html for unknown paths
+        dist_dir = os.path.join(os.path.dirname(__file__), "..", "frontend", "dist")
+        if os.path.exists(os.path.join(dist_dir, "index.html")):
+            return send_from_directory(dist_dir, "index.html")
+        return jsonify({"error": "Not found"}), 404
+
+    @app.errorhandler(500)
+    def internal_error(e):
+        db.session.rollback()
+        return jsonify({"error": "Internal server error", "details": str(e)}), 500
+
+    @app.errorhandler(Exception)
+    def handle_exception(e):
+        db.session.rollback()
+        app.logger.error(f"Unhandled exception: {e}", exc_info=True)
+        return jsonify({"error": "Server error", "details": str(e)}), 500
+
+    # Serve Vue Frontend SPA for local development
     @app.route("/", defaults={"path": ""})
     @app.route("/<path:path>")
     def serve_frontend(path):

@@ -27,11 +27,11 @@ def register():
     # Generate unique user ID
     if role == "seller":
         user_id = f"SELL-{random.randint(1000, 9999)}"
-        while User.query.get(user_id):
+        while db.session.get(User, user_id):
             user_id = f"SELL-{random.randint(1000, 9999)}"
     else:
         user_id = f"AGT-{random.randint(500, 999)}"
-        while User.query.get(user_id):
+        while db.session.get(User, user_id):
             user_id = f"AGT-{random.randint(500, 999)}"
 
     # New users start as pending per specification
