@@ -9,30 +9,16 @@ def create_app(config_class=Config):
     app = Flask(__name__, static_folder=None)
     app.config.from_object(config_class)
 
-    # On Vercel (HTTPS), session cookies must be Secure
-    is_production = os.environ.get("VERCEL") or os.environ.get("DATABASE_URL", "").startswith("postgresql")
-    app.config["SESSION_COOKIE_SECURE"] = bool(is_production)
+    # On Vercel (HTTPS), session cookies must be Secure + SameSite=None
+    is_production = bool(os.environ.get("VERCEL") or os.environ.get("DATABASE_URL", "").startswith("postgresql"))
+    app.config["SESSION_COOKIE_SECURE"] = is_production
     app.config["SESSION_COOKIE_SAMESITE"] = "None" if is_production else "Lax"
     app.config["SESSION_COOKIE_HTTPONLY"] = True
-    app.config["REMEMBER_COOKIE_SECURE"] = bool(is_production)
+    app.config["REMEMBER_COOKIE_SECURE"] = is_production
     app.config["REMEMBER_COOKIE_SAMESITE"] = "None" if is_production else "Lax"
 
-    # Ensure required data directories exist (skip on read-only serverless)
-    try:
-        os.makedirs(app.config.get("CERTIFICATES_DIR", "/tmp/certs"), exist_ok=True)
-        os.makedirs(app.config.get("QR_CODES_DIR", "/tmp/qr"), exist_ok=True)
-    except OSError:
-        pass
-
-    # Initialize database
+    # Initialize database extension only (no connection yet)
     db.init_app(app)
-
-    # Auto-create tables on first cold start (serverless-safe)
-    with app.app_context():
-        try:
-            db.create_all()
-        except Exception as e:
-            app.logger.warning(f"db.create_all() skipped: {e}")
 
     login_manager = LoginManager()
     login_manager.init_app(app)
@@ -40,7 +26,10 @@ def create_app(config_class=Config):
 
     @login_manager.user_loader
     def load_user(user_id):
-        return db.session.get(User, user_id)
+        try:
+            return db.session.get(User, user_id)
+        except Exception:
+            return None
 
     @login_manager.unauthorized_handler
     def unauthorized():
@@ -53,7 +42,7 @@ def create_app(config_class=Config):
     app.register_blueprint(admin_bp)
     app.register_blueprint(api_bp)
 
-    # Global JSON error handlers — prevents raw HTML 500 pages reaching the frontend
+    # Global JSON error handlers
     @app.errorhandler(400)
     def bad_request(e):
         return jsonify({"error": "Bad request", "details": str(e)}), 400
@@ -68,7 +57,6 @@ def create_app(config_class=Config):
 
     @app.errorhandler(404)
     def not_found(e):
-        # For SPA routing — return index.html for unknown paths
         dist_dir = os.path.join(os.path.dirname(__file__), "..", "frontend", "dist")
         if os.path.exists(os.path.join(dist_dir, "index.html")):
             return send_from_directory(dist_dir, "index.html")
@@ -76,12 +64,18 @@ def create_app(config_class=Config):
 
     @app.errorhandler(500)
     def internal_error(e):
-        db.session.rollback()
+        try:
+            db.session.rollback()
+        except Exception:
+            pass
         return jsonify({"error": "Internal server error", "details": str(e)}), 500
 
     @app.errorhandler(Exception)
     def handle_exception(e):
-        db.session.rollback()
+        try:
+            db.session.rollback()
+        except Exception:
+            pass
         app.logger.error(f"Unhandled exception: {e}", exc_info=True)
         return jsonify({"error": "Server error", "details": str(e)}), 500
 
@@ -100,9 +94,3 @@ def create_app(config_class=Config):
         })
 
     return app
-
-# Vercel / gunicorn entrypoint
-app = create_app()
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
