@@ -41,6 +41,28 @@ restful_api.add_resource(SystemStatusResource, "/status")
 restful_api.add_resource(QRCodeResource, "/qr/generate")
 
 
+@api_bp.route("/debug", methods=["GET"])
+def debug_info():
+    """Temporary diagnostic endpoint — exposes DB connection status."""
+    import os, sys
+    info = {
+        "python": sys.version,
+        "database_url_set": bool(os.environ.get("DATABASE_URL")),
+        "database_url_prefix": os.environ.get("DATABASE_URL", "NOT SET")[:30] + "..." if os.environ.get("DATABASE_URL") else "NOT SET",
+        "secret_key_set": bool(os.environ.get("SECRET_KEY")),
+        "vercel": bool(os.environ.get("VERCEL")),
+    }
+    try:
+        from backend.models import User
+        count = User.query.count()
+        info["db_status"] = "connected"
+        info["user_count"] = count
+    except Exception as e:
+        info["db_status"] = "ERROR"
+        info["db_error"] = str(e)
+    return jsonify(info)
+
+
 @api_bp.route("/certificates/<receipt_id>/download", methods=["GET"])
 def download_certificate(receipt_id):
     receipt = Receipt.query.get(receipt_id)
