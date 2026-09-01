@@ -35,7 +35,11 @@ class Config:
     CERTIFICATES_DIR = os.path.join(BASE_DIR, "data", "certificates")
     QR_CODES_DIR = os.path.join(BASE_DIR, "data", "qr_codes")
     
-    # Mapbox configuration
+    # Maps configuration
+    GOOGLE_MAPS_API_KEY = os.environ.get(
+        "GOOGLE_MAPS_API_KEY",
+        "AIzaSyC9vpy6T1_JwsLJDFR4O3mjNvQZiB_Ohzg"
+    )
     MAPBOX_ACCESS_TOKEN = os.environ.get(
         "MAPBOX_ACCESS_TOKEN", 
         "pk.eyJ1IjoiZ2VvZmllbGQiLCJhIjoiY2x5eG94OGdtMGJzczJqcTJ4bmw5c2QwayJ9.demo_token"

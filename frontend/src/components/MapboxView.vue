@@ -13,10 +13,15 @@
           <p class="text-xs text-slate-400">{{ subtitle || 'Real-time GPS tracking & optimized collection route' }}</p>
         </div>
       </div>
-      <span class="text-[11px] font-medium px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center gap-1.5">
-        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
-        GPS Active
-      </span>
+      <div class="flex items-center gap-2">
+        <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-700/60 text-slate-300 border border-slate-600/50">
+          {{ mapTypeLabel }}
+        </span>
+        <span class="text-[11px] font-medium px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center gap-1.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+          GPS Active
+        </span>
+      </div>
     </div>
 
     <!-- Map Container -->
@@ -24,7 +29,7 @@
       <div ref="mapContainerRef" class="w-full h-full min-h-[380px]"></div>
 
       <!-- Map Floating Overlay Legend -->
-      <div class="absolute bottom-3 left-3 bg-slate-900/90 backdrop-blur border border-slate-700/80 rounded-xl p-3 text-xs space-y-1.5 shadow-lg max-w-xs z-[1000]">
+      <div class="absolute bottom-3 left-3 bg-slate-900/95 backdrop-blur border border-slate-700/80 rounded-xl p-3 text-xs space-y-1.5 shadow-lg max-w-xs z-[1000]">
         <div class="font-bold text-white text-[11px] uppercase tracking-wider mb-1">Route Legend</div>
         <div class="flex items-center gap-2 text-slate-300">
           <span class="w-3 h-3 rounded-full bg-emerald-500 border border-white"></span>
@@ -74,7 +79,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, watch, nextTick } from 'vue';
+import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue';
 
 const props = defineProps({
   title: String,
@@ -90,7 +95,14 @@ const props = defineProps({
 });
 
 const mapContainerRef = ref(null);
-let mapInstance = null;
+const mapType = ref('google'); // 'google' or 'leaflet'
+const mapTypeLabel = computed(() => mapType.value === 'google' ? 'Google Maps' : 'OpenStreetMap');
+
+let googleMapInstance = null;
+let googleMarkers = [];
+let googlePolyline = null;
+
+let leafletMapInstance = null;
 
 onMounted(async () => {
   await nextTick();
@@ -98,144 +110,306 @@ onMounted(async () => {
 });
 
 onUnmounted(() => {
-  destroyMap();
+  destroyMaps();
 });
 
 watch(() => [props.stops, props.agents], () => {
   renderMarkers();
 }, { deep: true });
 
-function destroyMap() {
-  if (mapInstance) {
+function destroyMaps() {
+  if (googleMarkers.length) {
+    googleMarkers.forEach(m => m.setMap(null));
+    googleMarkers = [];
+  }
+  if (googlePolyline) {
+    googlePolyline.setMap(null);
+    googlePolyline = null;
+  }
+  googleMapInstance = null;
+
+  if (leafletMapInstance) {
     try {
-      mapInstance.remove();
-    } catch (e) {
-      // ignore teardown errors
-    }
-    mapInstance = null;
+      leafletMapInstance.remove();
+    } catch (e) {}
+    leafletMapInstance = null;
   }
 }
 
 function initMap() {
   if (!mapContainerRef.value) return;
-  
-  const L = window.L;
-  if (!L) {
-    // Retry after 200ms if script is still loading
-    setTimeout(initMap, 200);
-    return;
-  }
 
-  destroyMap();
+  // Check if Google Maps is loaded
+  if (window.google && window.google.maps) {
+    initGoogleMap();
+  } else if (window.L) {
+    initLeafletMap();
+  } else {
+    // Retry in 200ms if scripts are still downloading
+    setTimeout(initMap, 200);
+  }
+}
+
+// 1. GOOGLE MAPS IMPLEMENTATION
+function initGoogleMap() {
+  mapType.value = 'google';
+  destroyMaps();
+
+  const darkStyles = [
+    { elementType: 'geometry', stylers: [{ color: '#1e293b' }] },
+    { elementType: 'labels.text.stroke', stylers: [{ color: '#0f172a' }] },
+    { elementType: 'labels.text.fill', stylers: [{ color: '#94a3b8' }] },
+    { featureType: 'administrative.locality', elementType: 'labels.text.fill', stylers: [{ color: '#cbd5e1' }] },
+    { featureType: 'poi', elementType: 'labels.text.fill', stylers: [{ color: '#38bdf8' }] },
+    { featureType: 'poi.park', elementType: 'geometry', stylers: [{ color: '#0f3a3a' }] },
+    { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#334155' }] },
+    { featureType: 'road', elementType: 'geometry.stroke', stylers: [{ color: '#1e293b' }] },
+    { featureType: 'road', elementType: 'labels.text.fill', stylers: [{ color: '#cbd5e1' }] },
+    { featureType: 'road.highway', elementType: 'geometry', stylers: [{ color: '#0f766e' }] },
+    { featureType: 'transit', elementType: 'geometry', stylers: [{ color: '#1e293b' }] },
+    { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#091e3a' }] },
+    { featureType: 'water', elementType: 'labels.text.fill', stylers: [{ color: '#38bdf8' }] }
+  ];
 
   try {
-    mapInstance = L.map(mapContainerRef.value).setView([12.9716, 77.5946], 12);
-    
+    googleMapInstance = new window.google.maps.Map(mapContainerRef.value, {
+      center: { lat: 12.9716, lng: 77.5946 },
+      zoom: 12,
+      styles: darkStyles,
+      disableDefaultUI: false,
+      zoomControl: true,
+      mapTypeControl: false,
+      streetViewControl: false,
+      fullscreenControl: true
+    });
+
+    renderGoogleMarkers();
+  } catch (err) {
+    console.warn('Google Maps initialization fallback to Leaflet:', err);
+    initLeafletMap();
+  }
+}
+
+function renderGoogleMarkers() {
+  if (!googleMapInstance || !window.google) return;
+  const maps = window.google.maps;
+
+  // Clear existing markers & lines
+  googleMarkers.forEach(m => m.setMap(null));
+  googleMarkers = [];
+  if (googlePolyline) {
+    googlePolyline.setMap(null);
+    googlePolyline = null;
+  }
+
+  const bounds = new maps.LatLngBounds();
+  const routeCoords = [];
+
+  // 1. Stops
+  if (props.stops && props.stops.length) {
+    props.stops.forEach((stop, i) => {
+      const lat = stop.seller_lat || (12.9352 + (i * 0.02));
+      const lng = stop.seller_lng || (77.6245 - (i * 0.015));
+      const pos = { lat, lng };
+      bounds.extend(pos);
+      routeCoords.push(pos);
+
+      const marker = new maps.Marker({
+        position: pos,
+        map: googleMapInstance,
+        title: stop.seller_name,
+        label: {
+          text: String(stop.stop_order || i + 1),
+          color: '#ffffff',
+          fontWeight: 'bold',
+          fontSize: '11px'
+        },
+        icon: {
+          path: maps.SymbolPath.CIRCLE,
+          scale: 12,
+          fillColor: stop.status === 'visited' ? '#10b981' : '#f59e0b',
+          fillOpacity: 1,
+          strokeColor: '#ffffff',
+          strokeWeight: 2,
+        }
+      });
+
+      const infoWindow = new maps.InfoWindow({
+        content: `
+          <div style="font-family:sans-serif;font-size:12px;color:#0f172a;line-height:1.4;padding:4px;">
+            <strong>Stop #${stop.stop_order}: ${stop.seller_name || 'FBO Kitchen'}</strong><br>
+            <span style="color:#64748b;font-size:10px;">FSSAI: ${stop.seller_fssai || 'Verified'}</span><br>
+            <span style="display:inline-block;margin-top:4px;padding:2px 6px;border-radius:4px;background:#e2e8f0;font-size:10px;font-weight:bold;">Status: ${stop.status}</span>
+          </div>
+        `
+      });
+
+      marker.addListener('click', () => {
+        infoWindow.open(googleMapInstance, marker);
+      });
+
+      googleMarkers.push(marker);
+    });
+  }
+
+  // 2. Agents
+  if (props.agents && props.agents.length) {
+    props.agents.forEach((agent) => {
+      const lat = agent.lat || agent.current_lat || 12.9716;
+      const lng = agent.lng || agent.current_lng || 77.5946;
+      const pos = { lat, lng };
+      bounds.extend(pos);
+
+      const marker = new maps.Marker({
+        position: pos,
+        map: googleMapInstance,
+        title: `Agent: ${agent.name}`,
+        label: {
+          text: '🚚',
+          fontSize: '14px'
+        },
+        icon: {
+          path: maps.SymbolPath.BACKWARD_CLOSED_ARROW,
+          scale: 6,
+          fillColor: '#0284c7',
+          fillOpacity: 1,
+          strokeColor: '#ffffff',
+          strokeWeight: 2,
+        }
+      });
+
+      const infoWindow = new maps.InfoWindow({
+        content: `
+          <div style="font-family:sans-serif;font-size:12px;color:#0f172a;padding:4px;">
+            <strong>Agent: ${agent.name}</strong><br>
+            <span>Vehicle: ${agent.vehicle_no || 'KA-02-EV-4412'}</span><br>
+            <span style="color:#0284c7;font-weight:bold;">Zone: ${agent.zone || 'Bengaluru Central'}</span>
+          </div>
+        `
+      });
+
+      marker.addListener('click', () => {
+        infoWindow.open(googleMapInstance, marker);
+      });
+
+      googleMarkers.push(marker);
+    });
+  }
+
+  // 3. Biodiesel Refinery
+  const refineryPos = { lat: 12.9856, lng: 77.7289 };
+  bounds.extend(refineryPos);
+
+  const refineryMarker = new maps.Marker({
+    position: refineryPos,
+    map: googleMapInstance,
+    title: 'Biodiesel Refinery Hub',
+    label: {
+      text: '🏭',
+      fontSize: '14px'
+    },
+    icon: {
+      path: maps.SymbolPath.FORWARD_CLOSED_ARROW,
+      scale: 6,
+      fillColor: '#16a34a',
+      fillOpacity: 1,
+      strokeColor: '#ffffff',
+      strokeWeight: 2,
+    }
+  });
+
+  const refineryInfoWindow = new maps.InfoWindow({
+    content: `
+      <div style="font-family:sans-serif;font-size:12px;color:#0f172a;padding:4px;">
+        <strong>Biodiesel Processing Partner</strong><br>
+        <span>Refinery Delivery Hub</span>
+      </div>
+    `
+  });
+  refineryMarker.addListener('click', () => refineryInfoWindow.open(googleMapInstance, refineryMarker));
+  googleMarkers.push(refineryMarker);
+
+  // Route Polyline
+  if (routeCoords.length > 1) {
+    googlePolyline = new maps.Polyline({
+      path: routeCoords,
+      geodesic: true,
+      strokeColor: '#0f766e',
+      strokeOpacity: 0.9,
+      strokeWeight: 4
+    });
+    googlePolyline.setMap(googleMapInstance);
+  }
+
+  if (!bounds.isEmpty()) {
+    googleMapInstance.fitBounds(bounds, { top: 40, bottom: 40, left: 40, right: 40 });
+  }
+}
+
+// 2. LEAFLET FALLBACK IMPLEMENTATION
+function initLeafletMap() {
+  mapType.value = 'leaflet';
+  destroyMaps();
+
+  const L = window.L;
+  if (!L || !mapContainerRef.value) return;
+
+  try {
+    leafletMapInstance = L.map(mapContainerRef.value).setView([12.9716, 77.5946], 12);
     L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
       attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
       maxZoom: 19
-    }).addTo(mapInstance);
+    }).addTo(leafletMapInstance);
 
-    renderMarkers();
+    renderLeafletMarkers();
   } catch (e) {
-    console.warn('Map initialization notice:', e);
+    console.warn('Leaflet fallback notice:', e);
+  }
+}
+
+function renderLeafletMarkers() {
+  if (!leafletMapInstance || !window.L) return;
+  const L = window.L;
+
+  leafletMapInstance.eachLayer((layer) => {
+    if (layer instanceof L.Marker || layer instanceof L.Polyline) {
+      leafletMapInstance.removeLayer(layer);
+    }
+  });
+
+  const bounds = [];
+
+  if (props.stops && props.stops.length) {
+    props.stops.forEach((stop, i) => {
+      const lat = stop.seller_lat || (12.9352 + (i * 0.02));
+      const lng = stop.seller_lng || (77.6245 - (i * 0.015));
+      bounds.push([lat, lng]);
+
+      const markerColor = stop.status === 'visited' ? '#10b981' : '#f59e0b';
+      const customIcon = L.divIcon({
+        className: 'custom-div-icon',
+        html: `<div style="background-color:${markerColor};width:24px;height:24px;border-radius:50%;border:2px solid white;display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;font-size:11px;box-shadow:0 2px 5px rgba(0,0,0,0.4);">${stop.stop_order || i + 1}</div>`,
+        iconSize: [24, 24],
+        iconAnchor: [12, 12]
+      });
+
+      L.marker([lat, lng], { icon: customIcon })
+        .addTo(leafletMapInstance)
+        .bindPopup(`<strong>Stop #${stop.stop_order}: ${stop.seller_name}</strong>`);
+    });
+  }
+
+  if (bounds.length > 1) {
+    L.polyline(bounds, { color: '#0f766e', weight: 3, opacity: 0.8, dashArray: '6, 8' }).addTo(leafletMapInstance);
+    leafletMapInstance.fitBounds(bounds, { padding: [40, 40] });
   }
 }
 
 function renderMarkers() {
-  if (!mapInstance || !window.L) return;
-  const L = window.L;
-
-  try {
-    // Clear existing markers
-    mapInstance.eachLayer((layer) => {
-      if (layer instanceof L.Marker || layer instanceof L.Polyline) {
-        mapInstance.removeLayer(layer);
-      }
-    });
-
-    const bounds = [];
-
-    // 1. Plot Stops
-    if (props.stops && props.stops.length) {
-      props.stops.forEach((stop, i) => {
-        const lat = stop.seller_lat || (12.9352 + (i * 0.02));
-        const lng = stop.seller_lng || (77.6245 - (i * 0.015));
-        bounds.push([lat, lng]);
-
-        const markerColor = stop.status === 'visited' ? '#10b981' : '#f59e0b';
-        const customIcon = L.divIcon({
-          className: 'custom-div-icon',
-          html: `<div style="background-color:${markerColor};width:24px;height:24px;border-radius:50%;border:2px solid white;display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;font-size:11px;box-shadow:0 2px 5px rgba(0,0,0,0.4);">${stop.stop_order || i + 1}</div>`,
-          iconSize: [24, 24],
-          iconAnchor: [12, 12]
-        });
-
-        L.marker([lat, lng], { icon: customIcon })
-          .addTo(mapInstance)
-          .bindPopup(`
-            <div style="font-family:sans-serif;font-size:12px;color:#0f172a;line-height:1.4;">
-              <strong>Stop #${stop.stop_order}: ${stop.seller_name || 'FBO Kitchen'}</strong><br>
-              <span style="color:#64748b;font-size:10px;">FSSAI: ${stop.seller_fssai || 'Verified'}</span><br>
-              <span style="display:inline-block;margin-top:4px;padding:2px 6px;border-radius:4px;background:#e2e8f0;font-size:10px;font-weight:bold;">Status: ${stop.status}</span>
-            </div>
-          `);
-      });
-    }
-
-    // 2. Plot Agents
-    if (props.agents && props.agents.length) {
-      props.agents.forEach((agent) => {
-        const lat = agent.lat || agent.current_lat || 12.9716;
-        const lng = agent.lng || agent.current_lng || 77.5946;
-        bounds.push([lat, lng]);
-
-        const agentIcon = L.divIcon({
-          className: 'agent-div-icon',
-          html: `<div style="background-color:#0284c7;width:28px;height:28px;border-radius:8px;border:2px solid white;display:flex;align-items:center;justify-content:center;color:white;font-size:14px;box-shadow:0 3px 8px rgba(0,0,0,0.5);">🚚</div>`,
-          iconSize: [28, 28],
-          iconAnchor: [14, 14]
-        });
-
-        L.marker([lat, lng], { icon: agentIcon })
-          .addTo(mapInstance)
-          .bindPopup(`
-            <div style="font-family:sans-serif;font-size:12px;color:#0f172a;">
-              <strong>Agent: ${agent.name}</strong><br>
-              <span>Vehicle: ${agent.vehicle_no || 'KA-02-EV-4412'}</span><br>
-              <span style="color:#0284c7;font-weight:bold;">Zone: ${agent.zone || 'Bengaluru Central'}</span>
-            </div>
-          `);
-      });
-    }
-
-    // 3. Plot Biodiesel Refinery Destination
-    const refineryLat = 12.9856;
-    const refineryLng = 77.7289;
-    bounds.push([refineryLat, refineryLng]);
-
-    const refineryIcon = L.divIcon({
-      className: 'refinery-div-icon',
-      html: `<div style="background-color:#16a34a;width:28px;height:28px;border-radius:8px;border:2px solid white;display:flex;align-items:center;justify-content:center;color:white;font-size:14px;box-shadow:0 3px 8px rgba(0,0,0,0.5);">🏭</div>`,
-      iconSize: [28, 28],
-      iconAnchor: [14, 14]
-    });
-
-    L.marker([refineryLat, refineryLng], { icon: refineryIcon })
-      .addTo(mapInstance)
-      .bindPopup(`
-        <div style="font-family:sans-serif;font-size:12px;color:#0f172a;">
-          <strong>Biodiesel Processing Partner</strong><br>
-          <span>Refinery Delivery Hub</span>
-        </div>
-      `);
-
-    if (bounds.length > 1) {
-      L.polyline(bounds, { color: '#0f766e', weight: 3, opacity: 0.8, dashArray: '6, 8' }).addTo(mapInstance);
-      mapInstance.fitBounds(bounds, { padding: [40, 40] });
-    }
-  } catch (err) {
-    console.warn('Marker render notice:', err);
+  if (mapType.value === 'google') {
+    renderGoogleMarkers();
+  } else {
+    renderLeafletMarkers();
   }
 }
 </script>
