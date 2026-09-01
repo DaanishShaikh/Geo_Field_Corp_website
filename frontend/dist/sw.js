@@ -1,16 +1,6 @@
-const CACHE_NAME = 'ruco-trace-v2';
-const STATIC_ASSETS = [
-  '/',
-  '/index.html',
-  '/manifest.json'
-];
+const CACHE_NAME = 'ruco-trace-v3';
 
 self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(STATIC_ASSETS);
-    })
-  );
   self.skipWaiting();
 });
 
@@ -20,16 +10,17 @@ self.addEventListener('activate', (event) => {
       return Promise.all(
         keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))
       );
-    })
+    }).then(() => self.clients.claim())
   );
-  self.clients.claim();
 });
 
 self.addEventListener('fetch', (event) => {
-  // Pass API requests through with network-first or offline fallback
-  if (event.request.url.includes('/api/')) {
+  const request = event.request;
+
+  // 1. API Requests: Always Network-First with offline fallback
+  if (request.url.includes('/api/')) {
     event.respondWith(
-      fetch(event.request).catch(() => {
+      fetch(request).catch(() => {
         return new Response(
           JSON.stringify({ offline: true, error: 'Network request failed. Operating in offline mode.' }),
           { headers: { 'Content-Type': 'application/json' }, status: 503 }
@@ -39,9 +30,37 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // 2. HTML Navigation (Page Loads): Always Network-First so updates are instant!
+  if (request.mode === 'navigate' || request.destination === 'document' || request.url.endsWith('index.html')) {
+    event.respondWith(
+      fetch(request)
+        .then((networkResponse) => {
+          if (networkResponse && networkResponse.status === 200) {
+            const responseClone = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(request, responseClone));
+          }
+          return networkResponse;
+        })
+        .catch(() => {
+          // If offline, serve cached HTML
+          return caches.match(request).then((cached) => cached || caches.match('/index.html') || caches.match('/'));
+        })
+    );
+    return;
+  }
+
+  // 3. Static hashed assets (JS/CSS/images/fonts): Stale-While-Revalidate
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      return cachedResponse || fetch(event.request);
+    caches.match(request).then((cachedResponse) => {
+      const fetchPromise = fetch(request).then((networkResponse) => {
+        if (networkResponse && networkResponse.status === 200) {
+          const responseClone = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(request, responseClone));
+        }
+        return networkResponse;
+      }).catch(() => cachedResponse);
+
+      return cachedResponse || fetchPromise;
     })
   );
 });
