@@ -65,26 +65,28 @@ def debug_info():
 
 @api_bp.route("/certificates/<receipt_id>/download", methods=["GET"])
 def download_certificate(receipt_id):
-    receipt = Receipt.query.get(receipt_id)
+    import io
+    from backend.services.pdf_service import generate_disposal_pdf_bytes
+
+    receipt = db.session.get(Receipt, receipt_id)
     if not receipt:
         return jsonify({"error": "Receipt not found"}), 404
 
     if receipt.status != "settled":
         return jsonify({"error": "Disposal Certificate is only available after collection is settled."}), 400
 
-    seller = User.query.get(receipt.seller_id)
-    agent = User.query.get(receipt.approving_agent_id) if receipt.approving_agent_id else None
+    seller = db.session.get(User, receipt.seller_id)
+    agent = db.session.get(User, receipt.approving_agent_id) if receipt.approving_agent_id else None
     
     cert_id = receipt.certificate.id if receipt.certificate else f"CERT-RUCO-{receipt.id.replace('RCT-', '')}"
     
-    pdf_path = generate_disposal_pdf(receipt, seller, agent, cert_id, Config.CERTIFICATES_DIR)
-
-    if not os.path.exists(pdf_path):
-        return jsonify({"error": "Failed to generate certificate PDF"}), 500
-
-    return send_file(
-        pdf_path,
-        mimetype="application/pdf",
-        as_attachment=True,
-        download_name=f"RUCO_Disposal_Certificate_{receipt.id}.pdf"
-    )
+    try:
+        pdf_bytes = generate_disposal_pdf_bytes(receipt, seller, agent, cert_id)
+        return send_file(
+            io.BytesIO(pdf_bytes),
+            mimetype="application/pdf",
+            as_attachment=True,
+            download_name=f"RUCO_Disposal_Certificate_{receipt.id}.pdf"
+        )
+    except Exception as e:
+        return jsonify({"error": "Failed to generate certificate PDF", "details": str(e)}), 500

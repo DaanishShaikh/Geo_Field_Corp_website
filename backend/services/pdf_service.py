@@ -399,6 +399,139 @@ def render_fpdf_certificate(receipt, seller, agent, cert_id, output_path):
     
     pdf.output(output_path)
 
+def generate_disposal_pdf_bytes(receipt, seller, agent, cert_id):
+    """Generates PDF bytes directly in memory without writing to disk."""
+    pdf = RucoPDF(orientation="P", unit="mm", format="A4")
+    pdf.add_page()
+    
+    # Outer frame
+    pdf.set_draw_color(226, 232, 240)
+    pdf.set_fill_color(248, 250, 252)
+    pdf.rect(10, 32, 190, 245, "DF")
+    
+    # Ref box
+    pdf.set_xy(130, 36)
+    pdf.set_fill_color(254, 243, 199)
+    pdf.set_draw_color(245, 158, 11)
+    pdf.set_text_color(180, 83, 9)
+    pdf.set_font("Helvetica", "B", 9)
+    pdf.cell(65, 12, f"RUCO COMPLIANT | Ref: {cert_id}", border=1, fill=True, align="C", ln=1)
+    
+    # Main title
+    pdf.set_xy(10, 52)
+    pdf.set_text_color(15, 118, 110)
+    pdf.set_font("Helvetica", "B", 16)
+    pdf.cell(190, 8, "CERTIFICATE OF RESPONSIBLE DISPOSAL", align="C", ln=1)
+    
+    pdf.set_text_color(100, 116, 139)
+    pdf.set_font("Helvetica", "", 9)
+    pdf.cell(190, 5, "This document certifies that Used Cooking Oil was legally collected for Biofuel conversion in compliance with FSSAI regulations.", align="C", ln=1)
+    
+    pdf.ln(8)
+    
+    # FBO & License Section
+    pdf.set_xy(15, 72)
+    pdf.set_text_color(148, 163, 184)
+    pdf.set_font("Helvetica", "B", 8)
+    pdf.cell(90, 4, "FOOD BUSINESS OPERATOR (FBO)", ln=0)
+    pdf.cell(90, 4, "FSSAI LICENSE NO.", align="R", ln=1)
+    
+    pdf.set_x(15)
+    pdf.set_text_color(15, 23, 42)
+    pdf.set_font("Helvetica", "B", 12)
+    fbo_name = seller.name if seller else "Food Business Operator"
+    fssai_no = seller.seller_profile.fssai_license_no if seller and seller.seller_profile else "N/A"
+    pdf.cell(90, 6, fbo_name, ln=0)
+    pdf.cell(90, 6, fssai_no, align="R", ln=1)
+    
+    pdf.set_x(15)
+    pdf.set_text_color(100, 116, 139)
+    pdf.set_font("Helvetica", "", 9)
+    pdf.cell(90, 4, f"Unique Partner ID: {seller.id if seller else 'N/A'}", ln=0)
+    pdf.cell(90, 4, "KYC Status: Verified", align="R", ln=1)
+    
+    pdf.ln(8)
+    
+    # Metrics Box
+    pdf.set_fill_color(255, 255, 255)
+    pdf.set_draw_color(203, 213, 225)
+    pdf.rect(15, 96, 180, 26, "DF")
+    
+    vol = receipt.measured_volume or receipt.requested_volume
+    pickup_dt = receipt.settled_at.strftime('%d %b %Y') if receipt.settled_at else datetime.utcnow().strftime('%d %b %Y')
+    amt = f"INR {receipt.amount:,.2f}" if receipt.amount else "Pending"
+    
+    pdf.set_xy(15, 99)
+    pdf.set_text_color(148, 163, 184)
+    pdf.set_font("Helvetica", "B", 8)
+    pdf.cell(60, 4, "VOLUME HANDLED", align="C", ln=0)
+    pdf.cell(60, 4, "PICKUP DATE", align="C", ln=0)
+    pdf.cell(60, 4, "PAYOUT SETTLED", align="C", ln=1)
+    
+    pdf.set_xy(15, 105)
+    pdf.set_text_color(2, 132, 199)
+    pdf.set_font("Helvetica", "B", 14)
+    pdf.cell(60, 8, f"{vol} Liters", align="C", ln=0)
+    pdf.set_text_color(51, 65, 85)
+    pdf.cell(60, 8, pickup_dt, align="C", ln=0)
+    pdf.set_text_color(5, 150, 105)
+    pdf.cell(60, 8, amt, align="C", ln=1)
+    
+    # Collector Info
+    pdf.set_xy(15, 130)
+    pdf.set_fill_color(241, 245, 249)
+    pdf.set_draw_color(15, 118, 110)
+    pdf.rect(15, 130, 180, 14, "F")
+    
+    agent_name = agent.name if agent else "GeoField Logistics Officer"
+    veh = agent.agent_profile.vehicle_no if agent and agent.agent_profile else "KA-02-EV-4412"
+    tpc = f"{receipt.tpc_percentage}%" if receipt.tpc_percentage else "N/A"
+    
+    pdf.set_xy(18, 134)
+    pdf.set_text_color(15, 23, 42)
+    pdf.set_font("Helvetica", "", 9)
+    pdf.cell(174, 6, f"Collector: {agent_name} | Vehicle: {veh} | TPC Quality: {tpc}", ln=1)
+    
+    # QR code placeholder / generation
+    qr_bytes = generate_qr_bytes(f"RUCO-CERT:{cert_id}:{receipt.id}:{vol}L:{fssai_no}")
+    qr_temp_path = os.path.join(tempfile.gettempdir(), f"{cert_id}_qr.png")
+    with open(qr_temp_path, "wb") as f:
+        f.write(qr_bytes)
+    
+    pdf.image(qr_temp_path, x=18, y=154, w=32)
+    if os.path.exists(qr_temp_path):
+        os.remove(qr_temp_path)
+        
+    pdf.set_xy(54, 158)
+    pdf.set_text_color(15, 23, 42)
+    pdf.set_font("Helvetica", "B", 10)
+    pdf.cell(80, 5, "Government RUCO Traceable", ln=1)
+    pdf.set_x(54)
+    pdf.set_text_color(100, 116, 139)
+    pdf.set_font("Helvetica", "", 8)
+    pdf.cell(80, 4, "Chain of custody digitally verified by GeoField Compliance.", ln=1)
+    pdf.set_x(54)
+    pdf.cell(80, 4, "Support: compliance@geofieldcorp.com | www.geofieldcorp.com", ln=1)
+    
+    # Signatory
+    pdf.set_xy(135, 175)
+    pdf.set_text_color(15, 23, 42)
+    pdf.set_font("Helvetica", "B", 10)
+    pdf.cell(55, 5, "GeoField Compliance Dept.", align="R", ln=1)
+    pdf.set_x(135)
+    pdf.set_text_color(100, 116, 139)
+    pdf.set_font("Helvetica", "", 8)
+    pdf.cell(55, 4, "Authorized Signatory", align="R", ln=1)
+    
+    # Integrity Hash
+    pdf.set_xy(15, 205)
+    pdf.set_font("Courier", "", 7)
+    pdf.set_text_color(148, 163, 184)
+    hash_val = receipt.certificate.compliance_hash if receipt.certificate else generate_compliance_hash(receipt.id, seller.id if seller else '', vol, receipt.tpc_percentage, fssai_no)
+    pdf.multi_cell(180, 4, f"Tamper-Evident SHA256 Integrity Hash:\n{hash_val}")
+    
+    return bytes(pdf.output())
+
 def generate_disposal_pdf(receipt, seller, agent, cert_id, output_dir):
     # On serverless (Vercel), /tmp is the only writable dir
     try:
@@ -409,3 +542,4 @@ def generate_disposal_pdf(receipt, seller, agent, cert_id, output_dir):
 
     render_fpdf_certificate(receipt, seller, agent, cert_id, pdf_path)
     return pdf_path
+
