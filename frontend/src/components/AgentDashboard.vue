@@ -183,6 +183,7 @@
       title="Daily Manifest Route"
       subtitle="Assigned stops for collection vehicle"
       :stops="stops"
+      :agents="agent ? [{ name: agent.name, vehicle_no: agent.agent_profile?.vehicle_no, lat: agent.agent_profile?.current_lat || 12.9352, lng: agent.agent_profile?.current_lng || 77.6245, zone: 'Central' }] : []"
     />
   </div>
 </template>
