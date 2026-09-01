@@ -183,7 +183,6 @@
       title="Daily Manifest Route"
       subtitle="Assigned stops for collection vehicle"
       :stops="stops"
-      :agents="agent ? [{ name: agent.name, vehicle_no: agent.agent_profile?.vehicle_no, lat: agent.agent_profile?.current_lat || 12.9352, lng: agent.agent_profile?.current_lng || 77.6245, zone: 'Central' }] : []"
     />
   </div>
 </template>
@@ -194,13 +193,13 @@ import QrScanner from './QrScanner.vue';
 import MapboxView from './MapboxView.vue';
 
 const props = defineProps({
-  agent: Object,
-  stats: Object,
-  stops: Array,
-  openReceipts: Array,
-  recentSettled: Array,
-  offlineQueue: Array,
-  isOnline: Boolean,
+  agent: { type: Object, default: () => ({}) },
+  stats: { type: Object, default: () => ({}) },
+  stops: { type: Array, default: () => [] },
+  openReceipts: { type: Array, default: () => [] },
+  recentSettled: { type: Array, default: () => [] },
+  offlineQueue: { type: Array, default: () => [] },
+  isOnline: { type: Boolean, default: true },
 });
 
 const emit = defineEmits(['settle-receipt', 'scan-site', 'scan-receipt', 'toggle-offline', 'sync-offline']);
@@ -232,7 +231,7 @@ watch(() => props.openReceipts, (newReceipts) => {
 
 watch(selectedReceiptId, (newId) => {
   if (newId) {
-    activeReceipt.value = props.openReceipts.find(r => r.id === newId) || null;
+    activeReceipt.value = (props.openReceipts || []).find(r => r.id === newId) || null;
     if (activeReceipt.value) {
       form.value.measured_volume = activeReceipt.value.requested_volume || 100;
     }
