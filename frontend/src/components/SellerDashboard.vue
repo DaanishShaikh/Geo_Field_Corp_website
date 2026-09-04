@@ -59,6 +59,54 @@
       </div>
     </div>
 
+    <!-- Assigned Field Executive Contact Card -->
+    <div 
+      :class="assignedAgent ? 'bg-gradient-to-r from-slate-800/90 to-teal-950/40 border-teal-500/40' : 'bg-slate-800/60 border-slate-700/60'"
+      class="rounded-2xl border p-5 shadow-lg flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+    >
+      <div class="flex items-start sm:items-center gap-3.5">
+        <div class="w-10 h-10 rounded-xl bg-teal-500/10 text-teal-400 border border-teal-500/20 flex items-center justify-center text-lg flex-shrink-0">
+          🚚
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Assigned Collection Officer</span>
+            <span 
+              v-if="assignedAgent" 
+              class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 uppercase"
+            >
+              {{ assignedAgent.status || 'En Route' }} (Stop #{{ assignedAgent.stop_order || 1 }})
+            </span>
+            <span v-else class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-700 text-slate-300 uppercase">
+              Pending Dispatch
+            </span>
+          </div>
+          <div v-if="assignedAgent" class="mt-0.5">
+            <h3 class="text-sm font-bold text-white">{{ assignedAgent.name }} &bull; <span class="font-mono text-cyan-300 text-xs">{{ assignedAgent.vehicle_no }}</span></h3>
+            <p class="text-xs text-slate-300">Direct Contact: <strong class="text-white">{{ assignedAgent.phone }}</strong> &bull; <span class="text-slate-400">{{ assignedAgent.email }}</span></p>
+          </div>
+          <div v-else class="mt-0.5 text-xs text-slate-400">
+            Our logistics coordinator will assign an executive for your scheduled collection shortly.
+          </div>
+        </div>
+      </div>
+
+      <div v-if="assignedAgent" class="flex items-center gap-2 flex-shrink-0">
+        <a 
+          :href="'tel:' + assignedAgent.phone"
+          class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition shadow-lg flex items-center gap-1.5"
+        >
+          <span>📞</span> Call Officer
+        </a>
+        <a 
+          :href="'mailto:' + assignedAgent.email"
+          class="px-3 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 hover:text-white rounded-xl text-xs font-semibold transition flex items-center gap-1.5 border border-slate-600"
+        >
+          <span>✉</span> Email
+        </a>
+      </div>
+    </div>
+
     <!-- Main Two Column Grid -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <!-- 1. Site Identity (Static QR Code) -->
@@ -252,6 +300,7 @@ import { ref } from 'vue';
 
 const props = defineProps({
   seller: Object,
+  assignedAgent: Object,
   stats: Object,
   siteQr: Object,
   recentReceipts: Array,

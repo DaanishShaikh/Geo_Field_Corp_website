@@ -173,16 +173,30 @@
             <span class="text-[10px] text-slate-400">Dynamic Dispatch</span>
           </h3>
           <form @submit.prevent="handleInjectStop" class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            <select v-model="injectForm.agent_id" class="bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-xs text-white">
-              <option value="" disabled>-- Select Agent --</option>
-              <option v-for="a in activeAgents" :key="a.agent_id" :value="a.agent_id">{{ a.name }} ({{ a.vehicle_no }})</option>
-            </select>
-            <select v-model="injectForm.seller_id" class="bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-xs text-white">
-              <option value="" disabled>-- Select Seller FBO --</option>
-              <option v-for="s in approvedSellers" :key="s.id" :value="s.id">{{ s.name }} ({{ s.id }})</option>
-            </select>
-            <button type="submit" class="sm:col-span-2 py-1.5 bg-teal-600/30 hover:bg-teal-600 text-teal-300 hover:text-white rounded-lg text-xs font-semibold border border-teal-500/30 transition">
-              Dispatch Stop Injection
+            <div>
+              <label class="block text-[10px] font-semibold text-slate-400 mb-1">Select Field Executive</label>
+              <select v-model="injectForm.agent_id" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-2 text-xs text-white focus:border-emerald-500 focus:outline-none">
+                <option value="" disabled>-- Select Agent --</option>
+                <option v-for="a in activeAgents" :key="a.id" :value="a.id">
+                  {{ a.name }} ({{ a.phone || 'No Phone' }})
+                </option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[10px] font-semibold text-slate-400 mb-1">Select Food Business (FBO)</label>
+              <select v-model="injectForm.seller_id" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-2 text-xs text-white focus:border-emerald-500 focus:outline-none">
+                <option value="" disabled>-- Select Seller FBO --</option>
+                <option v-for="s in approvedSellers" :key="s.id" :value="s.id">
+                  {{ s.name }} ({{ s.phone || s.id }})
+                </option>
+              </select>
+            </div>
+            <button 
+              type="submit" 
+              :disabled="!injectForm.agent_id || !injectForm.seller_id"
+              class="sm:col-span-2 py-2 bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 disabled:opacity-50 text-white rounded-xl text-xs font-bold transition shadow"
+            >
+              Assign Seller to Executive for Pickup
             </button>
           </form>
         </div>

@@ -61,16 +61,38 @@
           {{ stop.stop_order }}
         </div>
         <div class="min-w-0 flex-1">
-          <div class="text-xs font-semibold text-white truncate">{{ stop.seller_name }}</div>
-          <div class="text-[10px] text-slate-400 truncate">{{ stop.seller_address || 'Bengaluru' }}</div>
-          <div class="mt-1 flex items-center justify-between">
-            <span class="text-[9px] font-mono text-slate-400">{{ stop.seller_fssai }}</span>
+          <div class="flex items-center justify-between gap-1">
+            <div class="text-xs font-semibold text-white truncate">{{ stop.seller_name }}</div>
             <span 
               :class="stop.status === 'visited' ? 'text-emerald-400 bg-emerald-500/10' : 'text-amber-400 bg-amber-500/10'"
-              class="text-[9px] font-semibold uppercase px-1.5 py-0.5 rounded"
+              class="text-[9px] font-semibold uppercase px-1.5 py-0.5 rounded flex-shrink-0"
             >
               {{ stop.status }}
             </span>
+          </div>
+          <div class="text-[10px] text-slate-400 truncate">{{ stop.seller_address || 'Bengaluru' }}</div>
+          <div class="mt-1.5 flex items-center justify-between gap-2 border-t border-slate-800/80 pt-1">
+            <div class="text-[10px] font-mono text-emerald-400 truncate">
+              {{ stop.seller_phone || '+91 99450 78120' }}
+            </div>
+            <div class="flex items-center gap-1.5 flex-shrink-0">
+              <a 
+                v-if="stop.seller_phone"
+                :href="'tel:' + stop.seller_phone" 
+                class="px-2 py-0.5 rounded bg-emerald-600/30 hover:bg-emerald-600 text-emerald-300 hover:text-white text-[10px] font-bold transition flex items-center gap-1"
+                title="Call Seller Kitchen"
+              >
+                <span>📞</span> Call
+              </a>
+              <a 
+                v-if="stop.seller_email"
+                :href="'mailto:' + stop.seller_email" 
+                class="px-1.5 py-0.5 rounded bg-slate-700/60 hover:bg-slate-600 text-slate-300 hover:text-white text-[10px] transition"
+                title="Email Seller"
+              >
+                ✉
+              </a>
+            </div>
           </div>
         </div>
       </div>

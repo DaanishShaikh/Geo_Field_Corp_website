@@ -32,6 +32,8 @@ def overview():
         db.session.add(rate_card)
         db.session.commit()
 
+    manifest_stops = RouteStop.query.order_by(RouteStop.scheduled_date.desc(), RouteStop.stop_order.asc()).all()
+
     return jsonify({
         "stats": {
             "pending_approvals_count": len(pending_users),
@@ -44,6 +46,7 @@ def overview():
         },
         "pending_users": [u.to_dict() for u in pending_users],
         "flagged_receipts": [r.to_dict() for r in flagged_receipts],
+        "manifest_stops": [s.to_dict() for s in manifest_stops],
         "rate_card": rate_card.to_dict()
     }), 200
 

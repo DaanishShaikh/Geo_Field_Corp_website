@@ -17,16 +17,25 @@ class RouteStop(db.Model):
     seller = db.relationship("User", foreign_keys=[seller_id])
 
     def to_dict(self):
+        seller_prof = self.seller.seller_profile if self.seller else None
+        agent_prof = self.agent.agent_profile if self.agent else None
         return {
             "id": self.id,
             "agent_id": self.agent_id,
+            "agent_name": self.agent.name if self.agent else None,
+            "agent_phone": self.agent.phone if self.agent else None,
+            "agent_email": self.agent.email if self.agent else None,
+            "agent_vehicle": agent_prof.vehicle_no if agent_prof else "KA-02-EV-4412",
             "seller_id": self.seller_id,
             "seller_name": self.seller.name if self.seller else None,
-            "seller_address": self.seller.seller_profile.address if self.seller and self.seller.seller_profile else None,
-            "seller_fssai": self.seller.seller_profile.fssai_license_no if self.seller and self.seller.seller_profile else None,
-            "seller_lat": self.seller.seller_profile.latitude if self.seller and self.seller.seller_profile else None,
-            "seller_lng": self.seller.seller_profile.longitude if self.seller and self.seller.seller_profile else None,
-            "seller_site_qr": self.seller.seller_profile.static_qr_code if self.seller and self.seller.seller_profile else None,
+            "seller_phone": self.seller.phone if self.seller else None,
+            "seller_email": self.seller.email if self.seller else None,
+            "seller_address": seller_prof.address if seller_prof else None,
+            "seller_city": seller_prof.city if seller_prof else None,
+            "seller_fssai": seller_prof.fssai_license_no if seller_prof else None,
+            "seller_lat": seller_prof.latitude if seller_prof else None,
+            "seller_lng": seller_prof.longitude if seller_prof else None,
+            "seller_site_qr": seller_prof.static_qr_code if seller_prof else None,
             "stop_order": self.stop_order,
             "status": self.status,
             "scheduled_date": self.scheduled_date.isoformat() if self.scheduled_date else None,

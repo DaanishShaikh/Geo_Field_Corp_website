@@ -78,14 +78,31 @@
         </div>
 
         <!-- Selected Seller & Receipt Details Header -->
-        <div v-if="activeSeller || activeReceipt" class="p-3 bg-slate-900/90 rounded-xl border border-slate-700 space-y-1 text-xs">
-          <div v-if="activeSeller" class="flex justify-between">
-            <span class="text-slate-400">FBO Seller:</span>
-            <strong class="text-white">{{ activeSeller.name }} ({{ activeSeller.id }})</strong>
+        <div v-if="activeSeller || activeReceipt" class="p-3 bg-slate-900/90 rounded-xl border border-slate-700 space-y-1.5 text-xs">
+          <div v-if="activeSeller" class="flex items-center justify-between">
+            <div>
+              <span class="text-slate-400">FBO Seller: </span>
+              <strong class="text-white">{{ activeSeller.name }}</strong>
+            </div>
+            <div v-if="activeSeller.phone" class="flex items-center gap-1.5">
+              <a 
+                :href="'tel:' + activeSeller.phone" 
+                class="px-2 py-0.5 rounded bg-emerald-600/30 hover:bg-emerald-600 text-emerald-300 hover:text-white font-bold text-[10px] transition flex items-center gap-1"
+              >
+                <span>📞</span> {{ activeSeller.phone }}
+              </a>
+              <a 
+                v-if="activeSeller.email"
+                :href="'mailto:' + activeSeller.email" 
+                class="px-1.5 py-0.5 rounded bg-slate-700 hover:bg-slate-600 text-slate-300 hover:text-white text-[10px] transition"
+              >
+                ✉
+              </a>
+            </div>
           </div>
           <div v-if="activeSeller" class="flex justify-between">
-            <span class="text-slate-400">FSSAI License:</span>
-            <span class="font-mono text-slate-200">{{ activeSeller.seller_profile?.fssai_license_no || 'Verified' }}</span>
+            <span class="text-slate-400">FSSAI / Location:</span>
+            <span class="font-mono text-slate-200">{{ activeSeller.seller_profile?.fssai_license_no || 'Verified' }} &bull; {{ activeSeller.seller_profile?.address || 'Bengaluru' }}</span>
           </div>
           <div v-if="activeReceipt" class="flex justify-between border-t border-slate-800 pt-1">
             <span class="text-slate-400">Target Receipt:</span>

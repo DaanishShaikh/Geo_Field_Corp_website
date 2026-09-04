@@ -199,6 +199,7 @@
           <SellerDashboard 
             v-if="currentUser.role === 'seller'" 
             :seller="currentUser"
+            :assigned-agent="sellerData.assigned_agent"
             :stats="sellerData.stats || {}"
             :site-qr="sellerData.site_qr || {}"
             :recent-receipts="sellerData.recent_receipts || []"
