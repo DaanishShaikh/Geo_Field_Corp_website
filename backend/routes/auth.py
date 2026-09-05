@@ -46,29 +46,44 @@ def register():
     user.set_password(password)
     db.session.add(user)
 
+    lat = None
+    lng = None
+    if "latitude" in data and data["latitude"] not in (None, ""):
+        try:
+            lat = float(data["latitude"])
+        except (ValueError, TypeError):
+            pass
+    if "longitude" in data and data["longitude"] not in (None, ""):
+        try:
+            lng = float(data["longitude"])
+        except (ValueError, TypeError):
+            pass
+
     if role == "seller":
         fssai = data.get("fssai_license_no", f"FSSAI-{random.randint(1000, 9999)}-UCO")
         profile = SellerProfile(
             user_id=user_id,
             fssai_license_no=fssai,
             kyc_status="Submitted",
-            address=data.get("address", "Bengaluru Central"),
-            city=data.get("city", "Bengaluru"),
-            pincode=data.get("pincode", "560001"),
-            latitude=float(data.get("latitude", 12.9716)),
-            longitude=float(data.get("longitude", 77.5946)),
-            static_qr_code=f"RUCO-SITE-{user_id}"
+            address=data.get("address", "").strip() or "Address Pending",
+            city=data.get("city", "").strip() or "Not Specified",
+            pincode=data.get("pincode", "").strip() or None,
+            latitude=lat if lat is not None else 12.9716,
+            longitude=lng if lng is not None else 77.5946,
+            static_qr_code=f"RUCO-SITE-{user_id}",
+            pickup_preference=data.get("pickup_preference", "Morning (9 AM - 12 PM)").strip()
         )
         db.session.add(profile)
     elif role == "agent":
-        vehicle = data.get("vehicle_no", f"KA-0{random.randint(1,9)}-UCO-{random.randint(1000,9999)}")
+        vehicle = data.get("vehicle_no", f"EV-{random.randint(1000,9999)}")
         profile = AgentProfile(
             user_id=user_id,
             vehicle_no=vehicle,
-            current_lat=12.9716,
-            current_lng=77.5946
+            current_lat=lat if lat is not None else 12.9716,
+            current_lng=lng if lng is not None else 77.5946
         )
         db.session.add(profile)
+
 
     log_audit(user_id, role, "Submitted Registration", "User", user_id, f"Registered with status: pending")
     db.session.commit()

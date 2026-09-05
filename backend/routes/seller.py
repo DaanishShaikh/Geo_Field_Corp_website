@@ -145,3 +145,49 @@ def get_receipt_qr(receipt_id):
         "receipt_qr": receipt.receipt_qr,
         "qr_data_url": qr_url
     }), 200
+
+
+@seller_bp.route("/profile/location", methods=["PATCH"])
+@login_required
+def update_seller_location():
+    auth_err = check_seller()
+    if auth_err: return auth_err
+
+    prof = current_user.seller_profile
+    if not prof:
+        return jsonify({"error": "Seller profile not found"}), 404
+
+    data = request.get_json() or {}
+    if "address" in data:
+        prof.address = str(data["address"]).strip()
+    if "city" in data:
+        prof.city = str(data["city"]).strip()
+    if "pincode" in data:
+        prof.pincode = str(data["pincode"]).strip()
+    if "latitude" in data and data["latitude"] not in (None, ""):
+        try:
+            prof.latitude = float(data["latitude"])
+        except (ValueError, TypeError):
+            pass
+    if "longitude" in data and data["longitude"] not in (None, ""):
+        try:
+            prof.longitude = float(data["longitude"])
+        except (ValueError, TypeError):
+            pass
+    if "pickup_preference" in data:
+        prof.pickup_preference = str(data["pickup_preference"]).strip()
+    if "special_instructions" in data:
+        prof.special_instructions = str(data["special_instructions"]).strip()
+
+    log_audit(
+        current_user.id, "seller", "Updated Kitchen Location & Preferences",
+        "SellerProfile", str(prof.id),
+        f"Addr: {prof.address}, City: {prof.city}, Pref: {prof.pickup_preference}, Lat: {prof.latitude}, Lng: {prof.longitude}"
+    )
+    db.session.commit()
+
+    return jsonify({
+        "message": "Kitchen pickup location updated successfully",
+        "seller": current_user.to_dict()
+    }), 200
+

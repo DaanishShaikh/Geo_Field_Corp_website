@@ -185,14 +185,14 @@
               class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white font-mono focus:outline-none focus:border-emerald-500"
             />
           </div>
-          <div class="grid grid-cols-2 gap-2">
-            <div>
-              <label class="block text-[11px] font-semibold text-slate-300 mb-1">Kitchen / Site Address</label>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+            <div class="sm:col-span-2">
+              <label class="block text-[11px] font-semibold text-slate-300 mb-1">Kitchen / Site Street Address</label>
               <input 
                 v-model="regForm.address" 
                 type="text" 
                 required
-                placeholder="Plot 42, 80ft Road, Koramangala" 
+                placeholder="e.g. 42 Main Road, Near Metro Station" 
                 class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
               />
             </div>
@@ -202,29 +202,118 @@
                 v-model="regForm.city" 
                 type="text" 
                 required
-                placeholder="Bengaluru" 
+                placeholder="e.g. Mumbai, Delhi, etc." 
+                class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+              />
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-300 mb-1">Pincode</label>
+              <input 
+                v-model="regForm.pincode" 
+                type="text" 
+                placeholder="e.g. 400001" 
+                class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+              />
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-300 mb-1">Collection Window Preference</label>
+              <select 
+                v-model="regForm.pickup_preference" 
+                class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+              >
+                <option value="Morning (9 AM - 12 PM)">Morning (9 AM - 12 PM)</option>
+                <option value="Afternoon (1 PM - 4 PM)">Afternoon (1 PM - 4 PM)</option>
+                <option value="Evening (5 PM - 8 PM)">Evening (5 PM - 8 PM)</option>
+                <option value="Night (9 PM - 12 AM)">Night (9 PM - 12 AM)</option>
+                <option value="On-Demand">On-Demand / Any Time</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Field Executive Vehicle & Operating Base -->
+        <div v-if="regForm.role === 'agent'" class="space-y-2.5 pt-1">
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-300 mb-1">
+                Vehicle Registration No. <span class="text-rose-400">*</span>
+              </label>
+              <input 
+                v-model="regForm.vehicle_no" 
+                type="text" 
+                required 
+                placeholder="e.g. MH-02-EV-4412" 
+                class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white font-mono focus:outline-none focus:border-emerald-500"
+              />
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-300 mb-1">Operating City / Base</label>
+              <input 
+                v-model="regForm.city" 
+                type="text" 
+                required 
+                placeholder="e.g. Mumbai Central" 
                 class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
               />
             </div>
           </div>
         </div>
 
-        <!-- Field Executive Vehicle -->
-        <div v-if="regForm.role === 'agent'" class="pt-1">
-          <label class="block text-[11px] font-semibold text-slate-300 mb-1">
-            Collection Vehicle Registration No. <span class="text-rose-400">*</span>
-          </label>
-          <input 
-            v-model="regForm.vehicle_no" 
-            type="text" 
-            required 
-            placeholder="KA-02-EV-4412" 
-            class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white font-mono focus:outline-none focus:border-emerald-500"
-          />
+        <!-- Live GPS Location Detection (For Both Sellers and Agents) -->
+        <div class="p-3 bg-slate-950/90 border border-slate-800 rounded-2xl space-y-2.5">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-1.5">
+              <span class="text-emerald-400 font-bold text-xs">📍</span>
+              <span class="text-[11px] font-bold text-white">
+                {{ regForm.role === 'seller' ? 'Kitchen GPS Coordinates (Pickup Spot)' : 'Current Device / Vehicle GPS Location' }}
+              </span>
+            </div>
+            <button 
+              type="button" 
+              @click="detectLocation" 
+              :disabled="detectingGps"
+              class="px-2.5 py-1 bg-emerald-600/20 hover:bg-emerald-600 text-emerald-300 hover:text-white rounded-lg text-[10px] font-bold transition flex items-center gap-1 border border-emerald-500/30 active:scale-95"
+            >
+              <span>{{ detectingGps ? '📡' : '🎯' }}</span>
+              <span>{{ detectingGps ? 'Locking GPS...' : 'Detect My Exact Location' }}</span>
+            </button>
+          </div>
+
+          <div v-if="gpsStatusMsg" class="text-[10px] font-mono px-2.5 py-1 rounded-lg border" :class="gpsSuccess ? 'bg-emerald-950/40 text-emerald-300 border-emerald-500/40' : 'bg-amber-950/40 text-amber-300 border-amber-500/40'">
+            {{ gpsStatusMsg }}
+          </div>
+
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Latitude</label>
+              <input 
+                v-model.number="regForm.latitude" 
+                type="number" 
+                step="any" 
+                placeholder="e.g. 19.0760" 
+                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-white font-mono focus:outline-none focus:border-emerald-500"
+              />
+            </div>
+            <div>
+              <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Longitude</label>
+              <input 
+                v-model.number="regForm.longitude" 
+                type="number" 
+                step="any" 
+                placeholder="e.g. 72.8777" 
+                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-white font-mono focus:outline-none focus:border-emerald-500"
+              />
+            </div>
+          </div>
+          <p class="text-[10px] text-slate-500">
+            Tip: Click <strong>Detect My Exact Location</strong> above to automatically lock your actual device coordinates instead of any default.
+          </p>
         </div>
 
         <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 text-[11px] text-slate-400 leading-relaxed">
-          🔒 In compliance with FSSAI regulations, accounts remain inactive until Super Admin audits KYC & FSSAI credentials. A permanent static site QR is automatically issued upon approval.
+          🔒 In compliance with FSSAI regulations, accounts remain inactive until Super Admin audits KYC credentials. A permanent static site QR is issued upon approval.
         </div>
 
         <button 
@@ -267,6 +356,10 @@ function fillAdminCredentials() {
 }
 
 
+const detectingGps = ref(false);
+const gpsStatusMsg = ref('');
+const gpsSuccess = ref(false);
+
 const regForm = ref({
   role: 'seller',
   name: '',
@@ -275,9 +368,63 @@ const regForm = ref({
   password: '',
   fssai_license_no: '',
   address: '',
-  city: 'Bengaluru',
+  city: '',
+  pincode: '',
+  latitude: null,
+  longitude: null,
+  pickup_preference: 'Morning (9 AM - 12 PM)',
   vehicle_no: '',
 });
+
+function detectLocation() {
+  if (!navigator.geolocation) {
+    gpsStatusMsg.value = 'Geolocation is not supported by your browser. Please enter coordinates manually.';
+    gpsSuccess.value = false;
+    return;
+  }
+  detectingGps.value = true;
+  gpsStatusMsg.value = 'Requesting device GPS coordinates...';
+  
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      detectingGps.value = false;
+      const lat = parseFloat(position.coords.latitude.toFixed(6));
+      const lng = parseFloat(position.coords.longitude.toFixed(6));
+      regForm.value.latitude = lat;
+      regForm.value.longitude = lng;
+      gpsSuccess.value = true;
+      const acc = Math.round(position.coords.accuracy || 0);
+      gpsStatusMsg.value = `✓ GPS Locked: ${lat}° N, ${lng}° E (Accuracy: ~${acc}m)`;
+      
+      // Auto-detect city & postcode via reverse geocode
+      fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data && data.address) {
+            const detectedCity = data.address.city || data.address.town || data.address.county || data.address.state_district || data.address.state;
+            if (detectedCity && !regForm.value.city) {
+              regForm.value.city = detectedCity;
+            }
+            if (data.address.postcode && !regForm.value.pincode) {
+              regForm.value.pincode = data.address.postcode;
+            }
+          }
+        })
+        .catch(() => {});
+    },
+    (error) => {
+      detectingGps.value = false;
+      gpsSuccess.value = false;
+      if (error.code === error.PERMISSION_DENIED) {
+        gpsStatusMsg.value = 'GPS permission denied. Please allow location access in your browser or type coordinates manually.';
+      } else {
+        gpsStatusMsg.value = `GPS Notice: ${error.message}. You can enter coordinates manually.`;
+      }
+    },
+    { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+  );
+}
+
 
 async function handleLogin() {
   loading.value = true;

@@ -25,21 +25,6 @@ def get_manifest():
     # Get assigned stops for current agent
     today = date.today()
     stops = RouteStop.query.filter_by(agent_id=current_user.id).order_by(RouteStop.stop_order.asc()).all()
-    
-    # If no stops in DB yet, create demo route stops from approved sellers
-    if not stops:
-        sellers = User.query.filter_by(role="seller", status="approved").all()
-        for idx, seller in enumerate(sellers[:5]):
-            stop = RouteStop(
-                agent_id=current_user.id,
-                seller_id=seller.id,
-                stop_order=idx + 1,
-                status="assigned",
-                scheduled_date=today
-            )
-            db.session.add(stop)
-        db.session.commit()
-        stops = RouteStop.query.filter_by(agent_id=current_user.id).order_by(RouteStop.stop_order.asc()).all()
 
     assigned_seller_ids = [s.seller_id for s in stops]
     open_receipts = Receipt.query.filter(Receipt.seller_id.in_(assigned_seller_ids), Receipt.status == "created").all()
@@ -274,3 +259,37 @@ def sync_offline():
         "synced": synced_results,
         "errors": errors
     }), 200
+
+
+@agent_bp.route("/location", methods=["PATCH"])
+@login_required
+def update_agent_location():
+    auth_err = check_agent()
+    if auth_err: return auth_err
+
+    data = request.get_json() or {}
+    prof = current_user.agent_profile
+    if not prof:
+        return jsonify({"error": "Agent profile not found"}), 404
+
+    if "latitude" in data and data["latitude"] not in (None, ""):
+        try:
+            prof.current_lat = float(data["latitude"])
+        except (ValueError, TypeError):
+            pass
+    if "longitude" in data and data["longitude"] not in (None, ""):
+        try:
+            prof.current_lng = float(data["longitude"])
+        except (ValueError, TypeError):
+            pass
+
+    prof.last_active_at = datetime.utcnow()
+    db.session.commit()
+
+    return jsonify({
+        "message": "Live GPS coordinates broadcasted successfully",
+        "latitude": prof.current_lat,
+        "longitude": prof.current_lng,
+        "last_active_at": prof.last_active_at.isoformat()
+    }), 200
+

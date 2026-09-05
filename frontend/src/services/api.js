@@ -58,6 +58,7 @@ export const api = {
   getSellerReceipts: () => request('/seller/receipts'),
   createReceipt: (requested_volume) => request('/seller/receipts', { method: 'POST', body: JSON.stringify({ requested_volume }) }),
   getReceiptQr: (receiptId) => request(`/seller/receipts/${receiptId}/qr`),
+  updateSellerProfileLocation: (payload) => request('/seller/profile/location', { method: 'PATCH', body: JSON.stringify(payload) }),
 
   // Agent
   getAgentManifest: () => request('/agent/manifest'),
@@ -65,6 +66,8 @@ export const api = {
   scanReceiptQr: (qr_code) => request('/agent/scan/receipt', { method: 'POST', body: JSON.stringify({ qr_code }) }),
   settleReceipt: (receiptId, payload) => request(`/agent/receipts/${receiptId}/settle`, { method: 'POST', body: JSON.stringify(payload) }),
   syncOfflineQueue: (queue) => request('/agent/sync/offline', { method: 'POST', body: JSON.stringify({ queue }) }),
+  updateAgentGps: (latitude, longitude) => request('/agent/location', { method: 'PATCH', body: JSON.stringify({ latitude, longitude }) }),
+
 
   // Admin
   getAdminOverview: () => request('/admin/overview'),

@@ -145,12 +145,37 @@
             </div>
             <div>
               <span class="text-slate-500 uppercase tracking-wider font-semibold text-[10px] block">Site Location</span>
-              <span>{{ seller.seller_profile?.address || 'Bengaluru, Karnataka' }}</span>
+              <div class="text-white font-medium">{{ seller.seller_profile?.address || 'Address Pending' }}</div>
+              <div class="text-[11px] text-slate-400">{{ seller.seller_profile?.city || 'Custom Region' }}{{ seller.seller_profile?.pincode ? ' - ' + seller.seller_profile.pincode : '' }}</div>
+            </div>
+            <div>
+              <span class="text-slate-500 uppercase tracking-wider font-semibold text-[10px] block">GPS Coordinates & Preference</span>
+              <div class="text-[11px] font-mono text-emerald-400 flex items-center gap-2">
+                <span>📍 {{ seller.seller_profile?.latitude || 12.9716 }}, {{ seller.seller_profile?.longitude || 77.5946 }}</span>
+                <a 
+                  v-if="seller.seller_profile?.latitude && seller.seller_profile?.longitude"
+                  :href="`https://www.google.com/maps?q=${seller.seller_profile.latitude},${seller.seller_profile.longitude}`"
+                  target="_blank"
+                  class="text-teal-300 hover:underline text-[10px]"
+                >
+                  Map ↗
+                </a>
+              </div>
+              <div class="text-[10px] text-slate-400 mt-0.5">
+                Preferred Slot: <strong class="text-white">{{ seller.seller_profile?.pickup_preference || 'Morning (9 AM - 12 PM)' }}</strong>
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="flex gap-2">
+        <div class="flex flex-col sm:flex-row gap-2">
+          <button 
+            @click="openEditLocation"
+            class="py-2 px-3 bg-teal-600 hover:bg-teal-500 text-white rounded-xl text-xs font-semibold transition flex items-center justify-center gap-2 shadow"
+          >
+            <span>📍</span>
+            <span>Update Pickup Spot & GPS</span>
+          </button>
           <button 
             @click="downloadSiteQr"
             class="flex-1 py-2 px-3 bg-slate-700 hover:bg-slate-600 text-white rounded-xl text-xs font-semibold transition flex items-center justify-center gap-2"
@@ -162,6 +187,7 @@
           </button>
         </div>
       </div>
+
 
       <!-- 2. Create Collection Receipt -->
       <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-6 shadow-xl space-y-4">
@@ -292,6 +318,128 @@
         </table>
       </div>
     </div>
+
+    <!-- Edit Location & Collection Preferences Modal -->
+    <div v-if="showLocationModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <div class="bg-slate-900 border border-slate-700 rounded-3xl w-full max-w-lg p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="text-emerald-400 text-lg">📍</span>
+            <h3 class="text-sm font-bold text-white">Update Kitchen Pickup Location & GPS</h3>
+          </div>
+          <button @click="showLocationModal = false" class="text-slate-400 hover:text-white p-1 rounded-lg">✕</button>
+        </div>
+
+        <form @submit.prevent="handleSaveLocation" class="space-y-3 text-xs">
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">Street Address</label>
+            <input 
+              v-model="locationForm.address" 
+              type="text" 
+              required
+              placeholder="e.g. Plot 42, 80 Feet Road, Near Main Market"
+              class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-emerald-500"
+            />
+          </div>
+
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-slate-300 font-semibold mb-1">City / Region</label>
+              <input 
+                v-model="locationForm.city" 
+                type="text" 
+                required
+                placeholder="e.g. Mumbai, Bengaluru, Delhi"
+                class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-emerald-500"
+              />
+            </div>
+            <div>
+              <label class="block text-slate-300 font-semibold mb-1">Pincode</label>
+              <input 
+                v-model="locationForm.pincode" 
+                type="text" 
+                placeholder="e.g. 560034"
+                class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-emerald-500"
+              />
+            </div>
+          </div>
+
+          <!-- GPS Coordinates with Detect Button -->
+          <div class="p-3 bg-slate-950 border border-slate-800 rounded-2xl space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="font-semibold text-slate-200">Exact GPS Coordinates</span>
+              <button 
+                type="button" 
+                @click="detectDeviceLocation" 
+                :disabled="detectingGps"
+                class="px-2.5 py-1 bg-emerald-600/30 hover:bg-emerald-600 text-emerald-300 hover:text-white rounded-lg text-[10px] font-bold transition flex items-center gap-1 border border-emerald-500/30"
+              >
+                <span>{{ detectingGps ? '📡' : '🎯' }}</span>
+                <span>{{ detectingGps ? 'Acquiring...' : 'Detect My Exact Location' }}</span>
+              </button>
+            </div>
+
+            <div v-if="gpsMsg" class="text-[10px] font-mono px-2 py-1 rounded bg-slate-900 text-emerald-400 border border-emerald-500/30">
+              {{ gpsMsg }}
+            </div>
+
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block text-[10px] text-slate-400 mb-0.5">Latitude</label>
+                <input 
+                  v-model.number="locationForm.latitude" 
+                  type="number" 
+                  step="any" 
+                  required
+                  class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-1.5 text-white font-mono"
+                />
+              </div>
+              <div>
+                <label class="block text-[10px] text-slate-400 mb-0.5">Longitude</label>
+                <input 
+                  v-model.number="locationForm.longitude" 
+                  type="number" 
+                  step="any" 
+                  required
+                  class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-1.5 text-white font-mono"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">Collection Window Preference</label>
+            <select 
+              v-model="locationForm.pickup_preference" 
+              class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-emerald-500"
+            >
+              <option value="Morning (9 AM - 12 PM)">Morning (9 AM - 12 PM)</option>
+              <option value="Afternoon (1 PM - 4 PM)">Afternoon (1 PM - 4 PM)</option>
+              <option value="Evening (5 PM - 8 PM)">Evening (5 PM - 8 PM)</option>
+              <option value="Night (9 PM - 12 AM)">Night (9 PM - 12 AM)</option>
+              <option value="On-Demand">On-Demand / Any Time</option>
+            </select>
+          </div>
+
+          <div class="flex items-center justify-end gap-2 pt-2">
+            <button 
+              type="button" 
+              @click="showLocationModal = false"
+              class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl font-semibold transition"
+            >
+              Cancel
+            </button>
+            <button 
+              type="submit" 
+              :disabled="savingLocation"
+              class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-bold transition shadow disabled:opacity-50"
+            >
+              {{ savingLocation ? 'Saving Location...' : 'Save Pickup Location' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -306,11 +454,89 @@ const props = defineProps({
   recentReceipts: Array,
 });
 
-const emit = defineEmits(['create-receipt', 'view-ledger']);
+const emit = defineEmits(['create-receipt', 'view-ledger', 'update-location']);
 
 const requestedVolume = ref(100);
 const creatingReceipt = ref(false);
 const lastCreatedReceipt = ref(null);
+
+const showLocationModal = ref(false);
+const savingLocation = ref(false);
+const detectingGps = ref(false);
+const gpsMsg = ref('');
+
+const locationForm = ref({
+  address: '',
+  city: '',
+  pincode: '',
+  latitude: 12.9716,
+  longitude: 77.5946,
+  pickup_preference: 'Morning (9 AM - 12 PM)',
+});
+
+function openEditLocation() {
+  const prof = props.seller?.seller_profile || {};
+  locationForm.value = {
+    address: prof.address || '',
+    city: prof.city || '',
+    pincode: prof.pincode || '',
+    latitude: prof.latitude || 12.9716,
+    longitude: prof.longitude || 77.5946,
+    pickup_preference: prof.pickup_preference || 'Morning (9 AM - 12 PM)',
+  };
+  gpsMsg.value = '';
+  showLocationModal.value = true;
+}
+
+function detectDeviceLocation() {
+  if (!navigator.geolocation) {
+    gpsMsg.value = 'Geolocation is not supported by your browser.';
+    return;
+  }
+  detectingGps.value = true;
+  gpsMsg.value = 'Requesting device GPS coordinates...';
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      detectingGps.value = false;
+      const lat = parseFloat(position.coords.latitude.toFixed(6));
+      const lng = parseFloat(position.coords.longitude.toFixed(6));
+      locationForm.value.latitude = lat;
+      locationForm.value.longitude = lng;
+      gpsMsg.value = `✓ GPS Locked: ${lat}° N, ${lng}° E`;
+
+      fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data && data.address) {
+            const detectedCity = data.address.city || data.address.town || data.address.state_district || data.address.state;
+            if (detectedCity && !locationForm.value.city) {
+              locationForm.value.city = detectedCity;
+            }
+            if (data.address.postcode && !locationForm.value.pincode) {
+              locationForm.value.pincode = data.address.postcode;
+            }
+          }
+        })
+        .catch(() => {});
+    },
+    (error) => {
+      detectingGps.value = false;
+      gpsMsg.value = `GPS Error: ${error.message}`;
+    },
+    { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+  );
+}
+
+async function handleSaveLocation() {
+  savingLocation.value = true;
+  try {
+    emit('update-location', { ...locationForm.value });
+    showLocationModal.value = false;
+  } finally {
+    savingLocation.value = false;
+  }
+}
+
 
 async function handleCreateReceipt() {
   if (!requestedVolume.value || requestedVolume.value <= 0) return;

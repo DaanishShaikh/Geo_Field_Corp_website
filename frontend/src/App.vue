@@ -205,6 +205,7 @@
             :recent-receipts="sellerData.recent_receipts || []"
             @create-receipt="handleCreateReceipt"
             @view-ledger="currentView = 'receipts'"
+            @update-location="handleUpdateSellerLocationSelf"
           />
 
           <AgentDashboard 
@@ -221,6 +222,7 @@
             @scan-receipt="handleScanReceipt"
             @toggle-offline="isOnline = !isOnline"
             @sync-offline="handleSyncOffline"
+            @update-gps="handleUpdateAgentGps"
           />
 
           <AdminDashboard 
@@ -560,7 +562,32 @@ async function handleUpdateSellerLocation(sellerId, payload) {
   }
 }
 
+async function handleUpdateSellerLocationSelf(payload) {
+  try {
+    const res = await api.updateSellerProfileLocation(payload);
+    showToast(res.message || 'Pickup location and GPS updated');
+    currentUser.value = res.seller;
+    await loadRoleData();
+  } catch (e) {
+    showToast(e.message || 'Failed to update location');
+  }
+}
+
+async function handleUpdateAgentGps(lat, lng) {
+  try {
+    const res = await api.updateAgentGps(lat, lng);
+    showToast(`GPS Broadcasted: ${lat.toFixed(4)}, ${lng.toFixed(4)}`);
+    if (currentUser.value && currentUser.value.agent_profile) {
+      currentUser.value.agent_profile.current_lat = lat;
+      currentUser.value.agent_profile.current_lng = lng;
+    }
+  } catch (e) {
+    showToast(e.message || 'Failed to update GPS location');
+  }
+}
+
 function formatNumber(val) {
+
 
 
   return Number(val || 0).toLocaleString('en-IN');

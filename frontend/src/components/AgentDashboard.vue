@@ -14,10 +14,29 @@
         <div class="text-[11px] text-slate-400 mt-2">Ready for physical collection</div>
       </div>
 
-      <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-5 shadow-lg">
-        <div class="text-xs font-semibold text-slate-400 mb-1">VEHICLE ASSIGNED</div>
-        <div class="text-xl font-bold font-mono text-cyan-300">{{ agent.agent_profile?.vehicle_no || 'KA-02-EV-4412' }}</div>
-        <div class="text-[11px] text-slate-400 mt-2">GeoField Electric Bio-Logistics</div>
+      <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-5 shadow-lg flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between text-xs font-semibold text-slate-400 mb-1">
+            <span>VEHICLE & GPS</span>
+            <span v-if="gpsSynced" class="text-[10px] text-emerald-400 font-mono">Synced ✓</span>
+          </div>
+          <div class="text-xl font-bold font-mono text-cyan-300">{{ agent.agent_profile?.vehicle_no || 'EV-COLLECTOR' }}</div>
+          <div class="text-[11px] text-slate-400 mt-1 font-mono flex items-center gap-1">
+            <span>📍</span>
+            <span v-if="agent.agent_profile?.current_lat">{{ Number(agent.agent_profile.current_lat).toFixed(4) }}, {{ Number(agent.agent_profile.current_lng).toFixed(4) }}</span>
+            <span v-else class="text-slate-500">No GPS locked</span>
+          </div>
+        </div>
+        <div class="mt-2.5">
+          <button 
+            @click="broadcastGps"
+            :disabled="syncingGps"
+            class="w-full py-1.5 px-2.5 bg-cyan-600/30 hover:bg-cyan-600 text-cyan-200 hover:text-white rounded-lg text-[10px] font-bold transition flex items-center justify-center gap-1.5 border border-cyan-500/30 shadow active:scale-95"
+          >
+            <span>{{ syncingGps ? '📡' : '🎯' }}</span>
+            <span>{{ syncingGps ? 'Acquiring GPS...' : 'Broadcast My Live GPS' }}</span>
+          </button>
+        </div>
       </div>
 
       <div 
@@ -219,12 +238,39 @@ const props = defineProps({
   isOnline: { type: Boolean, default: true },
 });
 
-const emit = defineEmits(['settle-receipt', 'scan-site', 'scan-receipt', 'toggle-offline', 'sync-offline']);
+const emit = defineEmits(['settle-receipt', 'scan-site', 'scan-receipt', 'toggle-offline', 'sync-offline', 'update-gps']);
 
 const selectedReceiptId = ref('');
 const activeSeller = ref(null);
 const activeReceipt = ref(null);
 const settling = ref(false);
+
+const syncingGps = ref(false);
+const gpsSynced = ref(false);
+
+function broadcastGps() {
+  if (!navigator.geolocation) {
+    alert('Geolocation is not supported by your browser.');
+    return;
+  }
+  syncingGps.value = true;
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      syncingGps.value = false;
+      const lat = parseFloat(pos.coords.latitude.toFixed(6));
+      const lng = parseFloat(pos.coords.longitude.toFixed(6));
+      gpsSynced.value = true;
+      emit('update-gps', lat, lng);
+      setTimeout(() => { gpsSynced.value = false; }, 4000);
+    },
+    (err) => {
+      syncingGps.value = false;
+      alert(`Could not acquire GPS: ${err.message}`);
+    },
+    { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+  );
+}
+
 
 const form = ref({
   measured_volume: 120,
