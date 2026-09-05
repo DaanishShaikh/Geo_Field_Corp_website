@@ -394,6 +394,19 @@ async function loadRoleData() {
       
       const sellersRes = await api.getAdminUsers({ role: 'seller', status: 'approved' });
       approvedSellers.value = sellersRes.users || [];
+      adminManifestStops.value = (sellersRes.users || []).map((s, idx) => ({
+        stop_order: idx + 1,
+        seller_id: s.id,
+        seller_name: s.name,
+        seller_phone: s.phone,
+        seller_address: s.seller_profile?.address ? `${s.seller_profile.address}${s.seller_profile.city ? ', ' + s.seller_profile.city : ''}${s.seller_profile.pincode ? ' - ' + s.seller_profile.pincode : ''}` : (s.seller_profile?.city || ''),
+        seller_lat: s.seller_profile?.latitude,
+        seller_lng: s.seller_profile?.longitude,
+        seller_fssai: s.seller_profile?.fssai_license_no || 'Verified',
+        pickup_enabled: s.seller_profile?.pickup_enabled !== false,
+        pickup_preference: s.seller_profile?.pickup_preference || 'Morning (9 AM - 12 PM)',
+        status: 'pending'
+      }));
       const agentsRes = await api.getAdminUsers({ role: 'agent', status: 'approved' });
       activeAgents.value = agentsRes.users || [];
     }

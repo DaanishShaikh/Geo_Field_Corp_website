@@ -66,10 +66,10 @@ def register():
             fssai_license_no=fssai,
             kyc_status="Submitted",
             address=data.get("address", "").strip() or "Address Pending",
-            city=data.get("city", "").strip() or "Not Specified",
+            city=data.get("city", "").strip() or None,
             pincode=data.get("pincode", "").strip() or None,
-            latitude=lat if lat is not None else 12.9716,
-            longitude=lng if lng is not None else 77.5946,
+            latitude=lat,
+            longitude=lng,
             static_qr_code=f"RUCO-SITE-{user_id}",
             pickup_preference=data.get("pickup_preference", "Morning (9 AM - 12 PM)").strip()
         )
@@ -79,8 +79,8 @@ def register():
         profile = AgentProfile(
             user_id=user_id,
             vehicle_no=vehicle,
-            current_lat=lat if lat is not None else 12.9716,
-            current_lng=lng if lng is not None else 77.5946
+            current_lat=lat,
+            current_lng=lng
         )
         db.session.add(profile)
 

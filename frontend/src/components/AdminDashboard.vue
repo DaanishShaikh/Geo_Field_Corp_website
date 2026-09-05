@@ -334,6 +334,16 @@
             <label class="block text-slate-400 mb-1">Special Instructions / Gate Landmark</label>
             <input v-model="editLocationForm.special_instructions" type="text" placeholder="e.g. Backdoor loading bay, near Gate 2" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white" />
           </div>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-slate-400 mb-1">City</label>
+              <input v-model="editLocationForm.city" type="text" placeholder="e.g. Mumbai" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white" />
+            </div>
+            <div>
+              <label class="block text-slate-400 mb-1">Pincode</label>
+              <input v-model="editLocationForm.pincode" type="text" placeholder="e.g. 400001" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white" />
+            </div>
+          </div>
           <div class="flex gap-2 pt-2">
             <button type="button" @click="editingSeller = null" class="flex-1 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl font-semibold">Cancel</button>
             <button type="submit" class="flex-1 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-bold">Save Changes</button>
@@ -513,9 +523,11 @@ const showBatchModal = ref(false);
 const editingSeller = ref(null);
 const editLocationForm = ref({
   address: '',
-  latitude: 12.9716,
-  longitude: 77.5946,
+  latitude: null,
+  longitude: null,
   special_instructions: '',
+  city: '',
+  pincode: '',
 });
 
 function handleTogglePickup(seller) {
@@ -535,9 +547,11 @@ function openEditLocationModal(seller) {
   editingSeller.value = seller;
   editLocationForm.value = {
     address: seller.seller_profile?.address || '',
-    latitude: seller.seller_profile?.latitude || 12.9716,
-    longitude: seller.seller_profile?.longitude || 77.5946,
+    latitude: seller.seller_profile?.latitude || null,
+    longitude: seller.seller_profile?.longitude || null,
     special_instructions: seller.seller_profile?.special_instructions || '',
+    city: seller.seller_profile?.city || '',
+    pincode: seller.seller_profile?.pincode || '',
   };
 }
 

@@ -151,7 +151,8 @@
             <div>
               <span class="text-slate-500 uppercase tracking-wider font-semibold text-[10px] block">GPS Coordinates & Preference</span>
               <div class="text-[11px] font-mono text-emerald-400 flex items-center gap-2">
-                <span>📍 {{ seller.seller_profile?.latitude || 12.9716 }}, {{ seller.seller_profile?.longitude || 77.5946 }}</span>
+                <span v-if="seller.seller_profile?.latitude && seller.seller_profile?.longitude">📍 {{ seller.seller_profile.latitude }}, {{ seller.seller_profile.longitude }}</span>
+                <span v-else class="text-amber-400">📍 GPS Location Pending</span>
                 <a 
                   v-if="seller.seller_profile?.latitude && seller.seller_profile?.longitude"
                   :href="`https://www.google.com/maps?q=${seller.seller_profile.latitude},${seller.seller_profile.longitude}`"
@@ -469,8 +470,8 @@ const locationForm = ref({
   address: '',
   city: '',
   pincode: '',
-  latitude: 12.9716,
-  longitude: 77.5946,
+  latitude: null,
+  longitude: null,
   pickup_preference: 'Morning (9 AM - 12 PM)',
 });
 
@@ -480,8 +481,8 @@ function openEditLocation() {
     address: prof.address || '',
     city: prof.city || '',
     pincode: prof.pincode || '',
-    latitude: prof.latitude || 12.9716,
-    longitude: prof.longitude || 77.5946,
+    latitude: prof.latitude ?? null,
+    longitude: prof.longitude ?? null,
     pickup_preference: prof.pickup_preference || 'Morning (9 AM - 12 PM)',
   };
   gpsMsg.value = '';

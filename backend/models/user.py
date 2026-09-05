@@ -51,10 +51,10 @@ class SellerProfile(db.Model):
     fssai_license_no = db.Column(db.String(60), nullable=False)
     kyc_status = db.Column(db.String(30), default="Submitted")  # 'Submitted', 'Verified', 'Rejected'
     address = db.Column(db.String(255), nullable=True)
-    city = db.Column(db.String(100), default="Bengaluru")
+    city = db.Column(db.String(100), nullable=True)
     pincode = db.Column(db.String(20), nullable=True)
-    latitude = db.Column(db.Float, default=12.9716)
-    longitude = db.Column(db.Float, default=77.5946)
+    latitude = db.Column(db.Float, nullable=True)
+    longitude = db.Column(db.Float, nullable=True)
     static_qr_code = db.Column(db.String(120), unique=True, nullable=False)  # e.g., 'RUCO-SITE-SELL-1001'
     pickup_enabled = db.Column(db.Boolean, default=True, nullable=False)
     pickup_preference = db.Column(db.String(100), default="Morning (9 AM - 12 PM)", nullable=False)
@@ -82,8 +82,8 @@ class AgentProfile(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.String(64), db.ForeignKey("users.id"), nullable=False, unique=True)
     vehicle_no = db.Column(db.String(50), nullable=False)
-    current_lat = db.Column(db.Float, default=12.9716)
-    current_lng = db.Column(db.Float, default=77.5946)
+    current_lat = db.Column(db.Float, nullable=True)
+    current_lng = db.Column(db.Float, nullable=True)
     last_active_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     def to_dict(self):

@@ -230,8 +230,10 @@ function renderGoogleMarkers() {
   // 1. Stops
   if (props.stops && props.stops.length) {
     props.stops.forEach((stop, i) => {
-      const lat = stop.seller_lat || (12.9352 + (i * 0.02));
-      const lng = stop.seller_lng || (77.6245 - (i * 0.015));
+      const lat = stop.seller_lat;
+      const lng = stop.seller_lng;
+      if (!lat || !lng) return; // skip stops with no GPS
+
       const pos = { lat, lng };
       bounds.extend(pos);
       routeCoords.push(pos);
@@ -266,7 +268,7 @@ function renderGoogleMarkers() {
         content: `
           <div style="font-family:sans-serif;font-size:12px;color:#0f172a;line-height:1.4;padding:6px;max-width:240px;">
             <strong style="font-size:13px;color:#0f172a;">Stop #${stop.stop_order}: ${stop.seller_name || 'FBO Kitchen'}</strong><br>
-            <span style="color:#64748b;font-size:10px;">${stop.seller_address || 'Bengaluru'}</span><br>
+            <span style="color:#64748b;font-size:10px;">${stop.seller_address || ''}</span><br>
             <span style="color:#64748b;font-size:10px;">FSSAI: ${stop.seller_fssai || 'Verified'}</span>
             ${prefHtml}
             <div style="margin-top:4px;display:flex;align-items:center;gap:6px;">
@@ -296,8 +298,10 @@ function renderGoogleMarkers() {
   // 2. Agents
   if (props.agents && props.agents.length) {
     props.agents.forEach((agent) => {
-      const lat = agent.lat || agent.current_lat || 12.9716;
-      const lng = agent.lng || agent.current_lng || 77.5946;
+      const lat = agent.lat ?? agent.current_lat;
+      const lng = agent.lng ?? agent.current_lng;
+      if (!lat || !lng) return; // skip agents that haven't broadcast GPS yet
+
       const pos = { lat, lng };
       bounds.extend(pos);
 
@@ -323,8 +327,8 @@ function renderGoogleMarkers() {
         content: `
           <div style="font-family:sans-serif;font-size:12px;color:#0f172a;padding:4px;">
             <strong>Agent: ${agent.name}</strong><br>
-            <span>Vehicle: ${agent.vehicle_no || 'KA-02-EV-4412'}</span><br>
-            <span style="color:#0284c7;font-weight:bold;">Zone: ${agent.zone || 'Bengaluru Central'}</span>
+            <span>Vehicle: ${agent.vehicle_no || 'N/A'}</span><br>
+            <span style="color:#0284c7;font-weight:bold;">Zone: ${agent.zone || 'Live Location'}</span>
           </div>
         `
       });
@@ -337,38 +341,41 @@ function renderGoogleMarkers() {
     });
   }
 
-  // 3. Biodiesel Refinery
-  const refineryPos = { lat: 12.9856, lng: 77.7289 };
-  bounds.extend(refineryPos);
+  // 3. Biodiesel Refinery (Only display if route or stops are near Bengaluru)
+  const isNearBengaluru = routeCoords.some(c => Math.abs(c.lat - 12.9856) < 1.0);
+  if (isNearBengaluru) {
+    const refineryPos = { lat: 12.9856, lng: 77.7289 };
+    bounds.extend(refineryPos);
 
-  const refineryMarker = new maps.Marker({
-    position: refineryPos,
-    map: googleMapInstance,
-    title: 'Biodiesel Refinery Hub',
-    label: {
-      text: '🏭',
-      fontSize: '14px'
-    },
-    icon: {
-      path: maps.SymbolPath.FORWARD_CLOSED_ARROW,
-      scale: 6,
-      fillColor: '#16a34a',
-      fillOpacity: 1,
-      strokeColor: '#ffffff',
-      strokeWeight: 2,
-    }
-  });
+    const refineryMarker = new maps.Marker({
+      position: refineryPos,
+      map: googleMapInstance,
+      title: 'Biodiesel Refinery Hub',
+      label: {
+        text: '🏭',
+        fontSize: '14px'
+      },
+      icon: {
+        path: maps.SymbolPath.FORWARD_CLOSED_ARROW,
+        scale: 6,
+        fillColor: '#16a34a',
+        fillOpacity: 1,
+        strokeColor: '#ffffff',
+        strokeWeight: 2,
+      }
+    });
 
-  const refineryInfoWindow = new maps.InfoWindow({
-    content: `
-      <div style="font-family:sans-serif;font-size:12px;color:#0f172a;padding:4px;">
-        <strong>Biodiesel Processing Partner</strong><br>
-        <span>Refinery Delivery Hub</span>
-      </div>
-    `
-  });
-  refineryMarker.addListener('click', () => refineryInfoWindow.open(googleMapInstance, refineryMarker));
-  googleMarkers.push(refineryMarker);
+    const refineryInfoWindow = new maps.InfoWindow({
+      content: `
+        <div style="font-family:sans-serif;font-size:12px;color:#0f172a;padding:4px;">
+          <strong>Biodiesel Processing Partner</strong><br>
+          <span>Refinery Delivery Hub</span>
+        </div>
+      `
+    });
+    refineryMarker.addListener('click', () => refineryInfoWindow.open(googleMapInstance, refineryMarker));
+    googleMarkers.push(refineryMarker);
+  }
 
   // Route Polyline
   if (routeCoords.length > 1) {
@@ -383,7 +390,11 @@ function renderGoogleMarkers() {
   }
 
   if (!bounds.isEmpty()) {
-    googleMapInstance.fitBounds(bounds, { top: 40, bottom: 40, left: 40, right: 40 });
+    googleMapInstance.fitBounds(bounds, { top: 50, bottom: 50, left: 50, right: 50 });
+  } else {
+    // Default pan to India view if no active markers yet
+    googleMapInstance.setCenter({ lat: 20.5937, lng: 78.9629 });
+    googleMapInstance.setZoom(5);
   }
 }
 
@@ -396,7 +407,7 @@ function initLeafletMap() {
   if (!L || !mapContainerRef.value) return;
 
   try {
-    leafletMapInstance = L.map(mapContainerRef.value).setView([12.9716, 77.5946], 12);
+    leafletMapInstance = L.map(mapContainerRef.value).setView([20.5937, 78.9629], 5);
     L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
       attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
       maxZoom: 19
@@ -420,10 +431,12 @@ function renderLeafletMarkers() {
 
   const bounds = [];
 
+  // Stops
   if (props.stops && props.stops.length) {
     props.stops.forEach((stop, i) => {
-      const lat = stop.seller_lat || (12.9352 + (i * 0.02));
-      const lng = stop.seller_lng || (77.6245 - (i * 0.015));
+      const lat = stop.seller_lat;
+      const lng = stop.seller_lng;
+      if (!lat || !lng) return;
       bounds.push([lat, lng]);
 
       const markerColor = stop.status === 'visited' ? '#10b981' : '#f59e0b';
@@ -436,13 +449,36 @@ function renderLeafletMarkers() {
 
       L.marker([lat, lng], { icon: customIcon })
         .addTo(leafletMapInstance)
-        .bindPopup(`<strong>Stop #${stop.stop_order}: ${stop.seller_name}</strong>`);
+        .bindPopup(`<strong>Stop #${stop.stop_order}: ${stop.seller_name}</strong><br>${stop.seller_address || ''}`);
+    });
+  }
+
+  // Agents
+  if (props.agents && props.agents.length) {
+    props.agents.forEach((agent) => {
+      const lat = agent.lat ?? agent.current_lat;
+      const lng = agent.lng ?? agent.current_lng;
+      if (!lat || !lng) return;
+      bounds.push([lat, lng]);
+
+      const agentIcon = L.divIcon({
+        className: 'custom-agent-icon',
+        html: `<div style="background-color:#0284c7;width:28px;height:28px;border-radius:50%;border:2px solid white;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 2px 5px rgba(0,0,0,0.4);">🚚</div>`,
+        iconSize: [28, 28],
+        iconAnchor: [14, 14]
+      });
+
+      L.marker([lat, lng], { icon: agentIcon })
+        .addTo(leafletMapInstance)
+        .bindPopup(`<strong>Agent: ${agent.name}</strong><br>Vehicle: ${agent.vehicle_no || 'N/A'}<br>Zone: ${agent.zone || 'Live'}`);
     });
   }
 
   if (bounds.length > 1) {
     L.polyline(bounds, { color: '#0f766e', weight: 3, opacity: 0.8, dashArray: '6, 8' }).addTo(leafletMapInstance);
     leafletMapInstance.fitBounds(bounds, { padding: [40, 40] });
+  } else if (bounds.length === 1) {
+    leafletMapInstance.setView(bounds[0], 14);
   }
 }
 

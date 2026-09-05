@@ -194,29 +194,20 @@ def fleet_tracking():
 
     agents = User.query.filter_by(role="agent", status="approved").all()
     agent_locations = []
-    
-    # Realistic GPS coordinates around Bengaluru
-    coords_pool = [
-        {"lat": 12.9716, "lng": 77.5946, "zone": "Central Bengaluru"},
-        {"lat": 12.9352, "lng": 77.6245, "zone": "Koramangala"},
-        {"lat": 12.9784, "lng": 77.6408, "zone": "Indiranagar"},
-        {"lat": 12.9141, "lng": 77.6101, "zone": "BTM Layout"},
-        {"lat": 12.9856, "lng": 77.7289, "zone": "Whitefield"},
-    ]
 
-    for idx, agent in enumerate(agents):
+    for agent in agents:
         prof = agent.agent_profile
-        coord = coords_pool[idx % len(coords_pool)]
         current_stops = RouteStop.query.filter_by(agent_id=agent.id).all()
         visited = sum(1 for s in current_stops if s.status == "visited")
-        
+        has_gps = prof and prof.current_lat and prof.current_lng
+
         agent_locations.append({
             "agent_id": agent.id,
             "name": agent.name,
-            "vehicle_no": prof.vehicle_no if prof else "KA-05-UCO-1000",
-            "lat": prof.current_lat if prof and prof.current_lat else coord["lat"],
-            "lng": prof.current_lng if prof and prof.current_lng else coord["lng"],
-            "zone": coord["zone"],
+            "vehicle_no": prof.vehicle_no if prof else "N/A",
+            "lat": prof.current_lat if has_gps else None,
+            "lng": prof.current_lng if has_gps else None,
+            "zone": f"GPS: {prof.current_lat:.4f}, {prof.current_lng:.4f}" if has_gps else "Location not broadcast yet",
             "total_stops": len(current_stops),
             "completed_stops": visited,
             "status": "In Transit" if visited < len(current_stops) else "Completed Route",
@@ -258,6 +249,10 @@ def update_seller_location(seller_id):
             pass
     if "special_instructions" in data:
         prof.special_instructions = str(data["special_instructions"]).strip()
+    if "city" in data and data["city"]:
+        prof.city = str(data["city"]).strip()
+    if "pincode" in data and data["pincode"]:
+        prof.pincode = str(data["pincode"]).strip()
 
     status_str = "ENABLED" if prof.pickup_enabled else "DISABLED"
     log_audit(
