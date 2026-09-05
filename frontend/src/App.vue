@@ -233,12 +233,10 @@
             :batches="biodieselBatches"
             :approved-sellers="approvedSellers"
             :active-agents="activeAgents"
-            :seeding="seeding"
             @update-user-status="handleUpdateUserStatus"
             @update-rate-card="handleUpdateRateCard"
             @inject-stop="handleInjectStop"
             @update-seller-location="handleUpdateSellerLocation"
-            @seed-database="handleSeedDatabase"
           />
         </div>
 
@@ -326,7 +324,7 @@ const biodieselBatches = ref([]);
 const auditLogs = ref([]);
 const approvedSellers = ref([]);
 const activeAgents = ref([]);
-const seeding = ref(false);
+
 
 function showToast(msg) {
   toastMsg.value = msg;
@@ -562,21 +560,8 @@ async function handleUpdateSellerLocation(sellerId, payload) {
   }
 }
 
-async function handleSeedDatabase() {
-  if (!confirm('This will populate/reset the database with sample active kitchens, routes, and collection agents. Proceed?')) return;
-  seeding.value = true;
-  try {
-    const res = await api.seedDemoData();
-    showToast(res.message || 'Database successfully populated with demo fleet & kitchens!');
-    await loadRoleData();
-  } catch (e) {
-    showToast(e.message || 'Failed to seed demo data');
-  } finally {
-    seeding.value = false;
-  }
-}
-
 function formatNumber(val) {
+
 
   return Number(val || 0).toLocaleString('en-IN');
 }

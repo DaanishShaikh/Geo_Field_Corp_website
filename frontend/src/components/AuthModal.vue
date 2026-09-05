@@ -71,6 +71,21 @@
           />
         </div>
 
+        <!-- Super Admin Quick Fill Helper -->
+        <div class="p-2.5 bg-slate-950/80 border border-slate-800 rounded-xl flex items-center justify-between gap-2">
+          <div class="text-[11px] text-slate-400">
+            <span class="text-white font-semibold">Super Admin:</span> <code class="text-teal-400">admin@geofield.com</code>
+          </div>
+          <button 
+            type="button" 
+            @click="fillAdminCredentials"
+            class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-teal-300 hover:text-white rounded-lg text-[10px] font-bold transition border border-slate-700/80"
+          >
+            Fill Admin
+          </button>
+        </div>
+
+
         <button 
           type="submit" 
           :disabled="loading"
@@ -244,6 +259,13 @@ const loginForm = ref({
   email: '',
   password: '',
 });
+
+function fillAdminCredentials() {
+  loginForm.value.email = 'admin@geofield.com';
+  loginForm.value.password = 'admin123';
+  errorMessage.value = '';
+}
+
 
 const regForm = ref({
   role: 'seller',

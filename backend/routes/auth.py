@@ -91,7 +91,7 @@ def login():
         return jsonify({"error": "Invalid email or password"}), 401
 
     if user.status == "pending":
-        return jsonify({"error": "Your account is pending Super Admin approval."}), 403
+        return jsonify({"error": "This account is currently pending Super Admin approval. Log in as Super Admin (admin@geofield.com) to approve it."}), 403
     elif user.status == "blacklisted":
         return jsonify({"error": "Your account has been suspended or blacklisted. Contact compliance support."}), 403
     elif user.status == "rejected":

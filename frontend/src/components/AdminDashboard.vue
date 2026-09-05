@@ -15,15 +15,10 @@
         </div>
       </div>
       <div class="flex items-center gap-2">
-        <button 
-          @click="$emit('seed-database')"
-          :disabled="seeding"
-          class="px-3.5 py-2 bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 disabled:opacity-50 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-md shadow-teal-900/30 active:scale-95 cursor-pointer"
-          title="Instantly populate the database with demo kitchens, routes, and collection agents"
-        >
-          <span>{{ seeding ? '⏳' : '🌱' }}</span>
-          <span>{{ seeding ? 'Populating Database...' : 'Seed / Refresh Demo Fleet & Kitchens' }}</span>
-        </button>
+        <span class="px-3 py-1.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 text-xs font-semibold flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          Fleet Dispatch Ready
+        </span>
       </div>
     </div>
 
@@ -493,14 +488,11 @@ const props = defineProps({
   activeAgents: {
     type: Array,
     default: () => []
-  },
-  seeding: {
-    type: Boolean,
-    default: false
   }
 });
 
-const emit = defineEmits(['update-user-status', 'update-rate-card', 'inject-stop', 'update-seller-location', 'create-batch', 'seed-database']);
+const emit = defineEmits(['update-user-status', 'update-rate-card', 'inject-stop', 'update-seller-location', 'create-batch']);
+
 
 
 const savingRate = ref(false);

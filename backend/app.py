@@ -9,13 +9,13 @@ def create_app(config_class=Config):
     app = Flask(__name__, static_folder=None)
     app.config.from_object(config_class)
 
-    # On Vercel (HTTPS), session cookies must be Secure + SameSite=None
-    is_production = bool(os.environ.get("VERCEL") or os.environ.get("DATABASE_URL", "").startswith("postgresql"))
-    app.config["SESSION_COOKIE_SECURE"] = is_production
-    app.config["SESSION_COOKIE_SAMESITE"] = "None" if is_production else "Lax"
+    # Universal cookie settings for same-origin SPA (compatible with both HTTP localhost and HTTPS Vercel)
     app.config["SESSION_COOKIE_HTTPONLY"] = True
-    app.config["REMEMBER_COOKIE_SECURE"] = is_production
-    app.config["REMEMBER_COOKIE_SAMESITE"] = "None" if is_production else "Lax"
+    app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
+    app.config["SESSION_COOKIE_SECURE"] = False
+    app.config["REMEMBER_COOKIE_HTTPONLY"] = True
+    app.config["REMEMBER_COOKIE_SAMESITE"] = "Lax"
+    app.config["REMEMBER_COOKIE_SECURE"] = False
 
     # Initialize database extension only (no connection yet)
     db.init_app(app)
@@ -27,7 +27,7 @@ def create_app(config_class=Config):
     @login_manager.user_loader
     def load_user(user_id):
         try:
-            return db.session.get(User, user_id)
+            return db.session.get(User, str(user_id))
         except Exception:
             return None
 
@@ -42,21 +42,47 @@ def create_app(config_class=Config):
     app.register_blueprint(admin_bp)
     app.register_blueprint(api_bp)
 
-    # Auto-seed database with default active agents and sellers if empty
-    _seeded = False
+    # Ensure Super Admin account and rate card exist without injecting dummy sellers/agents
+    _admin_checked = False
 
     @app.before_request
-    def ensure_initial_seed():
-        nonlocal _seeded
-        if not _seeded:
+    def ensure_admin_account():
+        nonlocal _admin_checked
+        if not _admin_checked:
             try:
-                from backend.seed import seed_database
+                from backend.models import RateCard
                 db.create_all()
-                if not User.query.first():
-                    seed_database(drop=False)
-                _seeded = True
+                admin = User.query.filter_by(role="admin").first()
+                if not admin:
+                    admin = User(
+                        id="ADM-001",
+                        email="admin@geofield.com",
+                        name="Super Admin (GeoField Platform Owner)",
+                        phone="+91 98800 11223",
+                        role="admin",
+                        status="approved"
+                    )
+                    admin.set_password("admin123")
+                    db.session.add(admin)
+                else:
+                    if admin.status != "approved":
+                        admin.status = "approved"
+                    if not admin.check_password("admin123"):
+                        admin.set_password("admin123")
+                
+                if not RateCard.query.first():
+                    rc = RateCard(base_rate=55.0, low_tpc_bonus=5.0, high_tpc_penalty=8.0)
+                    db.session.add(rc)
+
+                db.session.commit()
+                _admin_checked = True
             except Exception as e:
-                app.logger.warning(f"Auto-seed check: {e}")
+                try:
+                    db.session.rollback()
+                except Exception:
+                    pass
+                app.logger.warning(f"Admin bootstrap check: {e}")
+
 
 
     # Global JSON error handlers
