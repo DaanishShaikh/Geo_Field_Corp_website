@@ -115,6 +115,13 @@
               >
                 Reject
               </button>
+              <button 
+                @click="$emit('delete-user', u.id, u.name)"
+                title="Permanently Delete Account"
+                class="px-2.5 py-1.5 bg-slate-800 hover:bg-rose-900/60 text-slate-400 hover:text-rose-300 rounded-lg text-xs font-semibold border border-slate-700 hover:border-rose-500/30 transition"
+              >
+                🗑️
+              </button>
             </div>
           </div>
         </div>
@@ -256,7 +263,7 @@
             <tr class="border-b border-slate-700 text-slate-400 text-[11px] uppercase tracking-wider">
               <th class="py-3 px-3">FBO / Kitchen</th>
               <th class="py-3 px-3">Address & Pin</th>
-              <th class="py-3 px-3">Pickup Preference Window</th>
+              <th class="py-3 px-3">Pickup Window</th>
               <th class="py-3 px-3">Pickup Status</th>
               <th class="py-3 px-3 text-right">Actions</th>
             </tr>
@@ -269,9 +276,15 @@
               <td class="py-3 px-3">
                 <div class="font-bold text-white">{{ seller.name }}</div>
                 <div class="text-[10px] text-slate-400 font-mono">ID: {{ seller.id }} &bull; {{ seller.phone || 'No phone' }}</div>
+                <span 
+                  :class="seller.status === 'blacklisted' ? 'bg-amber-600/20 text-amber-400 border-amber-500/30' : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'"
+                  class="inline-block mt-1 px-2 py-0.5 rounded-full text-[9px] font-bold uppercase border"
+                >
+                  {{ seller.status === 'blacklisted' ? '⛔ Blacklisted' : '✓ Active' }}
+                </span>
               </td>
               <td class="py-3 px-3 text-slate-300 max-w-xs">
-                <div class="truncate">{{ seller.seller_profile?.address || 'Bengaluru, Karnataka' }}</div>
+                <div class="truncate">{{ seller.seller_profile?.address || 'Address not set' }}</div>
                 <div class="text-[10px] font-mono text-cyan-400">
                   {{ (seller.seller_profile?.latitude || 12.9716).toFixed(4) }}, {{ (seller.seller_profile?.longitude || 77.5946).toFixed(4) }}
                 </div>
@@ -302,22 +315,44 @@
                   {{ seller.seller_profile?.pickup_enabled !== false ? 'Pickup Enabled' : 'Pickup Disabled' }}
                 </button>
               </td>
-              <td class="py-3 px-3 text-right space-x-1.5">
-                <button 
-                  @click="inspectingSeller = seller"
-                  class="px-2.5 py-1 bg-blue-600/20 hover:bg-blue-600 text-blue-300 hover:text-white rounded-lg text-xs font-semibold border border-blue-500/30 transition"
-                >
-                  📋 View Dossier
-                </button>
-                <button 
-                  @click="openEditLocationModal(seller)"
-                  class="px-2.5 py-1 bg-slate-700 hover:bg-slate-600 text-white rounded-lg text-xs font-semibold transition"
-                >
-                  Edit Details
-                </button>
+              <td class="py-3 px-3 text-right">
+                <!-- Row 1: View + Edit -->
+                <div class="flex items-center justify-end gap-1.5 mb-1.5">
+                  <button 
+                    @click="inspectingSeller = seller"
+                    class="px-2.5 py-1 bg-blue-600/20 hover:bg-blue-600 text-blue-300 hover:text-white rounded-lg text-xs font-semibold border border-blue-500/30 transition"
+                  >
+                    📋 Dossier
+                  </button>
+                  <button 
+                    @click="openEditLocationModal(seller)"
+                    class="px-2.5 py-1 bg-slate-700 hover:bg-slate-600 text-white rounded-lg text-xs font-semibold transition"
+                  >
+                    ✏️ Edit
+                  </button>
+                </div>
+                <!-- Row 2: Blacklist + Delete -->
+                <div class="flex items-center justify-end gap-1.5">
+                  <button 
+                    @click="$emit('update-user-status', seller.id, seller.status === 'blacklisted' ? 'approved' : 'blacklisted')"
+                    :class="seller.status === 'blacklisted' ? 'bg-emerald-600/20 text-emerald-300 border-emerald-500/30 hover:bg-emerald-600 hover:text-white' : 'bg-amber-600/20 text-amber-300 border-amber-500/30 hover:bg-amber-600 hover:text-white'"
+                    class="px-2.5 py-1 rounded-lg text-xs font-semibold border transition"
+                    :title="seller.status === 'blacklisted' ? 'Unblock / Re-activate Seller' : 'Blacklist / Suspend Seller'"
+                  >
+                    {{ seller.status === 'blacklisted' ? '✓ Unblock' : '⛔ Blacklist' }}
+                  </button>
+                  <button 
+                    @click="$emit('delete-user', seller.id, seller.name)"
+                    title="Permanently Delete Seller Account"
+                    class="px-2.5 py-1 bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white rounded-lg text-xs font-semibold border border-rose-500/30 transition"
+                  >
+                    🗑️ Delete
+                  </button>
+                </div>
               </td>
             </tr>
           </tbody>
+
         </table>
       </div>
     </div>
@@ -484,19 +519,40 @@
             Close Dossier
           </button>
 
-          <div v-if="inspectingSeller.status === 'pending'" class="flex items-center gap-2">
+          <div class="flex items-center gap-2">
             <button 
-              @click="$emit('update-user-status', inspectingSeller.id, 'rejected'); inspectingSeller = null" 
-              class="px-4 py-2 bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white rounded-xl text-xs font-bold border border-rose-500/30 transition"
+              type="button" 
+              @click="$emit('delete-user', inspectingSeller.id, inspectingSeller.name); inspectingSeller = null" 
+              class="px-3 py-2 bg-rose-950/40 hover:bg-rose-900 text-rose-300 rounded-xl font-semibold text-xs border border-rose-500/30 transition flex items-center gap-1"
             >
-              ✕ Reject Application
+              <span>🗑️</span>
+              <span>Delete Account</span>
             </button>
+
             <button 
-              @click="$emit('update-user-status', inspectingSeller.id, 'approved'); inspectingSeller = null" 
-              class="px-5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition shadow"
+              v-if="inspectingSeller.status !== 'pending'"
+              type="button" 
+              @click="$emit('update-user-status', inspectingSeller.id, inspectingSeller.status === 'blacklisted' ? 'approved' : 'blacklisted'); inspectingSeller.status = inspectingSeller.status === 'blacklisted' ? 'approved' : 'blacklisted'" 
+              :class="inspectingSeller.status === 'blacklisted' ? 'bg-emerald-600/20 text-emerald-300 border-emerald-500/30 hover:bg-emerald-600 hover:text-white' : 'bg-amber-600/20 text-amber-300 border-amber-500/30 hover:bg-amber-600 hover:text-white'"
+              class="px-3.5 py-2 rounded-xl text-xs font-bold border transition"
             >
-              ✓ Approve & Authorize Seller
+              {{ inspectingSeller.status === 'blacklisted' ? '✓ Unblock Seller' : '⛔ Blacklist Seller' }}
             </button>
+
+            <div v-if="inspectingSeller.status === 'pending'" class="flex items-center gap-2">
+              <button 
+                @click="$emit('update-user-status', inspectingSeller.id, 'rejected'); inspectingSeller = null" 
+                class="px-4 py-2 bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white rounded-xl text-xs font-bold border border-rose-500/30 transition"
+              >
+                ✕ Reject
+              </button>
+              <button 
+                @click="$emit('update-user-status', inspectingSeller.id, 'approved'); inspectingSeller = null" 
+                class="px-5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition shadow"
+              >
+                ✓ Approve & Authorize
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -604,21 +660,28 @@
                 <div class="text-[10px] text-teal-400 font-mono">ID: {{ agent.id }}</div>
               </td>
               <td class="py-3 px-3">
-                <div class="font-mono font-bold text-cyan-300">{{ agent.agent_profile?.vehicle_no || 'KA-02-EV-4412' }}</div>
+                <div class="font-mono font-bold text-cyan-300">{{ agent.agent_profile?.vehicle_no || 'N/A' }}</div>
                 <div class="text-[10px] text-slate-400">GeoField Electric Bio-Logistics</div>
               </td>
               <td class="py-3 px-3">
-                <div class="text-white font-medium">{{ agent.phone || '+91 94480 33221' }}</div>
+                <div class="text-white font-medium">{{ agent.phone || 'No phone' }}</div>
                 <div class="text-[10px] text-slate-400">{{ agent.email }}</div>
               </td>
               <td class="py-3 px-3">
-                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center gap-1.5 w-fit">
-                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                  Active &bull; On Route
+                <span 
+                  :class="agent.status === 'blacklisted' ? 'bg-amber-600/10 text-amber-400 border-amber-500/20' : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'"
+                  class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase border flex items-center gap-1.5 w-fit"
+                >
+                  <span 
+                    :class="agent.status === 'blacklisted' ? 'bg-amber-400' : 'bg-emerald-400 animate-pulse'"
+                    class="w-1.5 h-1.5 rounded-full"
+                  ></span>
+                  {{ agent.status === 'blacklisted' ? 'Suspended' : 'Active · On Route' }}
                 </span>
               </td>
               <td class="py-3 px-3 text-right">
-                <div class="flex items-center justify-end gap-1.5">
+                <!-- Row 1: Call + Email -->
+                <div class="flex items-center justify-end gap-1.5 mb-1.5">
                   <a 
                     v-if="agent.phone"
                     :href="'tel:' + agent.phone"
@@ -634,9 +697,28 @@
                     ✉ Email
                   </a>
                 </div>
+                <!-- Row 2: Suspend/Unblock + Delete -->
+                <div class="flex items-center justify-end gap-1.5">
+                  <button 
+                    @click="$emit('update-user-status', agent.id, agent.status === 'blacklisted' ? 'approved' : 'blacklisted')"
+                    :class="agent.status === 'blacklisted' ? 'bg-emerald-600/20 text-emerald-300 border-emerald-500/30 hover:bg-emerald-600 hover:text-white' : 'bg-amber-600/20 text-amber-300 border-amber-500/30 hover:bg-amber-600 hover:text-white'"
+                    class="px-2.5 py-1 rounded-lg text-[10px] font-semibold border transition"
+                    :title="agent.status === 'blacklisted' ? 'Unblock / Re-activate Agent' : 'Suspend / Blacklist Agent'"
+                  >
+                    {{ agent.status === 'blacklisted' ? '✓ Unblock' : '⛔ Suspend' }}
+                  </button>
+                  <button 
+                    @click="$emit('delete-user', agent.id, agent.name)"
+                    title="Permanently Delete Agent Account"
+                    class="px-2.5 py-1 bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white rounded-lg text-[10px] font-semibold border border-rose-500/30 transition"
+                  >
+                    🗑️ Delete
+                  </button>
+                </div>
               </td>
             </tr>
           </tbody>
+
         </table>
       </div>
     </div>
@@ -715,7 +797,7 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(['update-user-status', 'update-rate-card', 'inject-stop', 'update-seller-location', 'create-batch']);
+const emit = defineEmits(['update-user-status', 'update-rate-card', 'inject-stop', 'update-seller-location', 'create-batch', 'delete-user']);
 
 
 

@@ -104,6 +104,40 @@ def update_user_status(user_id):
     }), 200
 
 
+@admin_bp.route("/users/<user_id>", methods=["DELETE"])
+@login_required
+def delete_user(user_id):
+    """Super Admin endpoint to permanently delete a seller or agent account."""
+    auth_err = check_admin()
+    if auth_err: return auth_err
+
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    if user.id == current_user.id or user.role == "admin":
+        return jsonify({"error": "Super Admin account cannot be deleted."}), 400
+
+    user_name = user.name
+    user_role = user.role
+    user_email = user.email
+
+    # Clean up associated route stops
+    RouteStop.query.filter((RouteStop.seller_id == user.id) | (RouteStop.agent_id == user.id)).delete(synchronize_session=False)
+
+    log_audit(
+        current_user.id, "admin", f"Deleted {user_role.capitalize()} Account",
+        "User", user.id, f"Deleted user: {user_name} ({user_email})"
+    )
+
+    db.session.delete(user)
+    db.session.commit()
+
+    return jsonify({
+        "message": f"Account for {user_name} ({user_role}) deleted permanently."
+    }), 200
+
+
 @admin_bp.route("/receipts", methods=["GET"])
 @login_required
 def list_receipts():

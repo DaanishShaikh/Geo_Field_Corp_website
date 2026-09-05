@@ -76,6 +76,7 @@ export const api = {
     return request(`/admin/users${qs ? '?' + qs : ''}`);
   },
   updateUserStatus: (userId, status) => request(`/admin/users/${userId}/status`, { method: 'PATCH', body: JSON.stringify({ status }) }),
+  deleteUser: (userId) => request(`/admin/users/${userId}`, { method: 'DELETE' }),
   getAdminReceipts: (params = {}) => {
     const qs = new URLSearchParams(params).toString();
     return request(`/admin/receipts${qs ? '?' + qs : ''}`);

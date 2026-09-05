@@ -239,6 +239,7 @@
             @update-rate-card="handleUpdateRateCard"
             @inject-stop="handleInjectStop"
             @update-seller-location="handleUpdateSellerLocation"
+            @delete-user="handleDeleteUser"
           />
         </div>
 
@@ -392,9 +393,9 @@ async function loadRoleData() {
       const logs = await api.getAuditLogs();
       auditLogs.value = logs.audit_logs || [];
       
-      const sellersRes = await api.getAdminUsers({ role: 'seller', status: 'approved' });
-      approvedSellers.value = sellersRes.users || [];
-      adminManifestStops.value = (sellersRes.users || []).map((s, idx) => ({
+      // Load approved sellers for manifest stops
+      const sellersApprovedRes = await api.getAdminUsers({ role: 'seller', status: 'approved' });
+      adminManifestStops.value = (sellersApprovedRes.users || []).map((s, idx) => ({
         stop_order: idx + 1,
         seller_id: s.id,
         seller_name: s.name,
@@ -407,8 +408,12 @@ async function loadRoleData() {
         pickup_preference: s.seller_profile?.pickup_preference || 'Morning (9 AM - 12 PM)',
         status: 'pending'
       }));
-      const agentsRes = await api.getAdminUsers({ role: 'agent', status: 'approved' });
-      activeAgents.value = agentsRes.users || [];
+      // Load ALL sellers (approved + blacklisted) so they remain visible for management
+      const sellersRes = await api.getAdminUsers({ role: 'seller' });
+      approvedSellers.value = (sellersRes.users || []).filter(u => u.status !== 'pending' && u.status !== 'rejected');
+      // Load ALL agents (approved + blacklisted) so they remain visible for management
+      const agentsRes = await api.getAdminUsers({ role: 'agent' });
+      activeAgents.value = (agentsRes.users || []).filter(u => u.status !== 'pending' && u.status !== 'rejected');
     }
   } catch (e) {
     showToast(e.message || 'Failed to load operational data');
@@ -526,6 +531,19 @@ async function handleUpdateUserStatus(userId, status) {
     await loadRoleData();
   } catch (e) {
     showToast(e.message || 'Failed to update user status');
+  }
+}
+
+async function handleDeleteUser(userId, userName = 'this account') {
+  if (!confirm(`Are you sure you want to permanently delete ${userName}? This action cannot be undone.`)) {
+    return;
+  }
+  try {
+    const res = await api.deleteUser(userId);
+    showToast(res.message || 'Account deleted permanently');
+    await loadRoleData();
+  } catch (e) {
+    showToast(e.message || 'Failed to delete account');
   }
 }
 
