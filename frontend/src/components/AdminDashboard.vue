@@ -320,6 +320,81 @@
       </div>
     </div>
 
+    <!-- Active Fleet Agents Directory -->
+    <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-6 shadow-xl space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-teal-500/10 text-teal-400 border border-teal-500/20 flex items-center justify-center text-sm font-bold">
+            🚚
+          </div>
+          <div>
+            <h2 class="text-sm font-bold text-white">Active Field Collection Fleet & Agents Directory</h2>
+            <p class="text-xs text-slate-400">Deployed collection officers, assigned EV vehicles, and direct phone contacts</p>
+          </div>
+        </div>
+        <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-teal-500/10 text-teal-300 border border-teal-500/20 w-fit">
+          {{ activeAgents.length }} Active Agents
+        </span>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs">
+          <thead>
+            <tr class="border-b border-slate-700 text-slate-400 text-[11px] uppercase tracking-wider">
+              <th class="py-3 px-3">Agent Officer</th>
+              <th class="py-3 px-3">Vehicle Assigned</th>
+              <th class="py-3 px-3">Contact Details</th>
+              <th class="py-3 px-3">Operational Status</th>
+              <th class="py-3 px-3 text-right">Direct Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-700/60">
+            <tr v-if="!activeAgents.length">
+              <td colspan="5" class="py-6 text-center text-slate-500">No active field agents registered. Approve pending agents in the queue above.</td>
+            </tr>
+            <tr v-for="agent in activeAgents" :key="agent.id" class="hover:bg-slate-700/30 transition">
+              <td class="py-3 px-3">
+                <div class="font-bold text-white text-sm">{{ agent.name }}</div>
+                <div class="text-[10px] text-teal-400 font-mono">ID: {{ agent.id }}</div>
+              </td>
+              <td class="py-3 px-3">
+                <div class="font-mono font-bold text-cyan-300">{{ agent.agent_profile?.vehicle_no || 'KA-02-EV-4412' }}</div>
+                <div class="text-[10px] text-slate-400">GeoField Electric Bio-Logistics</div>
+              </td>
+              <td class="py-3 px-3">
+                <div class="text-white font-medium">{{ agent.phone || '+91 94480 33221' }}</div>
+                <div class="text-[10px] text-slate-400">{{ agent.email }}</div>
+              </td>
+              <td class="py-3 px-3">
+                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center gap-1.5 w-fit">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                  Active &bull; On Route
+                </span>
+              </td>
+              <td class="py-3 px-3 text-right">
+                <div class="flex items-center justify-end gap-1.5">
+                  <a 
+                    v-if="agent.phone"
+                    :href="'tel:' + agent.phone"
+                    class="px-2.5 py-1 rounded-lg bg-emerald-600/30 hover:bg-emerald-600 text-emerald-300 hover:text-white font-bold text-[10px] transition flex items-center gap-1"
+                  >
+                    <span>📞</span> Call
+                  </a>
+                  <a 
+                    v-if="agent.email"
+                    :href="'mailto:' + agent.email"
+                    class="px-2 py-1 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-200 text-[10px] transition"
+                  >
+                    ✉ Email
+                  </a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
     <!-- Live Fleet GPS Tracking -->
     <MapboxView 
       title="Live Fleet & Route Dispatch Tracking"
