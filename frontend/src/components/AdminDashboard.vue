@@ -1,5 +1,32 @@
 <template>
   <div class="space-y-6">
+    <!-- Super Admin Command Bar -->
+    <div class="flex flex-wrap items-center justify-between gap-3 bg-gradient-to-r from-slate-800/90 to-slate-900/90 p-4 rounded-2xl border border-slate-700/80 shadow-xl">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-teal-500/10 border border-teal-500/20 text-teal-400 flex items-center justify-center font-bold text-lg shadow-inner">
+          🏢
+        </div>
+        <div>
+          <div class="text-sm font-bold text-white flex items-center gap-2">
+            <span>GeoField Super Admin Command Center</span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">System Live</span>
+          </div>
+          <div class="text-xs text-slate-400">Total System Oversight: <span class="text-slate-200 font-semibold">{{ approvedSellers.length }} Registered Kitchens</span> &bull; <span class="text-slate-200 font-semibold">{{ activeAgents.length }} Active Fleet Agents</span></div>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <button 
+          @click="$emit('seed-database')"
+          :disabled="seeding"
+          class="px-3.5 py-2 bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 disabled:opacity-50 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-md shadow-teal-900/30 active:scale-95 cursor-pointer"
+          title="Instantly populate the database with demo kitchens, routes, and collection agents"
+        >
+          <span>{{ seeding ? '⏳' : '🌱' }}</span>
+          <span>{{ seeding ? 'Populating Database...' : 'Seed / Refresh Demo Fleet & Kitchens' }}</span>
+        </button>
+      </div>
+    </div>
+
     <!-- Super Admin Header Stats -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-5 shadow-lg">
@@ -466,10 +493,15 @@ const props = defineProps({
   activeAgents: {
     type: Array,
     default: () => []
+  },
+  seeding: {
+    type: Boolean,
+    default: false
   }
 });
 
-const emit = defineEmits(['update-user-status', 'update-rate-card', 'inject-stop', 'update-seller-location', 'create-batch']);
+const emit = defineEmits(['update-user-status', 'update-rate-card', 'inject-stop', 'update-seller-location', 'create-batch', 'seed-database']);
+
 
 const savingRate = ref(false);
 const rateCardForm = ref({

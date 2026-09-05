@@ -340,3 +340,15 @@ def audit_logs():
 
     logs = AuditLog.query.order_by(AuditLog.timestamp.desc()).limit(200).all()
     return jsonify({"audit_logs": [l.to_dict() for l in logs]}), 200
+
+
+@admin_bp.route("/seed", methods=["POST"])
+@login_required
+def trigger_seed():
+    auth_err = check_admin()
+    if auth_err: return auth_err
+
+    from backend.seed import seed_database
+    seed_database(drop=True)
+    return jsonify({"message": "Database successfully reset and re-seeded with demo agents, kitchens, and routes!"}), 200
+

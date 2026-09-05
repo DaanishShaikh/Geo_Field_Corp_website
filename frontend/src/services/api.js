@@ -86,7 +86,9 @@ export const api = {
   getBiodieselBatches: () => request('/admin/compliance/batches'),
   createBiodieselBatch: (payload) => request('/admin/compliance/batches', { method: 'POST', body: JSON.stringify(payload) }),
   getAuditLogs: () => request('/admin/audit-logs'),
+  seedDemoData: () => request('/admin/seed', { method: 'POST' }),
 
   // General & Certificate Download URL
   getCertificateDownloadUrl: (receiptId) => `/api/certificates/${receiptId}/download`,
 };
+

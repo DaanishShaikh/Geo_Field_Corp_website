@@ -42,6 +42,23 @@ def create_app(config_class=Config):
     app.register_blueprint(admin_bp)
     app.register_blueprint(api_bp)
 
+    # Auto-seed database with default active agents and sellers if empty
+    _seeded = False
+
+    @app.before_request
+    def ensure_initial_seed():
+        nonlocal _seeded
+        if not _seeded:
+            try:
+                from backend.seed import seed_database
+                db.create_all()
+                if not User.query.first():
+                    seed_database(drop=False)
+                _seeded = True
+            except Exception as e:
+                app.logger.warning(f"Auto-seed check: {e}")
+
+
     # Global JSON error handlers
     @app.errorhandler(400)
     def bad_request(e):
