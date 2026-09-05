@@ -1,6 +1,8 @@
 from flask import Blueprint, request, jsonify
 from flask_login import login_required, current_user
 from backend.models import db, User, Receipt, RateCard, AuditLog, RouteStop, BiodieselBatch
+from backend.models.receipt import Receipt
+from backend.models.certificate import DisposalCertificate
 from backend.services.audit_service import log_audit
 from datetime import datetime, date
 
@@ -122,16 +124,39 @@ def delete_user(user_id):
     user_role = user.role
     user_email = user.email
 
-    # Clean up associated route stops
-    RouteStop.query.filter((RouteStop.seller_id == user.id) | (RouteStop.agent_id == user.id)).delete(synchronize_session=False)
+    try:
+        # 1. Nullify approving_agent_id on receipts where this user was the settling agent
+        Receipt.query.filter_by(approving_agent_id=user.id).update(
+            {"approving_agent_id": None}, synchronize_session=False
+        )
 
-    log_audit(
-        current_user.id, "admin", f"Deleted {user_role.capitalize()} Account",
-        "User", user.id, f"Deleted user: {user_name} ({user_email})"
-    )
+        # 2. Delete certificates & receipts where this user was the seller
+        seller_receipts = Receipt.query.filter_by(seller_id=user.id).all()
+        for receipt in seller_receipts:
+            if receipt.certificate:
+                db.session.delete(receipt.certificate)
+            db.session.delete(receipt)
 
-    db.session.delete(user)
-    db.session.commit()
+        # 3. Delete any route stops referencing this user
+        RouteStop.query.filter(
+            (RouteStop.seller_id == user.id) | (RouteStop.agent_id == user.id)
+        ).delete(synchronize_session=False)
+
+        db.session.flush()  # flush before deleting the user itself
+
+        # 4. Log the deletion
+        log_audit(
+            current_user.id, "admin", f"Deleted {user_role.capitalize()} Account",
+            "User", user.id, f"Deleted user: {user_name} ({user_email})"
+        )
+
+        # 5. Delete the user (seller_profile / agent_profile cascade automatically)
+        db.session.delete(user)
+        db.session.commit()
+
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": f"Deletion failed: {str(e)}"}), 500
 
     return jsonify({
         "message": f"Account for {user_name} ({user_role}) deleted permanently."
