@@ -203,6 +203,123 @@
       </div>
     </div>
 
+    <!-- FBO Pickup Location & Route Preferences Management -->
+    <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-6 shadow-xl space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 flex items-center justify-center text-sm font-bold">
+            📍
+          </div>
+          <div>
+            <h2 class="text-sm font-bold text-white">FBO Pickup Location Controls & Preferences</h2>
+            <p class="text-xs text-slate-400">Enable/disable collection sites, configure time slots, and update coordinates</p>
+          </div>
+        </div>
+        <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/20 w-fit">
+          {{ approvedSellers.length }} Registered Sites
+        </span>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs">
+          <thead>
+            <tr class="border-b border-slate-700 text-slate-400 text-[11px] uppercase tracking-wider">
+              <th class="py-3 px-3">FBO / Kitchen</th>
+              <th class="py-3 px-3">Address & Pin</th>
+              <th class="py-3 px-3">Pickup Preference Window</th>
+              <th class="py-3 px-3">Pickup Status</th>
+              <th class="py-3 px-3 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-700/60">
+            <tr v-if="!approvedSellers.length">
+              <td colspan="5" class="py-6 text-center text-slate-500">No approved sellers registered yet.</td>
+            </tr>
+            <tr v-for="seller in approvedSellers" :key="seller.id" class="hover:bg-slate-700/30 transition">
+              <td class="py-3 px-3">
+                <div class="font-bold text-white">{{ seller.name }}</div>
+                <div class="text-[10px] text-slate-400 font-mono">ID: {{ seller.id }} &bull; {{ seller.phone || 'No phone' }}</div>
+              </td>
+              <td class="py-3 px-3 text-slate-300 max-w-xs">
+                <div class="truncate">{{ seller.seller_profile?.address || 'Bengaluru, Karnataka' }}</div>
+                <div class="text-[10px] font-mono text-cyan-400">
+                  {{ (seller.seller_profile?.latitude || 12.9716).toFixed(4) }}, {{ (seller.seller_profile?.longitude || 77.5946).toFixed(4) }}
+                </div>
+              </td>
+              <td class="py-3 px-3">
+                <select 
+                  :value="seller.seller_profile?.pickup_preference || 'Morning (9 AM - 12 PM)'"
+                  @change="handleUpdatePreference(seller.id, $event.target.value)"
+                  class="bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1 text-xs text-slate-200 focus:border-emerald-500 focus:outline-none"
+                >
+                  <option value="Morning (9 AM - 12 PM)">⏰ Morning (9 AM - 12 PM)</option>
+                  <option value="Afternoon (1 PM - 4 PM)">⏰ Afternoon (1 PM - 4 PM)</option>
+                  <option value="Evening (5 PM - 8 PM)">⏰ Evening (5 PM - 8 PM)</option>
+                  <option value="Custom / Night (9 PM - 12 AM)">🌙 Custom / Night (9 PM - 12 AM)</option>
+                  <option value="On-Demand Collection">⚡ On-Demand Collection</option>
+                </select>
+              </td>
+              <td class="py-3 px-3">
+                <button 
+                  @click="handleTogglePickup(seller)"
+                  :class="seller.seller_profile?.pickup_enabled !== false ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40 hover:bg-emerald-500/30' : 'bg-rose-500/20 text-rose-300 border-rose-500/40 hover:bg-rose-500/30'"
+                  class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase border transition flex items-center gap-1.5"
+                >
+                  <span 
+                    :class="seller.seller_profile?.pickup_enabled !== false ? 'bg-emerald-400' : 'bg-rose-400'"
+                    class="w-1.5 h-1.5 rounded-full"
+                  ></span>
+                  {{ seller.seller_profile?.pickup_enabled !== false ? 'Pickup Enabled' : 'Pickup Disabled' }}
+                </button>
+              </td>
+              <td class="py-3 px-3 text-right">
+                <button 
+                  @click="openEditLocationModal(seller)"
+                  class="px-2.5 py-1 bg-slate-700 hover:bg-slate-600 text-white rounded-lg text-xs font-semibold transition"
+                >
+                  Edit Coordinates
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Edit Location Modal -->
+    <div v-if="editingSeller" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+        <div class="flex justify-between items-center">
+          <h3 class="text-sm font-bold text-white">Edit Location: {{ editingSeller.name }}</h3>
+          <button @click="editingSeller = null" class="text-slate-400 hover:text-white">&times;</button>
+        </div>
+        <form @submit.prevent="saveLocationEdit" class="space-y-3 text-xs">
+          <div>
+            <label class="block text-slate-400 mb-1">Physical Address</label>
+            <input v-model="editLocationForm.address" type="text" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white" />
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-slate-400 mb-1">Latitude</label>
+              <input v-model.number="editLocationForm.latitude" type="number" step="0.0001" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white" />
+            </div>
+            <div>
+              <label class="block text-slate-400 mb-1">Longitude</label>
+              <input v-model.number="editLocationForm.longitude" type="number" step="0.0001" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white" />
+            </div>
+          </div>
+          <div>
+            <label class="block text-slate-400 mb-1">Special Instructions / Gate Landmark</label>
+            <input v-model="editLocationForm.special_instructions" type="text" placeholder="e.g. Backdoor loading bay, near Gate 2" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white" />
+          </div>
+          <div class="flex gap-2 pt-2">
+            <button type="button" @click="editingSeller = null" class="flex-1 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl font-semibold">Cancel</button>
+            <button type="submit" class="flex-1 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-bold">Save Changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
     <!-- Live Fleet GPS Tracking -->
     <MapboxView 
       title="Live Fleet & Route Dispatch Tracking"
@@ -277,7 +394,7 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(['update-user-status', 'update-rate-card', 'inject-stop', 'create-batch']);
+const emit = defineEmits(['update-user-status', 'update-rate-card', 'inject-stop', 'update-seller-location', 'create-batch']);
 
 const savingRate = ref(false);
 const rateCardForm = ref({
@@ -292,6 +409,44 @@ const injectForm = ref({
 });
 
 const showBatchModal = ref(false);
+
+// Location editing state
+const editingSeller = ref(null);
+const editLocationForm = ref({
+  address: '',
+  latitude: 12.9716,
+  longitude: 77.5946,
+  special_instructions: '',
+});
+
+function handleTogglePickup(seller) {
+  const currentStatus = seller.seller_profile?.pickup_enabled !== false;
+  emit('update-seller-location', seller.id, {
+    pickup_enabled: !currentStatus
+  });
+}
+
+function handleUpdatePreference(sellerId, preference) {
+  emit('update-seller-location', sellerId, {
+    pickup_preference: preference
+  });
+}
+
+function openEditLocationModal(seller) {
+  editingSeller.value = seller;
+  editLocationForm.value = {
+    address: seller.seller_profile?.address || '',
+    latitude: seller.seller_profile?.latitude || 12.9716,
+    longitude: seller.seller_profile?.longitude || 77.5946,
+    special_instructions: seller.seller_profile?.special_instructions || '',
+  };
+}
+
+async function saveLocationEdit() {
+  if (!editingSeller.value) return;
+  await emit('update-seller-location', editingSeller.value.id, editLocationForm.value);
+  editingSeller.value = null;
+}
 
 watch(() => props.rateCard, (rc) => {
   if (rc) {

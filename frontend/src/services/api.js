@@ -82,6 +82,7 @@ export const api = {
   updateRateCard: (payload) => request('/admin/rate-card', { method: 'POST', body: JSON.stringify(payload) }),
   getLiveFleet: () => request('/admin/fleet/live'),
   injectStop: (agent_id, seller_id) => request('/admin/routing/inject-stop', { method: 'POST', body: JSON.stringify({ agent_id, seller_id }) }),
+  updateSellerLocation: (seller_id, payload) => request(`/admin/sellers/${seller_id}/location`, { method: 'PATCH', body: JSON.stringify(payload) }),
   getBiodieselBatches: () => request('/admin/compliance/batches'),
   createBiodieselBatch: (payload) => request('/admin/compliance/batches', { method: 'POST', body: JSON.stringify(payload) }),
   getAuditLogs: () => request('/admin/audit-logs'),

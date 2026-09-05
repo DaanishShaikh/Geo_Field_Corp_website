@@ -226,6 +226,53 @@ def fleet_tracking():
     return jsonify({"fleet": agent_locations}), 200
 
 
+@admin_bp.route("/sellers/<seller_id>/location", methods=["PATCH"])
+@login_required
+def update_seller_location(seller_id):
+    """Super Admin endpoint to edit seller pickup location, enable/disable pickup, and set time preferences."""
+    auth_err = check_admin()
+    if auth_err: return auth_err
+
+    user = User.query.get(seller_id)
+    if not user or user.role != "seller" or not user.seller_profile:
+        return jsonify({"error": "Seller or profile not found"}), 404
+
+    prof = user.seller_profile
+    data = request.get_json() or {}
+
+    if "pickup_enabled" in data:
+        prof.pickup_enabled = bool(data["pickup_enabled"])
+    if "pickup_preference" in data:
+        prof.pickup_preference = str(data["pickup_preference"]).strip()
+    if "address" in data:
+        prof.address = str(data["address"]).strip()
+    if "latitude" in data and data["latitude"] is not None:
+        try:
+            prof.latitude = float(data["latitude"])
+        except (ValueError, TypeError):
+            pass
+    if "longitude" in data and data["longitude"] is not None:
+        try:
+            prof.longitude = float(data["longitude"])
+        except (ValueError, TypeError):
+            pass
+    if "special_instructions" in data:
+        prof.special_instructions = str(data["special_instructions"]).strip()
+
+    status_str = "ENABLED" if prof.pickup_enabled else "DISABLED"
+    log_audit(
+        current_user.id, "admin", f"Updated Pickup Location ({status_str})",
+        "SellerProfile", str(prof.id),
+        f"Seller: {user.name}, Pref: {prof.pickup_preference}, Addr: {prof.address}"
+    )
+    db.session.commit()
+
+    return jsonify({
+        "message": f"Pickup location for {user.name} updated successfully ({status_str})",
+        "user": user.to_dict()
+    }), 200
+
+
 @admin_bp.route("/routing/inject-stop", methods=["POST"])
 @login_required
 def inject_stop():

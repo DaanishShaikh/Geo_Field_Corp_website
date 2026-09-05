@@ -236,6 +236,8 @@ function renderGoogleMarkers() {
       bounds.extend(pos);
       routeCoords.push(pos);
 
+      const isEnabled = stop.pickup_enabled !== false;
+      const markerColor = !isEnabled ? '#64748b' : (stop.status === 'visited' ? '#10b981' : '#f59e0b');
       const marker = new maps.Marker({
         position: pos,
         map: googleMapInstance,
@@ -248,20 +250,37 @@ function renderGoogleMarkers() {
         },
         icon: {
           path: maps.SymbolPath.CIRCLE,
-          scale: 12,
-          fillColor: stop.status === 'visited' ? '#10b981' : '#f59e0b',
+          scale: 13,
+          fillColor: markerColor,
           fillOpacity: 1,
           strokeColor: '#ffffff',
           strokeWeight: 2,
         }
       });
 
+      const phoneHtml = stop.seller_phone ? `<div style="margin-top:4px;"><a href="tel:${stop.seller_phone}" style="display:inline-block;padding:3px 8px;background:#059669;color:white;text-decoration:none;border-radius:4px;font-weight:bold;font-size:11px;">📞 Call: ${stop.seller_phone}</a></div>` : '';
+      const prefHtml = `<div style="color:#0f766e;font-weight:bold;font-size:11px;margin-top:3px;">⏰ Pref: ${stop.pickup_preference || 'Morning (9 AM - 12 PM)'}</div>`;
+      const navUrl = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+
       const infoWindow = new maps.InfoWindow({
         content: `
-          <div style="font-family:sans-serif;font-size:12px;color:#0f172a;line-height:1.4;padding:4px;">
-            <strong>Stop #${stop.stop_order}: ${stop.seller_name || 'FBO Kitchen'}</strong><br>
-            <span style="color:#64748b;font-size:10px;">FSSAI: ${stop.seller_fssai || 'Verified'}</span><br>
-            <span style="display:inline-block;margin-top:4px;padding:2px 6px;border-radius:4px;background:#e2e8f0;font-size:10px;font-weight:bold;">Status: ${stop.status}</span>
+          <div style="font-family:sans-serif;font-size:12px;color:#0f172a;line-height:1.4;padding:6px;max-width:240px;">
+            <strong style="font-size:13px;color:#0f172a;">Stop #${stop.stop_order}: ${stop.seller_name || 'FBO Kitchen'}</strong><br>
+            <span style="color:#64748b;font-size:10px;">${stop.seller_address || 'Bengaluru'}</span><br>
+            <span style="color:#64748b;font-size:10px;">FSSAI: ${stop.seller_fssai || 'Verified'}</span>
+            ${prefHtml}
+            <div style="margin-top:4px;display:flex;align-items:center;gap:6px;">
+              <span style="display:inline-block;padding:2px 6px;border-radius:4px;background:${stop.status === 'visited' ? '#dcfce7' : '#fef3c7'};color:${stop.status === 'visited' ? '#166534' : '#92400e'};font-size:10px;font-weight:bold;">
+                ${stop.status.toUpperCase()}
+              </span>
+              ${!isEnabled ? '<span style="display:inline-block;padding:2px 6px;border-radius:4px;background:#fee2e2;color:#991b1b;font-size:10px;font-weight:bold;">DISABLED</span>' : ''}
+            </div>
+            ${phoneHtml}
+            <div style="margin-top:6px;">
+              <a href="${navUrl}" target="_blank" style="display:block;text-align:center;padding:4px 8px;background:#0284c7;color:white;text-decoration:none;border-radius:4px;font-weight:bold;font-size:11px;">
+                🧭 Navigate in Google Maps &rarr;
+              </a>
+            </div>
           </div>
         `
       });

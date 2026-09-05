@@ -56,6 +56,9 @@ class SellerProfile(db.Model):
     latitude = db.Column(db.Float, default=12.9716)
     longitude = db.Column(db.Float, default=77.5946)
     static_qr_code = db.Column(db.String(120), unique=True, nullable=False)  # e.g., 'RUCO-SITE-SELL-1001'
+    pickup_enabled = db.Column(db.Boolean, default=True, nullable=False)
+    pickup_preference = db.Column(db.String(100), default="Morning (9 AM - 12 PM)", nullable=False)
+    special_instructions = db.Column(db.String(255), nullable=True)
 
     def to_dict(self):
         return {
@@ -67,6 +70,9 @@ class SellerProfile(db.Model):
             "latitude": self.latitude,
             "longitude": self.longitude,
             "static_qr_code": self.static_qr_code,
+            "pickup_enabled": self.pickup_enabled,
+            "pickup_preference": self.pickup_preference,
+            "special_instructions": self.special_instructions,
         }
 
 

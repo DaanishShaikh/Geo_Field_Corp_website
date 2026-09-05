@@ -236,6 +236,7 @@
             @update-user-status="handleUpdateUserStatus"
             @update-rate-card="handleUpdateRateCard"
             @inject-stop="handleInjectStop"
+            @update-seller-location="handleUpdateSellerLocation"
           />
         </div>
 
@@ -545,6 +546,16 @@ async function handleInjectStop(agentId, sellerId) {
     await loadRoleData();
   } catch (e) {
     showToast(e.message || 'Failed to inject stop');
+  }
+}
+
+async function handleUpdateSellerLocation(sellerId, payload) {
+  try {
+    const res = await api.updateSellerLocation(sellerId, payload);
+    showToast(res.message || 'Pickup location updated');
+    await loadRoleData();
+  } catch (e) {
+    showToast(e.message || 'Failed to update location');
   }
 }
 
