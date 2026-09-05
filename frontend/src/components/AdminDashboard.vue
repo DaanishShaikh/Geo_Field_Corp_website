@@ -316,18 +316,38 @@
           <button @click="editingSeller = null" class="text-slate-400 hover:text-white">&times;</button>
         </div>
         <form @submit.prevent="saveLocationEdit" class="space-y-3 text-xs">
+          <!-- GPS Detect & Auto-fill -->
+          <div class="p-2.5 bg-slate-950 border border-slate-800 rounded-xl flex items-center justify-between">
+            <div>
+              <span class="font-bold text-white block text-[11px]">Auto-Detect Location</span>
+              <span class="text-[10px] text-slate-400">Fetch GPS & auto-fill address, city, & pincode</span>
+            </div>
+            <button 
+              type="button" 
+              @click="detectAdminLocation"
+              :disabled="detectingAdminGps"
+              class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-bold text-[10px] flex items-center gap-1 transition"
+            >
+              <span>{{ detectingAdminGps ? '📡' : '🎯' }}</span>
+              <span>{{ detectingAdminGps ? 'Resolving...' : 'Detect & Auto-Fill' }}</span>
+            </button>
+          </div>
+          <div v-if="adminGpsMsg" class="text-[10px] font-mono px-2 py-1 rounded bg-slate-950 text-emerald-400 border border-emerald-500/30">
+            {{ adminGpsMsg }}
+          </div>
+
           <div>
             <label class="block text-slate-400 mb-1">Physical Address</label>
-            <input v-model="editLocationForm.address" type="text" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white" />
+            <input v-model="editLocationForm.address" type="text" required placeholder="Street address or landmark" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white" />
           </div>
           <div class="grid grid-cols-2 gap-2">
             <div>
               <label class="block text-slate-400 mb-1">Latitude</label>
-              <input v-model.number="editLocationForm.latitude" type="number" step="0.0001" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white" />
+              <input v-model.number="editLocationForm.latitude" type="number" step="any" required placeholder="e.g. 19.0760" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white font-mono" />
             </div>
             <div>
               <label class="block text-slate-400 mb-1">Longitude</label>
-              <input v-model.number="editLocationForm.longitude" type="number" step="0.0001" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white" />
+              <input v-model.number="editLocationForm.longitude" type="number" step="any" required placeholder="e.g. 72.8777" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white font-mono" />
             </div>
           </div>
           <div>
@@ -543,8 +563,12 @@ function handleUpdatePreference(sellerId, preference) {
   });
 }
 
+const adminGpsMsg = ref('');
+const detectingAdminGps = ref(false);
+
 function openEditLocationModal(seller) {
   editingSeller.value = seller;
+  adminGpsMsg.value = '';
   editLocationForm.value = {
     address: seller.seller_profile?.address || '',
     latitude: seller.seller_profile?.latitude || null,
@@ -553,6 +577,67 @@ function openEditLocationModal(seller) {
     city: seller.seller_profile?.city || '',
     pincode: seller.seller_profile?.pincode || '',
   };
+}
+
+function detectAdminLocation() {
+  if (!navigator.geolocation) {
+    adminGpsMsg.value = 'Geolocation is not supported by your browser.';
+    return;
+  }
+  detectingAdminGps.value = true;
+  adminGpsMsg.value = 'Resolving GPS and street address...';
+
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      const lat = parseFloat(position.coords.latitude.toFixed(6));
+      const lng = parseFloat(position.coords.longitude.toFixed(6));
+      editLocationForm.value.latitude = lat;
+      editLocationForm.value.longitude = lng;
+
+      fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data && data.address) {
+            const a = data.address;
+            const building = a.amenity || a.building || a.shop || a.office || '';
+            const roadPart = [a.house_number, a.road || a.street || a.pedestrian || a.footway].filter(Boolean).join(' ');
+            const locality = a.suburb || a.neighbourhood || a.residential || a.subdistrict || '';
+
+            let street = [building, roadPart, locality].filter(Boolean).join(', ');
+            if (!street && data.display_name) {
+              street = data.display_name.split(',').slice(0, 3).map(s => s.trim()).join(', ');
+            }
+            if (street) {
+              editLocationForm.value.address = street;
+            }
+
+            const detectedCity = a.city || a.town || a.city_district || a.municipality || a.suburb || a.state_district || a.county || a.state;
+            if (detectedCity) {
+              editLocationForm.value.city = detectedCity;
+            }
+
+            if (a.postcode) {
+              editLocationForm.value.pincode = a.postcode;
+            }
+
+            adminGpsMsg.value = `✓ Auto-Filled: ${detectedCity || 'City'}${a.postcode ? ' (' + a.postcode + ')' : ''}`;
+          } else {
+            adminGpsMsg.value = `✓ GPS Locked: ${lat}°, ${lng}°`;
+          }
+        })
+        .catch(() => {
+          adminGpsMsg.value = `✓ GPS Locked: ${lat}°, ${lng}°`;
+        })
+        .finally(() => {
+          detectingAdminGps.value = false;
+        });
+    },
+    (err) => {
+      detectingAdminGps.value = false;
+      adminGpsMsg.value = `GPS Error: ${err.message}`;
+    },
+    { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+  );
 }
 
 async function saveLocationEdit() {

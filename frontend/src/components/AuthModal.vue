@@ -393,24 +393,41 @@ function detectLocation() {
       regForm.value.latitude = lat;
       regForm.value.longitude = lng;
       gpsSuccess.value = true;
-      const acc = Math.round(position.coords.accuracy || 0);
-      gpsStatusMsg.value = `✓ GPS Locked: ${lat}° N, ${lng}° E (Accuracy: ~${acc}m)`;
+      gpsStatusMsg.value = `✓ GPS Locked (${lat}°, ${lng}°). Resolving street address...`;
       
-      // Auto-detect city & postcode via reverse geocode
+      // Auto-detect street address, city & postcode via reverse geocode
       fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
         .then(res => res.json())
         .then(data => {
           if (data && data.address) {
-            const detectedCity = data.address.city || data.address.town || data.address.county || data.address.state_district || data.address.state;
-            if (detectedCity && !regForm.value.city) {
+            const a = data.address;
+            const building = a.amenity || a.building || a.shop || a.office || '';
+            const roadPart = [a.house_number, a.road || a.street || a.pedestrian || a.footway].filter(Boolean).join(' ');
+            const locality = a.suburb || a.neighbourhood || a.residential || a.subdistrict || '';
+
+            let street = [building, roadPart, locality].filter(Boolean).join(', ');
+            if (!street && data.display_name) {
+              street = data.display_name.split(',').slice(0, 3).map(s => s.trim()).join(', ');
+            }
+            if (street) {
+              regForm.value.address = street;
+            }
+
+            const detectedCity = a.city || a.town || a.city_district || a.municipality || a.suburb || a.state_district || a.county || a.state;
+            if (detectedCity) {
               regForm.value.city = detectedCity;
             }
-            if (data.address.postcode && !regForm.value.pincode) {
-              regForm.value.pincode = data.address.postcode;
+
+            if (a.postcode) {
+              regForm.value.pincode = a.postcode;
             }
+
+            gpsStatusMsg.value = `✓ Address Auto-Filled: ${detectedCity || 'City'}${a.postcode ? ' (' + a.postcode + ')' : ''}`;
           }
         })
-        .catch(() => {});
+        .catch(() => {
+          gpsStatusMsg.value = `✓ GPS Locked: ${lat}° N, ${lng}° E (Accuracy: ~${acc}m)`;
+        });
     },
     (error) => {
       detectingGps.value = false;

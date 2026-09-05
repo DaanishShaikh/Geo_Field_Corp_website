@@ -332,13 +332,61 @@
         </div>
 
         <form @submit.prevent="handleSaveLocation" class="space-y-3 text-xs">
+          <!-- GPS Coordinates with Detect & Auto-Fill Button -->
+          <div class="p-3 bg-slate-950 border border-slate-800 rounded-2xl space-y-2">
+            <div class="flex items-center justify-between">
+              <div>
+                <span class="font-semibold text-slate-200 block text-xs">Device GPS & Address Lookup</span>
+                <span class="text-[10px] text-slate-400">Locks GPS and automatically fills street address, city, & pincode</span>
+              </div>
+              <button 
+                type="button" 
+                @click="detectDeviceLocation" 
+                :disabled="detectingGps"
+                class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow"
+              >
+                <span>{{ detectingGps ? '📡' : '🎯' }}</span>
+                <span>{{ detectingGps ? 'Resolving...' : 'Detect & Auto-Fill' }}</span>
+              </button>
+            </div>
+
+            <div v-if="gpsMsg" class="text-[10px] font-mono px-2.5 py-1.5 rounded-lg bg-slate-900 text-emerald-400 border border-emerald-500/30">
+              {{ gpsMsg }}
+            </div>
+
+            <div class="grid grid-cols-2 gap-2 pt-1">
+              <div>
+                <label class="block text-[10px] text-slate-400 mb-0.5">Latitude</label>
+                <input 
+                  v-model.number="locationForm.latitude" 
+                  type="number" 
+                  step="any" 
+                  required
+                  placeholder="e.g. 19.0760"
+                  class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-1.5 text-white font-mono"
+                />
+              </div>
+              <div>
+                <label class="block text-[10px] text-slate-400 mb-0.5">Longitude</label>
+                <input 
+                  v-model.number="locationForm.longitude" 
+                  type="number" 
+                  step="any" 
+                  required
+                  placeholder="e.g. 72.8777"
+                  class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-1.5 text-white font-mono"
+                />
+              </div>
+            </div>
+          </div>
+
           <div>
-            <label class="block text-slate-300 font-semibold mb-1">Street Address</label>
+            <label class="block text-slate-300 font-semibold mb-1">Street Address / Landmark</label>
             <input 
               v-model="locationForm.address" 
               type="text" 
               required
-              placeholder="e.g. Plot 42, 80 Feet Road, Near Main Market"
+              placeholder="e.g. Shop 4, Linking Road, Near Station"
               class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-emerald-500"
             />
           </div>
@@ -350,7 +398,7 @@
                 v-model="locationForm.city" 
                 type="text" 
                 required
-                placeholder="e.g. Mumbai, Bengaluru, Delhi"
+                placeholder="e.g. Mumbai"
                 class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-emerald-500"
               />
             </div>
@@ -359,52 +407,9 @@
               <input 
                 v-model="locationForm.pincode" 
                 type="text" 
-                placeholder="e.g. 560034"
+                placeholder="e.g. 400052"
                 class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-emerald-500"
               />
-            </div>
-          </div>
-
-          <!-- GPS Coordinates with Detect Button -->
-          <div class="p-3 bg-slate-950 border border-slate-800 rounded-2xl space-y-2">
-            <div class="flex items-center justify-between">
-              <span class="font-semibold text-slate-200">Exact GPS Coordinates</span>
-              <button 
-                type="button" 
-                @click="detectDeviceLocation" 
-                :disabled="detectingGps"
-                class="px-2.5 py-1 bg-emerald-600/30 hover:bg-emerald-600 text-emerald-300 hover:text-white rounded-lg text-[10px] font-bold transition flex items-center gap-1 border border-emerald-500/30"
-              >
-                <span>{{ detectingGps ? '📡' : '🎯' }}</span>
-                <span>{{ detectingGps ? 'Acquiring...' : 'Detect My Exact Location' }}</span>
-              </button>
-            </div>
-
-            <div v-if="gpsMsg" class="text-[10px] font-mono px-2 py-1 rounded bg-slate-900 text-emerald-400 border border-emerald-500/30">
-              {{ gpsMsg }}
-            </div>
-
-            <div class="grid grid-cols-2 gap-2">
-              <div>
-                <label class="block text-[10px] text-slate-400 mb-0.5">Latitude</label>
-                <input 
-                  v-model.number="locationForm.latitude" 
-                  type="number" 
-                  step="any" 
-                  required
-                  class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-1.5 text-white font-mono"
-                />
-              </div>
-              <div>
-                <label class="block text-[10px] text-slate-400 mb-0.5">Longitude</label>
-                <input 
-                  v-model.number="locationForm.longitude" 
-                  type="number" 
-                  step="any" 
-                  required
-                  class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-1.5 text-white font-mono"
-                />
-              </div>
             </div>
           </div>
 
@@ -503,22 +508,48 @@ function detectDeviceLocation() {
       const lng = parseFloat(position.coords.longitude.toFixed(6));
       locationForm.value.latitude = lat;
       locationForm.value.longitude = lng;
-      gpsMsg.value = `✓ GPS Locked: ${lat}° N, ${lng}° E`;
+      gpsMsg.value = `✓ GPS Locked (${lat}°, ${lng}°). Resolving street address...`;
 
       fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
         .then(res => res.json())
         .then(data => {
           if (data && data.address) {
-            const detectedCity = data.address.city || data.address.town || data.address.state_district || data.address.state;
-            if (detectedCity && !locationForm.value.city) {
+            const a = data.address;
+            // 1. Street Address / Landmark
+            const building = a.amenity || a.building || a.shop || a.office || '';
+            const roadPart = [a.house_number, a.road || a.street || a.pedestrian || a.footway].filter(Boolean).join(' ');
+            const locality = a.suburb || a.neighbourhood || a.residential || a.subdistrict || '';
+
+            let street = [building, roadPart, locality].filter(Boolean).join(', ');
+            if (!street && data.display_name) {
+              street = data.display_name.split(',').slice(0, 3).map(s => s.trim()).join(', ');
+            }
+            if (street) {
+              locationForm.value.address = street;
+            }
+
+            // 2. City / Town / District
+            const detectedCity = a.city || a.town || a.city_district || a.municipality || a.suburb || a.state_district || a.county || a.state;
+            if (detectedCity) {
               locationForm.value.city = detectedCity;
             }
-            if (data.address.postcode && !locationForm.value.pincode) {
-              locationForm.value.pincode = data.address.postcode;
+
+            // 3. Pincode
+            if (a.postcode) {
+              locationForm.value.pincode = a.postcode;
             }
+
+            gpsMsg.value = `✓ Address Auto-Filled: ${detectedCity || 'City'}${a.postcode ? ' (' + a.postcode + ')' : ''}`;
+          } else {
+            gpsMsg.value = `✓ GPS Locked: ${lat}° N, ${lng}° E`;
           }
         })
-        .catch(() => {});
+        .catch(() => {
+          gpsMsg.value = `✓ GPS Locked: ${lat}° N, ${lng}° E (Reverse lookup offline)`;
+        })
+        .finally(() => {
+          detectingGps.value = false;
+        });
     },
     (error) => {
       detectingGps.value = false;
