@@ -131,23 +131,58 @@
             <img :src="siteQr.data_url" alt="Site QR" class="w-36 h-36 object-contain" />
           </div>
           <div class="space-y-2 text-xs text-slate-300 flex-1">
-            <div>
-              <span class="text-slate-500 uppercase tracking-wider font-semibold text-[10px] block">Company Name</span>
-              <strong class="text-white text-sm">{{ seller.name }}</strong>
+            <div class="flex items-center justify-between">
+              <div>
+                <span class="text-slate-500 uppercase tracking-wider font-semibold text-[10px] block">Company / Kitchen Name</span>
+                <strong class="text-white text-sm">{{ seller.name }}</strong>
+              </div>
+              <span 
+                :class="seller.status === 'approved' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-amber-500/10 text-amber-400 border-amber-500/20'"
+                class="px-2 py-0.5 rounded-full border text-[10px] font-bold uppercase tracking-wider"
+              >
+                {{ seller.status === 'approved' ? '✓ Verified FBO' : '⏳ KYC Under Review' }}
+              </span>
             </div>
-            <div>
-              <span class="text-slate-500 uppercase tracking-wider font-semibold text-[10px] block">Seller ID</span>
-              <code class="text-emerald-400 font-mono text-xs">{{ seller.id }}</code>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 border-t border-slate-800">
+              <div>
+                <span class="text-slate-500 uppercase tracking-wider font-semibold text-[10px] block">Primary Contact</span>
+                <span class="text-white">{{ seller.seller_profile?.contact_name || seller.name }}</span>
+                <span class="text-[11px] text-slate-400 block font-mono">{{ seller.phone || 'N/A' }}</span>
+              </div>
+              <div>
+                <span class="text-slate-500 uppercase tracking-wider font-semibold text-[10px] block">Alternative Contact</span>
+                <span class="text-white">{{ seller.seller_profile?.alt_contact_name || 'Not specified' }}</span>
+                <span class="text-[11px] text-slate-400 block font-mono">{{ seller.seller_profile?.alt_phone || 'N/A' }}</span>
+              </div>
             </div>
-            <div>
-              <span class="text-slate-500 uppercase tracking-wider font-semibold text-[10px] block">FSSAI License No.</span>
-              <span class="font-mono text-slate-200">{{ seller.seller_profile?.fssai_license_no || 'N/A' }}</span>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1 border-t border-slate-800 font-mono text-[11px]">
+              <div>
+                <span class="text-slate-500 uppercase tracking-wider font-semibold text-[10px] block">FSSAI No.</span>
+                <span class="text-amber-400">{{ seller.seller_profile?.fssai_license_no || 'N/A' }}</span>
+              </div>
+              <div>
+                <span class="text-slate-500 uppercase tracking-wider font-semibold text-[10px] block">GST No.</span>
+                <span class="text-white">{{ seller.seller_profile?.gst_no || 'N/A' }}</span>
+              </div>
+              <div>
+                <span class="text-slate-500 uppercase tracking-wider font-semibold text-[10px] block">MSME / UDYAM</span>
+                <span class="text-white">{{ seller.seller_profile?.msme_udyam_no || 'N/A' }}</span>
+              </div>
             </div>
-            <div>
+
+            <div class="pt-1 border-t border-slate-800">
+              <span class="text-slate-500 uppercase tracking-wider font-semibold text-[10px] block">Settlement Account (Cheque / UPI)</span>
+              <span class="text-cyan-400 font-mono text-xs">{{ seller.seller_profile?.bank_upi_or_cheque || 'N/A' }}</span>
+            </div>
+
+            <div class="pt-1 border-t border-slate-800">
               <span class="text-slate-500 uppercase tracking-wider font-semibold text-[10px] block">Site Location</span>
               <div class="text-white font-medium">{{ seller.seller_profile?.address || 'Address Pending' }}</div>
               <div class="text-[11px] text-slate-400">{{ seller.seller_profile?.city || 'Custom Region' }}{{ seller.seller_profile?.pincode ? ' - ' + seller.seller_profile.pincode : '' }}</div>
             </div>
+
             <div>
               <span class="text-slate-500 uppercase tracking-wider font-semibold text-[10px] block">GPS Coordinates & Preference</span>
               <div class="text-[11px] font-mono text-emerald-400 flex items-center gap-2">

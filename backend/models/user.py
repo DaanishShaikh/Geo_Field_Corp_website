@@ -50,6 +50,12 @@ class SellerProfile(db.Model):
     user_id = db.Column(db.String(64), db.ForeignKey("users.id"), nullable=False, unique=True)
     fssai_license_no = db.Column(db.String(60), nullable=False)
     kyc_status = db.Column(db.String(30), default="Submitted")  # 'Submitted', 'Verified', 'Rejected'
+    contact_name = db.Column(db.String(150), nullable=True)
+    alt_contact_name = db.Column(db.String(150), nullable=True)
+    alt_phone = db.Column(db.String(50), nullable=True)
+    gst_no = db.Column(db.String(50), nullable=True)
+    bank_upi_or_cheque = db.Column(db.String(150), nullable=True)
+    msme_udyam_no = db.Column(db.String(80), nullable=True)
     address = db.Column(db.String(255), nullable=True)
     city = db.Column(db.String(100), nullable=True)
     pincode = db.Column(db.String(20), nullable=True)
@@ -62,7 +68,13 @@ class SellerProfile(db.Model):
 
     def to_dict(self):
         return {
+            "contact_name": self.contact_name,
+            "alt_contact_name": self.alt_contact_name,
+            "alt_phone": self.alt_phone,
             "fssai_license_no": self.fssai_license_no,
+            "gst_no": self.gst_no,
+            "bank_upi_or_cheque": self.bank_upi_or_cheque,
+            "msme_udyam_no": self.msme_udyam_no,
             "kyc_status": self.kyc_status,
             "address": self.address,
             "city": self.city,

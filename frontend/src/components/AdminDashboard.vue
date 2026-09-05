@@ -96,6 +96,14 @@
 
             <div class="flex items-center gap-2 flex-shrink-0">
               <button 
+                v-if="u.role === 'seller'"
+                @click="inspectingSeller = u"
+                class="px-2.5 py-1.5 bg-blue-600/20 hover:bg-blue-600 text-blue-300 hover:text-white rounded-lg text-xs font-bold border border-blue-500/30 transition shadow flex items-center gap-1"
+              >
+                <span>🔍</span>
+                <span>Inspect 12 Documents</span>
+              </button>
+              <button 
                 @click="$emit('update-user-status', u.id, 'approved')"
                 class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold transition shadow"
               >
@@ -294,17 +302,203 @@
                   {{ seller.seller_profile?.pickup_enabled !== false ? 'Pickup Enabled' : 'Pickup Disabled' }}
                 </button>
               </td>
-              <td class="py-3 px-3 text-right">
+              <td class="py-3 px-3 text-right space-x-1.5">
+                <button 
+                  @click="inspectingSeller = seller"
+                  class="px-2.5 py-1 bg-blue-600/20 hover:bg-blue-600 text-blue-300 hover:text-white rounded-lg text-xs font-semibold border border-blue-500/30 transition"
+                >
+                  📋 View Dossier
+                </button>
                 <button 
                   @click="openEditLocationModal(seller)"
                   class="px-2.5 py-1 bg-slate-700 hover:bg-slate-600 text-white rounded-lg text-xs font-semibold transition"
                 >
-                  Edit Coordinates
+                  Edit Details
                 </button>
               </td>
             </tr>
           </tbody>
         </table>
+      </div>
+    </div>
+
+    <!-- 12-Point Seller KYC & Document Verification Dossier Modal -->
+    <div v-if="inspectingSeller" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <div class="bg-slate-900 border border-slate-700 rounded-3xl max-w-2xl w-full p-6 space-y-5 shadow-2xl max-h-[92vh] overflow-y-auto">
+        <div class="flex justify-between items-start border-b border-slate-800 pb-3">
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 class="text-base font-bold text-white">{{ inspectingSeller.name }}</h3>
+              <span 
+                :class="inspectingSeller.status === 'approved' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-amber-500/10 text-amber-400 border-amber-500/20'"
+                class="text-[10px] font-mono px-2 py-0.5 rounded-full border uppercase font-semibold"
+              >
+                {{ inspectingSeller.status }}
+              </span>
+            </div>
+            <p class="text-xs text-slate-400 mt-0.5">12-Point Regulatory KYC & Verification Dossier</p>
+          </div>
+          <button @click="inspectingSeller = null" class="text-slate-400 hover:text-white text-lg p-1">&times;</button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+          <!-- 1. Kitchen / Restaurant Name -->
+          <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-800">
+            <span class="text-[10px] font-mono font-bold text-emerald-400 block mb-0.5">1. NAME OF KITCHEN / RESTAURANT</span>
+            <strong class="text-white text-sm">{{ inspectingSeller.name }}</strong>
+          </div>
+
+          <!-- 2. Address -->
+          <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-800">
+            <span class="text-[10px] font-mono font-bold text-emerald-400 block mb-0.5">2. PHYSICAL ADDRESS & REGION</span>
+            <div class="text-white font-medium">{{ inspectingSeller.seller_profile?.address || 'Address not set' }}</div>
+            <div class="text-slate-400 text-[11px] mt-0.5">
+              {{ inspectingSeller.seller_profile?.city || 'City' }}{{ inspectingSeller.seller_profile?.pincode ? ' - ' + inspectingSeller.seller_profile.pincode : '' }}
+            </div>
+          </div>
+
+          <!-- 3. Email ID -->
+          <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-800">
+            <span class="text-[10px] font-mono font-bold text-emerald-400 block mb-0.5">3. OFFICIAL EMAIL ID</span>
+            <a :href="`mailto:${inspectingSeller.email}`" class="text-teal-400 hover:underline font-mono">
+              ✉ {{ inspectingSeller.email }}
+            </a>
+          </div>
+
+          <!-- 4. Contact Person Name -->
+          <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-800">
+            <span class="text-[10px] font-mono font-bold text-emerald-400 block mb-0.5">4. PRIMARY CONTACT PERSON</span>
+            <strong class="text-white">{{ inspectingSeller.seller_profile?.contact_name || inspectingSeller.name }}</strong>
+          </div>
+
+          <!-- 5. Contact Number -->
+          <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-800">
+            <span class="text-[10px] font-mono font-bold text-emerald-400 block mb-0.5">5. PRIMARY CONTACT NUMBER</span>
+            <a :href="`tel:${inspectingSeller.phone}`" class="text-emerald-400 hover:underline font-mono font-bold">
+              📞 {{ inspectingSeller.phone || 'N/A' }}
+            </a>
+          </div>
+
+          <!-- 6. Alternative Contact Name -->
+          <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-800">
+            <span class="text-[10px] font-mono font-bold text-emerald-400 block mb-0.5">6. ALTERNATIVE CONTACT PERSON</span>
+            <span class="text-white font-medium">{{ inspectingSeller.seller_profile?.alt_contact_name || 'Not Provided' }}</span>
+          </div>
+
+          <!-- 7. Alternative Number -->
+          <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-800">
+            <span class="text-[10px] font-mono font-bold text-emerald-400 block mb-0.5">7. ALTERNATIVE CONTACT NUMBER</span>
+            <a v-if="inspectingSeller.seller_profile?.alt_phone" :href="`tel:${inspectingSeller.seller_profile.alt_phone}`" class="text-emerald-400 hover:underline font-mono font-bold">
+              📞 {{ inspectingSeller.seller_profile.alt_phone }}
+            </a>
+            <span v-else class="text-slate-500">N/A</span>
+          </div>
+
+          <!-- 8. FSSAI License Number -->
+          <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-800">
+            <span class="text-[10px] font-mono font-bold text-emerald-400 block mb-0.5">8. FSSAI LICENSE NUMBER (14 DIGITS)</span>
+            <div class="flex items-center justify-between font-mono">
+              <span class="text-amber-400 font-bold tracking-wider text-xs">{{ inspectingSeller.seller_profile?.fssai_license_no || 'N/A' }}</span>
+              <button 
+                v-if="inspectingSeller.seller_profile?.fssai_license_no"
+                @click="copyText(inspectingSeller.seller_profile.fssai_license_no)"
+                class="text-[10px] text-slate-400 hover:text-white px-2 py-0.5 rounded bg-slate-800 border border-slate-700"
+              >
+                Copy
+              </button>
+            </div>
+          </div>
+
+          <!-- 9. GST Number -->
+          <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-800">
+            <span class="text-[10px] font-mono font-bold text-emerald-400 block mb-0.5">9. GST IDENTIFICATION NUMBER (GSTIN)</span>
+            <div class="flex items-center justify-between font-mono">
+              <span class="text-white font-bold tracking-wider text-xs">{{ inspectingSeller.seller_profile?.gst_no || 'N/A' }}</span>
+              <button 
+                v-if="inspectingSeller.seller_profile?.gst_no"
+                @click="copyText(inspectingSeller.seller_profile.gst_no)"
+                class="text-[10px] text-slate-400 hover:text-white px-2 py-0.5 rounded bg-slate-800 border border-slate-700"
+              >
+                Copy
+              </button>
+            </div>
+          </div>
+
+          <!-- 10. Cancel Cheque or UPI ID -->
+          <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-800">
+            <span class="text-[10px] font-mono font-bold text-emerald-400 block mb-0.5">10. CANCEL CHEQUE REF OR UPI ID</span>
+            <div class="flex items-center justify-between font-mono">
+              <span class="text-cyan-400 font-medium text-xs">{{ inspectingSeller.seller_profile?.bank_upi_or_cheque || 'N/A' }}</span>
+              <button 
+                v-if="inspectingSeller.seller_profile?.bank_upi_or_cheque"
+                @click="copyText(inspectingSeller.seller_profile.bank_upi_or_cheque)"
+                class="text-[10px] text-slate-400 hover:text-white px-2 py-0.5 rounded bg-slate-800 border border-slate-700"
+              >
+                Copy
+              </button>
+            </div>
+          </div>
+
+          <!-- 11. Location on Map -->
+          <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-800 md:col-span-2">
+            <span class="text-[10px] font-mono font-bold text-emerald-400 block mb-0.5">11. LOCATION ON MAP (GPS COORDINATES)</span>
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mt-1">
+              <span class="font-mono text-white text-xs">
+                📍 {{ inspectingSeller.seller_profile?.latitude || 'N/A' }}, {{ inspectingSeller.seller_profile?.longitude || 'N/A' }}
+              </span>
+              <a 
+                v-if="inspectingSeller.seller_profile?.latitude && inspectingSeller.seller_profile?.longitude"
+                :href="`https://www.google.com/maps?q=${inspectingSeller.seller_profile.latitude},${inspectingSeller.seller_profile.longitude}`"
+                target="_blank"
+                class="px-3 py-1.5 bg-teal-600 hover:bg-teal-500 text-white rounded-lg text-xs font-bold transition flex items-center gap-1.5 w-fit shadow"
+              >
+                <span>🗺️</span>
+                <span>Open in Google Maps ↗</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- 12. MSME / UDYAM Number -->
+          <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-800 md:col-span-2">
+            <span class="text-[10px] font-mono font-bold text-emerald-400 block mb-0.5">12. MSME / UDYAM REGISTRATION NUMBER</span>
+            <div class="flex items-center justify-between font-mono">
+              <span class="text-white font-bold tracking-wider text-xs">{{ inspectingSeller.seller_profile?.msme_udyam_no || 'N/A' }}</span>
+              <button 
+                v-if="inspectingSeller.seller_profile?.msme_udyam_no"
+                @click="copyText(inspectingSeller.seller_profile.msme_udyam_no)"
+                class="text-[10px] text-slate-400 hover:text-white px-2 py-0.5 rounded bg-slate-800 border border-slate-700"
+              >
+                Copy
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Controls inside Modal -->
+        <div class="flex items-center justify-between pt-3 border-t border-slate-800">
+          <button 
+            type="button" 
+            @click="inspectingSeller = null" 
+            class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl font-semibold text-xs"
+          >
+            Close Dossier
+          </button>
+
+          <div v-if="inspectingSeller.status === 'pending'" class="flex items-center gap-2">
+            <button 
+              @click="$emit('update-user-status', inspectingSeller.id, 'rejected'); inspectingSeller = null" 
+              class="px-4 py-2 bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white rounded-xl text-xs font-bold border border-rose-500/30 transition"
+            >
+              ✕ Reject Application
+            </button>
+            <button 
+              @click="$emit('update-user-status', inspectingSeller.id, 'approved'); inspectingSeller = null" 
+              class="px-5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition shadow"
+            >
+              ✓ Approve & Authorize Seller
+            </button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -538,6 +732,16 @@ const injectForm = ref({
 });
 
 const showBatchModal = ref(false);
+
+// 12-point KYC dossier state
+const inspectingSeller = ref(null);
+
+function copyText(val) {
+  if (!val) return;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(val);
+  }
+}
 
 // Location editing state
 const editingSeller = ref(null);

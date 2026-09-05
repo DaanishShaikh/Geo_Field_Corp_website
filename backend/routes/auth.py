@@ -60,18 +60,45 @@ def register():
             pass
 
     if role == "seller":
-        fssai = data.get("fssai_license_no", f"FSSAI-{random.randint(1000, 9999)}-UCO")
+        missing_docs = []
+        if not name: missing_docs.append("1. Name of Kitchen or Restaurant")
+        if not (data.get("address") and str(data.get("address")).strip()): missing_docs.append("2. Physical Street Address")
+        if not (data.get("city") and str(data.get("city")).strip()): missing_docs.append("2. City / Region")
+        if not (data.get("pincode") and str(data.get("pincode")).strip()): missing_docs.append("2. Pincode")
+        if not email: missing_docs.append("3. Official Email ID")
+        if not (data.get("contact_name") and str(data.get("contact_name")).strip()): missing_docs.append("4. Primary Contact Person Name")
+        if not phone: missing_docs.append("5. Primary Contact Number")
+        if not (data.get("alt_contact_name") and str(data.get("alt_contact_name")).strip()): missing_docs.append("6. Alternative Contact Person Name")
+        if not (data.get("alt_phone") and str(data.get("alt_phone")).strip()): missing_docs.append("7. Alternative Phone Number")
+        if not (data.get("fssai_license_no") and str(data.get("fssai_license_no")).strip()): missing_docs.append("8. FSSAI License Number (14 digits)")
+        if not (data.get("gst_no") and str(data.get("gst_no")).strip()): missing_docs.append("9. GST Number")
+        if not (data.get("bank_upi_or_cheque") and str(data.get("bank_upi_or_cheque")).strip()): missing_docs.append("10. Cancel Cheque Reference or UPI ID")
+        if lat is None or lng is None: missing_docs.append("11. Location GPS Coordinates on Map")
+        if not (data.get("msme_udyam_no") and str(data.get("msme_udyam_no")).strip()): missing_docs.append("12. MSME / UDYAM Number")
+
+        if missing_docs:
+            return jsonify({
+                "error": "All 12 required seller documents and verification fields must be provided.",
+                "missing_documents": missing_docs
+            }), 400
+
         profile = SellerProfile(
             user_id=user_id,
-            fssai_license_no=fssai,
+            fssai_license_no=str(data.get("fssai_license_no")).strip(),
+            contact_name=str(data.get("contact_name")).strip(),
+            alt_contact_name=str(data.get("alt_contact_name")).strip(),
+            alt_phone=str(data.get("alt_phone")).strip(),
+            gst_no=str(data.get("gst_no")).strip(),
+            bank_upi_or_cheque=str(data.get("bank_upi_or_cheque")).strip(),
+            msme_udyam_no=str(data.get("msme_udyam_no")).strip(),
             kyc_status="Submitted",
-            address=data.get("address", "").strip() or "Address Pending",
-            city=data.get("city", "").strip() or None,
-            pincode=data.get("pincode", "").strip() or None,
+            address=str(data.get("address")).strip(),
+            city=str(data.get("city")).strip(),
+            pincode=str(data.get("pincode")).strip(),
             latitude=lat,
             longitude=lng,
             static_qr_code=f"RUCO-SITE-{user_id}",
-            pickup_preference=data.get("pickup_preference", "Morning (9 AM - 12 PM)").strip()
+            pickup_preference=str(data.get("pickup_preference", "Morning (9 AM - 12 PM)")).strip()
         )
         db.session.add(profile)
     elif role == "agent":

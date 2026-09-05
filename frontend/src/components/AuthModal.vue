@@ -122,113 +122,243 @@
           </div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div>
-            <label class="block text-[11px] font-semibold text-slate-300 mb-1">
-              {{ regForm.role === 'seller' ? 'Commercial Name / Brand' : 'Full Legal Name' }}
-            </label>
-            <input 
-              v-model="regForm.name" 
-              type="text" 
-              required 
-              :placeholder="regForm.role === 'seller' ? 'e.g. Royal Palace Bistro' : 'e.g. Rajesh Kumar'" 
-              class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
-            />
+        <!-- 12-Point Compliance Banner for Sellers -->
+        <div v-if="regForm.role === 'seller'" class="p-3 bg-emerald-950/40 border border-emerald-500/30 rounded-2xl space-y-1">
+          <div class="flex items-center gap-1.5 text-xs font-bold text-emerald-400">
+            <span>🛡️</span>
+            <span>12-Point Seller Compliance & KYC Requirement</span>
           </div>
-          <div>
-            <label class="block text-[11px] font-semibold text-slate-300 mb-1">Official Email</label>
-            <input 
-              v-model="regForm.email" 
-              type="email" 
-              required 
-              placeholder="contact@entity.com" 
-              class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
-            />
+          <p class="text-[10px] text-slate-400 leading-relaxed">
+            Per RUCO / FSSAI standards, all 12 operational and regulatory credentials are required to be verified by Super Admin prior to account activation.
+          </p>
+        </div>
+
+        <!-- Section A: Entity & Primary Contact -->
+        <div class="space-y-2.5">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-300 mb-1">
+                <span class="text-emerald-400 font-mono font-bold mr-1">1.</span>
+                {{ regForm.role === 'seller' ? 'Name of Kitchen or Restaurant' : 'Full Legal Name' }} <span class="text-rose-400">*</span>
+              </label>
+              <input 
+                v-model="regForm.name" 
+                type="text" 
+                required 
+                :placeholder="regForm.role === 'seller' ? 'e.g. Green Leaf Cafe & Kitchen' : 'e.g. Rajesh Kumar'" 
+                class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+              />
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-300 mb-1">
+                <span class="text-emerald-400 font-mono font-bold mr-1">3.</span>
+                Official Email ID <span class="text-rose-400">*</span>
+              </label>
+              <input 
+                v-model="regForm.email" 
+                type="email" 
+                required 
+                placeholder="accounts@restaurant.com" 
+                class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+              />
+            </div>
+          </div>
+
+          <div v-if="regForm.role === 'seller'" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-300 mb-1">
+                <span class="text-emerald-400 font-mono font-bold mr-1">4.</span>
+                Primary Contact Person Name <span class="text-rose-400">*</span>
+              </label>
+              <input 
+                v-model="regForm.contact_name" 
+                type="text" 
+                required 
+                placeholder="e.g. Suresh Sharma (Manager)" 
+                class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+              />
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-300 mb-1">
+                <span class="text-emerald-400 font-mono font-bold mr-1">5.</span>
+                Primary Contact Number <span class="text-rose-400">*</span>
+              </label>
+              <input 
+                v-model="regForm.phone" 
+                type="text" 
+                required 
+                placeholder="e.g. +91 98200 12345" 
+                class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+              />
+            </div>
+          </div>
+
+          <div v-if="regForm.role === 'seller'" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-300 mb-1">
+                <span class="text-emerald-400 font-mono font-bold mr-1">6.</span>
+                Alternative Contact Name <span class="text-rose-400">*</span>
+              </label>
+              <input 
+                v-model="regForm.alt_contact_name" 
+                type="text" 
+                required 
+                placeholder="e.g. Chef Amit (Kitchen In-Charge)" 
+                class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+              />
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-300 mb-1">
+                <span class="text-emerald-400 font-mono font-bold mr-1">7.</span>
+                Alternative Number <span class="text-rose-400">*</span>
+              </label>
+              <input 
+                v-model="regForm.alt_phone" 
+                type="text" 
+                required 
+                placeholder="e.g. +91 98200 67890" 
+                class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+              />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div v-if="regForm.role !== 'seller'">
+              <label class="block text-[11px] font-semibold text-slate-300 mb-1">Contact Phone</label>
+              <input 
+                v-model="regForm.phone" 
+                type="text" 
+                required
+                placeholder="+91 98000 12345" 
+                class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+              />
+            </div>
+            <div :class="regForm.role === 'seller' ? 'sm:col-span-2' : ''">
+              <label class="block text-[11px] font-semibold text-slate-300 mb-1">Portal Account Password <span class="text-rose-400">*</span></label>
+              <input 
+                v-model="regForm.password" 
+                type="password" 
+                required 
+                placeholder="Minimum 6 characters" 
+                class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+              />
+            </div>
           </div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div>
-            <label class="block text-[11px] font-semibold text-slate-300 mb-1">Contact Phone</label>
-            <input 
-              v-model="regForm.phone" 
-              type="text" 
-              required
-              placeholder="+91 98000 12345" 
-              class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
-            />
+        <!-- Section B: Seller Regulatory & Banking Documents -->
+        <div v-if="regForm.role === 'seller'" class="space-y-2.5 pt-2 border-t border-slate-800">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-300 mb-1">
+                <span class="text-emerald-400 font-mono font-bold mr-1">8.</span>
+                FSSAI 14-Digit License Number <span class="text-rose-400">*</span>
+              </label>
+              <input 
+                v-model="regForm.fssai_license_no" 
+                type="text" 
+                required 
+                maxlength="14"
+                placeholder="e.g. 11521034000123" 
+                class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white font-mono focus:outline-none focus:border-emerald-500"
+              />
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-300 mb-1">
+                <span class="text-emerald-400 font-mono font-bold mr-1">9.</span>
+                GST Number (GSTIN) <span class="text-rose-400">*</span>
+              </label>
+              <input 
+                v-model="regForm.gst_no" 
+                type="text" 
+                required 
+                maxlength="15"
+                placeholder="e.g. 27AAAAA0000A1Z5" 
+                class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white font-mono uppercase focus:outline-none focus:border-emerald-500"
+              />
+            </div>
           </div>
-          <div>
-            <label class="block text-[11px] font-semibold text-slate-300 mb-1">Password</label>
-            <input 
-              v-model="regForm.password" 
-              type="password" 
-              required 
-              placeholder="Minimum 6 characters" 
-              class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
-            />
-          </div>
-        </div>
 
-        <!-- FBO Specific Fields -->
-        <div v-if="regForm.role === 'seller'" class="space-y-2.5 pt-1">
-          <div>
-            <label class="block text-[11px] font-semibold text-slate-300 mb-1">
-              FSSAI 14-Digit License Number <span class="text-rose-400">*</span>
-            </label>
-            <input 
-              v-model="regForm.fssai_license_no" 
-              type="text" 
-              required 
-              maxlength="14"
-              placeholder="e.g. 10020011003456" 
-              class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white font-mono focus:outline-none focus:border-emerald-500"
-            />
-          </div>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-            <div class="sm:col-span-2">
-              <label class="block text-[11px] font-semibold text-slate-300 mb-1">Kitchen / Site Street Address</label>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-300 mb-1">
+                <span class="text-emerald-400 font-mono font-bold mr-1">10.</span>
+                Cancel Cheque Ref or UPI ID <span class="text-rose-400">*</span>
+              </label>
               <input 
-                v-model="regForm.address" 
+                v-model="regForm.bank_upi_or_cheque" 
                 type="text" 
-                required
-                placeholder="e.g. 42 Main Road, Near Metro Station" 
+                required 
+                placeholder="e.g. cafe@icici or A/C 9876543210 IFSC HDFC0001" 
                 class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
               />
             </div>
             <div>
-              <label class="block text-[11px] font-semibold text-slate-300 mb-1">City / Region</label>
+              <label class="block text-[11px] font-semibold text-slate-300 mb-1">
+                <span class="text-emerald-400 font-mono font-bold mr-1">12.</span>
+                MSME / UDYAM Number <span class="text-rose-400">*</span>
+              </label>
               <input 
-                v-model="regForm.city" 
+                v-model="regForm.msme_udyam_no" 
                 type="text" 
-                required
-                placeholder="e.g. Mumbai, Delhi, etc." 
-                class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                required 
+                placeholder="e.g. UDYAM-MH-01-0012345" 
+                class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white font-mono uppercase focus:outline-none focus:border-emerald-500"
               />
             </div>
           </div>
-          <div class="grid grid-cols-2 gap-2">
-            <div>
-              <label class="block text-[11px] font-semibold text-slate-300 mb-1">Pincode</label>
-              <input 
-                v-model="regForm.pincode" 
-                type="text" 
-                placeholder="e.g. 400001" 
-                class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
-              />
+
+          <!-- Section C: Address & Location on Map -->
+          <div class="pt-2 border-t border-slate-800 space-y-2">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              <div class="sm:col-span-2">
+                <label class="block text-[11px] font-semibold text-slate-300 mb-1">
+                  <span class="text-emerald-400 font-mono font-bold mr-1">2.</span>
+                  Kitchen / Site Street Address <span class="text-rose-400">*</span>
+                </label>
+                <input 
+                  v-model="regForm.address" 
+                  type="text" 
+                  required
+                  placeholder="e.g. Shop 12, High Street, Near Station" 
+                  class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                />
+              </div>
+              <div>
+                <label class="block text-[11px] font-semibold text-slate-300 mb-1">City / Region <span class="text-rose-400">*</span></label>
+                <input 
+                  v-model="regForm.city" 
+                  type="text" 
+                  required
+                  placeholder="e.g. Mumbai" 
+                  class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                />
+              </div>
             </div>
-            <div>
-              <label class="block text-[11px] font-semibold text-slate-300 mb-1">Collection Window Preference</label>
-              <select 
-                v-model="regForm.pickup_preference" 
-                class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
-              >
-                <option value="Morning (9 AM - 12 PM)">Morning (9 AM - 12 PM)</option>
-                <option value="Afternoon (1 PM - 4 PM)">Afternoon (1 PM - 4 PM)</option>
-                <option value="Evening (5 PM - 8 PM)">Evening (5 PM - 8 PM)</option>
-                <option value="Night (9 PM - 12 AM)">Night (9 PM - 12 AM)</option>
-                <option value="On-Demand">On-Demand / Any Time</option>
-              </select>
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block text-[11px] font-semibold text-slate-300 mb-1">Pincode <span class="text-rose-400">*</span></label>
+                <input 
+                  v-model="regForm.pincode" 
+                  type="text" 
+                  required
+                  placeholder="e.g. 400052" 
+                  class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                />
+              </div>
+              <div>
+                <label class="block text-[11px] font-semibold text-slate-300 mb-1">Preferred Pickup Window</label>
+                <select 
+                  v-model="regForm.pickup_preference" 
+                  class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                >
+                  <option value="Morning (9 AM - 12 PM)">Morning (9 AM - 12 PM)</option>
+                  <option value="Afternoon (1 PM - 4 PM)">Afternoon (1 PM - 4 PM)</option>
+                  <option value="Evening (5 PM - 8 PM)">Evening (5 PM - 8 PM)</option>
+                  <option value="Night (9 PM - 12 AM)">Night (9 PM - 12 AM)</option>
+                  <option value="On-Demand">On-Demand / Any Time</option>
+                </select>
+              </div>
             </div>
           </div>
         </div>
@@ -362,16 +492,22 @@ const gpsSuccess = ref(false);
 
 const regForm = ref({
   role: 'seller',
-  name: '',
-  email: '',
-  phone: '',
+  name: '',               // 1. Name of Kitchen or Restaurant
+  address: '',            // 2. Physical Address
+  city: '',               // 2. City
+  pincode: '',            // 2. Pincode
+  email: '',              // 3. Email ID
+  contact_name: '',       // 4. Primary Contact Person Name
+  phone: '',              // 5. Primary Contact Number
+  alt_contact_name: '',   // 6. Alternative Contact Person Name
+  alt_phone: '',          // 7. Alternative Phone Number
+  fssai_license_no: '',   // 8. FSSAI License Number
+  gst_no: '',             // 9. GST Number
+  bank_upi_or_cheque: '', // 10. Cancel Cheque or UPI ID
+  latitude: null,         // 11. Location on map (lat)
+  longitude: null,        // 11. Location on map (lng)
+  msme_udyam_no: '',      // 12. MSME / UDYAM Number
   password: '',
-  fssai_license_no: '',
-  address: '',
-  city: '',
-  pincode: '',
-  latitude: null,
-  longitude: null,
   pickup_preference: 'Morning (9 AM - 12 PM)',
   vehicle_no: '',
 });
@@ -458,8 +594,31 @@ async function handleLogin() {
 }
 
 async function handleRegister() {
-  loading.value = true;
   errorMessage.value = '';
+
+  if (regForm.value.role === 'seller') {
+    const f = regForm.value;
+    if (!f.name?.trim()) { errorMessage.value = 'Item #1 Required: Name of Kitchen or Restaurant'; return; }
+    if (!f.email?.trim()) { errorMessage.value = 'Item #3 Required: Official Email ID'; return; }
+    if (!f.contact_name?.trim()) { errorMessage.value = 'Item #4 Required: Primary Contact Person Name'; return; }
+    if (!f.phone?.trim()) { errorMessage.value = 'Item #5 Required: Primary Contact Number'; return; }
+    if (!f.alt_contact_name?.trim()) { errorMessage.value = 'Item #6 Required: Alternative Contact Name'; return; }
+    if (!f.alt_phone?.trim()) { errorMessage.value = 'Item #7 Required: Alternative Phone Number'; return; }
+    if (!f.fssai_license_no?.trim()) { errorMessage.value = 'Item #8 Required: FSSAI 14-Digit License Number'; return; }
+    if (!f.gst_no?.trim()) { errorMessage.value = 'Item #9 Required: GST Identification Number (GSTIN)'; return; }
+    if (!f.bank_upi_or_cheque?.trim()) { errorMessage.value = 'Item #10 Required: Cancel Cheque Reference or UPI ID'; return; }
+    if (f.latitude === null || f.longitude === null) {
+      errorMessage.value = 'Item #11 Required: Exact Location on Map. Please click "Detect My Exact Location" or enter coordinates.';
+      return;
+    }
+    if (!f.address?.trim() || !f.city?.trim() || !f.pincode?.trim()) {
+      errorMessage.value = 'Item #2 Required: Full Address (Street Address, City, and Pincode)';
+      return;
+    }
+    if (!f.msme_udyam_no?.trim()) { errorMessage.value = 'Item #12 Required: MSME / UDYAM Registration Number'; return; }
+  }
+
+  loading.value = true;
   try {
     await emit('register', { ...regForm.value }, (err) => {
       if (err) errorMessage.value = err;

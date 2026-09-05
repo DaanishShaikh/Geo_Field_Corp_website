@@ -51,7 +51,31 @@ def create_app(config_class=Config):
         if not _admin_checked:
             try:
                 from backend.models import RateCard
+                from sqlalchemy import text
                 db.create_all()
+
+                # Safe auto-migration for new seller KYC columns
+                new_columns = [
+                    ("contact_name", "VARCHAR(150)"),
+                    ("alt_contact_name", "VARCHAR(150)"),
+                    ("alt_phone", "VARCHAR(50)"),
+                    ("gst_no", "VARCHAR(50)"),
+                    ("bank_upi_or_cheque", "VARCHAR(150)"),
+                    ("msme_udyam_no", "VARCHAR(80)"),
+                ]
+                for col_name, col_type in new_columns:
+                    try:
+                        db.session.execute(text(f"ALTER TABLE seller_profiles ADD COLUMN IF NOT EXISTS {col_name} {col_type};"))
+                        db.session.commit()
+                    except Exception:
+                        db.session.rollback()
+                        try:
+                            # SQLite syntax fallback
+                            db.session.execute(text(f"ALTER TABLE seller_profiles ADD COLUMN {col_name} {col_type};"))
+                            db.session.commit()
+                        except Exception:
+                            db.session.rollback()
+
                 admin = User.query.filter_by(role="admin").first()
                 if not admin:
                     admin = User(
@@ -73,6 +97,19 @@ def create_app(config_class=Config):
                 if not RateCard.query.first():
                     rc = RateCard(base_rate=55.0, low_tpc_bonus=5.0, high_tpc_penalty=8.0)
                     db.session.add(rc)
+
+                # Clean up legacy/demo accounts
+                stale_emails = [
+                    "greenleaf@cafe.com", 
+                    "mumbai@kitchen.com", 
+                    "bangalore@cloudkitchen.com", 
+                    "agent.rahul@geofield.com", 
+                    "agent.priya@geofield.com", 
+                    "agent@geofield.com", 
+                    "seller@geofield.com"
+                ]
+                for stale in User.query.filter(User.email.in_(stale_emails)).all():
+                    db.session.delete(stale)
 
                 db.session.commit()
                 _admin_checked = True
