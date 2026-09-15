@@ -2,7 +2,7 @@
   <header 
     :class="user 
       ? 'bg-slate-900/95 backdrop-blur border-b border-slate-800 text-slate-100' 
-      : 'bg-[#FAF8F5] border-b border-[#E2DCD2] text-[#1E2820]'"
+      : 'bg-[#05180f]/95 backdrop-blur-md border-b border-emerald-900/60 text-white'"
     class="h-16 flex items-center justify-between px-4 lg:px-8 sticky top-0 z-40 transition-colors duration-200"
   >
     <div class="flex items-center gap-4">
@@ -18,31 +18,18 @@
       </button>
 
       <a href="/" class="flex items-center gap-3 group">
-        <div 
-          :class="user 
-            ? 'bg-gradient-to-tr from-emerald-600 via-teal-500 to-emerald-400 text-white rounded-xl shadow-md shadow-emerald-950/50' 
-            : 'bg-[#233127] text-[#FAF8F5] rounded-md border border-[#344439] shadow-xs'"
-          class="w-9 h-9 flex items-center justify-center font-serif font-black text-lg tracking-wider transition-transform group-hover:scale-105"
-        >
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-700 via-green-600 to-emerald-400 flex items-center justify-center font-black text-white text-base shadow-md shadow-emerald-950/60 transition-transform group-hover:scale-105">
           G
         </div>
         <div>
-          <div 
-            :class="user ? 'text-white' : 'text-[#1E2820]'"
-            class="text-sm font-bold tracking-tight flex items-center gap-2"
-          >
+          <div class="text-sm font-bold tracking-tight text-white flex items-center gap-2">
             GeoField Bio-Logistics
-            <span 
-              :class="user 
-                ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' 
-                : 'bg-[#EFEAE1] text-[#2D3B32] border-[#D8D0C3]'"
-              class="text-[10px] uppercase font-bold px-2 py-0.5 rounded border tracking-wider"
-            >
-              RUCO Certified
+            <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 tracking-wider">
+              🌿 RUCO Certified
             </span>
           </div>
-          <p :class="user ? 'text-slate-400' : 'text-[#5C645D]'" class="text-[11px]">
-            National UCO Traceability & Compliance Network
+          <p class="text-[11px] text-emerald-300/70">
+            National UCO Traceability & Clean Bio-Energy Network
           </p>
         </div>
       </a>
@@ -52,15 +39,11 @@
     <div class="flex items-center gap-3 sm:gap-4">
       <!-- Network Connectivity Indicator -->
       <div 
-        :class="user
-          ? (isOnline ? 'bg-emerald-950/40 border-emerald-800/50 text-emerald-300' : 'bg-amber-950/50 border-amber-800/60 text-amber-300')
-          : (isOnline ? 'bg-[#EFEAE1] border-[#D8D0C3] text-[#2D3B32]' : 'bg-[#FBEBE6] border-[#F2C5B5] text-[#C85A32]')"
-        class="flex items-center gap-2 text-xs font-medium px-3 py-1.5 rounded border transition-all"
+        :class="isOnline ? 'bg-emerald-950/60 border-emerald-800/60 text-emerald-300' : 'bg-amber-950/50 border-amber-800/60 text-amber-300'"
+        class="flex items-center gap-2 text-xs font-medium px-3 py-1.5 rounded-full border transition-all"
       >
         <span 
-          :class="user
-            ? (isOnline ? 'bg-emerald-400' : 'bg-amber-400 animate-pulse')
-            : (isOnline ? 'bg-[#233127]' : 'bg-[#C85A32] animate-pulse')"
+          :class="isOnline ? 'bg-emerald-400' : 'bg-amber-400 animate-pulse'"
           class="w-2 h-2 rounded-full"
         ></span>
         <span class="hidden sm:inline">{{ isOnline ? 'Network Online' : `${offlineCount} Pending Sync` }}</span>
@@ -86,13 +69,13 @@
       <div v-else class="flex items-center gap-2.5">
         <button 
           @click="$emit('open-auth', 'login')" 
-          class="px-3.5 py-1.5 text-xs font-semibold text-[#2D3B32] hover:text-[#1E2820] bg-white hover:bg-[#F5F2EB] rounded-md border border-[#D8D0C3] transition shadow-2xs cursor-pointer"
+          class="px-3.5 py-1.5 text-xs font-semibold text-emerald-100 hover:text-white bg-emerald-950/70 hover:bg-emerald-900/80 rounded-xl border border-emerald-800/60 transition shadow-xs cursor-pointer"
         >
           Sign In
         </button>
         <button 
           @click="$emit('open-auth', 'register')" 
-          class="px-4 py-1.5 text-xs font-semibold text-white bg-[#C85A32] hover:bg-[#B34E29] rounded-md border border-[#B34E29] transition shadow-xs cursor-pointer"
+          class="px-4 py-1.5 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-500 rounded-xl shadow-lg shadow-emerald-950/50 hover:shadow-emerald-900/60 transition cursor-pointer"
         >
           Register FBO
         </button>
