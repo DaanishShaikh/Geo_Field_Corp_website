@@ -1,5 +1,8 @@
 <template>
-  <div class="min-h-screen bg-slate-900 text-slate-100 flex flex-col selection:bg-emerald-500 selection:text-white">
+  <div 
+    :class="currentUser ? 'bg-slate-900 text-slate-100 selection:bg-emerald-500 selection:text-white' : 'bg-[#FAF8F5] text-[#1E2820] selection:bg-[#C85A32] selection:text-white'" 
+    class="min-h-screen flex flex-col transition-colors duration-300"
+  >
     <!-- Top Navbar -->
     <Navbar 
       :user="currentUser" 
