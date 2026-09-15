@@ -21,166 +21,12 @@
       </div>
     </transition>
 
-    <!-- 1. PUBLIC LANDING PAGE (When unauthenticated) -->
-    <div v-if="!currentUser" class="flex-1 flex flex-col">
-      <!-- Hero Section -->
-      <section class="relative py-16 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full text-center space-y-8">
-        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-xs font-bold uppercase tracking-wider">
-          <span>🌿</span> FSSAI RUCO Compliant &bull; Biofuel Conversion Network
-        </div>
-
-        <h1 class="text-4xl sm:text-6xl font-black text-white tracking-tight leading-[1.1] max-w-4xl mx-auto">
-          Closed-Loop Logistics & Compliance for <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-300">Used Cooking Oil</span>
-        </h1>
-
-        <p class="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto leading-relaxed">
-          GeoField connects Food Business Operators (FBOs), field collection fleets, and certified biodiesel refineries under tamper-proof FSSAI RUCO compliance records.
-        </p>
-
-        <div class="flex flex-wrap items-center justify-center gap-4 pt-2">
-          <button 
-            @click="openAuthModal('register')"
-            class="px-8 py-3.5 bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-bold text-sm rounded-2xl shadow-xl hover:shadow-emerald-900/50 transition transform hover:-translate-y-0.5"
-          >
-            Register Food Business (FBO)
-          </button>
-          <button 
-            @click="openAuthModal('login')"
-            class="px-8 py-3.5 bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white font-semibold text-sm rounded-2xl border border-slate-700 hover:border-slate-600 transition"
-          >
-            Sign In to Portal
-          </button>
-        </div>
-
-        <!-- Live Platform Impact Stats Counter -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 pt-12 max-w-5xl mx-auto">
-          <div class="p-5 rounded-2xl bg-slate-800/60 border border-slate-700/60 text-center">
-            <div class="text-2xl sm:text-3xl font-black text-white font-mono">100%</div>
-            <div class="text-xs text-slate-400 font-medium mt-1">RUCO Traceability</div>
-          </div>
-          <div class="p-5 rounded-2xl bg-slate-800/60 border border-slate-700/60 text-center">
-            <div class="text-2xl sm:text-3xl font-black text-emerald-400 font-mono">₹55 - 60</div>
-            <div class="text-xs text-slate-400 font-medium mt-1">Base Payout / Liter</div>
-          </div>
-          <div class="p-5 rounded-2xl bg-slate-800/60 border border-slate-700/60 text-center">
-            <div class="text-2xl sm:text-3xl font-black text-cyan-300 font-mono">&le; 25%</div>
-            <div class="text-xs text-slate-400 font-medium mt-1">FSSAI Max TPC Standard</div>
-          </div>
-          <div class="p-5 rounded-2xl bg-slate-800/60 border border-slate-700/60 text-center">
-            <div class="text-2xl sm:text-3xl font-black text-amber-400 font-mono">Instant</div>
-            <div class="text-xs text-slate-400 font-medium mt-1">PDF Disposal Certs</div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Interactive UCO Revenue & ESG Impact Calculator -->
-      <section class="py-12 bg-slate-950/60 border-y border-slate-800/80 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-4xl mx-auto bg-slate-900 rounded-3xl border border-slate-700/80 p-6 sm:p-10 shadow-2xl space-y-6">
-          <div class="text-center space-y-2">
-            <h2 class="text-xl sm:text-2xl font-black text-white">Commercial UCO Revenue & ESG Calculator</h2>
-            <p class="text-xs sm:text-sm text-slate-400">Estimate your monthly earnings and environmental carbon offset</p>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center pt-2">
-            <div class="space-y-4">
-              <div>
-                <div class="flex justify-between text-xs font-semibold text-slate-300 mb-2">
-                  <span>Monthly Used Cooking Oil Produced:</span>
-                  <span class="text-emerald-400 font-bold font-mono">{{ calcLiters }} Liters</span>
-                </div>
-                <input 
-                  type="range" 
-                  v-model.number="calcLiters" 
-                  min="20" 
-                  max="2000" 
-                  step="10" 
-                  class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-500"
-                />
-              </div>
-
-              <div>
-                <div class="flex justify-between text-xs font-semibold text-slate-300 mb-2">
-                  <span>Average Quality (TPC %):</span>
-                  <span class="text-teal-400 font-bold font-mono">{{ calcTpc }}% ({{ calcTpc <= 22 ? '+₹5 Bonus Tier' : (calcTpc >= 30 ? '-₹8 Penalty' : 'Standard Rate') }})</span>
-                </div>
-                <input 
-                  type="range" 
-                  v-model.number="calcTpc" 
-                  min="10" 
-                  max="35" 
-                  step="1" 
-                  class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-teal-500"
-                />
-              </div>
-            </div>
-
-            <!-- Output Box -->
-            <div class="bg-slate-950 p-6 rounded-2xl border border-slate-800 space-y-3">
-              <div class="flex justify-between items-center text-xs">
-                <span class="text-slate-400">Estimated Monthly Earnings:</span>
-                <span class="text-xl font-black text-emerald-400 font-mono">₹{{ formatNumber(estimatedMonthlyRevenue) }}</span>
-              </div>
-              <div class="flex justify-between items-center text-xs">
-                <span class="text-slate-400">CO₂ Avoided / Month:</span>
-                <span class="font-bold text-white font-mono">{{ (calcLiters * 0.0028).toFixed(2) }} Tons</span>
-              </div>
-              <div class="flex justify-between items-center text-xs">
-                <span class="text-slate-400">Clean Water Protected:</span>
-                <span class="font-bold text-cyan-300 font-mono">{{ formatNumber(calcLiters * 24000) }} Liters</span>
-              </div>
-              <div class="pt-2 border-t border-slate-800">
-                <button 
-                  @click="openAuthModal('register')"
-                  class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow transition"
-                >
-                  Onboard Your Kitchen Now
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- How It Works Section -->
-      <section class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full space-y-12">
-        <div class="text-center space-y-2">
-          <h2 class="text-2xl sm:text-3xl font-black text-white">4-Step End-to-End Compliance Workflow</h2>
-          <p class="text-xs sm:text-sm text-slate-400">Zero manual paperwork, full FSSAI legal traceability</p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <div class="p-6 rounded-2xl bg-slate-800/80 border border-slate-700/80 space-y-3 relative">
-            <div class="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-black flex items-center justify-center text-sm">1</div>
-            <h3 class="text-sm font-bold text-white">Onboard & Static QR</h3>
-            <p class="text-xs text-slate-400 leading-relaxed">FBO registers with FSSAI license. Super Admin verifies KYC and issues a permanent static site QR code sticker.</p>
-          </div>
-
-          <div class="p-6 rounded-2xl bg-slate-800/80 border border-slate-700/80 space-y-3 relative">
-            <div class="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-black flex items-center justify-center text-sm">2</div>
-            <h3 class="text-sm font-bold text-white">Receipt Creation</h3>
-            <p class="text-xs text-slate-400 leading-relaxed">FBO generates a collection receipt specifying estimated volume, producing a dynamic receipt approval QR.</p>
-          </div>
-
-          <div class="p-6 rounded-2xl bg-slate-800/80 border border-slate-700/80 space-y-3 relative">
-            <div class="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-black flex items-center justify-center text-sm">3</div>
-            <h3 class="text-sm font-bold text-white">On-Site Measurement</h3>
-            <p class="text-xs text-slate-400 leading-relaxed">Field executive scans site & receipt QR, tests oil quality (TPC %), measures volume, and records settlement.</p>
-          </div>
-
-          <div class="p-6 rounded-2xl bg-slate-800/80 border border-slate-700/80 space-y-3 relative">
-            <div class="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-black flex items-center justify-center text-sm">4</div>
-            <h3 class="text-sm font-bold text-white">Official Certificate</h3>
-            <p class="text-xs text-slate-400 leading-relaxed">Backend locks the immutable record and auto-generates official FSSAI Disposal PDF certificates for health audits.</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- Footer -->
-      <footer class="mt-auto border-t border-slate-800 bg-slate-950 py-8 px-4 sm:px-6 lg:px-8 text-center text-xs text-slate-500 space-y-2">
-        <p>GeoField Bio-Logistics &bull; Enforcing FSSAI RUCO Compliance &bull; Clean Energy Conversion</p>
-        <p class="text-[11px] text-slate-600">Tamper-Evident SHA-256 Ledger &bull; Offline-First PWA &bull; Biofuel Delivery Aggregator</p>
-      </footer>
-    </div>
+    <!-- 1. HIGH-ENERGY NARRATIVE LANDING PAGE (When unauthenticated) -->
+    <LandingPage 
+      v-if="!currentUser"
+      @open-register="openAuthModal('register')"
+      @open-login="openAuthModal('login')"
+    />
 
     <!-- 2. AUTHENTICATED PLATFORM PORTAL (When logged in) -->
     <div v-else class="flex-1 flex overflow-hidden">
@@ -289,6 +135,7 @@ import { getOfflineQueue, addOfflineSettlement, clearOfflineQueue, cacheManifest
 import Navbar from './components/Navbar.vue';
 import Sidebar from './components/Sidebar.vue';
 import AuthModal from './components/AuthModal.vue';
+import LandingPage from './components/LandingPage.vue';
 import SellerDashboard from './components/SellerDashboard.vue';
 import AgentDashboard from './components/AgentDashboard.vue';
 import AdminDashboard from './components/AdminDashboard.vue';
@@ -304,17 +151,6 @@ const authInitialMode = ref('login');
 const isOnline = ref(navigator.onLine);
 const toastMsg = ref('');
 const offlineQueue = ref([]);
-
-// Calculator State
-const calcLiters = ref(300);
-const calcTpc = ref(20);
-
-const estimatedMonthlyRevenue = computed(() => {
-  let rate = 55;
-  if (calcTpc.value <= 22) rate += 5;
-  else if (calcTpc.value >= 30) rate -= 8;
-  return calcLiters.value * rate;
-});
 
 // Portal State Data
 const sellerData = ref({});
