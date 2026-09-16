@@ -1,12 +1,12 @@
 <template>
-  <div class="landing-page relative bg-[#05180f] text-emerald-50 selection:bg-emerald-500 selection:text-white font-sans antialiased overflow-hidden">
+  <div class="landing-page relative bg-[#F4F1E6] text-[#243027] selection:bg-[#D29A5A] selection:text-[#F4F1E6] font-sans antialiased overflow-hidden">
     <!-- Interactive Background Particle Canvas (Flowing Bio-Spores) -->
     <canvas ref="particleCanvas" class="pointer-events-none absolute inset-0 -z-10 w-full h-full opacity-60"></canvas>
 
     <!-- Ambient Glowing Environmental Auroras -->
-    <div class="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-[1100px] h-[650px] bg-gradient-to-b from-emerald-500/20 via-green-500/10 to-transparent blur-[130px] -z-10 animate-pulse-slow"></div>
-    <div class="pointer-events-none absolute top-[1300px] left-[-220px] w-[700px] h-[700px] bg-emerald-600/15 rounded-full blur-[160px] -z-10"></div>
-    <div class="pointer-events-none absolute top-[2500px] right-[-180px] w-[650px] h-[650px] bg-teal-500/15 rounded-full blur-[150px] -z-10"></div>
+    <div class="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-[1100px] h-[650px] bg-[#668A68]/10 blur-[130px] -z-10 animate-pulse-slow"></div>
+    <div class="pointer-events-none absolute top-[1300px] left-[-220px] w-[700px] h-[700px] bg-[#31543B]/10 rounded-full blur-[160px] -z-10"></div>
+    <div class="pointer-events-none absolute top-[2500px] right-[-180px] w-[650px] h-[650px] bg-[#D29A5A]/10 rounded-full blur-[150px] -z-10"></div>
 
     <!-- ========================================================================= -->
     <!-- SECTION 1: THE HERO (The Visceral Hook & 3D Interactive Reactor)          -->
@@ -21,26 +21,26 @@
         <!-- Left Column: Copy & Interactive CTAs -->
         <div class="lg:col-span-7 space-y-7 text-center lg:text-left">
           <!-- Compliance Live Pulse Badge -->
-          <div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-[#082215]/90 text-emerald-400 border border-emerald-500/40 text-xs font-bold uppercase tracking-wider backdrop-blur-xl shadow-xl shadow-emerald-950/60 hover:border-emerald-400 transition-colors">
+          <div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-[#31543B]/10 text-[#31543B] border border-[#668A68]/40 text-xs font-bold uppercase tracking-wider backdrop-blur-xl shadow-sm hover:border-[#31543B] transition-colors">
             <span class="relative flex h-2.5 w-2.5">
-              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400"></span>
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#31543B] opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#31543B]"></span>
             </span>
             <span>🌿 FSSAI RUCO Verified Network</span>
-            <span class="text-emerald-700">&bull;</span>
-            <span class="text-green-300 font-mono">100% Closed-Loop Biofuel</span>
+            <span class="text-[#668A68]">&bull;</span>
+            <span class="text-[#31543B] font-mono">100% Closed-Loop Biofuel</span>
           </div>
 
           <!-- Headline -->
-          <h1 class="text-4xl sm:text-6xl xl:text-7xl font-black tracking-tight leading-[1.08] text-white">
+          <h1 class="text-4xl sm:text-6xl xl:text-7xl font-black tracking-tight leading-[1.08] text-[#243027]">
             Stop the Toxic Cycle. <br />
-            <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-green-300 to-teal-300 drop-shadow-[0_4px_24px_rgba(52,211,153,0.35)]">
+            <span class="text-[#31543B]">
               Start the Green Revenue.
             </span>
           </h1>
 
           <!-- Sub-headline -->
-          <p class="text-base sm:text-lg text-emerald-100/80 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-normal">
+          <p class="text-base sm:text-lg text-[#243027]/80 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-normal">
             Join India’s smartest RUCO aggregation network. We take the hassle out of FSSAI compliance with instant QR-based disposal, cluster-based pickups, and real-time environmental tracking.
           </p>
 
@@ -49,12 +49,12 @@
             <!-- Primary Magnetic Shimmer Button -->
             <button 
               @click="$emit('open-register')"
-              class="relative group w-full sm:w-auto p-[2px] rounded-2xl overflow-hidden shadow-2xl shadow-emerald-900/60 transition-transform duration-300 hover:scale-105 active:scale-98 cursor-pointer"
+              class="relative group w-full sm:w-auto p-[2px] rounded-2xl overflow-hidden shadow-xl shadow-[#31543B]/30 transition-transform duration-300 hover:scale-105 active:scale-98 cursor-pointer"
             >
               <!-- Spinning Conic Gradient Neon Border -->
-              <span class="absolute inset-[-1000%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#059669_0%,#34d399_50%,#10b981_100%)]"></span>
-              <span class="relative flex items-center justify-center gap-3 px-8 py-4 bg-[#071f13] hover:bg-[#092919] text-white font-extrabold text-sm rounded-2xl backdrop-blur-xl transition-colors">
-                <span class="text-emerald-400 text-base">🌱</span>
+              <span class="absolute inset-[-1000%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#31543B_0%,#D29A5A_50%,#668A68_100%)]"></span>
+              <span class="relative flex items-center justify-center gap-3 px-8 py-4 bg-[#31543B] hover:bg-[#243027] text-[#F4F1E6] font-extrabold text-sm rounded-2xl backdrop-blur-xl transition-colors">
+                <span class="text-[#D29A5A] text-base">🌱</span>
                 <span>Join the Clean Network</span>
                 <svg class="w-4 h-4 transition-transform group-hover:translate-x-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
@@ -65,28 +65,28 @@
             <!-- Secondary Cinematic Explore Link -->
             <a 
               href="#threat-section"
-              class="w-full sm:w-auto px-6 py-4 bg-[#0a2618]/80 hover:bg-[#0e3321] text-emerald-200 hover:text-white font-semibold text-sm rounded-2xl border border-emerald-800/80 hover:border-emerald-500 transition-all duration-300 flex items-center justify-center gap-2 group backdrop-blur-md"
+              class="w-full sm:w-auto px-6 py-4 bg-[#F4F1E6] hover:bg-[#EAE6D8] text-[#31543B] hover:text-[#243027] font-semibold text-sm rounded-2xl border border-[#668A68]/50 hover:border-[#31543B] transition-all duration-300 flex items-center justify-center gap-2 group shadow-sm"
             >
-              <span class="text-amber-400 group-hover:scale-125 transition-transform">⚠️</span>
+              <span class="text-[#D29A5A] group-hover:scale-125 transition-transform">⚠️</span>
               <span>Explore The 60% Crisis</span>
-              <svg class="w-4 h-4 text-emerald-400 group-hover:translate-y-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-4 h-4 text-[#31543B] group-hover:translate-y-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
               </svg>
             </a>
           </div>
 
           <!-- Live Compliance Mini-Badges -->
-          <div class="pt-6 border-t border-emerald-900/60 flex flex-wrap items-center justify-center lg:justify-start gap-6 text-xs text-emerald-300/80">
-            <div class="flex items-center gap-2 hover:text-white transition-colors cursor-default">
-              <span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-[10px] font-black border border-emerald-500/30">₹</span>
+          <div class="pt-6 border-t border-[#668A68]/30 flex flex-wrap items-center justify-center lg:justify-start gap-6 text-xs text-[#243027]/80">
+            <div class="flex items-center gap-2 hover:text-[#243027] transition-colors cursor-default">
+              <span class="w-5 h-5 rounded-full bg-[#31543B]/10 text-[#31543B] flex items-center justify-center text-[10px] font-black border border-[#668A68]/30">₹</span>
               <span>₹55 - ₹60/L Guaranteed Base</span>
             </div>
-            <div class="flex items-center gap-2 hover:text-white transition-colors cursor-default">
-              <span class="w-5 h-5 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center text-[10px] font-black border border-green-500/30">📜</span>
+            <div class="flex items-center gap-2 hover:text-[#243027] transition-colors cursor-default">
+              <span class="w-5 h-5 rounded-full bg-[#31543B]/10 text-[#31543B] flex items-center justify-center text-[10px] font-black border border-[#668A68]/30">📜</span>
               <span>Digital Form-D Certificates</span>
             </div>
-            <div class="flex items-center gap-2 hover:text-white transition-colors cursor-default">
-              <span class="w-5 h-5 rounded-full bg-teal-500/20 text-teal-400 flex items-center justify-center text-[10px] font-black border border-teal-500/30">⚡</span>
+            <div class="flex items-center gap-2 hover:text-[#243027] transition-colors cursor-default">
+              <span class="w-5 h-5 rounded-full bg-[#31543B]/10 text-[#31543B] flex items-center justify-center text-[10px] font-black border border-[#668A68]/30">⚡</span>
               <span>Zero-Interruption Cluster Fleet</span>
             </div>
           </div>
@@ -99,26 +99,26 @@
             :style="heroParallaxStyle"
           >
             <!-- Glowing Reactor Glass Card -->
-            <div class="relative w-full h-full rounded-3xl bg-[#092216]/90 border border-emerald-700/60 shadow-[0_20px_60px_-15px_rgba(16,185,129,0.3)] p-6 flex flex-col justify-between backdrop-blur-2xl overflow-hidden group">
+            <div class="relative w-full h-full rounded-3xl bg-[#31543B] border border-[#668A68]/40 shadow-2xl p-6 flex flex-col justify-between backdrop-blur-2xl overflow-hidden group text-[#F4F1E6]">
               <!-- Animated Edge Flare -->
-              <div class="absolute -top-32 -right-32 w-64 h-64 bg-emerald-500/25 rounded-full blur-3xl pointer-events-none group-hover:bg-emerald-500/40 transition-colors duration-700"></div>
-              <div class="absolute -bottom-32 -left-32 w-64 h-64 bg-teal-500/20 rounded-full blur-3xl pointer-events-none"></div>
+              <div class="absolute -top-32 -right-32 w-64 h-64 bg-[#668A68]/20 rounded-full blur-3xl pointer-events-none group-hover:bg-[#668A68]/30 transition-colors duration-700"></div>
+              <div class="absolute -bottom-32 -left-32 w-64 h-64 bg-[#D29A5A]/15 rounded-full blur-3xl pointer-events-none"></div>
 
               <!-- Reactor Top Controls -->
               <div class="flex items-center justify-between z-10">
-                <div class="flex items-center gap-2 bg-[#04120b]/90 border border-emerald-900 px-3 py-1.5 rounded-xl shadow-inner">
-                  <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-                  <span class="text-[11px] font-mono text-emerald-300 font-bold uppercase tracking-wider">
+                <div class="flex items-center gap-2 bg-[#243027] border border-[#668A68]/40 px-3 py-1.5 rounded-xl shadow-inner">
+                  <span class="w-2 h-2 rounded-full bg-[#D29A5A] animate-ping"></span>
+                  <span class="text-[11px] font-mono text-[#F4F1E6] font-bold uppercase tracking-wider">
                     {{ activeReactorTier.label }}
                   </span>
                 </div>
                 <!-- Interactive Tier Switcher -->
-                <div class="flex items-center gap-1 bg-[#04120b]/90 p-1 rounded-xl border border-emerald-900">
+                <div class="flex items-center gap-1 bg-[#243027] p-1 rounded-xl border border-[#668A68]/40">
                   <button 
                     v-for="(tier, idx) in reactorTiers" 
                     :key="idx"
                     @click="selectedReactorTier = idx"
-                    :class="selectedReactorTier === idx ? 'bg-emerald-700 text-white font-black shadow-md' : 'text-emerald-400 hover:text-emerald-200'"
+                    :class="selectedReactorTier === idx ? 'bg-[#D29A5A] text-[#243027] font-black shadow-md' : 'text-[#F4F1E6]/70 hover:text-[#F4F1E6]'"
                     class="px-2.5 py-1 text-[10px] rounded-lg font-mono uppercase transition cursor-pointer"
                   >
                     {{ tier.code }}
@@ -130,15 +130,15 @@
               <div class="relative flex-1 flex items-center justify-center my-2">
                 <svg viewBox="0 0 340 340" class="w-full h-full max-h-[270px]">
                   <!-- Outer Magnetic Confinement Rings -->
-                  <circle cx="170" cy="170" r="140" fill="none" stroke="#064e3b" stroke-width="1.5" stroke-dasharray="8 6" class="animate-spin-very-slow origin-center opacity-70" />
-                  <circle cx="170" cy="170" r="122" fill="none" stroke="#047857" stroke-width="2" stroke-dasharray="14 10" class="animate-spin-reverse origin-center opacity-80" />
+                  <circle cx="170" cy="170" r="140" fill="none" stroke="#668A68" stroke-width="1.5" stroke-dasharray="8 6" class="animate-spin-very-slow origin-center opacity-70" />
+                  <circle cx="170" cy="170" r="122" fill="none" stroke="#668A68" stroke-width="2" stroke-dasharray="14 10" class="animate-spin-reverse origin-center opacity-80" />
                   
                   <!-- Platform Base -->
                   <ellipse cx="170" cy="275" rx="90" ry="18" fill="url(#platformGlow)" />
-                  <ellipse cx="170" cy="270" rx="75" ry="12" fill="#022c22" stroke="#10b981" stroke-width="1.5" />
+                  <ellipse cx="170" cy="270" rx="75" ry="12" fill="#243027" stroke="#D29A5A" stroke-width="1.5" />
 
                   <!-- Central Catalytic Reactor Chamber -->
-                  <rect x="100" y="65" width="140" height="175" rx="24" fill="url(#reactorGlass)" stroke="#34d399" stroke-width="2" opacity="0.9" />
+                  <rect x="100" y="65" width="140" height="175" rx="24" fill="url(#reactorGlass)" stroke="#668A68" stroke-width="2" opacity="0.9" />
 
                   <!-- Fluid Wave Fill in Chamber -->
                   <path 
@@ -158,49 +158,49 @@
 
                   <!-- Internal Catalytic Catalyst Core -->
                   <circle cx="170" cy="155" r="18" :fill="activeReactorTier.coreColor" class="animate-pulse" opacity="0.85" />
-                  <circle cx="170" cy="155" r="8" fill="#ecfdf5" />
+                  <circle cx="170" cy="155" r="8" fill="#F4F1E6" />
 
                   <!-- Molecular Output Overlay Lines -->
-                  <line x1="170" y1="55" x2="170" y2="25" stroke="#34d399" stroke-width="2" stroke-dasharray="3 3"/>
-                  <circle cx="170" cy="25" r="4" fill="#34d399" class="animate-ping" />
+                  <line x1="170" y1="55" x2="170" y2="25" stroke="#D29A5A" stroke-width="2" stroke-dasharray="3 3"/>
+                  <circle cx="170" cy="25" r="4" fill="#D29A5A" class="animate-ping" />
 
                   <!-- Gradients -->
                   <defs>
                     <radialGradient id="platformGlow" cx="50%" cy="50%" r="50%">
-                      <stop offset="0%" stop-color="#10b981" stop-opacity="0.8"/>
-                      <stop offset="100%" stop-color="#10b981" stop-opacity="0"/>
+                      <stop offset="0%" stop-color="#D29A5A" stop-opacity="0.8"/>
+                      <stop offset="100%" stop-color="#D29A5A" stop-opacity="0"/>
                     </radialGradient>
                     <linearGradient id="reactorGlass" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stop-color="#062115" stop-opacity="0.75"/>
-                      <stop offset="100%" stop-color="#021c10" stop-opacity="0.9"/>
+                      <stop offset="0%" stop-color="#243027" stop-opacity="0.75"/>
+                      <stop offset="100%" stop-color="#1b241e" stop-opacity="0.9"/>
                     </linearGradient>
                     <linearGradient id="biofuelClean" x1="0%" y1="0%" x2="0%" y2="100%">
-                      <stop offset="0%" stop-color="#34d399" stop-opacity="0.95"/>
-                      <stop offset="100%" stop-color="#059669" stop-opacity="0.98"/>
+                      <stop offset="0%" stop-color="#668A68" stop-opacity="0.95"/>
+                      <stop offset="100%" stop-color="#31543B" stop-opacity="0.98"/>
                     </linearGradient>
                     <linearGradient id="biofuelStandard" x1="0%" y1="0%" x2="0%" y2="100%">
-                      <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.95"/>
-                      <stop offset="100%" stop-color="#d97706" stop-opacity="0.98"/>
+                      <stop offset="0%" stop-color="#D29A5A" stop-opacity="0.95"/>
+                      <stop offset="100%" stop-color="#31543B" stop-opacity="0.98"/>
                     </linearGradient>
                     <linearGradient id="biofuelSludge" x1="0%" y1="0%" x2="0%" y2="100%">
-                      <stop offset="0%" stop-color="#ef4444" stop-opacity="0.95"/>
-                      <stop offset="100%" stop-color="#7f1d1d" stop-opacity="0.98"/>
+                      <stop offset="0%" stop-color="#8C4A32" stop-opacity="0.95"/>
+                      <stop offset="100%" stop-color="#243027" stop-opacity="0.98"/>
                     </linearGradient>
                   </defs>
                 </svg>
               </div>
 
               <!-- Interactive Telemetry Footer -->
-              <div class="grid grid-cols-2 gap-3 z-10 pt-2 border-t border-emerald-900">
-                <div class="bg-[#04120b]/90 p-2.5 rounded-xl border border-emerald-900">
-                  <div class="text-[10px] text-emerald-400/80 font-mono uppercase">Total Polar Compounds</div>
+              <div class="grid grid-cols-2 gap-3 z-10 pt-2 border-t border-[#668A68]/30">
+                <div class="bg-[#243027] p-2.5 rounded-xl border border-[#668A68]/40">
+                  <div class="text-[10px] text-[#F4F1E6]/70 font-mono uppercase">Total Polar Compounds</div>
                   <div class="text-xs font-black font-mono mt-0.5" :class="activeReactorTier.tpcColor">
                     {{ activeReactorTier.tpcValue }}
                   </div>
                 </div>
-                <div class="bg-[#04120b]/90 p-2.5 rounded-xl border border-emerald-900">
-                  <div class="text-[10px] text-emerald-400/80 font-mono uppercase">Payout Status</div>
-                  <div class="text-xs font-black font-mono mt-0.5 text-emerald-400">
+                <div class="bg-[#243027] p-2.5 rounded-xl border border-[#668A68]/40">
+                  <div class="text-[10px] text-[#F4F1E6]/70 font-mono uppercase">Payout Status</div>
+                  <div class="text-xs font-black font-mono mt-0.5 text-[#D29A5A]">
                     {{ activeReactorTier.payoutTier }}
                   </div>
                 </div>
@@ -217,18 +217,18 @@
     <section 
       id="threat-section"
       ref="threatSection"
-      class="relative py-24 bg-gradient-to-b from-[#05180f] via-[#03110a] to-[#05180f] border-y border-emerald-900/60 px-4 sm:px-6 lg:px-8"
+      class="relative py-24 bg-[#F4F1E6] border-y border-[#668A68]/30 px-4 sm:px-6 lg:px-8"
     >
       <div class="max-w-7xl mx-auto space-y-16">
         <!-- Section Header -->
         <div class="max-w-3xl mx-auto text-center space-y-4">
-          <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/30 text-xs font-bold font-mono uppercase tracking-wider animate-pulse">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#D29A5A]/15 text-[#31543B] border border-[#D29A5A]/40 text-xs font-bold font-mono uppercase tracking-wider animate-pulse">
             <span>⚠️</span> The Unregulated Danger
           </div>
-          <h2 class="text-3xl sm:text-5xl font-black text-white tracking-tight">
+          <h2 class="text-3xl sm:text-5xl font-black text-[#243027] tracking-tight">
             The 60% Crisis in Your Kitchen.
           </h2>
-          <p class="text-emerald-200/80 text-sm sm:text-base leading-relaxed">
+          <p class="text-[#243027]/80 text-sm sm:text-base leading-relaxed">
             Every liter of unmonitored used cooking oil represents severe health liabilities, legal penalties from food safety authorities, and lost restaurant revenue.
           </p>
         </div>
@@ -236,78 +236,78 @@
         <!-- 3 Pillars of The Threat with Animated Scroll Counting -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
           <!-- Pillar 1: 60% Return to the Plate -->
-          <div class="relative bg-[#092216]/80 rounded-3xl p-8 border border-emerald-900/80 shadow-2xl hover:border-amber-500/50 transition-all duration-300 flex flex-col justify-between group hover:-translate-y-1">
+          <div class="relative bg-[#F4F1E6] rounded-3xl p-8 border border-[#668A68]/40 shadow-xl hover:border-[#D29A5A] transition-all duration-300 flex flex-col justify-between group hover:-translate-y-1">
             <div class="space-y-4">
               <div class="flex items-baseline gap-2">
-                <span class="text-5xl sm:text-6xl font-black font-mono text-amber-400 tracking-tight drop-shadow-[0_4px_16px_rgba(251,191,36,0.3)]">
+                <span class="text-5xl sm:text-6xl font-black font-mono text-[#D29A5A] tracking-tight drop-shadow-sm">
                   {{ countPlate }}%
                 </span>
-                <span class="text-xs font-mono uppercase tracking-widest text-amber-400 font-bold">Recirculated</span>
+                <span class="text-xs font-mono uppercase tracking-widest text-[#D29A5A] font-bold">Recirculated</span>
               </div>
-              <h3 class="text-lg font-bold text-white group-hover:text-amber-300 transition-colors">
+              <h3 class="text-lg font-bold text-[#243027] group-hover:text-[#31543B] transition-colors">
                 The Return to the Plate
               </h3>
-              <p class="text-xs sm:text-sm text-emerald-200/70 leading-relaxed">
-                Shockingly, nearly <strong class="text-white">60% of all Used Cooking Oil (UCO)</strong> generated in India finds its way back into the food stream via illegal black-market repackaging.
+              <p class="text-xs sm:text-sm text-[#243027]/80 leading-relaxed">
+                Shockingly, nearly <strong class="text-[#243027]">60% of all Used Cooking Oil (UCO)</strong> generated in India finds its way back into the food stream via illegal black-market repackaging.
               </p>
             </div>
-            <div class="mt-6 pt-4 border-t border-emerald-900/80 flex items-center justify-between text-[11px] text-emerald-400/60 font-mono">
+            <div class="mt-6 pt-4 border-t border-[#668A68]/30 flex items-center justify-between text-[11px] text-[#668A68] font-mono">
               <span>Source: FSSAI Audit Reports</span>
-              <span class="text-amber-400 font-bold">Unchecked Hazard</span>
+              <span class="text-[#D29A5A] font-bold">Unchecked Hazard</span>
             </div>
           </div>
 
           <!-- Pillar 2: 25% Toxicity Limit -->
-          <div class="relative bg-[#092216]/80 rounded-3xl p-8 border border-emerald-900/80 shadow-2xl hover:border-emerald-400/50 transition-all duration-300 flex flex-col justify-between group hover:-translate-y-1">
+          <div class="relative bg-[#F4F1E6] rounded-3xl p-8 border border-[#668A68]/40 shadow-xl hover:border-[#31543B] transition-all duration-300 flex flex-col justify-between group hover:-translate-y-1">
             <div class="space-y-4">
               <div class="flex items-baseline gap-2">
-                <span class="text-5xl sm:text-6xl font-black font-mono text-emerald-400 tracking-tight drop-shadow-[0_4px_16px_rgba(52,211,153,0.3)]">
+                <span class="text-5xl sm:text-6xl font-black font-mono text-[#31543B] tracking-tight drop-shadow-sm">
                   {{ countTpc }}%
                 </span>
-                <span class="text-xs font-mono uppercase tracking-widest text-emerald-400 font-bold">Max TPC Limit</span>
+                <span class="text-xs font-mono uppercase tracking-widest text-[#31543B] font-bold">Max TPC Limit</span>
               </div>
-              <h3 class="text-lg font-bold text-white group-hover:text-emerald-300 transition-colors">
+              <h3 class="text-lg font-bold text-[#243027] group-hover:text-[#31543B] transition-colors">
                 The 25% Toxicity Limit
               </h3>
-              <p class="text-xs sm:text-sm text-emerald-200/70 leading-relaxed">
-                Every time oil is reheated, toxic <strong class="text-white">Total Polar Compounds (TPC)</strong> multiply. The FSSAI mandates oil with a TPC above 25% is strictly unsafe for human consumption.
+              <p class="text-xs sm:text-sm text-[#243027]/80 leading-relaxed">
+                Every time oil is reheated, toxic <strong class="text-[#243027]">Total Polar Compounds (TPC)</strong> multiply. The FSSAI mandates oil with a TPC above 25% is strictly unsafe for human consumption.
               </p>
             </div>
-            <div class="mt-6 pt-4 border-t border-emerald-900/80 flex items-center justify-between text-[11px] text-emerald-400/60 font-mono">
+            <div class="mt-6 pt-4 border-t border-[#668A68]/30 flex items-center justify-between text-[11px] text-[#668A68] font-mono">
               <span>Regulation: FSSAI Gazette 2018</span>
-              <span class="text-emerald-400 font-bold">Mandatory Testing</span>
+              <span class="text-[#31543B] font-bold">Mandatory Testing</span>
             </div>
           </div>
 
           <!-- Pillar 3: The Health Hazard -->
-          <div class="relative bg-[#092216]/80 rounded-3xl p-8 border border-emerald-900/80 shadow-2xl hover:border-green-400/50 transition-all duration-300 flex flex-col justify-between group hover:-translate-y-1">
+          <div class="relative bg-[#F4F1E6] rounded-3xl p-8 border border-[#668A68]/40 shadow-xl hover:border-[#668A68] transition-all duration-300 flex flex-col justify-between group hover:-translate-y-1">
             <div class="space-y-4">
               <div class="flex items-baseline gap-2">
-                <span class="text-5xl sm:text-6xl font-black font-mono text-green-400 tracking-tight drop-shadow-[0_4px_16px_rgba(74,222,128,0.3)]">
+                <span class="text-5xl sm:text-6xl font-black font-mono text-[#668A68] tracking-tight drop-shadow-sm">
                   3×
                 </span>
-                <span class="text-xs font-mono uppercase tracking-widest text-green-400 font-bold">Cardio Risk</span>
+                <span class="text-xs font-mono uppercase tracking-widest text-[#668A68] font-bold">Cardio Risk</span>
               </div>
-              <h3 class="text-lg font-bold text-white group-hover:text-green-300 transition-colors">
+              <h3 class="text-lg font-bold text-[#243027] group-hover:text-[#31543B] transition-colors">
                 The Health Hazard
               </h3>
-              <p class="text-xs sm:text-sm text-emerald-200/70 leading-relaxed">
+              <p class="text-xs sm:text-sm text-[#243027]/80 leading-relaxed">
                 Degraded cooking oil is a major contributor to atherosclerosis, hypertension, and cellular oxidation. Proper disposal isn't just compliance—it’s public health stewardship.
               </p>
             </div>
-            <div class="mt-6 pt-4 border-t border-emerald-900/80 flex items-center justify-between text-[11px] text-emerald-400/60 font-mono">
+            <div class="mt-6 pt-4 border-t border-[#668A68]/30 flex items-center justify-between text-[11px] text-[#668A68] font-mono">
               <span>Clinical Study: AIIMS Toxicity</span>
-              <span class="text-green-400 font-bold">High Pathology</span>
+              <span class="text-[#668A68] font-bold">High Pathology</span>
             </div>
           </div>
         </div>
 
         <!-- Interactive Specimen Spectrometer HUD -->
-        <div class="bg-[#071f13] border border-emerald-800/80 rounded-3xl p-6 sm:p-10 shadow-2xl space-y-8">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-emerald-900">
+        <div class="bg-[#31543B] border border-[#668A68]/40 rounded-3xl p-6 sm:p-10 shadow-2xl space-y-8 text-[#F4F1E6]">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#668A68]/30">
             <div>
-              <span class="text-xs font-mono text-emerald-400 uppercase font-bold tracking-widest">Interactive Laboratory HUD</span>
-              <h3 class="text-xl sm:text-2xl font-black text-white mt-1">Live Oil Degradation Spectrometer</h3>
+              <span class="text-xs font-mono text-[#D29A5A] uppercase font-bold tracking-widest">Interactive Laboratory HUD</span>
+              <h3 class="text-xl sm:text-2xl font-black text-[#F4F1E6] mt-1">Live Oil Degradation Spectrometer</h3>
             </div>
             <!-- Specimen Select Buttons -->
             <div class="flex flex-wrap items-center gap-2">
@@ -315,7 +315,7 @@
                 v-for="(specimen, idx) in specimens"
                 :key="idx"
                 @click="activeSpecimen = idx"
-                :class="activeSpecimen === idx ? 'bg-emerald-700 text-white border-emerald-500 shadow-lg' : 'bg-[#04140b] text-emerald-300 border-emerald-900 hover:border-emerald-700'"
+                :class="activeSpecimen === idx ? 'bg-[#D29A5A] text-[#243027] border-[#D29A5A] shadow-md' : 'bg-[#243027] text-[#F4F1E6]/80 border-[#668A68]/40 hover:border-[#668A68]'"
                 class="px-3.5 py-2 text-xs font-bold rounded-xl border transition-all duration-200 flex items-center gap-2 cursor-pointer"
               >
                 <span>{{ specimen.icon }}</span>
@@ -326,13 +326,13 @@
 
           <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             <!-- Left: Speedometer Gauge -->
-            <div class="lg:col-span-5 flex flex-col items-center justify-center p-6 bg-[#04120b] rounded-2xl border border-emerald-900/80">
+            <div class="lg:col-span-5 flex flex-col items-center justify-center p-6 bg-[#243027] rounded-2xl border border-[#668A68]/40">
               <div class="relative w-56 h-36 flex items-center justify-center">
                 <svg viewBox="0 0 160 90" class="w-full h-full">
-                  <path d="M 20 80 A 60 60 0 0 1 140 80" fill="none" stroke="#062c1b" stroke-width="12" stroke-linecap="round"/>
-                  <path d="M 20 80 A 60 60 0 0 1 65 30" fill="none" stroke="#10b981" stroke-width="12" stroke-linecap="round"/>
-                  <path d="M 65 30 A 60 60 0 0 1 105 30" fill="none" stroke="#f59e0b" stroke-width="12"/>
-                  <path d="M 105 30 A 60 60 0 0 1 140 80" fill="none" stroke="#ef4444" stroke-width="12" stroke-linecap="round"/>
+                  <path d="M 20 80 A 60 60 0 0 1 140 80" fill="none" stroke="#31543B" stroke-width="12" stroke-linecap="round"/>
+                  <path d="M 20 80 A 60 60 0 0 1 65 30" fill="none" stroke="#668A68" stroke-width="12" stroke-linecap="round"/>
+                  <path d="M 65 30 A 60 60 0 0 1 105 30" fill="none" stroke="#D29A5A" stroke-width="12"/>
+                  <path d="M 105 30 A 60 60 0 0 1 140 80" fill="none" stroke="#8C4A32" stroke-width="12" stroke-linecap="round"/>
                   
                   <!-- Needle Line -->
                   <line 
@@ -340,19 +340,19 @@
                     y1="80" 
                     :x2="gaugeNeedleX" 
                     :y2="gaugeNeedleY" 
-                    stroke="#ffffff" 
+                    stroke="#F4F1E6" 
                     stroke-width="3.5" 
                     stroke-linecap="round"
                     class="transition-all duration-500 ease-out"
                   />
-                  <circle cx="80" cy="80" r="7" fill="#10b981" stroke="#ffffff" stroke-width="2"/>
+                  <circle cx="80" cy="80" r="7" fill="#D29A5A" stroke="#F4F1E6" stroke-width="2"/>
                 </svg>
               </div>
               <div class="text-center mt-2">
                 <div class="text-3xl font-black font-mono tracking-tight" :class="activeSpecimenData.tpcColor">
                   {{ activeSpecimenData.tpc }}% TPC
                 </div>
-                <div class="text-[11px] font-mono uppercase tracking-widest text-emerald-400 mt-1 font-bold">
+                <div class="text-[11px] font-mono uppercase tracking-widest text-[#D29A5A] mt-1 font-bold">
                   {{ activeSpecimenData.verdict }}
                 </div>
               </div>
@@ -361,21 +361,21 @@
             <!-- Right: Forensics Data Card -->
             <div class="lg:col-span-7 space-y-4">
               <div class="flex items-center justify-between">
-                <span class="text-xs font-mono text-emerald-300 font-bold uppercase">Sample Analysis:</span>
+                <span class="text-xs font-mono text-[#D29A5A] font-bold uppercase">Sample Analysis:</span>
                 <span class="px-3 py-1 rounded-full text-xs font-bold font-mono border" :class="activeSpecimenData.statusClass">
                   {{ activeSpecimenData.statusText }}
                 </span>
               </div>
-              <p class="text-xs sm:text-sm text-emerald-100/80 leading-relaxed">
+              <p class="text-xs sm:text-sm text-[#F4F1E6]/90 leading-relaxed">
                 {{ activeSpecimenData.description }}
               </p>
               <div class="grid grid-cols-2 gap-3 pt-2">
-                <div class="p-3 bg-[#04120b] rounded-xl border border-emerald-900">
-                  <div class="text-[10px] font-mono text-emerald-400/80 uppercase">Free Fatty Acids (FFA)</div>
-                  <div class="text-sm font-bold font-mono text-white mt-0.5">{{ activeSpecimenData.ffa }}</div>
+                <div class="p-3 bg-[#243027] rounded-xl border border-[#668A68]/40">
+                  <div class="text-[10px] font-mono text-[#F4F1E6]/70 uppercase">Free Fatty Acids (FFA)</div>
+                  <div class="text-sm font-bold font-mono text-[#F4F1E6] mt-0.5">{{ activeSpecimenData.ffa }}</div>
                 </div>
-                <div class="p-3 bg-[#04120b] rounded-xl border border-emerald-900">
-                  <div class="text-[10px] font-mono text-emerald-400/80 uppercase">Legal Standing</div>
+                <div class="p-3 bg-[#243027] rounded-xl border border-[#668A68]/40">
+                  <div class="text-[10px] font-mono text-[#F4F1E6]/70 uppercase">Legal Standing</div>
                   <div class="text-sm font-bold font-mono mt-0.5" :class="activeSpecimenData.legalColor">{{ activeSpecimenData.legal }}</div>
                 </div>
               </div>
@@ -388,17 +388,17 @@
     <!-- ========================================================================= -->
     <!-- SECTION 3: THE SOLUTION - 3-STEP WORKFLOW & QR SIMULATOR                  -->
     <!-- ========================================================================= -->
-    <section class="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+    <section class="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full bg-[#F4F1E6]">
       <div class="space-y-16">
         <!-- Section Header -->
         <div class="max-w-3xl mx-auto text-center space-y-4">
-          <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-xs font-bold font-mono uppercase tracking-wider">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#31543B]/10 text-[#31543B] border border-[#668A68]/40 text-xs font-bold font-mono uppercase tracking-wider">
             <span>⚡</span> Automated Three-Step Workflow
           </div>
-          <h2 class="text-3xl sm:text-5xl font-black text-white tracking-tight">
+          <h2 class="text-3xl sm:text-5xl font-black text-[#243027] tracking-tight">
             Frictionless Disposal. Zero Interruptions.
           </h2>
-          <p class="text-emerald-200/80 text-sm sm:text-base leading-relaxed">
+          <p class="text-[#243027]/80 text-sm sm:text-base leading-relaxed">
             Eliminate messy haggling with shady aggregators. Transform your waste stream with three transparent digital steps.
           </p>
         </div>
@@ -411,29 +411,41 @@
             @mouseenter="activeProcessStep = idx"
             class="relative rounded-3xl p-8 border transition-all duration-300 flex flex-col justify-between group cursor-pointer"
             :class="activeProcessStep === idx 
-              ? 'bg-[#092919] border-emerald-400/60 shadow-[0_15px_40px_-10px_rgba(16,185,129,0.3)] -translate-y-2' 
-              : 'bg-[#061e12]/80 border-emerald-900/80 hover:border-emerald-700'"
+              ? 'bg-[#31543B] text-[#F4F1E6] border-[#31543B] shadow-xl -translate-y-2' 
+              : 'bg-[#F4F1E6] text-[#243027] border-[#668A68]/40 hover:border-[#31543B]'"
           >
             <div class="space-y-5">
               <div class="flex items-center justify-between">
                 <span 
                   class="px-3 py-1 rounded-xl text-xs font-mono font-bold border transition-colors"
-                  :class="activeProcessStep === idx ? 'bg-emerald-500 text-slate-950 border-emerald-400' : 'bg-[#04120b] text-emerald-400 border-emerald-900'"
+                  :class="activeProcessStep === idx ? 'bg-[#D29A5A] text-[#243027] border-[#D29A5A]' : 'bg-[#668A68]/15 text-[#31543B] border-[#668A68]/40'"
                 >
                   {{ step.badge }}
                 </span>
-                <span class="text-xl font-black font-mono opacity-40 group-hover:opacity-100 transition-opacity">
+                <span 
+                  class="text-xl font-black font-mono transition-opacity"
+                  :class="activeProcessStep === idx ? 'text-[#D29A5A]' : 'text-[#668A68]/50 group-hover:text-[#31543B]'"
+                >
                   0{{ idx + 1 }}
                 </span>
               </div>
-              <h3 class="text-xl font-bold text-white group-hover:text-emerald-300 transition-colors">
+              <h3 
+                class="text-xl font-bold transition-colors"
+                :class="activeProcessStep === idx ? 'text-[#F4F1E6]' : 'text-[#243027] group-hover:text-[#31543B]'"
+              >
                 {{ step.title }}
               </h3>
-              <p class="text-xs sm:text-sm text-emerald-200/70 leading-relaxed">
+              <p 
+                class="text-xs sm:text-sm leading-relaxed"
+                :class="activeProcessStep === idx ? 'text-[#F4F1E6]/85' : 'text-[#243027]/75'"
+              >
                 {{ step.description }}
               </p>
             </div>
-            <div class="mt-6 pt-4 border-t border-emerald-900/60 flex items-center gap-2 text-xs font-bold text-emerald-400">
+            <div 
+              class="mt-6 pt-4 border-t flex items-center gap-2 text-xs font-bold"
+              :class="activeProcessStep === idx ? 'border-[#668A68]/40 text-[#D29A5A]' : 'border-[#668A68]/30 text-[#31543B]'"
+            >
               <span>Explore details</span>
               <span class="transition-transform group-hover:translate-x-1">&rarr;</span>
             </div>
@@ -441,46 +453,46 @@
         </div>
 
         <!-- Interactive Animated Route Map Vector -->
-        <div class="bg-[#071f13] border border-emerald-800/80 rounded-3xl p-8 sm:p-10 shadow-2xl relative overflow-hidden">
+        <div class="bg-[#31543B] border border-[#668A68]/40 rounded-3xl p-8 sm:p-10 shadow-2xl relative overflow-hidden text-[#F4F1E6]">
           <div class="text-center sm:text-left mb-6">
-            <span class="text-xs font-mono text-emerald-400 font-bold uppercase tracking-widest">Live Dynamic Dispatch</span>
-            <h3 class="text-xl font-bold text-white mt-1">Simulated Collection Route & Dynamic Tracking</h3>
+            <span class="text-xs font-mono text-[#D29A5A] font-bold uppercase tracking-widest">Live Dynamic Dispatch</span>
+            <h3 class="text-xl font-bold text-[#F4F1E6] mt-1">Simulated Collection Route & Dynamic Tracking</h3>
           </div>
 
           <div class="relative w-full h-40 flex items-center justify-center overflow-x-auto">
             <svg viewBox="0 0 800 120" class="w-full min-w-[650px] h-full">
               <!-- Route Path Line -->
               <path d="M 60 60 Q 220 15 400 60 T 740 60" fill="none" stroke="url(#routeGradient)" stroke-width="4" stroke-linecap="round" />
-              <path d="M 60 60 Q 220 15 400 60 T 740 60" fill="none" stroke="#34d399" stroke-width="2" stroke-dasharray="6 8" class="animate-dash" opacity="0.6"/>
+              <path d="M 60 60 Q 220 15 400 60 T 740 60" fill="none" stroke="#D29A5A" stroke-width="2" stroke-dasharray="6 8" class="animate-dash" opacity="0.6"/>
 
               <!-- Waypoint 1: Register (Kitchen) -->
               <g class="cursor-pointer" @click="activeProcessStep = 0">
-                <circle cx="60" cy="60" r="24" :fill="activeProcessStep === 0 ? '#10b981' : '#143825'" class="transition-colors duration-500" />
-                <circle cx="60" cy="60" r="28" stroke="#10b981" stroke-width="2" stroke-dasharray="4 4" class="animate-spin origin-center" v-if="activeProcessStep === 0" />
-                <circle cx="60" cy="60" r="15" fill="#022c22" />
-                <text x="60" y="65" text-anchor="middle" fill="#ecfdf5" font-size="12">🍳</text>
-                <text x="60" y="105" text-anchor="middle" fill="#34d399" font-size="11" font-weight="bold">FBO Kitchen</text>
+                <circle cx="60" cy="60" r="24" :fill="activeProcessStep === 0 ? '#D29A5A' : '#243027'" class="transition-colors duration-500" />
+                <circle cx="60" cy="60" r="28" stroke="#D29A5A" stroke-width="2" stroke-dasharray="4 4" class="animate-spin origin-center" v-if="activeProcessStep === 0" />
+                <circle cx="60" cy="60" r="15" fill="#31543B" />
+                <text x="60" y="65" text-anchor="middle" fill="#F4F1E6" font-size="12">🍳</text>
+                <text x="60" y="105" text-anchor="middle" fill="#D29A5A" font-size="11" font-weight="bold">FBO Kitchen</text>
               </g>
 
               <!-- Waypoint 2: Cluster Pickups -->
               <g class="cursor-pointer" @click="activeProcessStep = 1">
-                <circle cx="400" cy="60" r="24" :fill="activeProcessStep === 1 ? '#10b981' : '#143825'" class="transition-colors duration-500" />
-                <circle cx="400" cy="60" r="28" stroke="#10b981" stroke-width="2" stroke-dasharray="4 4" class="animate-spin origin-center" v-if="activeProcessStep === 1" />
-                <circle cx="400" cy="60" r="15" fill="#022c22" />
-                <text x="400" y="65" text-anchor="middle" fill="#ecfdf5" font-size="12">⚡</text>
-                <text x="400" y="105" text-anchor="middle" fill="#34d399" font-size="11" font-weight="bold">2km Cluster Fleet</text>
+                <circle cx="400" cy="60" r="24" :fill="activeProcessStep === 1 ? '#D29A5A' : '#243027'" class="transition-colors duration-500" />
+                <circle cx="400" cy="60" r="28" stroke="#D29A5A" stroke-width="2" stroke-dasharray="4 4" class="animate-spin origin-center" v-if="activeProcessStep === 1" />
+                <circle cx="400" cy="60" r="15" fill="#31543B" />
+                <text x="400" y="65" text-anchor="middle" fill="#F4F1E6" font-size="12">⚡</text>
+                <text x="400" y="105" text-anchor="middle" fill="#D29A5A" font-size="11" font-weight="bold">2km Cluster Fleet</text>
               </g>
 
               <!-- Waypoint 3: Scan & Done -->
               <g class="cursor-pointer" @click="activeProcessStep = 2">
-                <circle cx="740" cy="60" r="24" :fill="activeProcessStep === 2 ? '#10b981' : '#143825'" class="transition-colors duration-500" />
-                <circle cx="740" cy="60" r="28" stroke="#10b981" stroke-width="2" stroke-dasharray="4 4" class="animate-spin origin-center" v-if="activeProcessStep === 2" />
-                <circle cx="740" cy="60" r="15" fill="#022c22" />
-                <rect x="734" y="54" width="4" height="4" fill="#34d399"/>
-                <rect x="742" y="54" width="4" height="4" fill="#34d399"/>
-                <rect x="734" y="62" width="4" height="4" fill="#34d399"/>
-                <rect x="742" y="62" width="4" height="4" fill="#34d399"/>
-                <text x="740" y="105" text-anchor="middle" fill="#34d399" font-size="11" font-weight="bold">Scan & Done</text>
+                <circle cx="740" cy="60" r="24" :fill="activeProcessStep === 2 ? '#D29A5A' : '#243027'" class="transition-colors duration-500" />
+                <circle cx="740" cy="60" r="28" stroke="#D29A5A" stroke-width="2" stroke-dasharray="4 4" class="animate-spin origin-center" v-if="activeProcessStep === 2" />
+                <circle cx="740" cy="60" r="15" fill="#31543B" />
+                <rect x="734" y="54" width="4" height="4" fill="#D29A5A"/>
+                <rect x="742" y="54" width="4" height="4" fill="#D29A5A"/>
+                <rect x="734" y="62" width="4" height="4" fill="#D29A5A"/>
+                <rect x="742" y="62" width="4" height="4" fill="#D29A5A"/>
+                <text x="740" y="105" text-anchor="middle" fill="#D29A5A" font-size="11" font-weight="bold">Scan & Done</text>
               </g>
 
               <!-- Animated EV Collection Van along the route line -->
@@ -488,39 +500,39 @@
                 :transform="`translate(${vanPositions[activeProcessStep]}, 25)`" 
                 class="transition-transform duration-700 ease-in-out cursor-pointer"
               >
-                <ellipse cx="28" cy="48" rx="26" ry="6" fill="#000" opacity="0.4" />
-                <rect x="4" y="12" width="48" height="26" rx="6" fill="#059669" stroke="#34d399" stroke-width="1.5" />
-                <path d="M 38 15 L 50 24 L 50 34 L 38 34 Z" fill="#064e3b" />
-                <circle cx="22" cy="24" r="6" fill="#ecfdf5" />
-                <path d="M22 20 C25 22 25 26 22 28 C19 26 19 22 22 20 Z" fill="#10b981" />
-                <circle cx="16" cy="38" r="6" fill="#0f172a" stroke="#64748b" stroke-width="2"/>
-                <circle cx="42" cy="38" r="6" fill="#0f172a" stroke="#64748b" stroke-width="2"/>
-                <polygon points="52,26 70,20 70,36 52,32" fill="#34d399" opacity="0.35"/>
+                <ellipse cx="28" cy="48" rx="26" ry="6" fill="#000" opacity="0.3" />
+                <rect x="4" y="12" width="48" height="26" rx="6" fill="#668A68" stroke="#D29A5A" stroke-width="1.5" />
+                <path d="M 38 15 L 50 24 L 50 34 L 38 34 Z" fill="#243027" />
+                <circle cx="22" cy="24" r="6" fill="#F4F1E6" />
+                <path d="M22 20 C25 22 25 26 22 28 C19 26 19 22 22 20 Z" fill="#D29A5A" />
+                <circle cx="16" cy="38" r="6" fill="#243027" stroke="#668A68" stroke-width="2"/>
+                <circle cx="42" cy="38" r="6" fill="#243027" stroke="#668A68" stroke-width="2"/>
+                <polygon points="52,26 70,20 70,36 52,32" fill="#D29A5A" opacity="0.4"/>
               </g>
 
               <defs>
                 <linearGradient id="routeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stop-color="#10b981"/>
-                  <stop offset="50%" stop-color="#22c55e"/>
-                  <stop offset="100%" stop-color="#34d399"/>
+                  <stop offset="0%" stop-color="#668A68"/>
+                  <stop offset="50%" stop-color="#D29A5A"/>
+                  <stop offset="100%" stop-color="#F4F1E6"/>
                 </linearGradient>
               </defs>
             </svg>
           </div>
 
           <!-- PLAYABLE INTERACTIVE QR SCAN SIMULATOR -->
-          <div class="mt-8 p-6 sm:p-8 rounded-2xl bg-[#04140b] border border-emerald-800/80 space-y-6">
+          <div class="mt-8 p-6 sm:p-8 rounded-2xl bg-[#243027] border border-[#668A68]/40 space-y-6">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <h3 class="text-base font-bold text-white flex items-center gap-2">
+                <h3 class="text-base font-bold text-[#F4F1E6] flex items-center gap-2">
                   <span>📱</span> Interactive Field Pickup Simulator
                 </h3>
-                <p class="text-xs text-emerald-300/70">Experience how an EV field executive settles oil in under 30 seconds</p>
+                <p class="text-xs text-[#F4F1E6]/70">Experience how an EV field executive settles oil in under 30 seconds</p>
               </div>
               <button 
                 @click="triggerQrLaserSweep"
                 :disabled="isScanningLaser"
-                class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow-lg shadow-emerald-950/60 transition flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                class="px-5 py-2.5 bg-[#D29A5A] hover:bg-[#C08949] text-[#243027] font-bold text-xs rounded-xl shadow-lg transition flex items-center gap-2 cursor-pointer disabled:opacity-50"
               >
                 <span>{{ isScanningLaser ? '⚡ Scanning QR...' : '▶ Run Live Pickup Demo' }}</span>
               </button>
@@ -530,31 +542,31 @@
             <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
               <!-- Left: Viewfinder with Laser Sweep -->
               <div class="md:col-span-5 flex items-center justify-center">
-                <div class="relative w-48 h-48 rounded-2xl bg-[#020a06] border-2 border-emerald-700/80 p-3 flex flex-col items-center justify-center overflow-hidden shadow-inner">
+                <div class="relative w-48 h-48 rounded-2xl bg-[#31543B] border-2 border-[#668A68]/60 p-3 flex flex-col items-center justify-center overflow-hidden shadow-inner">
                   <!-- Viewfinder Corner Marks -->
-                  <div class="absolute top-2 left-2 w-4 h-4 border-t-2 border-l-2 border-emerald-400"></div>
-                  <div class="absolute top-2 right-2 w-4 h-4 border-t-2 border-r-2 border-emerald-400"></div>
-                  <div class="absolute bottom-2 left-2 w-4 h-4 border-b-2 border-l-2 border-emerald-400"></div>
-                  <div class="absolute bottom-2 right-2 w-4 h-4 border-b-2 border-r-2 border-emerald-400"></div>
+                  <div class="absolute top-2 left-2 w-4 h-4 border-t-2 border-l-2 border-[#D29A5A]"></div>
+                  <div class="absolute top-2 right-2 w-4 h-4 border-t-2 border-r-2 border-[#D29A5A]"></div>
+                  <div class="absolute bottom-2 left-2 w-4 h-4 border-b-2 border-l-2 border-[#D29A5A]"></div>
+                  <div class="absolute bottom-2 right-2 w-4 h-4 border-b-2 border-r-2 border-[#D29A5A]"></div>
 
                   <!-- Simulated Restaurant Site QR Sticker -->
                   <div class="w-32 h-32 bg-white rounded-xl p-2.5 flex flex-col items-center justify-between shadow-lg">
-                    <div class="w-full text-center text-[8px] font-black font-mono text-slate-900 tracking-wider">RUCO-FBO-SELL-104</div>
+                    <div class="w-full text-center text-[8px] font-black font-mono text-[#243027] tracking-wider">RUCO-FBO-SELL-104</div>
                     <!-- QR matrix representation -->
-                    <div class="grid grid-cols-5 gap-1 w-20 h-20 bg-slate-100 p-1 rounded">
-                      <div class="bg-black rounded-xs"></div><div class="bg-black rounded-xs"></div><div class="bg-slate-200"></div><div class="bg-black rounded-xs"></div><div class="bg-black rounded-xs"></div>
-                      <div class="bg-black rounded-xs"></div><div class="bg-slate-200"></div><div class="bg-black rounded-xs"></div><div class="bg-slate-200"></div><div class="bg-black rounded-xs"></div>
-                      <div class="bg-slate-200"></div><div class="bg-black rounded-xs"></div><div class="bg-emerald-600 rounded-xs"></div><div class="bg-black rounded-xs"></div><div class="bg-slate-200"></div>
-                      <div class="bg-black rounded-xs"></div><div class="bg-slate-200"></div><div class="bg-black rounded-xs"></div><div class="bg-slate-200"></div><div class="bg-black rounded-xs"></div>
-                      <div class="bg-black rounded-xs"></div><div class="bg-black rounded-xs"></div><div class="bg-slate-200"></div><div class="bg-black rounded-xs"></div><div class="bg-black rounded-xs"></div>
+                    <div class="grid grid-cols-5 gap-1 w-20 h-20 bg-stone-100 p-1 rounded">
+                      <div class="bg-[#243027] rounded-xs"></div><div class="bg-[#243027] rounded-xs"></div><div class="bg-stone-200"></div><div class="bg-[#243027] rounded-xs"></div><div class="bg-[#243027] rounded-xs"></div>
+                      <div class="bg-[#243027] rounded-xs"></div><div class="bg-stone-200"></div><div class="bg-[#243027] rounded-xs"></div><div class="bg-stone-200"></div><div class="bg-[#243027] rounded-xs"></div>
+                      <div class="bg-stone-200"></div><div class="bg-[#243027] rounded-xs"></div><div class="bg-[#31543B] rounded-xs"></div><div class="bg-[#243027] rounded-xs"></div><div class="bg-stone-200"></div>
+                      <div class="bg-[#243027] rounded-xs"></div><div class="bg-stone-200"></div><div class="bg-[#243027] rounded-xs"></div><div class="bg-stone-200"></div><div class="bg-[#243027] rounded-xs"></div>
+                      <div class="bg-[#243027] rounded-xs"></div><div class="bg-[#243027] rounded-xs"></div><div class="bg-stone-200"></div><div class="bg-[#243027] rounded-xs"></div><div class="bg-[#243027] rounded-xs"></div>
                     </div>
-                    <div class="w-full text-center text-[7px] font-bold text-emerald-700 uppercase">FSSAI Compliant</div>
+                    <div class="w-full text-center text-[7px] font-bold text-[#31543B] uppercase">FSSAI Compliant</div>
                   </div>
 
                   <!-- Moving Neon Laser Bar -->
                   <div 
                     v-if="isScanningLaser"
-                    class="absolute inset-x-0 h-1 bg-emerald-400 shadow-[0_0_15px_#10b981] animate-laser-sweep pointer-events-none"
+                    class="absolute inset-x-0 h-1 bg-[#D29A5A] shadow-[0_0_15px_#D29A5A] animate-laser-sweep pointer-events-none"
                   ></div>
                 </div>
               </div>
@@ -565,7 +577,7 @@
                   v-for="(log, lIdx) in scanLogs" 
                   :key="lIdx"
                   class="p-2.5 rounded-xl border flex items-center justify-between text-xs transition-all duration-300"
-                  :class="scanProgress >= lIdx + 1 ? 'bg-emerald-950/60 border-emerald-500/50 text-emerald-300' : 'bg-[#020b06] border-emerald-950 text-emerald-400/50'"
+                  :class="scanProgress >= lIdx + 1 ? 'bg-[#31543B] border-[#668A68]/60 text-[#F4F1E6]' : 'bg-[#243027] border-[#668A68]/20 text-[#F4F1E6]/50'"
                 >
                   <span class="flex items-center gap-2">
                     <span class="font-mono font-bold">{{ scanProgress >= lIdx + 1 ? '✓' : '○' }}</span>
@@ -577,13 +589,13 @@
                 <!-- Verified Certificate Stamp Preview -->
                 <div 
                   v-if="scanProgress >= 4"
-                  class="p-3 bg-emerald-900/40 border border-emerald-500/60 rounded-xl flex items-center justify-between text-xs animate-fade-in shadow-lg shadow-emerald-950/50"
+                  class="p-3 bg-[#31543B] border border-[#D29A5A]/60 rounded-xl flex items-center justify-between text-xs animate-fade-in shadow-lg"
                 >
-                  <div class="flex items-center gap-2 text-emerald-300 font-bold">
+                  <div class="flex items-center gap-2 text-[#F4F1E6] font-bold">
                     <span>📜</span>
                     <span>Form-D Disposal Certificate Issued: #CERT-2026-9042</span>
                   </div>
-                  <span class="px-2 py-0.5 rounded bg-emerald-500 text-slate-950 font-black font-mono text-[10px] uppercase">
+                  <span class="px-2 py-0.5 rounded bg-[#D29A5A] text-[#243027] font-black font-mono text-[10px] uppercase">
                     Locked
                   </span>
                 </div>
@@ -597,17 +609,17 @@
     <!-- ========================================================================= -->
     <!-- SECTION 4: THE IMPACT & REWARD - ESG COCKPIT & LIVE SLIDER                -->
     <!-- ========================================================================= -->
-    <section class="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full border-t border-emerald-900/60">
+    <section class="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full border-t border-[#668A68]/30 bg-[#F4F1E6]">
       <div class="space-y-16">
         <!-- Section Header -->
         <div class="max-w-3xl mx-auto text-center space-y-4">
-          <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-xs font-bold font-mono uppercase tracking-wider">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#31543B]/10 text-[#31543B] border border-[#668A68]/40 text-xs font-bold font-mono uppercase tracking-wider">
             <span>🌱</span> Environmental Yield & Financial Valuation
           </div>
-          <h2 class="text-3xl sm:text-5xl font-black text-white tracking-tight">
+          <h2 class="text-3xl sm:text-5xl font-black text-[#243027] tracking-tight">
             Track Your Green Footprint.
           </h2>
-          <p class="text-emerald-200/80 text-sm sm:text-base leading-relaxed">
+          <p class="text-[#243027]/80 text-sm sm:text-base leading-relaxed">
             Every liter of used cooking oil diverted from water systems and black markets translates into direct monthly revenue and verified ESG carbon offsets.
           </p>
         </div>
@@ -616,16 +628,16 @@
           <!-- Left: Live Interactive Volume Slider & Projections -->
           <div class="lg:col-span-7 space-y-8">
             <!-- Dynamic Volume Slider Card -->
-            <div class="bg-[#071f13] border border-emerald-800/80 rounded-3xl p-8 shadow-2xl space-y-6">
+            <div class="bg-[#31543B] border border-[#668A68]/40 rounded-3xl p-8 shadow-2xl space-y-6 text-[#F4F1E6]">
               <div class="flex items-center justify-between">
                 <div>
-                  <span class="text-xs font-mono uppercase text-emerald-400 font-bold tracking-widest">Select Monthly Volume</span>
-                  <div class="text-3xl sm:text-4xl font-black font-mono text-white mt-1">
-                    {{ formatNumber(monthlyLiters) }} <span class="text-lg font-normal text-emerald-300">Liters / Month</span>
+                  <span class="text-xs font-mono uppercase text-[#D29A5A] font-bold tracking-widest">Select Monthly Volume</span>
+                  <div class="text-3xl sm:text-4xl font-black font-mono text-[#F4F1E6] mt-1">
+                    {{ formatNumber(monthlyLiters) }} <span class="text-lg font-normal text-[#F4F1E6]/80">Liters / Month</span>
                   </div>
                 </div>
                 <div class="text-right">
-                  <span class="px-3 py-1.5 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs font-mono font-bold">
+                  <span class="px-3 py-1.5 rounded-xl bg-[#243027] text-[#D29A5A] border border-[#668A68]/40 text-xs font-mono font-bold">
                     ₹55.00 / Liter Base
                   </span>
                 </div>
@@ -639,9 +651,9 @@
                   min="50" 
                   max="5000" 
                   step="25"
-                  class="w-full h-3 bg-[#031109] rounded-lg appearance-none cursor-pointer accent-emerald-400"
+                  class="w-full h-3 bg-[#243027] rounded-lg appearance-none cursor-pointer accent-[#D29A5A]"
                 />
-                <div class="flex justify-between text-xs font-mono text-emerald-400/70">
+                <div class="flex justify-between text-xs font-mono text-[#F4F1E6]/70">
                   <span>50 L (Bistro)</span>
                   <span>1,000 L (QSR Hub)</span>
                   <span>5,000 L (Industrial Kitchen)</span>
@@ -649,10 +661,10 @@
               </div>
 
               <!-- Animated Monthly Yield Chart Projection -->
-              <div class="pt-4 border-t border-emerald-900 space-y-2">
-                <div class="flex justify-between text-xs font-mono text-emerald-300">
+              <div class="pt-4 border-t border-[#668A68]/30 space-y-2">
+                <div class="flex justify-between text-xs font-mono text-[#F4F1E6]/80">
                   <span>6-Month Revenue Projection Curve</span>
-                  <span class="text-emerald-400 font-bold">Compounding Compliance Tier</span>
+                  <span class="text-[#D29A5A] font-bold">Compounding Compliance Tier</span>
                 </div>
                 <div class="h-20 flex items-end justify-between gap-3 pt-2">
                   <div 
@@ -661,10 +673,10 @@
                     class="flex-1 flex flex-col items-center gap-1.5 h-full justify-end group"
                   >
                     <div 
-                      class="w-full bg-gradient-to-t from-emerald-800 via-emerald-600 to-green-400 rounded-lg transition-all duration-300 group-hover:brightness-125 shadow-sm shadow-emerald-950"
+                      class="w-full bg-[#D29A5A] rounded-lg transition-all duration-300 group-hover:brightness-110 shadow-sm"
                       :style="{ height: `${Math.min(100, Math.max(15, (bar.factor * (monthlyLiters / 5000)) * 100))}%` }"
                     ></div>
-                    <span class="text-[10px] font-mono text-emerald-400/80">{{ bar.month }}</span>
+                    <span class="text-[10px] font-mono text-[#F4F1E6]/80">{{ bar.month }}</span>
                   </div>
                 </div>
               </div>
@@ -673,84 +685,84 @@
             <!-- 4 Live Calculation Metric Blocks -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <!-- Block 1: Annual Revenue -->
-              <div class="bg-[#071f13] border border-emerald-800/80 rounded-2xl p-6 space-y-2 shadow-lg">
-                <div class="text-xs font-mono uppercase text-emerald-400 font-bold">Estimated Annual Revenue</div>
-                <div class="text-3xl font-black font-mono text-emerald-400 drop-shadow-[0_2px_12px_rgba(52,211,153,0.3)]">
+              <div class="bg-[#F4F1E6] border border-[#668A68]/40 rounded-2xl p-6 space-y-2 shadow-lg">
+                <div class="text-xs font-mono uppercase text-[#668A68] font-bold">Estimated Annual Revenue</div>
+                <div class="text-3xl font-black font-mono text-[#31543B]">
                   ₹{{ formatNumber(monthlyLiters * 55 * 12) }}
                 </div>
-                <p class="text-xs text-emerald-200/70">Direct weekly or monthly NEFT disbursement to your restaurant business bank account.</p>
+                <p class="text-xs text-[#243027]/80">Direct weekly or monthly NEFT disbursement to your restaurant business bank account.</p>
               </div>
 
               <!-- Block 2: CO2 Displaced -->
-              <div class="bg-[#071f13] border border-emerald-800/80 rounded-2xl p-6 space-y-2 shadow-lg">
-                <div class="text-xs font-mono uppercase text-green-400 font-bold">CO₂ Emissions Displaced</div>
-                <div class="text-3xl font-black font-mono text-green-300">
-                  {{ formatNumber(Math.round(monthlyLiters * 12 * 3.0)) }} <span class="text-sm font-sans text-emerald-400">kg CO₂e</span>
+              <div class="bg-[#F4F1E6] border border-[#668A68]/40 rounded-2xl p-6 space-y-2 shadow-lg">
+                <div class="text-xs font-mono uppercase text-[#668A68] font-bold">CO₂ Emissions Displaced</div>
+                <div class="text-3xl font-black font-mono text-[#31543B]">
+                  {{ formatNumber(Math.round(monthlyLiters * 12 * 3.0)) }} <span class="text-sm font-sans text-[#668A68]">kg CO₂e</span>
                 </div>
-                <p class="text-xs text-emerald-200/70">Lifecycle fossil diesel emissions abated by converting your waste oil into clean biofuel.</p>
+                <p class="text-xs text-[#243027]/80">Lifecycle fossil diesel emissions abated by converting your waste oil into clean biofuel.</p>
               </div>
 
               <!-- Block 3: Freshwater Protected -->
-              <div class="bg-[#071f13] border border-emerald-800/80 rounded-2xl p-6 space-y-2 shadow-lg">
-                <div class="text-xs font-mono uppercase text-teal-400 font-bold">Freshwater Protected</div>
-                <div class="text-3xl font-black font-mono text-teal-300">
-                  {{ formatNumber(monthlyLiters * 12) }} <span class="text-sm font-sans text-teal-400">Million L</span>
+              <div class="bg-[#F4F1E6] border border-[#668A68]/40 rounded-2xl p-6 space-y-2 shadow-lg">
+                <div class="text-xs font-mono uppercase text-[#668A68] font-bold">Freshwater Protected</div>
+                <div class="text-3xl font-black font-mono text-[#31543B]">
+                  {{ formatNumber(monthlyLiters * 12) }} <span class="text-sm font-sans text-[#668A68]">Million L</span>
                 </div>
-                <p class="text-xs text-emerald-200/70">Preventing toxic hydrocarbon films from coating and suffocating municipal drainage basins.</p>
+                <p class="text-xs text-[#243027]/80">Preventing toxic hydrocarbon films from coating and suffocating municipal drainage basins.</p>
               </div>
 
               <!-- Block 4: Biofuel Produced -->
-              <div class="bg-[#071f13] border border-emerald-800/80 rounded-2xl p-6 space-y-2 shadow-lg">
-                <div class="text-xs font-mono uppercase text-emerald-400 font-bold">ASTM D6751 Biofuel Yield</div>
-                <div class="text-3xl font-black font-mono text-white">
-                  {{ formatNumber(Math.round(monthlyLiters * 12 * 0.92)) }} <span class="text-sm font-sans text-emerald-400">Liters</span>
+              <div class="bg-[#F4F1E6] border border-[#668A68]/40 rounded-2xl p-6 space-y-2 shadow-lg">
+                <div class="text-xs font-mono uppercase text-[#668A68] font-bold">ASTM D6751 Biofuel Yield</div>
+                <div class="text-3xl font-black font-mono text-[#31543B]">
+                  {{ formatNumber(Math.round(monthlyLiters * 12 * 0.92)) }} <span class="text-sm font-sans text-[#668A68]">Liters</span>
                 </div>
-                <p class="text-xs text-emerald-200/70">High-cetane, zero-sulfur renewable diesel fuel produced and supplied to state transport fleets.</p>
+                <p class="text-xs text-[#243027]/80">High-cetane, zero-sulfur renewable diesel fuel produced and supplied to state transport fleets.</p>
               </div>
             </div>
           </div>
 
           <!-- Right: Interactive FSSAI ESG Audit Certificate Preview -->
           <div class="lg:col-span-5">
-            <div class="relative bg-gradient-to-b from-[#092b1b] to-[#05180f] rounded-3xl border-2 border-emerald-500/50 p-8 shadow-[0_20px_50px_rgba(16,185,129,0.2)] space-y-6">
-              <div class="text-center space-y-2 pb-6 border-b border-emerald-800/80">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-mono uppercase font-bold tracking-widest">
+            <div class="relative bg-[#31543B] rounded-3xl border-2 border-[#668A68]/40 p-8 shadow-2xl space-y-6 text-[#F4F1E6]">
+              <div class="text-center space-y-2 pb-6 border-b border-[#668A68]/30">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#243027] text-[#D29A5A] text-[10px] font-mono uppercase font-bold tracking-widest border border-[#668A68]/40">
                   Official Statutory Certificate
                 </div>
-                <h3 class="text-2xl font-black text-white font-serif tracking-tight">
+                <h3 class="text-2xl font-black text-[#F4F1E6] font-serif tracking-tight">
                   Certificate of RUCO Compliance
                 </h3>
-                <p class="text-xs text-emerald-200/80">Pursuant to FSSAI Order File No. 1-2/Enf/RUCO/FSSAI/2018</p>
+                <p class="text-xs text-[#F4F1E6]/80">Pursuant to FSSAI Order File No. 1-2/Enf/RUCO/FSSAI/2018</p>
               </div>
 
               <div class="space-y-4 text-xs">
-                <div class="flex justify-between py-2 border-b border-emerald-900">
-                  <span class="text-emerald-300/80">Certified FBO Facility:</span>
-                  <span class="font-bold text-white font-mono">Your Commercial Kitchen</span>
+                <div class="flex justify-between py-2 border-b border-[#668A68]/30">
+                  <span class="text-[#F4F1E6]/70">Certified FBO Facility:</span>
+                  <span class="font-bold text-[#F4F1E6] font-mono">Your Commercial Kitchen</span>
                 </div>
-                <div class="flex justify-between py-2 border-b border-emerald-900">
-                  <span class="text-emerald-300/80">Annual Sequestration:</span>
-                  <span class="font-mono font-bold text-emerald-400">{{ formatNumber(monthlyLiters * 12) }} Liters UCO</span>
+                <div class="flex justify-between py-2 border-b border-[#668A68]/30">
+                  <span class="text-[#F4F1E6]/70">Annual Sequestration:</span>
+                  <span class="font-mono font-bold text-[#D29A5A]">{{ formatNumber(monthlyLiters * 12) }} Liters UCO</span>
                 </div>
-                <div class="flex justify-between py-2 border-b border-emerald-900">
-                  <span class="text-emerald-300/80">Net Carbon Offset:</span>
-                  <span class="font-mono font-bold text-green-400">{{ formatNumber(Math.round(monthlyLiters * 12 * 3.0)) }} kg CO₂e</span>
+                <div class="flex justify-between py-2 border-b border-[#668A68]/30">
+                  <span class="text-[#F4F1E6]/70">Net Carbon Offset:</span>
+                  <span class="font-mono font-bold text-[#D29A5A]">{{ formatNumber(Math.round(monthlyLiters * 12 * 3.0)) }} kg CO₂e</span>
                 </div>
-                <div class="flex justify-between py-2 border-b border-emerald-900">
-                  <span class="text-emerald-300/80">Regulatory Ledger ID:</span>
-                  <span class="font-mono text-emerald-300">RUCO-2026-VAL-9821</span>
+                <div class="flex justify-between py-2 border-b border-[#668A68]/30">
+                  <span class="text-[#F4F1E6]/70">Regulatory Ledger ID:</span>
+                  <span class="font-mono text-[#F4F1E6]">{{ 'RUCO-2026-VAL-9821' }}</span>
                 </div>
               </div>
 
               <!-- Certificate Footer Seal -->
               <div class="pt-4 flex items-center justify-between">
-                <div class="flex items-center gap-2 text-xs text-emerald-300 font-bold">
-                  <span class="w-3 h-3 rounded-full bg-emerald-400 animate-pulse"></span>
+                <div class="flex items-center gap-2 text-xs text-[#F4F1E6] font-bold">
+                  <span class="w-3 h-3 rounded-full bg-[#D29A5A] animate-pulse"></span>
                   <span>100% Audit Proof</span>
                 </div>
                 <button 
                   @click="$emit('open-register')"
-                  class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow-lg transition cursor-pointer"
+                  class="px-4 py-2 bg-[#D29A5A] hover:bg-[#C08949] text-[#243027] font-bold text-xs rounded-xl shadow-lg transition cursor-pointer"
                 >
                   Claim Site Certificate
                 </button>
@@ -765,19 +777,19 @@
     <!-- SECTION 5: FINAL CALL TO ACTION (The Decisive Decision)                    -->
     <!-- ========================================================================= -->
     <section class="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
-      <div class="relative bg-gradient-to-tr from-[#051c11] via-[#092e1d] to-[#082216] rounded-3xl border-2 border-emerald-500/50 p-8 sm:p-14 lg:p-20 shadow-[0_25px_70px_rgba(16,185,129,0.25)] text-center sm:text-left overflow-hidden">
+      <div class="relative bg-[#31543B] rounded-3xl border-2 border-[#668A68]/40 p-8 sm:p-14 lg:p-20 shadow-2xl text-center sm:text-left overflow-hidden text-[#F4F1E6]">
         <!-- Ambient Glowing Core -->
-        <div class="absolute -right-20 -top-20 w-80 h-80 bg-emerald-500/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -right-20 -top-20 w-80 h-80 bg-[#D29A5A]/15 rounded-full blur-3xl pointer-events-none"></div>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center relative z-10">
           <div class="lg:col-span-8 space-y-4">
-            <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs font-mono uppercase font-bold tracking-wider">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#243027] text-[#D29A5A] border border-[#668A68]/40 text-xs font-mono uppercase font-bold tracking-wider">
               Zero Upfront Investment &bull; Instant Kitchen QR Placard
             </div>
-            <h2 class="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.1]">
+            <h2 class="text-3xl sm:text-5xl lg:text-6xl font-black text-[#F4F1E6] tracking-tight leading-[1.1]">
               Ready to Clean Up Your Kitchen and Your Conscience?
             </h2>
-            <p class="text-base sm:text-lg text-emerald-100/80 max-w-2xl leading-relaxed">
+            <p class="text-base sm:text-lg text-[#F4F1E6]/85 max-w-2xl leading-relaxed">
               Join hundreds of compliant hotels, restaurants, caterers, and food processing facilities turning hazardous cooking oil into dependable green revenue.
             </p>
           </div>
@@ -786,10 +798,10 @@
             <!-- Shimmering Conversion Button -->
             <button 
               @click="$emit('open-register')"
-              class="relative group w-full p-[2px] rounded-2xl overflow-hidden shadow-2xl shadow-emerald-950/80 transition-transform duration-300 hover:scale-105 active:scale-98 cursor-pointer"
+              class="relative group w-full p-[2px] rounded-2xl overflow-hidden shadow-2xl shadow-[#243027]/50 transition-transform duration-300 hover:scale-105 active:scale-98 cursor-pointer"
             >
-              <span class="absolute inset-[-1000%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#059669_0%,#34d399_50%,#10b981_100%)]"></span>
-              <span class="relative flex items-center justify-center gap-3 px-8 py-4 bg-[#071f13] hover:bg-[#092919] text-white font-black text-sm rounded-2xl backdrop-blur-xl transition-colors">
+              <span class="absolute inset-[-1000%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#D29A5A_0%,#F4F1E6_50%,#D29A5A_100%)]"></span>
+              <span class="relative flex items-center justify-center gap-3 px-8 py-4 bg-[#D29A5A] hover:bg-[#C08949] text-[#243027] font-black text-sm rounded-2xl backdrop-blur-xl transition-colors">
                 <span>Register Your Kitchen Now</span>
                 <svg class="w-4 h-4 transition-transform group-hover:translate-x-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
@@ -800,7 +812,7 @@
             <!-- Secondary Sign-In Button -->
             <button 
               @click="$emit('open-login')"
-              class="w-full px-6 py-4 bg-[#04140b]/90 hover:bg-[#062112] text-emerald-200 hover:text-white font-bold text-sm rounded-2xl border border-emerald-800/80 transition-colors flex items-center justify-center gap-2 cursor-pointer"
+              class="w-full px-6 py-4 bg-[#243027] hover:bg-[#1a231c] text-[#F4F1E6] font-bold text-sm rounded-2xl border border-[#668A68]/40 transition-colors flex items-center justify-center gap-2 cursor-pointer"
             >
               <span>Access FBO Portal</span>
             </button>
@@ -808,17 +820,17 @@
         </div>
 
         <!-- Footnote Badges -->
-        <div class="mt-12 pt-8 border-t border-emerald-900/80 flex flex-wrap items-center justify-center sm:justify-start gap-8 text-xs text-emerald-300/80">
+        <div class="mt-12 pt-8 border-t border-[#668A68]/30 flex flex-wrap items-center justify-center sm:justify-start gap-8 text-xs text-[#F4F1E6]/80">
           <div class="flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+            <span class="w-2 h-2 rounded-full bg-[#D29A5A]"></span>
             <span>100% Traceable Biofuel Conversion</span>
           </div>
           <div class="flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+            <span class="w-2 h-2 rounded-full bg-[#D29A5A]"></span>
             <span>Immediate Digital Form-D Issuance</span>
           </div>
           <div class="flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+            <span class="w-2 h-2 rounded-full bg-[#D29A5A]"></span>
             <span>Zero Minimum Volume Penalty</span>
           </div>
         </div>
@@ -826,17 +838,17 @@
     </section>
 
     <!-- Sticky Mobile Conversion Bar (Bottom) -->
-    <div class="lg:hidden fixed bottom-0 inset-x-0 bg-[#05180f]/95 backdrop-blur-md border-t border-emerald-900/80 p-3.5 z-30 flex items-center justify-between gap-3 shadow-2xl">
+    <div class="lg:hidden fixed bottom-0 inset-x-0 bg-[#F4F1E6]/95 backdrop-blur-md border-t border-[#668A68]/40 p-3.5 z-30 flex items-center justify-between gap-3 shadow-2xl text-[#243027]">
       <div>
-        <div class="text-xs font-bold text-white flex items-center gap-1.5">
-          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+        <div class="text-xs font-bold text-[#243027] flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-[#31543B]"></span>
           GeoField RUCO
         </div>
-        <div class="text-[10px] text-emerald-300/80">Guaranteed ₹55/L Base</div>
+        <div class="text-[10px] text-[#668A68]">Guaranteed ₹55/L Base</div>
       </div>
       <button 
         @click="$emit('open-register')"
-        class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow-lg transition cursor-pointer"
+        class="px-5 py-2.5 bg-[#31543B] hover:bg-[#243027] text-[#F4F1E6] font-bold text-xs rounded-xl shadow-lg transition cursor-pointer"
       >
         Register Kitchen
       </button>
@@ -874,7 +886,7 @@ function initParticleField() {
       vy: (Math.random() - 0.5) * 0.45,
       radius: Math.random() * 2.2 + 0.8,
       alpha: Math.random() * 0.65 + 0.25,
-      color: Math.random() > 0.4 ? '#34d399' : '#10b981',
+      color: Math.random() > 0.4 ? '#31543B' : '#668A68',
     });
   }
 
@@ -889,7 +901,7 @@ function initParticleField() {
         const dist = Math.sqrt(dx * dx + dy * dy);
 
         if (dist < 120) {
-          ctx.strokeStyle = `rgba(52, 211, 153, ${0.16 * (1 - dist / 120)})`;
+          ctx.strokeStyle = `rgba(102, 138, 104, ${0.2 * (1 - dist / 120)})`;
           ctx.lineWidth = 0.8;
           ctx.beginPath();
           ctx.moveTo(particles[i].x, particles[i].y);
@@ -967,10 +979,10 @@ const reactorTiers = [
     label: 'Hydrotreated Biofuel HVO: 99.4%',
     tooltip: 'Premium low-TPC virgin collection (TPC ≤ 18%)',
     liquidGradient: 'url(#biofuelClean)',
-    bubbleColor: '#ecfdf5',
-    coreColor: '#10b981',
+    bubbleColor: '#F4F1E6',
+    coreColor: '#31543B',
     tpcValue: '14.2% (Optimal Grade)',
-    tpcColor: 'text-emerald-400',
+    tpcColor: 'text-[#D29A5A]',
     payoutTier: '₹60.00 / Liter'
   },
   {
@@ -978,10 +990,10 @@ const reactorTiers = [
     label: 'Standard B100 Biodiesel: 92%',
     tooltip: 'Standard commercial kitchen oil (TPC ≤ 25%)',
     liquidGradient: 'url(#biofuelStandard)',
-    bubbleColor: '#fef3c7',
-    coreColor: '#f59e0b',
+    bubbleColor: '#F4F1E6',
+    coreColor: '#668A68',
     tpcValue: '23.8% (Standard Tier)',
-    tpcColor: 'text-amber-400',
+    tpcColor: 'text-[#D29A5A]',
     payoutTier: '₹55.00 / Liter'
   },
   {
@@ -989,10 +1001,10 @@ const reactorTiers = [
     label: 'Toxic Recirculation Sludge',
     tooltip: 'Severely degraded illegal oil (TPC > 25%)',
     liquidGradient: 'url(#biofuelSludge)',
-    bubbleColor: '#fecdd3',
-    coreColor: '#ef4444',
+    bubbleColor: '#F4F1E6',
+    coreColor: '#8C4A32',
     tpcValue: '35.2% (Illegal Reuse)',
-    tpcColor: 'text-rose-500',
+    tpcColor: 'text-[#8C4A32]',
     payoutTier: 'Mandatory Destruction'
   }
 ];
@@ -1048,13 +1060,13 @@ const specimens = [
     icon: '🥘',
     tpc: 34.8,
     statusText: 'Severe Hazard',
-    statusClass: 'bg-rose-950/60 text-rose-400 border-rose-500/40',
+    statusClass: 'bg-[#8C4A32]/20 text-[#8C4A32] border-[#8C4A32]/40',
     verdict: 'Carcinogenic Oxidation',
-    verdictColor: 'text-rose-400',
-    tpcColor: 'text-rose-500',
+    verdictColor: 'text-[#8C4A32]',
+    tpcColor: 'text-[#8C4A32]',
     ffa: '8.4% (Critical)',
     legal: 'STRICTLY BANNED',
-    legalColor: 'text-rose-400',
+    legalColor: 'text-[#8C4A32]',
     description: 'Repeatedly reheated cooking oil tested at 34.8% TPC. Highly toxic polar polymers directly increase risks of vascular plaques, arterial inflammation, and cellular degeneration.'
   },
   {
@@ -1062,13 +1074,13 @@ const specimens = [
     icon: '🛢️',
     tpc: 28.2,
     statusText: 'Black Market',
-    statusClass: 'bg-amber-950/60 text-amber-400 border-amber-500/40',
+    statusClass: 'bg-[#D29A5A]/20 text-[#D29A5A] border-[#D29A5A]/40',
     verdict: 'Illegal Recirculation',
-    verdictColor: 'text-amber-400',
-    tpcColor: 'text-amber-400',
+    verdictColor: 'text-[#D29A5A]',
+    tpcColor: 'text-[#D29A5A]',
     ffa: '5.2% (Degraded)',
     legal: 'SEIZURE WARRANT',
-    legalColor: 'text-amber-400',
+    legalColor: 'text-[#D29A5A]',
     description: 'Black-market repackaged oil sold back into local snack manufacturing. Bypasses mandatory FSSAI traceability and contaminates consumer food streams.'
   },
   {
@@ -1076,13 +1088,13 @@ const specimens = [
     icon: '🌿',
     tpc: 17.6,
     statusText: '100% Certified',
-    statusClass: 'bg-emerald-950/60 text-emerald-300 border-emerald-500/40',
+    statusClass: 'bg-[#668A68]/20 text-[#D29A5A] border-[#668A68]/40',
     verdict: 'Clean Biofuel Grade',
-    verdictColor: 'text-emerald-400',
-    tpcColor: 'text-emerald-400',
+    verdictColor: 'text-[#D29A5A]',
+    tpcColor: 'text-[#D29A5A]',
     ffa: '1.8% (Optimal)',
     legal: 'APPROVED FOR PAYOUT',
-    legalColor: 'text-emerald-400',
+    legalColor: 'text-[#D29A5A]',
     description: 'Legally audited cooking oil sealed in GeoField tamper-proof containers. Tested with digital probes and cleared for clean biodiesel conversion with bonus revenue.'
   }
 ];

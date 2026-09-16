@@ -2,7 +2,7 @@
   <header 
     :class="user 
       ? 'bg-slate-900/95 backdrop-blur border-b border-slate-800 text-slate-100' 
-      : 'bg-[#05180f]/95 backdrop-blur-md border-b border-emerald-900/60 text-white'"
+      : 'bg-[#F4F1E6]/95 backdrop-blur-md border-b border-[#668A68]/30 text-[#243027]'"
     class="h-16 flex items-center justify-between px-4 lg:px-8 sticky top-0 z-40 transition-colors duration-200"
   >
     <div class="flex items-center gap-4">
@@ -18,17 +18,17 @@
       </button>
 
       <a href="/" class="flex items-center gap-3 group">
-        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-700 via-green-600 to-emerald-400 flex items-center justify-center font-black text-white text-base shadow-md shadow-emerald-950/60 transition-transform group-hover:scale-105">
+        <div class="w-9 h-9 rounded-xl bg-[#31543B] flex items-center justify-center font-black text-[#F4F1E6] text-base shadow-md transition-transform group-hover:scale-105">
           G
         </div>
         <div>
-          <div class="text-sm font-bold tracking-tight text-white flex items-center gap-2">
+          <div class="text-sm font-bold tracking-tight text-[#243027] flex items-center gap-2">
             GeoField Bio-Logistics
-            <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 tracking-wider">
+            <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-[#668A68]/15 text-[#31543B] border border-[#668A68]/30 tracking-wider">
               🌿 RUCO Certified
             </span>
           </div>
-          <p class="text-[11px] text-emerald-300/70">
+          <p class="text-[11px] text-[#668A68]">
             National UCO Traceability & Clean Bio-Energy Network
           </p>
         </div>
@@ -39,11 +39,11 @@
     <div class="flex items-center gap-3 sm:gap-4">
       <!-- Network Connectivity Indicator -->
       <div 
-        :class="isOnline ? 'bg-emerald-950/60 border-emerald-800/60 text-emerald-300' : 'bg-amber-950/50 border-amber-800/60 text-amber-300'"
+        :class="isOnline ? 'bg-[#668A68]/10 border-[#668A68]/30 text-[#31543B]' : 'bg-[#D29A5A]/15 border-[#D29A5A]/40 text-[#243027]'"
         class="flex items-center gap-2 text-xs font-medium px-3 py-1.5 rounded-full border transition-all"
       >
         <span 
-          :class="isOnline ? 'bg-emerald-400' : 'bg-amber-400 animate-pulse'"
+          :class="isOnline ? 'bg-[#31543B]' : 'bg-[#D29A5A] animate-pulse'"
           class="w-2 h-2 rounded-full"
         ></span>
         <span class="hidden sm:inline">{{ isOnline ? 'Network Online' : `${offlineCount} Pending Sync` }}</span>
@@ -69,13 +69,13 @@
       <div v-else class="flex items-center gap-2.5">
         <button 
           @click="$emit('open-auth', 'login')" 
-          class="px-3.5 py-1.5 text-xs font-semibold text-emerald-100 hover:text-white bg-emerald-950/70 hover:bg-emerald-900/80 rounded-xl border border-emerald-800/60 transition shadow-xs cursor-pointer"
+          class="px-3.5 py-1.5 text-xs font-semibold text-[#31543B] hover:text-[#243027] bg-[#F4F1E6] hover:bg-[#EAE6D8] rounded-xl border border-[#668A68]/40 transition shadow-xs cursor-pointer"
         >
           Sign In
         </button>
         <button 
           @click="$emit('open-auth', 'register')" 
-          class="px-4 py-1.5 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-500 rounded-xl shadow-lg shadow-emerald-950/50 hover:shadow-emerald-900/60 transition cursor-pointer"
+          class="px-4 py-1.5 text-xs font-bold text-[#F4F1E6] bg-[#31543B] hover:bg-[#243027] rounded-xl shadow-lg transition cursor-pointer"
         >
           Register FBO
         </button>
