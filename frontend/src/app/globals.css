@@ -1,0 +1,71 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #F4F1E4;
+  --foreground: #111813;
+  --forest-dark: #1F3D2B;
+  --amber-accent: #D99A5B;
+  --olive-accent: #4A6B46;
+}
+
+html {
+  background-color: var(--background);
+  color: var(--foreground);
+  scroll-behavior: auto;
+}
+
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+/* Custom subtle scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #E8E3D0;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #4A6B46;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #1F3D2B;
+}
+
+/* Monospace technical tags styling */
+.hud-label {
+  font-family: var(--font-mono), monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.6875rem; /* 11px */
+  font-weight: 700;
+}
+
+/* Glassmorphism restrained panel */
+.hud-panel {
+  background: #1F3D2B;
+  border: 1px solid rgba(102, 138, 104, 0.35);
+  box-shadow: 0 25px 50px -12px rgba(17, 24, 19, 0.45);
+}
