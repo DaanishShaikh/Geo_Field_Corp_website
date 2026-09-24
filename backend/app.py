@@ -49,6 +49,7 @@ def create_app(config_class=Config):
     def ensure_admin_account():
         nonlocal _admin_checked
         if not _admin_checked:
+            _admin_checked = True
             try:
                 from backend.models import RateCard
                 from sqlalchemy import text

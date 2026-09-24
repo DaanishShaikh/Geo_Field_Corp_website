@@ -140,8 +140,14 @@ def login():
         return jsonify({"error": "Your registration was rejected by Super Admin."}), 403
 
     login_user(user, remember=True)
-    log_audit(user.id, user.role, "User Logged In", "User", user.id)
-    db.session.commit()
+    try:
+        log_audit(user.id, user.role, "User Logged In", "User", user.id)
+        db.session.commit()
+    except Exception:
+        try:
+            db.session.rollback()
+        except Exception:
+            pass
 
     return jsonify({
         "message": "Logged in successfully",
@@ -155,8 +161,14 @@ def logout():
     uid = current_user.id
     role = current_user.role
     logout_user()
-    log_audit(uid, role, "User Logged Out", "User", uid)
-    db.session.commit()
+    try:
+        log_audit(uid, role, "User Logged Out", "User", uid)
+        db.session.commit()
+    except Exception:
+        try:
+            db.session.rollback()
+        except Exception:
+            pass
     return jsonify({"message": "Logged out successfully"}), 200
 
 

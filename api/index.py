@@ -8,3 +8,5 @@ from backend.app import create_app
 
 # Create app — no blocking operations at startup
 app = create_app()
+handler = app
+
