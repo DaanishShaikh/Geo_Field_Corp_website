@@ -81,148 +81,60 @@
           </div>
         </div>
 
-        <!-- Right: Studio-Lit 3D Bio-Transmutation Centerpiece -->
+        <!-- Right: Studio-Lit 3D Bio-Transmutation Centerpiece (WebGL / Three.js) -->
         <div class="lg:col-span-5 flex items-center justify-center relative">
           <!-- Ambient Studio Spotlight Aura -->
-          <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(73,197,182,0.18)_0%,transparent_70%)] pointer-events-none blur-2xl"></div>
+          <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(73,197,182,0.16)_0%,transparent_70%)] pointer-events-none blur-3xl"></div>
 
-          <div 
-            class="w-full max-w-[500px] transition-transform duration-200 ease-out select-none"
-            :style="heroParallaxStyle"
-          >
-            <!-- High-Precision Industrial Apparatus Housing -->
-            <div class="relative w-full rounded-2xl bg-[#080808]/95 border border-white/[0.12] shadow-2xl p-6 sm:p-7 flex flex-col justify-between overflow-hidden backdrop-blur-2xl text-white group">
-              
-              <!-- Subtle Rim Lighting Highlights -->
-              <div class="absolute top-0 right-0 w-64 h-64 bg-[#49C5B6]/15 rounded-full blur-3xl pointer-events-none group-hover:bg-[#49C5B6]/25 transition-colors duration-700"></div>
-              <div class="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full blur-2xl pointer-events-none"></div>
-
-              <!-- Top Telemetry & Tier Switcher Bar -->
-              <div class="flex items-center justify-between gap-2 z-10 pb-4 border-b border-white/[0.08]">
-                <div class="flex items-center gap-2">
-                  <span class="w-2 h-2 rounded-full bg-[#49C5B6] animate-ping"></span>
-                  <span class="text-[10px] font-mono text-zinc-300 uppercase tracking-widest font-semibold">
-                    {{ activeReactorTier.label }}
-                  </span>
-                </div>
-
-                <!-- Tactile Grade Selectors -->
-                <div class="flex items-center gap-1 bg-white/[0.04] p-1 rounded-lg border border-white/[0.08]">
-                  <button 
-                    v-for="(tier, idx) in reactorTiers" 
-                    :key="idx"
-                    @click="selectedReactorTier = idx"
-                    :class="selectedReactorTier === idx 
-                      ? 'bg-[#49C5B6] text-black font-extrabold shadow-[0_0_12px_rgba(73,197,182,0.5)]' 
-                      : 'text-zinc-400 hover:text-white'"
-                    class="px-2.5 py-1 text-[10px] rounded font-mono uppercase transition-all duration-200 cursor-pointer"
-                  >
-                    {{ tier.code }}
-                  </button>
-                </div>
+          <!-- Genuine Three.js 3D Bio-Reactor Stage -->
+          <div class="relative w-full max-w-[520px] flex flex-col justify-between">
+            
+            <!-- Top Controls Floating Strip -->
+            <div class="flex items-center justify-between gap-2 z-20 pb-3">
+              <div class="flex items-center gap-2 bg-black/60 px-3 py-1.5 rounded-lg border border-white/10 backdrop-blur-md">
+                <span class="w-2 h-2 rounded-full bg-[#49C5B6] animate-ping"></span>
+                <span class="text-[10px] font-mono text-zinc-300 uppercase tracking-widest font-semibold">
+                  {{ activeReactorTier.label }}
+                </span>
               </div>
 
-              <!-- Centerpiece: Laser Interferometer & 3D Bio-Capsule Chamber -->
-              <div class="relative flex-1 flex items-center justify-center my-4 py-2">
-                <svg viewBox="0 0 340 340" class="w-full h-full max-h-[300px]">
-                  <!-- Concentric Laser Scan Interferometer Rings -->
-                  <circle cx="170" cy="170" r="145" fill="none" stroke="#49C5B6" stroke-width="1.2" stroke-dasharray="10 8" class="animate-spin-very-slow origin-center opacity-70" />
-                  <circle cx="170" cy="170" r="126" fill="none" stroke="#FFFFFF" stroke-width="1.2" stroke-dasharray="4 14" class="animate-spin-reverse origin-center opacity-40" />
-                  <circle cx="170" cy="170" r="108" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1" />
-                  
-                  <!-- Target Crosshair Ticks -->
-                  <line x1="20" y1="170" x2="35" y2="170" stroke="#49C5B6" stroke-width="1.5" opacity="0.8" />
-                  <line x1="305" y1="170" x2="320" y2="170" stroke="#49C5B6" stroke-width="1.5" opacity="0.8" />
-                  <line x1="170" y1="20" x2="170" y2="35" stroke="#49C5B6" stroke-width="1.5" opacity="0.8" />
-                  <line x1="170" y1="305" x2="170" y2="320" stroke="#49C5B6" stroke-width="1.5" opacity="0.8" />
-
-                  <!-- Heavy Industrial Base Pedestal -->
-                  <ellipse cx="170" cy="275" rx="90" ry="18" fill="url(#platformGlow)" />
-                  <ellipse cx="170" cy="270" rx="76" ry="12" fill="#111111" stroke="#49C5B6" stroke-width="1.5" />
-
-                  <!-- Precision-Machined Borosilicate Reactor Cylinder -->
-                  <rect x="100" y="65" width="140" height="175" rx="20" fill="url(#reactorGlass)" stroke="rgba(255,255,255,0.18)" stroke-width="1.5" />
-
-                  <!-- Metric Graduation Ticks (0L to 200L) -->
-                  <g stroke="rgba(255,255,255,0.25)" stroke-width="1">
-                    <line x1="104" y1="90" x2="114" y2="90" />
-                    <line x1="104" y1="115" x2="110" y2="115" />
-                    <line x1="104" y1="140" x2="114" y2="140" />
-                    <line x1="104" y1="165" x2="110" y2="165" />
-                    <line x1="104" y1="190" x2="114" y2="190" />
-                    <line x1="104" y1="215" x2="110" y2="215" />
-                  </g>
-
-                  <!-- Dynamic Fluid Wave Fill -->
-                  <path 
-                    :d="reactorFluidPath" 
-                    :fill="activeReactorTier.liquidGradient"
-                    class="transition-all duration-700 ease-out opacity-95"
-                  />
-
-                  <!-- Rising Active Carbon Bubbles -->
-                  <g class="animate-float-bubbles">
-                    <circle cx="130" cy="190" r="3.5" :fill="activeReactorTier.bubbleColor" opacity="0.85" />
-                    <circle cx="160" cy="170" r="5" :fill="activeReactorTier.bubbleColor" opacity="0.65" />
-                    <circle cx="195" cy="180" r="4" :fill="activeReactorTier.bubbleColor" opacity="0.8" />
-                    <circle cx="145" cy="140" r="3" :fill="activeReactorTier.bubbleColor" opacity="0.9" />
-                    <circle cx="180" cy="130" r="4.5" :fill="activeReactorTier.bubbleColor" opacity="0.85" />
-                  </g>
-
-                  <!-- Internal Catalytic Conversion Core -->
-                  <circle cx="170" cy="155" r="18" :fill="activeReactorTier.coreColor" class="animate-pulse" opacity="0.9" />
-                  <circle cx="170" cy="155" r="7" fill="#FFFFFF" />
-
-                  <!-- Laser Sweep Sensor Line -->
-                  <line x1="170" y1="58" x2="170" y2="22" stroke="#49C5B6" stroke-width="2" stroke-dasharray="3 3"/>
-                  <circle cx="170" cy="22" r="4" fill="#49C5B6" class="animate-ping" />
-
-                  <!-- Specular Tube Glass Reflection Sheen -->
-                  <rect x="220" y="70" width="8" height="165" rx="4" fill="white" opacity="0.12" />
-
-                  <!-- Precision Color Gradients -->
-                  <defs>
-                    <radialGradient id="platformGlow" cx="50%" cy="50%" r="50%">
-                      <stop offset="0%" stop-color="#49C5B6" stop-opacity="0.6"/>
-                      <stop offset="100%" stop-color="#49C5B6" stop-opacity="0"/>
-                    </radialGradient>
-                    <linearGradient id="reactorGlass" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stop-color="#141414" stop-opacity="0.9"/>
-                      <stop offset="100%" stop-color="#050505" stop-opacity="0.98"/>
-                    </linearGradient>
-                    <linearGradient id="biofuelClean" x1="0%" y1="0%" x2="0%" y2="100%">
-                      <stop offset="0%" stop-color="#49C5B6" stop-opacity="0.95"/>
-                      <stop offset="100%" stop-color="#0E332E" stop-opacity="0.98"/>
-                    </linearGradient>
-                    <linearGradient id="biofuelStandard" x1="0%" y1="0%" x2="0%" y2="100%">
-                      <stop offset="0%" stop-color="#2C8B80" stop-opacity="0.95"/>
-                      <stop offset="100%" stop-color="#0A211E" stop-opacity="0.98"/>
-                    </linearGradient>
-                    <linearGradient id="biofuelSludge" x1="0%" y1="0%" x2="0%" y2="100%">
-                      <stop offset="0%" stroke-width="2" stop-color="#333333" stop-opacity="0.95"/>
-                      <stop offset="100%" stop-color="#0A0A0A" stop-opacity="0.98"/>
-                    </linearGradient>
-                  </defs>
-                </svg>
+              <!-- Tactile Grade Selectors -->
+              <div class="flex items-center gap-1 bg-black/60 p-1 rounded-lg border border-white/10 backdrop-blur-md">
+                <button 
+                  v-for="(tier, idx) in reactorTiers" 
+                  :key="idx"
+                  @click="selectedReactorTier = idx"
+                  :class="selectedReactorTier === idx 
+                    ? 'bg-[#49C5B6] text-black font-extrabold shadow-[0_0_12px_rgba(73,197,182,0.5)]' 
+                    : 'text-zinc-400 hover:text-white'"
+                  class="px-2.5 py-1 text-[10px] rounded font-mono uppercase transition-all duration-200 cursor-pointer"
+                >
+                  {{ tier.code }}
+                </button>
               </div>
-
-              <!-- Bottom Dual-Channel Telemetry Readout -->
-              <div class="grid grid-cols-2 gap-3 z-10 pt-3 border-t border-white/[0.08]">
-                <div class="bg-white/[0.03] p-3 rounded-xl border border-white/[0.08]">
-                  <div class="text-[9px] text-zinc-400 font-mono uppercase tracking-widest">TOTAL POLAR COMPOUNDS</div>
-                  <div class="text-xs font-bold font-mono mt-1" :class="activeReactorTier.tpcColor">
-                    {{ activeReactorTier.tpcValue }}
-                  </div>
-                </div>
-                <div class="bg-white/[0.03] p-3 rounded-xl border border-white/[0.08]">
-                  <div class="text-[9px] text-zinc-400 font-mono uppercase tracking-widest">PAYOUT VALUATION</div>
-                  <div class="text-xs font-bold font-mono mt-1 text-[#49C5B6]">
-                    {{ activeReactorTier.payoutTier }}
-                  </div>
-                </div>
-              </div>
-
             </div>
+
+            <!-- Three.js Canvas Container -->
+            <div class="relative w-full aspect-square min-h-[360px] sm:min-h-[440px] flex items-center justify-center">
+              <BioReactor3D :tier-index="selectedReactorTier" />
+            </div>
+
+            <!-- Bottom Dual-Channel Telemetry Readout Matrix -->
+            <div class="grid grid-cols-2 gap-3 z-20 pt-3">
+              <div class="bg-black/60 p-3.5 rounded-xl border border-white/10 backdrop-blur-md">
+                <div class="text-[9px] text-zinc-400 font-mono uppercase tracking-widest">TOTAL POLAR COMPOUNDS</div>
+                <div class="text-xs sm:text-sm font-bold font-mono mt-1" :class="activeReactorTier.tpcColor">
+                  {{ activeReactorTier.tpcValue }}
+                </div>
+              </div>
+              <div class="bg-black/60 p-3.5 rounded-xl border border-white/10 backdrop-blur-md">
+                <div class="text-[9px] text-zinc-400 font-mono uppercase tracking-widest">PAYOUT VALUATION</div>
+                <div class="text-xs sm:text-sm font-bold font-mono mt-1 text-[#49C5B6]">
+                  {{ activeReactorTier.payoutTier }}
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
 
@@ -896,6 +808,7 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue';
+import BioReactor3D from './BioReactor3D.vue';
 
 defineEmits(['open-register', 'open-login']);
 
