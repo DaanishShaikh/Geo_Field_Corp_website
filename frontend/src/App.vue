@@ -1,6 +1,6 @@
 <template>
   <div 
-    :class="currentUser ? 'bg-slate-900 text-slate-100 selection:bg-emerald-500 selection:text-white' : 'bg-[#FAFAFA] text-[#0A0A0A] selection:bg-[#49C5B6] selection:text-[#0A0A0A]'" 
+    :class="currentUser ? 'bg-slate-900 text-slate-100 selection:bg-emerald-500 selection:text-white' : 'bg-[#000000] text-white selection:bg-[#49C5B6] selection:text-black'" 
     class="min-h-screen flex flex-col transition-colors duration-300"
   >
     <!-- Top Navbar -->
