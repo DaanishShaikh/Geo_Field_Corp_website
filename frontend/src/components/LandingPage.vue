@@ -1,12 +1,12 @@
 <template>
-  <div class="landing-page relative bg-[#F4F1E6] text-[#243027] selection:bg-[#D29A5A] selection:text-[#F4F1E6] font-sans antialiased overflow-hidden">
+  <div class="landing-page relative bg-[#FAFAFA] text-[#0A0A0A] selection:bg-[#49C5B6] selection:text-[#0A0A0A] font-sans antialiased overflow-hidden">
     <!-- Interactive Background Particle Canvas (Flowing Bio-Spores) -->
-    <canvas ref="particleCanvas" class="pointer-events-none absolute inset-0 -z-10 w-full h-full opacity-60"></canvas>
+    <canvas ref="particleCanvas" class="pointer-events-none absolute inset-0 -z-10 w-full h-full opacity-40"></canvas>
 
-    <!-- Ambient Glowing Environmental Auroras -->
-    <div class="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-[1100px] h-[650px] bg-[#668A68]/10 blur-[130px] -z-10 animate-pulse-slow"></div>
-    <div class="pointer-events-none absolute top-[1300px] left-[-220px] w-[700px] h-[700px] bg-[#31543B]/10 rounded-full blur-[160px] -z-10"></div>
-    <div class="pointer-events-none absolute top-[2500px] right-[-180px] w-[650px] h-[650px] bg-[#D29A5A]/10 rounded-full blur-[150px] -z-10"></div>
+    <!-- Ambient Glowing Soft Studio Lights -->
+    <div class="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-[1100px] h-[650px] bg-[#49C5B6]/8 blur-[160px] -z-10 animate-pulse-slow"></div>
+    <div class="pointer-events-none absolute top-[1300px] left-[-220px] w-[700px] h-[700px] bg-black/[0.03] rounded-full blur-[160px] -z-10"></div>
+    <div class="pointer-events-none absolute top-[2500px] right-[-180px] w-[650px] h-[650px] bg-[#49C5B6]/6 rounded-full blur-[150px] -z-10"></div>
 
     <!-- ========================================================================= -->
     <!-- SECTION 1: THE HERO (The Visceral Hook & 3D Interactive Reactor)          -->
@@ -15,78 +15,72 @@
       ref="heroSection"
       @mousemove="handleHeroMouseMove"
       @mouseleave="handleHeroMouseLeave"
-      class="relative min-h-[92vh] flex items-center justify-center pt-8 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full"
+      class="relative min-h-[96vh] flex items-center justify-center pt-14 pb-28 px-4 sm:px-8 lg:px-12 max-w-7xl mx-auto w-full"
     >
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center w-full">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-14 lg:gap-10 items-center w-full">
         <!-- Left Column: Copy & Interactive CTAs -->
-        <div class="lg:col-span-7 space-y-7 text-center lg:text-left">
+        <div class="lg:col-span-7 space-y-9 text-center lg:text-left">
           <!-- Compliance Live Pulse Badge -->
-          <div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-[#31543B]/10 text-[#31543B] border border-[#668A68]/40 text-xs font-bold uppercase tracking-wider backdrop-blur-xl shadow-sm hover:border-[#31543B] transition-colors">
-            <span class="relative flex h-2.5 w-2.5">
-              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#31543B] opacity-75"></span>
-              <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#31543B]"></span>
+          <div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-black/[0.04] text-[#0A0A0A] border border-[#49C5B6]/40 text-[11px] font-mono font-bold uppercase tracking-widest backdrop-blur-xl shadow-xs hover:border-[#49C5B6] transition-colors">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#49C5B6] opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-[#49C5B6]"></span>
             </span>
-            <span>🌿 FSSAI RUCO Verified Network</span>
-            <span class="text-[#668A68]">&bull;</span>
-            <span class="text-[#31543B] font-mono">100% Closed-Loop Biofuel</span>
+            <span>FSSAI RUCO Verified Network</span>
+            <span class="text-zinc-400">&bull;</span>
+            <span class="text-[#0A0A0A] font-mono">100% Closed-Loop Biofuel</span>
           </div>
 
-          <!-- Headline -->
-          <h1 class="text-4xl sm:text-6xl xl:text-7xl font-black tracking-tight leading-[1.08] text-[#243027]">
+          <!-- Headline (Capsul'in Poster Headline Typography) -->
+          <h1 class="text-5xl sm:text-7xl xl:text-[84px] font-black tracking-[-0.04em] leading-[0.98] text-[#0A0A0A]">
             Stop the Toxic Cycle. <br />
-            <span class="text-[#31543B]">
+            <span class="text-[#0A0A0A]">
               Start the Green Revenue.
             </span>
           </h1>
 
           <!-- Sub-headline -->
-          <p class="text-base sm:text-lg text-[#243027]/80 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-normal">
+          <p class="text-base sm:text-lg text-zinc-600 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-normal">
             Join India’s smartest RUCO aggregation network. We take the hassle out of FSSAI compliance with instant QR-based disposal, cluster-based pickups, and real-time environmental tracking.
           </p>
 
           <!-- Magnetic Shimmering Action CTAs -->
           <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
-            <!-- Primary Magnetic Shimmer Button -->
+            <!-- Primary Solid Mint-Teal CTA Button -->
             <button 
               @click="$emit('open-register')"
-              class="relative group w-full sm:w-auto p-[2px] rounded-2xl overflow-hidden shadow-xl shadow-[#31543B]/30 transition-transform duration-300 hover:scale-105 active:scale-98 cursor-pointer"
+              class="relative group w-full sm:w-auto px-8 py-4 bg-[#49C5B6] hover:bg-[#3db0a2] text-[#0A0A0A] font-extrabold text-sm rounded-xl shadow-lg shadow-[#49C5B6]/25 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-3 cursor-pointer"
             >
-              <!-- Spinning Conic Gradient Neon Border -->
-              <span class="absolute inset-[-1000%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#31543B_0%,#D29A5A_50%,#668A68_100%)]"></span>
-              <span class="relative flex items-center justify-center gap-3 px-8 py-4 bg-[#31543B] hover:bg-[#243027] text-[#F4F1E6] font-extrabold text-sm rounded-2xl backdrop-blur-xl transition-colors">
-                <span class="text-[#D29A5A] text-base">🌱</span>
-                <span>Join the Clean Network</span>
-                <svg class="w-4 h-4 transition-transform group-hover:translate-x-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                </svg>
-              </span>
+              <span>Join the Clean Network</span>
+              <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
             </button>
 
-            <!-- Secondary Cinematic Explore Link -->
+            <!-- Secondary Ghost Button -->
             <a 
               href="#threat-section"
-              class="w-full sm:w-auto px-6 py-4 bg-[#F4F1E6] hover:bg-[#EAE6D8] text-[#31543B] hover:text-[#243027] font-semibold text-sm rounded-2xl border border-[#668A68]/50 hover:border-[#31543B] transition-all duration-300 flex items-center justify-center gap-2 group shadow-sm"
+              class="w-full sm:w-auto px-7 py-4 bg-transparent hover:bg-[#0A0A0A] text-[#0A0A0A] hover:text-[#FAFAFA] font-bold text-sm rounded-xl border border-black/20 hover:border-[#0A0A0A] transition-all duration-300 flex items-center justify-center gap-2 group cursor-pointer"
             >
-              <span class="text-[#D29A5A] group-hover:scale-125 transition-transform">⚠️</span>
               <span>Explore The 60% Crisis</span>
-              <svg class="w-4 h-4 text-[#31543B] group-hover:translate-y-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-4 h-4 transition-transform group-hover:translate-y-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
               </svg>
             </a>
           </div>
 
           <!-- Live Compliance Mini-Badges -->
-          <div class="pt-6 border-t border-[#668A68]/30 flex flex-wrap items-center justify-center lg:justify-start gap-6 text-xs text-[#243027]/80">
-            <div class="flex items-center gap-2 hover:text-[#243027] transition-colors cursor-default">
-              <span class="w-5 h-5 rounded-full bg-[#31543B]/10 text-[#31543B] flex items-center justify-center text-[10px] font-black border border-[#668A68]/30">₹</span>
+          <div class="pt-8 border-t border-black/[0.08] flex flex-wrap items-center justify-center lg:justify-start gap-8 text-xs font-mono text-zinc-500">
+            <div class="flex items-center gap-2 hover:text-[#0A0A0A] transition-colors cursor-default">
+              <span class="w-1.5 h-1.5 rounded-full bg-[#49C5B6]"></span>
               <span>₹55 - ₹60/L Guaranteed Base</span>
             </div>
-            <div class="flex items-center gap-2 hover:text-[#243027] transition-colors cursor-default">
-              <span class="w-5 h-5 rounded-full bg-[#31543B]/10 text-[#31543B] flex items-center justify-center text-[10px] font-black border border-[#668A68]/30">📜</span>
+            <div class="flex items-center gap-2 hover:text-[#0A0A0A] transition-colors cursor-default">
+              <span class="w-1.5 h-1.5 rounded-full bg-[#49C5B6]"></span>
               <span>Digital Form-D Certificates</span>
             </div>
-            <div class="flex items-center gap-2 hover:text-[#243027] transition-colors cursor-default">
-              <span class="w-5 h-5 rounded-full bg-[#31543B]/10 text-[#31543B] flex items-center justify-center text-[10px] font-black border border-[#668A68]/30">⚡</span>
+            <div class="flex items-center gap-2 hover:text-[#0A0A0A] transition-colors cursor-default">
+              <span class="w-1.5 h-1.5 rounded-full bg-[#49C5B6]"></span>
               <span>Zero-Interruption Cluster Fleet</span>
             </div>
           </div>
@@ -98,28 +92,28 @@
             class="w-full max-w-[480px] aspect-square transition-transform duration-200 ease-out select-none"
             :style="heroParallaxStyle"
           >
-            <!-- Glowing Reactor Glass Card -->
-            <div class="relative w-full h-full rounded-3xl bg-[#31543B] border border-[#668A68]/40 shadow-2xl p-6 flex flex-col justify-between backdrop-blur-2xl overflow-hidden group text-[#F4F1E6]">
-              <!-- Animated Edge Flare -->
-              <div class="absolute -top-32 -right-32 w-64 h-64 bg-[#668A68]/20 rounded-full blur-3xl pointer-events-none group-hover:bg-[#668A68]/30 transition-colors duration-700"></div>
-              <div class="absolute -bottom-32 -left-32 w-64 h-64 bg-[#D29A5A]/15 rounded-full blur-3xl pointer-events-none"></div>
+            <!-- Glowing Reactor Glass Card in Studio Black -->
+            <div class="relative w-full h-full rounded-2xl bg-[#0A0A0A] border border-white/10 shadow-2xl p-7 flex flex-col justify-between overflow-hidden group text-white">
+              <!-- Animated Edge Flare - Studio Lighting -->
+              <div class="absolute -top-32 -right-32 w-72 h-72 bg-[#49C5B6]/20 rounded-full blur-3xl pointer-events-none group-hover:bg-[#49C5B6]/30 transition-colors duration-700"></div>
+              <div class="absolute -bottom-32 -left-32 w-72 h-72 bg-white/5 rounded-full blur-3xl pointer-events-none"></div>
 
               <!-- Reactor Top Controls -->
               <div class="flex items-center justify-between z-10">
-                <div class="flex items-center gap-2 bg-[#243027] border border-[#668A68]/40 px-3 py-1.5 rounded-xl shadow-inner">
-                  <span class="w-2 h-2 rounded-full bg-[#D29A5A] animate-ping"></span>
-                  <span class="text-[11px] font-mono text-[#F4F1E6] font-bold uppercase tracking-wider">
+                <div class="flex items-center gap-2 bg-[#141414] border border-white/10 px-3 py-1.5 rounded-lg shadow-inner">
+                  <span class="w-2 h-2 rounded-full bg-[#49C5B6] animate-ping"></span>
+                  <span class="text-[11px] font-mono text-[#FAFAFA] font-bold uppercase tracking-wider">
                     {{ activeReactorTier.label }}
                   </span>
                 </div>
                 <!-- Interactive Tier Switcher -->
-                <div class="flex items-center gap-1 bg-[#243027] p-1 rounded-xl border border-[#668A68]/40">
+                <div class="flex items-center gap-1 bg-[#141414] p-1 rounded-lg border border-white/10">
                   <button 
                     v-for="(tier, idx) in reactorTiers" 
                     :key="idx"
                     @click="selectedReactorTier = idx"
-                    :class="selectedReactorTier === idx ? 'bg-[#D29A5A] text-[#243027] font-black shadow-md' : 'text-[#F4F1E6]/70 hover:text-[#F4F1E6]'"
-                    class="px-2.5 py-1 text-[10px] rounded-lg font-mono uppercase transition cursor-pointer"
+                    :class="selectedReactorTier === idx ? 'bg-[#49C5B6] text-[#0A0A0A] font-black shadow-md' : 'text-zinc-400 hover:text-white'"
+                    class="px-2.5 py-1 text-[10px] rounded font-mono uppercase transition cursor-pointer"
                   >
                     {{ tier.code }}
                   </button>
@@ -130,15 +124,15 @@
               <div class="relative flex-1 flex items-center justify-center my-2">
                 <svg viewBox="0 0 340 340" class="w-full h-full max-h-[270px]">
                   <!-- Outer Magnetic Confinement Rings -->
-                  <circle cx="170" cy="170" r="140" fill="none" stroke="#668A68" stroke-width="1.5" stroke-dasharray="8 6" class="animate-spin-very-slow origin-center opacity-70" />
-                  <circle cx="170" cy="170" r="122" fill="none" stroke="#668A68" stroke-width="2" stroke-dasharray="14 10" class="animate-spin-reverse origin-center opacity-80" />
+                  <circle cx="170" cy="170" r="140" fill="none" stroke="#49C5B6" stroke-width="1.5" stroke-dasharray="8 6" class="animate-spin-very-slow origin-center opacity-70" />
+                  <circle cx="170" cy="170" r="122" fill="none" stroke="#FFFFFF" stroke-width="1.5" stroke-dasharray="14 10" class="animate-spin-reverse origin-center opacity-40" />
                   
                   <!-- Platform Base -->
                   <ellipse cx="170" cy="275" rx="90" ry="18" fill="url(#platformGlow)" />
-                  <ellipse cx="170" cy="270" rx="75" ry="12" fill="#243027" stroke="#D29A5A" stroke-width="1.5" />
+                  <ellipse cx="170" cy="270" rx="75" ry="12" fill="#141414" stroke="#49C5B6" stroke-width="1.5" />
 
                   <!-- Central Catalytic Reactor Chamber -->
-                  <rect x="100" y="65" width="140" height="175" rx="24" fill="url(#reactorGlass)" stroke="#668A68" stroke-width="2" opacity="0.9" />
+                  <rect x="100" y="65" width="140" height="175" rx="24" fill="url(#reactorGlass)" stroke="rgba(255,255,255,0.15)" stroke-width="1.5" opacity="0.95" />
 
                   <!-- Fluid Wave Fill in Chamber -->
                   <path 
@@ -158,49 +152,49 @@
 
                   <!-- Internal Catalytic Catalyst Core -->
                   <circle cx="170" cy="155" r="18" :fill="activeReactorTier.coreColor" class="animate-pulse" opacity="0.85" />
-                  <circle cx="170" cy="155" r="8" fill="#F4F1E6" />
+                  <circle cx="170" cy="155" r="8" fill="#FFFFFF" />
 
                   <!-- Molecular Output Overlay Lines -->
-                  <line x1="170" y1="55" x2="170" y2="25" stroke="#D29A5A" stroke-width="2" stroke-dasharray="3 3"/>
-                  <circle cx="170" cy="25" r="4" fill="#D29A5A" class="animate-ping" />
+                  <line x1="170" y1="55" x2="170" y2="25" stroke="#49C5B6" stroke-width="2" stroke-dasharray="3 3"/>
+                  <circle cx="170" cy="25" r="4" fill="#49C5B6" class="animate-ping" />
 
                   <!-- Gradients -->
                   <defs>
                     <radialGradient id="platformGlow" cx="50%" cy="50%" r="50%">
-                      <stop offset="0%" stop-color="#D29A5A" stop-opacity="0.8"/>
-                      <stop offset="100%" stop-color="#D29A5A" stop-opacity="0"/>
+                      <stop offset="0%" stop-color="#49C5B6" stop-opacity="0.6"/>
+                      <stop offset="100%" stop-color="#49C5B6" stop-opacity="0"/>
                     </radialGradient>
                     <linearGradient id="reactorGlass" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stop-color="#243027" stop-opacity="0.75"/>
-                      <stop offset="100%" stop-color="#1b241e" stop-opacity="0.9"/>
+                      <stop offset="0%" stop-color="#1A1A1A" stop-opacity="0.85"/>
+                      <stop offset="100%" stop-color="#0A0A0A" stop-opacity="0.95"/>
                     </linearGradient>
                     <linearGradient id="biofuelClean" x1="0%" y1="0%" x2="0%" y2="100%">
-                      <stop offset="0%" stop-color="#668A68" stop-opacity="0.95"/>
-                      <stop offset="100%" stop-color="#31543B" stop-opacity="0.98"/>
+                      <stop offset="0%" stop-color="#49C5B6" stop-opacity="0.95"/>
+                      <stop offset="100%" stop-color="#0A0A0A" stop-opacity="0.98"/>
                     </linearGradient>
                     <linearGradient id="biofuelStandard" x1="0%" y1="0%" x2="0%" y2="100%">
-                      <stop offset="0%" stop-color="#D29A5A" stop-opacity="0.95"/>
-                      <stop offset="100%" stop-color="#31543B" stop-opacity="0.98"/>
+                      <stop offset="0%" stop-color="#368E83" stop-opacity="0.95"/>
+                      <stop offset="100%" stop-color="#141414" stop-opacity="0.98"/>
                     </linearGradient>
                     <linearGradient id="biofuelSludge" x1="0%" y1="0%" x2="0%" y2="100%">
-                      <stop offset="0%" stop-color="#8C4A32" stop-opacity="0.95"/>
-                      <stop offset="100%" stop-color="#243027" stop-opacity="0.98"/>
+                      <stop offset="0%" stop-color="#3A3A3A" stop-opacity="0.95"/>
+                      <stop offset="100%" stop-color="#0A0A0A" stop-opacity="0.98"/>
                     </linearGradient>
                   </defs>
                 </svg>
               </div>
 
               <!-- Interactive Telemetry Footer -->
-              <div class="grid grid-cols-2 gap-3 z-10 pt-2 border-t border-[#668A68]/30">
-                <div class="bg-[#243027] p-2.5 rounded-xl border border-[#668A68]/40">
-                  <div class="text-[10px] text-[#F4F1E6]/70 font-mono uppercase">Total Polar Compounds</div>
-                  <div class="text-xs font-black font-mono mt-0.5" :class="activeReactorTier.tpcColor">
+              <div class="grid grid-cols-2 gap-3 z-10 pt-3 border-t border-white/10">
+                <div class="bg-[#141414] p-3 rounded-xl border border-white/10">
+                  <div class="text-[10px] text-zinc-400 font-mono uppercase tracking-wider">Total Polar Compounds</div>
+                  <div class="text-xs font-bold font-mono mt-1" :class="activeReactorTier.tpcColor">
                     {{ activeReactorTier.tpcValue }}
                   </div>
                 </div>
-                <div class="bg-[#243027] p-2.5 rounded-xl border border-[#668A68]/40">
-                  <div class="text-[10px] text-[#F4F1E6]/70 font-mono uppercase">Payout Status</div>
-                  <div class="text-xs font-black font-mono mt-0.5 text-[#D29A5A]">
+                <div class="bg-[#141414] p-3 rounded-xl border border-white/10">
+                  <div class="text-[10px] text-zinc-400 font-mono uppercase tracking-wider">Payout Status</div>
+                  <div class="text-xs font-bold font-mono mt-1 text-[#49C5B6]">
                     {{ activeReactorTier.payoutTier }}
                   </div>
                 </div>
@@ -212,23 +206,23 @@
     </section>
 
     <!-- ========================================================================= -->
-    <!-- SECTION 2: THE THREAT - WITH PLAYABLE BIOHAZARD HUD SCANNER              -->
+    <!-- SECTION 2: THE THREAT - THE CRISIS (Editorial Chapter Layout)            -->
     <!-- ========================================================================= -->
     <section 
       id="threat-section"
       ref="threatSection"
-      class="relative py-24 bg-[#F4F1E6] border-y border-[#668A68]/30 px-4 sm:px-6 lg:px-8"
+      class="relative py-32 bg-[#FAFAFA] border-t border-black/[0.06] px-4 sm:px-8 lg:px-12"
     >
-      <div class="max-w-7xl mx-auto space-y-16">
+      <div class="max-w-7xl mx-auto space-y-20">
         <!-- Section Header -->
-        <div class="max-w-3xl mx-auto text-center space-y-4">
-          <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#D29A5A]/15 text-[#31543B] border border-[#D29A5A]/40 text-xs font-bold font-mono uppercase tracking-wider animate-pulse">
-            <span>⚠️</span> The Unregulated Danger
+        <div class="max-w-3xl mx-auto text-center space-y-5">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/[0.04] text-[#0A0A0A] border border-[#49C5B6]/30 text-[11px] font-mono font-bold uppercase tracking-widest">
+            <span class="w-1.5 h-1.5 rounded-full bg-[#49C5B6] animate-pulse"></span> The Unregulated Danger
           </div>
-          <h2 class="text-3xl sm:text-5xl font-black text-[#243027] tracking-tight">
+          <h2 class="text-4xl sm:text-6xl font-black text-[#0A0A0A] tracking-[-0.03em] leading-tight">
             The 60% Crisis in Your Kitchen.
           </h2>
-          <p class="text-[#243027]/80 text-sm sm:text-base leading-relaxed">
+          <p class="text-zinc-600 text-base sm:text-lg leading-relaxed font-normal">
             Every liter of unmonitored used cooking oil represents severe health liabilities, legal penalties from food safety authorities, and lost restaurant revenue.
           </p>
         </div>
@@ -236,68 +230,68 @@
         <!-- 3 Pillars of The Threat with Animated Scroll Counting -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
           <!-- Pillar 1: 60% Return to the Plate -->
-          <div class="relative bg-[#F4F1E6] rounded-3xl p-8 border border-[#668A68]/40 shadow-xl hover:border-[#D29A5A] transition-all duration-300 flex flex-col justify-between group hover:-translate-y-1">
+          <div class="relative bg-white rounded-2xl p-8 sm:p-10 border border-black/[0.06] shadow-sm hover:shadow-xl hover:border-[#49C5B6]/40 transition-all duration-300 flex flex-col justify-between group hover:-translate-y-1">
             <div class="space-y-4">
-              <div class="flex items-baseline gap-2">
-                <span class="text-5xl sm:text-6xl font-black font-mono text-[#D29A5A] tracking-tight drop-shadow-sm">
+              <div class="flex items-baseline gap-3">
+                <span class="text-6xl sm:text-7xl font-black font-mono text-[#49C5B6] tracking-tighter leading-none">
                   {{ countPlate }}%
                 </span>
-                <span class="text-xs font-mono uppercase tracking-widest text-[#D29A5A] font-bold">Recirculated</span>
+                <span class="text-[10px] font-mono uppercase tracking-widest text-[#0A0A0A] font-extrabold px-2 py-0.5 bg-black/[0.04] rounded">Recirculated</span>
               </div>
-              <h3 class="text-lg font-bold text-[#243027] group-hover:text-[#31543B] transition-colors">
+              <h3 class="text-xl font-bold text-[#0A0A0A] tracking-tight group-hover:text-[#49C5B6] transition-colors">
                 The Return to the Plate
               </h3>
-              <p class="text-xs sm:text-sm text-[#243027]/80 leading-relaxed">
-                Shockingly, nearly <strong class="text-[#243027]">60% of all Used Cooking Oil (UCO)</strong> generated in India finds its way back into the food stream via illegal black-market repackaging.
+              <p class="text-sm text-zinc-600 leading-relaxed font-normal">
+                Shockingly, nearly <strong class="text-[#0A0A0A] font-semibold">60% of all Used Cooking Oil (UCO)</strong> generated in India finds its way back into the food stream via illegal black-market repackaging.
               </p>
             </div>
-            <div class="mt-6 pt-4 border-t border-[#668A68]/30 flex items-center justify-between text-[11px] text-[#668A68] font-mono">
+            <div class="mt-8 pt-5 border-t border-black/[0.06] flex items-center justify-between text-[11px] text-zinc-400 font-mono uppercase tracking-wider">
               <span>Source: FSSAI Audit Reports</span>
-              <span class="text-[#D29A5A] font-bold">Unchecked Hazard</span>
+              <span class="text-[#0A0A0A] font-bold px-2 py-0.5 bg-[#49C5B6]/15 rounded text-[10px]">Unchecked Hazard</span>
             </div>
           </div>
 
           <!-- Pillar 2: 25% Toxicity Limit -->
-          <div class="relative bg-[#F4F1E6] rounded-3xl p-8 border border-[#668A68]/40 shadow-xl hover:border-[#31543B] transition-all duration-300 flex flex-col justify-between group hover:-translate-y-1">
+          <div class="relative bg-white rounded-2xl p-8 sm:p-10 border border-black/[0.06] shadow-sm hover:shadow-xl hover:border-[#49C5B6]/40 transition-all duration-300 flex flex-col justify-between group hover:-translate-y-1">
             <div class="space-y-4">
-              <div class="flex items-baseline gap-2">
-                <span class="text-5xl sm:text-6xl font-black font-mono text-[#31543B] tracking-tight drop-shadow-sm">
+              <div class="flex items-baseline gap-3">
+                <span class="text-6xl sm:text-7xl font-black font-mono text-[#0A0A0A] tracking-tighter leading-none">
                   {{ countTpc }}%
                 </span>
-                <span class="text-xs font-mono uppercase tracking-widest text-[#31543B] font-bold">Max TPC Limit</span>
+                <span class="text-[10px] font-mono uppercase tracking-widest text-[#0A0A0A] font-extrabold px-2 py-0.5 bg-black/[0.04] rounded">Max TPC Limit</span>
               </div>
-              <h3 class="text-lg font-bold text-[#243027] group-hover:text-[#31543B] transition-colors">
+              <h3 class="text-xl font-bold text-[#0A0A0A] tracking-tight group-hover:text-[#49C5B6] transition-colors">
                 The 25% Toxicity Limit
               </h3>
-              <p class="text-xs sm:text-sm text-[#243027]/80 leading-relaxed">
-                Every time oil is reheated, toxic <strong class="text-[#243027]">Total Polar Compounds (TPC)</strong> multiply. The FSSAI mandates oil with a TPC above 25% is strictly unsafe for human consumption.
+              <p class="text-sm text-zinc-600 leading-relaxed font-normal">
+                Every time oil is reheated, toxic <strong class="text-[#0A0A0A] font-semibold">Total Polar Compounds (TPC)</strong> multiply. The FSSAI mandates oil with a TPC above 25% is strictly unsafe for human consumption.
               </p>
             </div>
-            <div class="mt-6 pt-4 border-t border-[#668A68]/30 flex items-center justify-between text-[11px] text-[#668A68] font-mono">
+            <div class="mt-8 pt-5 border-t border-black/[0.06] flex items-center justify-between text-[11px] text-zinc-400 font-mono uppercase tracking-wider">
               <span>Regulation: FSSAI Gazette 2018</span>
-              <span class="text-[#31543B] font-bold">Mandatory Testing</span>
+              <span class="text-[#0A0A0A] font-bold px-2 py-0.5 bg-[#49C5B6]/15 rounded text-[10px]">Mandatory Testing</span>
             </div>
           </div>
 
           <!-- Pillar 3: The Health Hazard -->
-          <div class="relative bg-[#F4F1E6] rounded-3xl p-8 border border-[#668A68]/40 shadow-xl hover:border-[#668A68] transition-all duration-300 flex flex-col justify-between group hover:-translate-y-1">
+          <div class="relative bg-white rounded-2xl p-8 sm:p-10 border border-black/[0.06] shadow-sm hover:shadow-xl hover:border-[#49C5B6]/40 transition-all duration-300 flex flex-col justify-between group hover:-translate-y-1">
             <div class="space-y-4">
-              <div class="flex items-baseline gap-2">
-                <span class="text-5xl sm:text-6xl font-black font-mono text-[#668A68] tracking-tight drop-shadow-sm">
+              <div class="flex items-baseline gap-3">
+                <span class="text-6xl sm:text-7xl font-black font-mono text-[#49C5B6] tracking-tighter leading-none">
                   3×
                 </span>
-                <span class="text-xs font-mono uppercase tracking-widest text-[#668A68] font-bold">Cardio Risk</span>
+                <span class="text-[10px] font-mono uppercase tracking-widest text-[#0A0A0A] font-extrabold px-2 py-0.5 bg-black/[0.04] rounded">Cardio Risk</span>
               </div>
-              <h3 class="text-lg font-bold text-[#243027] group-hover:text-[#31543B] transition-colors">
+              <h3 class="text-xl font-bold text-[#0A0A0A] tracking-tight group-hover:text-[#49C5B6] transition-colors">
                 The Health Hazard
               </h3>
-              <p class="text-xs sm:text-sm text-[#243027]/80 leading-relaxed">
+              <p class="text-sm text-zinc-600 leading-relaxed font-normal">
                 Degraded cooking oil is a major contributor to atherosclerosis, hypertension, and cellular oxidation. Proper disposal isn't just compliance—it’s public health stewardship.
               </p>
             </div>
-            <div class="mt-6 pt-4 border-t border-[#668A68]/30 flex items-center justify-between text-[11px] text-[#668A68] font-mono">
+            <div class="mt-8 pt-5 border-t border-black/[0.06] flex items-center justify-between text-[11px] text-zinc-400 font-mono uppercase tracking-wider">
               <span>Clinical Study: AIIMS Toxicity</span>
-              <span class="text-[#668A68] font-bold">High Pathology</span>
+              <span class="text-[#0A0A0A] font-bold px-2 py-0.5 bg-[#49C5B6]/15 rounded text-[10px]">High Pathology</span>
             </div>
           </div>
         </div>
@@ -886,7 +880,7 @@ function initParticleField() {
       vy: (Math.random() - 0.5) * 0.45,
       radius: Math.random() * 2.2 + 0.8,
       alpha: Math.random() * 0.65 + 0.25,
-      color: Math.random() > 0.4 ? '#31543B' : '#668A68',
+      color: Math.random() > 0.4 ? '#49C5B6' : '#A1A1AA',
     });
   }
 
@@ -901,7 +895,7 @@ function initParticleField() {
         const dist = Math.sqrt(dx * dx + dy * dy);
 
         if (dist < 120) {
-          ctx.strokeStyle = `rgba(102, 138, 104, ${0.2 * (1 - dist / 120)})`;
+          ctx.strokeStyle = `rgba(73, 197, 182, ${0.15 * (1 - dist / 120)})`;
           ctx.lineWidth = 0.8;
           ctx.beginPath();
           ctx.moveTo(particles[i].x, particles[i].y);
@@ -979,10 +973,10 @@ const reactorTiers = [
     label: 'Hydrotreated Biofuel HVO: 99.4%',
     tooltip: 'Premium low-TPC virgin collection (TPC ≤ 18%)',
     liquidGradient: 'url(#biofuelClean)',
-    bubbleColor: '#F4F1E6',
-    coreColor: '#31543B',
+    bubbleColor: '#49C5B6',
+    coreColor: '#49C5B6',
     tpcValue: '14.2% (Optimal Grade)',
-    tpcColor: 'text-[#D29A5A]',
+    tpcColor: 'text-[#49C5B6]',
     payoutTier: '₹60.00 / Liter'
   },
   {
@@ -990,10 +984,10 @@ const reactorTiers = [
     label: 'Standard B100 Biodiesel: 92%',
     tooltip: 'Standard commercial kitchen oil (TPC ≤ 25%)',
     liquidGradient: 'url(#biofuelStandard)',
-    bubbleColor: '#F4F1E6',
-    coreColor: '#668A68',
+    bubbleColor: '#FFFFFF',
+    coreColor: '#368E83',
     tpcValue: '23.8% (Standard Tier)',
-    tpcColor: 'text-[#D29A5A]',
+    tpcColor: 'text-[#49C5B6]',
     payoutTier: '₹55.00 / Liter'
   },
   {
@@ -1001,10 +995,10 @@ const reactorTiers = [
     label: 'Toxic Recirculation Sludge',
     tooltip: 'Severely degraded illegal oil (TPC > 25%)',
     liquidGradient: 'url(#biofuelSludge)',
-    bubbleColor: '#F4F1E6',
-    coreColor: '#8C4A32',
+    bubbleColor: '#71717A',
+    coreColor: '#3A3A3A',
     tpcValue: '35.2% (Illegal Reuse)',
-    tpcColor: 'text-[#8C4A32]',
+    tpcColor: 'text-zinc-400',
     payoutTier: 'Mandatory Destruction'
   }
 ];

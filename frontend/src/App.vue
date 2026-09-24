@@ -1,6 +1,6 @@
 <template>
   <div 
-    :class="currentUser ? 'bg-slate-900 text-slate-100 selection:bg-emerald-500 selection:text-white' : 'bg-[#F4F1E6] text-[#243027] selection:bg-[#D29A5A] selection:text-[#F4F1E6]'" 
+    :class="currentUser ? 'bg-slate-900 text-slate-100 selection:bg-emerald-500 selection:text-white' : 'bg-[#FAFAFA] text-[#0A0A0A] selection:bg-[#49C5B6] selection:text-[#0A0A0A]'" 
     class="min-h-screen flex flex-col transition-colors duration-300"
   >
     <!-- Top Navbar -->
@@ -17,9 +17,9 @@
     <transition name="fade">
       <div 
         v-if="toastMsg" 
-        class="fixed bottom-6 right-6 z-50 px-5 py-3.5 rounded-2xl bg-[#31543B] border border-[#668A68]/60 text-[#F4F1E6] shadow-2xl text-xs font-semibold flex items-center gap-3 max-w-md"
+        class="fixed bottom-6 right-6 z-50 px-5 py-3.5 rounded-xl bg-[#0A0A0A] border border-[#49C5B6]/40 text-[#FAFAFA] shadow-2xl text-xs font-semibold flex items-center gap-3 max-w-md"
       >
-        <span class="w-2.5 h-2.5 rounded-full bg-[#D29A5A] animate-pulse"></span>
+        <span class="w-2.5 h-2.5 rounded-full bg-[#49C5B6] animate-pulse"></span>
         <span>{{ toastMsg }}</span>
       </div>
     </transition>
