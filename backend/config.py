@@ -20,6 +20,7 @@ IS_SERVERLESS = bool(
 def get_database_uri():
     db_url = os.environ.get("DATABASE_URL")
     if db_url:
+        db_url = db_url.strip('"\' \t\r\n')
         if db_url.startswith("postgres://"):
             db_url = db_url.replace("postgres://", "postgresql://", 1)
         if "channel_binding=" in db_url:
@@ -51,6 +52,10 @@ class Config:
     
     SQLALCHEMY_DATABASE_URI = get_database_uri()
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_ENGINE_OPTIONS = {
+        "pool_pre_ping": True,
+        "pool_recycle": 300,
+    }
     
     # Session config
     PERMANENT_SESSION_LIFETIME = timedelta(days=7)
