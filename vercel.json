@@ -2,14 +2,7 @@
   "framework": null,
   "buildCommand": "cd frontend && rm -rf node_modules && npm install --foreground-scripts && npm run build",
   "outputDirectory": "frontend/dist",
-  "functions": {
-    "api/**/*.py": {
-      "includeFiles": "backend/**"
-    },
-    "api/index.py": {
-      "includeFiles": "backend/**"
-    }
-  },
+  "installCommand": "pip install --break-system-packages -r requirements.txt",
   "headers": [
     {
       "source": "/(.*).html",
