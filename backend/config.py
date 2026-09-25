@@ -3,7 +3,12 @@ import shutil
 import tempfile
 from datetime import timedelta
 
-BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+try:
+    from dotenv import load_dotenv
+    BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+    load_dotenv(os.path.join(BASE_DIR, "..", ".env"))
+except Exception:
+    BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 # Detect Vercel or AWS Lambda serverless execution environment
 IS_SERVERLESS = bool(
