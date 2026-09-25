@@ -6,20 +6,16 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 
 try:
     from backend.app import create_app
-    flask_app = create_app()
+    app = create_app()
 
-    class PrefixMiddleware:
-        def __init__(self, wsgi_app):
-            self.wsgi_app = wsgi_app
-
-        def __call__(self, environ, start_response):
-            path = environ.get("PATH_INFO", "")
-            # Ensure path starts with /api so Flask Blueprints match
-            if not path.startswith("/api"):
-                environ["PATH_INFO"] = "/api" + path
-            return self.wsgi_app(environ, start_response)
-
-    app = PrefixMiddleware(flask_app)
+    # Wrap wsgi_app so path is normalized to /api without changing app type
+    _original_wsgi_app = app.wsgi_app
+    def _normalized_wsgi_app(environ, start_response):
+        path = environ.get("PATH_INFO", "")
+        if not path.startswith("/api"):
+            environ["PATH_INFO"] = "/api" + path
+        return _original_wsgi_app(environ, start_response)
+    app.wsgi_app = _normalized_wsgi_app
 except Exception as e:
     import traceback
     from flask import Flask, jsonify
