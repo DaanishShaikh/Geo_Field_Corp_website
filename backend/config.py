@@ -22,7 +22,12 @@ def get_database_uri():
     if db_url:
         db_url = db_url.strip('"\' \t\r\n')
         if db_url.startswith("postgres://"):
-            db_url = db_url.replace("postgres://", "postgresql://", 1)
+            db_url = db_url.replace("postgres://", "postgresql+psycopg2://", 1)
+        elif db_url.startswith("postgresql://"):
+            db_url = db_url.replace("postgresql://", "postgresql+psycopg2://", 1)
+        elif db_url.startswith("postgresql+psycopg://"):
+            db_url = db_url.replace("postgresql+psycopg://", "postgresql+psycopg2://", 1)
+            
         if "channel_binding=" in db_url:
             import re
             db_url = re.sub(r"[&?]channel_binding=[^&]*", "", db_url)
