@@ -23,6 +23,3 @@ except Exception as e:
             "traceback": _tb
         }), 500
 
-handler = app
-
-
