@@ -1,4 +1,5 @@
 import os
+import tempfile
 from datetime import timedelta
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
@@ -22,7 +23,10 @@ class Config:
             _raw_db_url = re.sub(r"\?&", "?", _raw_db_url).rstrip("?")
         SQLALCHEMY_DATABASE_URI = _raw_db_url
     else:
-        SQLALCHEMY_DATABASE_URI = f"sqlite:///{os.path.join(BASE_DIR, 'data', 'ruco_platform.db')}"
+        if os.environ.get("VERCEL") or os.environ.get("AWS_LAMBDA_FUNCTION_NAME"):
+            SQLALCHEMY_DATABASE_URI = f"sqlite:///{os.path.join(tempfile.gettempdir(), 'ruco_platform.db')}"
+        else:
+            SQLALCHEMY_DATABASE_URI = f"sqlite:///{os.path.join(BASE_DIR, 'data', 'ruco_platform.db')}"
         
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     
@@ -35,9 +39,19 @@ class Config:
     CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL", "redis://localhost:6379/0")
     CELERY_RESULT_BACKEND = os.environ.get("CELERY_RESULT_BACKEND", "redis://localhost:6379/0")
     
-    # Storage
-    CERTIFICATES_DIR = os.path.join(BASE_DIR, "data", "certificates")
-    QR_CODES_DIR = os.path.join(BASE_DIR, "data", "qr_codes")
+    # Storage - use writable /tmp directory on serverless environments
+    if os.environ.get("VERCEL") or os.environ.get("AWS_LAMBDA_FUNCTION_NAME"):
+        CERTIFICATES_DIR = os.path.join(tempfile.gettempdir(), "certificates")
+        QR_CODES_DIR = os.path.join(tempfile.gettempdir(), "qr_codes")
+    else:
+        CERTIFICATES_DIR = os.path.join(BASE_DIR, "data", "certificates")
+        QR_CODES_DIR = os.path.join(BASE_DIR, "data", "qr_codes")
+        
+    try:
+        os.makedirs(CERTIFICATES_DIR, exist_ok=True)
+        os.makedirs(QR_CODES_DIR, exist_ok=True)
+    except Exception:
+        pass
     
     # Maps configuration
     GOOGLE_MAPS_API_KEY = os.environ.get(
