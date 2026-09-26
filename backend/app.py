@@ -49,7 +49,6 @@ def create_app(config_class=Config):
     def ensure_admin_account():
         nonlocal _admin_checked
         if not _admin_checked:
-            _admin_checked = True
             try:
                 from backend.models import RateCard
                 from sqlalchemy import text
@@ -138,9 +137,6 @@ def create_app(config_class=Config):
 
     @app.errorhandler(404)
     def not_found(e):
-        from flask import request
-        if request.path.startswith("/api") or request.method != "GET":
-            return jsonify({"error": "API route not found", "path": request.path}), 404
         dist_dir = os.path.join(os.path.dirname(__file__), "..", "frontend", "dist")
         if os.path.exists(os.path.join(dist_dir, "index.html")):
             return send_from_directory(dist_dir, "index.html")
