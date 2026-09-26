@@ -2,12 +2,6 @@
   "framework": null,
   "buildCommand": "cd frontend && rm -rf node_modules && npm install --foreground-scripts && npm run build",
   "outputDirectory": "frontend/dist",
-  "functions": {
-    "api/index.py": {
-      "includeFiles": "backend/**",
-      "maxDuration": 15
-    }
-  },
   "headers": [
     {
       "source": "/(.*).html",
