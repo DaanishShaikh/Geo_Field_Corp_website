@@ -98,20 +98,21 @@ def create_app(config_class=Config):
                     rc = RateCard(base_rate=55.0, low_tpc_bonus=5.0, high_tpc_penalty=8.0)
                     db.session.add(rc)
 
-                # Clean up legacy/demo accounts
+                # Clean up legacy/demo accounts safely if unreferenced
                 stale_emails = [
                     "greenleaf@cafe.com", 
                     "mumbai@kitchen.com", 
                     "bangalore@cloudkitchen.com", 
                     "agent.rahul@geofield.com", 
                     "agent.priya@geofield.com", 
-                    "agent@geofield.com", 
                     "seller@geofield.com"
                 ]
                 for stale in User.query.filter(User.email.in_(stale_emails)).all():
-                    db.session.delete(stale)
-
-                db.session.commit()
+                    try:
+                        db.session.delete(stale)
+                        db.session.commit()
+                    except Exception:
+                        db.session.rollback()
                 _admin_checked = True
             except Exception as e:
                 try:
