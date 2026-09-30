@@ -12,10 +12,13 @@ try:
     _original_wsgi_app = app.wsgi_app
     def _normalized_wsgi_app(environ, start_response):
         path = environ.get("PATH_INFO", "")
-        if path.startswith("/api/index.py"):
-            path = path.replace("/api/index.py", "/api", 1)
-        elif path.startswith("/api/index"):
-            path = path.replace("/api/index", "/api", 1)
+        # Strip redundant serverless function file prefixes if present
+        for prefix in ["/api/index.py", "/api/index", "/index.py"]:
+            if path.startswith(prefix):
+                path = path[len(prefix):]
+                break
+        if not path.startswith("/"):
+            path = "/" + path
         if not path.startswith("/api"):
             path = "/api" + path
         environ["PATH_INFO"] = path
