@@ -12,8 +12,13 @@ try:
     _original_wsgi_app = app.wsgi_app
     def _normalized_wsgi_app(environ, start_response):
         path = environ.get("PATH_INFO", "")
+        if path.startswith("/api/index.py"):
+            path = path.replace("/api/index.py", "/api", 1)
+        elif path.startswith("/api/index"):
+            path = path.replace("/api/index", "/api", 1)
         if not path.startswith("/api"):
-            environ["PATH_INFO"] = "/api" + path
+            path = "/api" + path
+        environ["PATH_INFO"] = path
         return _original_wsgi_app(environ, start_response)
     app.wsgi_app = _normalized_wsgi_app
 except Exception as e:
