@@ -12,15 +12,23 @@ try:
     _original_wsgi_app = app.wsgi_app
     def _normalized_wsgi_app(environ, start_response):
         path = environ.get("PATH_INFO", "")
+        # If Vercel rewrote PATH_INFO to the entrypoint file, recover the actual request path from RAW_URI or REQUEST_URI
+        if path in ("/api/index.py", "/api/index", "/index.py", ""):
+            raw = environ.get("RAW_URI") or environ.get("REQUEST_URI") or environ.get("HTTP_X_VERCEL_FORWARDED_FOR") or ""
+            if raw and raw.startswith("/"):
+                path = raw.split("?")[0]
+
         # Strip redundant serverless function file prefixes if present
         for prefix in ["/api/index.py", "/api/index", "/index.py"]:
             if path.startswith(prefix):
                 path = path[len(prefix):]
                 break
+
         if not path.startswith("/"):
             path = "/" + path
         if not path.startswith("/api"):
             path = "/api" + path
+
         environ["PATH_INFO"] = path
         return _original_wsgi_app(environ, start_response)
     app.wsgi_app = _normalized_wsgi_app

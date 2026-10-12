@@ -163,10 +163,28 @@ def create_app(config_class=Config):
         app.logger.error(f"Unhandled exception: {e}", exc_info=True)
         return jsonify({"error": "Server error", "details": str(e)}), 500
 
+    # Routing debug endpoint to verify serverless proxy headers
+    @app.route("/api/debug-routing")
+    @app.route("/debug-routing")
+    def debug_routing():
+        from flask import request
+        return jsonify({
+            "PATH_INFO": request.environ.get("PATH_INFO"),
+            "SCRIPT_NAME": request.environ.get("SCRIPT_NAME"),
+            "RAW_URI": request.environ.get("RAW_URI"),
+            "REQUEST_URI": request.environ.get("REQUEST_URI"),
+            "x-vercel-matched-path": request.environ.get("HTTP_X_VERCEL_MATCHED_PATH"),
+            "request_path": request.path,
+            "method": request.method,
+        })
+
     # Serve Vue Frontend SPA for local development
     @app.route("/", defaults={"path": ""})
     @app.route("/<path:path>")
     def serve_frontend(path):
+        # Never serve index.html for API routes!
+        if path.startswith("api/") or path == "api":
+            return jsonify({"error": "API route not found", "path": path}), 404
         dist_dir = os.path.join(os.path.dirname(__file__), "..", "frontend", "dist")
         if path and os.path.exists(os.path.join(dist_dir, path)):
             return send_from_directory(dist_dir, path)
