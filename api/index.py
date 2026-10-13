@@ -13,7 +13,7 @@ try:
     def _normalized_wsgi_app(environ, start_response):
         path = environ.get("PATH_INFO", "")
         # If Vercel rewrote PATH_INFO to the entrypoint file, recover the actual request path from RAW_URI or REQUEST_URI
-        if path in ("/api/index.py", "/api/index", "/index.py", ""):
+        if path in ("/api/index.py", "/api/index", "/index.py", "/api", ""):
             raw = environ.get("RAW_URI") or environ.get("REQUEST_URI") or environ.get("HTTP_X_VERCEL_FORWARDED_FOR") or ""
             if raw and raw.startswith("/"):
                 path = raw.split("?")[0]
