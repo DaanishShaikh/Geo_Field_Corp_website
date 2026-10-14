@@ -1,8 +1,6 @@
 {
-  "framework": null,
-  "buildCommand": "cd frontend && rm -rf node_modules && npm install --foreground-scripts && npm run build",
+  "buildCommand": "cd frontend && npm install && npm run build",
   "outputDirectory": "frontend/dist",
-  "installCommand": "pip install --break-system-packages -r requirements.txt",
   "headers": [
     {
       "source": "/(.*).html",
@@ -34,15 +32,7 @@
   ],
   "rewrites": [
     {
-      "source": "/api/(.*)",
-      "destination": "/api/index.py"
-    },
-    {
-      "source": "/api",
-      "destination": "/api/index.py"
-    },
-    {
-      "source": "/((?!api/).*)",
+      "source": "/(.*)",
       "destination": "/index.html"
     }
   ]

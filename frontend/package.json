@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "firebase": "^13.0.0",
     "html5-qrcode": "^2.3.8",
     "idb": "^8.0.3",
     "lucide-vue-next": "^1.0.0",
