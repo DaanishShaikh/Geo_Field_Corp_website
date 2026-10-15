@@ -331,8 +331,15 @@
                     ✏️ Edit
                   </button>
                 </div>
-                <!-- Row 2: Blacklist + Delete -->
-                <div class="flex items-center justify-end gap-1.5">
+                <!-- Row 2: Reset to Pending + Blacklist + Delete -->
+                <div class="flex items-center justify-end gap-1.5 flex-wrap">
+                  <button 
+                    @click="$emit('update-user-status', seller.id, 'pending')"
+                    title="Move back to Pending Onboarding Queue for Re-Approval"
+                    class="px-2 py-1 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 rounded-lg text-xs font-semibold border border-amber-500/30 transition"
+                  >
+                    ⏳ Reset to Pending
+                  </button>
                   <button 
                     @click="$emit('update-user-status', seller.id, seller.status === 'blacklisted' ? 'approved' : 'blacklisted')"
                     :class="seller.status === 'blacklisted' ? 'bg-emerald-600/20 text-emerald-300 border-emerald-500/30 hover:bg-emerald-600 hover:text-white' : 'bg-amber-600/20 text-amber-300 border-amber-500/30 hover:bg-amber-600 hover:text-white'"
@@ -697,8 +704,15 @@
                     ✉ Email
                   </a>
                 </div>
-                <!-- Row 2: Suspend/Unblock + Delete -->
-                <div class="flex items-center justify-end gap-1.5">
+                <!-- Row 2: Reset to Pending + Suspend/Unblock + Delete -->
+                <div class="flex items-center justify-end gap-1.5 flex-wrap">
+                  <button 
+                    @click="$emit('update-user-status', agent.id, 'pending')"
+                    title="Move back to Pending Onboarding Queue for Re-Approval"
+                    class="px-2 py-1 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 rounded-lg text-[10px] font-semibold border border-amber-500/30 transition"
+                  >
+                    ⏳ Reset to Pending
+                  </button>
                   <button 
                     @click="$emit('update-user-status', agent.id, agent.status === 'blacklisted' ? 'approved' : 'blacklisted')"
                     :class="agent.status === 'blacklisted' ? 'bg-emerald-600/20 text-emerald-300 border-emerald-500/30 hover:bg-emerald-600 hover:text-white' : 'bg-amber-600/20 text-amber-300 border-amber-500/30 hover:bg-amber-600 hover:text-white'"

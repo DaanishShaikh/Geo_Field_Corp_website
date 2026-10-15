@@ -145,19 +145,30 @@ export const api = {
           email: cleanEmail,
           name: cleanEmail.split("@")[0],
           role: "seller",
-          status: "approved",
+          status: "pending",
           created_at: new Date().toISOString()
         };
         await setDoc(doc(db, "users", cred.user.uid), profile);
       }
 
-      if (profile.status === "pending") {
-        await signOut(auth);
-        throw new Error("Your registration is pending approval by the compliance team.");
-      }
-      if (profile.status === "rejected" || profile.status === "blacklisted") {
-        await signOut(auth);
-        throw new Error("Account access has been revoked or blacklisted. Contact support.");
+      // Non-admin users must be approved by the Super Admin
+      if (profile.role !== "admin") {
+        if (profile.status === "pending") {
+          await signOut(auth);
+          throw new Error("Your account registration is currently pending Super Admin review. You will be able to log in once your account is approved.");
+        }
+        if (profile.status === "rejected") {
+          await signOut(auth);
+          throw new Error("Your registration application was declined. Please contact support.");
+        }
+        if (profile.status === "blacklisted" || profile.status === "suspended") {
+          await signOut(auth);
+          throw new Error("Account access has been revoked or blacklisted. Contact support.");
+        }
+        if (profile.status !== "approved") {
+          await signOut(auth);
+          throw new Error("Account access requires admin approval. Current status: " + profile.status);
+        }
       }
 
       await logAudit("USER_LOGIN", profile.name, `User ${profile.email} logged in successfully`);
@@ -184,7 +195,7 @@ export const api = {
         name: payload.name.trim(),
         role: role,
         phone: payload.phone?.trim() || "",
-        status: "approved", // Auto-approved for instant onboarding
+        status: "pending", // Strict Gate: Requires Super Admin approval
         created_at: new Date().toISOString()
       };
 
@@ -209,6 +220,7 @@ export const api = {
         };
       } else if (role === "agent") {
         userProfile.agent_profile = {
+          vehicle_no: payload.vehicle_no?.trim() || "MH-01-AB-1234",
           vehicle_number: payload.vehicle_no?.trim() || "MH-01-AB-1234",
           driving_license: "DL-VALIDATED",
           latitude: 19.0760,
@@ -217,10 +229,13 @@ export const api = {
       }
 
       await setDoc(doc(db, "users", uid), userProfile);
-      await logAudit("USER_REGISTER", userProfile.name, `New ${role} registered: ${cleanEmail}`);
+      await logAudit("USER_REGISTER", userProfile.name, `New ${role} registration pending approval: ${cleanEmail}`);
+
+      // Firebase client SDK auto-signs in the created user; sign them out so pending users cannot bypass approval!
+      await signOut(auth);
 
       return { 
-        message: "Registration successful. You can now sign in.", 
+        message: "Registration submitted successfully! Your account is pending Super Admin review. You will be able to log in once your account is approved.", 
         user: userProfile 
       };
     } catch (err) {
@@ -245,6 +260,10 @@ export const api = {
         }
         const profile = await getUserProfile(user.uid);
         if (profile) {
+          if (profile.role !== "admin" && profile.status !== "approved") {
+            await signOut(auth);
+            return resolve({ authenticated: false, reason: profile.status });
+          }
           resolve({ authenticated: true, user: profile });
         } else {
           resolve({ authenticated: false });
@@ -651,16 +670,25 @@ export const api = {
     let total_sellers = 0;
     let pending_sellers = 0;
     let active_agents = 0;
+    let pending_agents = 0;
+    let pending_approvals_count = 0;
     let total_volume = 0;
     let total_payout = 0;
 
     usersSnap.forEach((d) => {
       const u = d.data();
       if (u.role === "seller") {
-        total_sellers++;
-        if (u.status === "pending") pending_sellers++;
+        if (u.status === "approved") total_sellers++;
+        if (u.status === "pending") {
+          pending_sellers++;
+          pending_approvals_count++;
+        }
       } else if (u.role === "agent") {
-        active_agents++;
+        if (u.status === "approved") active_agents++;
+        if (u.status === "pending") {
+          pending_agents++;
+          pending_approvals_count++;
+        }
       }
     });
 
@@ -688,6 +716,8 @@ export const api = {
         total_sellers,
         pending_sellers,
         active_agents,
+        pending_agents,
+        pending_approvals_count,
         batches_count: batchesSnap.size
       },
       pending_users,
