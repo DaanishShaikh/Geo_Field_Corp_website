@@ -851,13 +851,20 @@ const editLocationForm = ref({
 });
 
 function handleTogglePickup(seller) {
-  const currentStatus = seller.seller_profile?.pickup_enabled !== false;
+  if (!seller.seller_profile) seller.seller_profile = {};
+  const currentStatus = seller.seller_profile.pickup_enabled !== false;
+  seller.seller_profile.pickup_enabled = !currentStatus;
   emit('update-seller-location', seller.id, {
     pickup_enabled: !currentStatus
   });
 }
 
 function handleUpdatePreference(sellerId, preference) {
+  const seller = props.approvedSellers.find(s => s.id === sellerId);
+  if (seller) {
+    if (!seller.seller_profile) seller.seller_profile = {};
+    seller.seller_profile.pickup_preference = preference;
+  }
   emit('update-seller-location', sellerId, {
     pickup_preference: preference
   });

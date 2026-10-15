@@ -473,11 +473,17 @@ export const api = {
     const user = auth.currentUser;
     if (!user) throw new Error("Authentication required");
     const ref = doc(db, "users", user.uid);
-    await updateDoc(ref, {
-      "seller_profile.latitude": payload.latitude,
-      "seller_profile.longitude": payload.longitude
-    });
-    return { message: "Location updated successfully" };
+    const updates = {};
+    for (const [key, val] of Object.entries(payload)) {
+      if (val !== undefined) {
+        updates[`seller_profile.${key}`] = val;
+      }
+    }
+    if (Object.keys(updates).length > 0) {
+      await updateDoc(ref, updates);
+    }
+    await logAudit("SELLER_LOCATION_UPDATE", user.email, "Updated own kitchen pickup settings");
+    return { message: "Location and profile updated successfully" };
   },
 
   // ----------------------------------------------------
@@ -818,11 +824,20 @@ export const api = {
 
   updateSellerLocation: async (seller_id, payload) => {
     const ref = doc(db, "users", seller_id);
-    await updateDoc(ref, {
-      "seller_profile.latitude": payload.latitude,
-      "seller_profile.longitude": payload.longitude
-    });
-    return { message: "Seller location updated" };
+    const updates = {};
+    for (const [key, val] of Object.entries(payload)) {
+      if (val !== undefined) {
+        updates[`seller_profile.${key}`] = val;
+      }
+    }
+    if (Object.keys(updates).length > 0) {
+      await updateDoc(ref, updates);
+    }
+    const actionDesc = payload.pickup_enabled !== undefined 
+      ? `Pickup ${payload.pickup_enabled ? 'enabled' : 'disabled'}` 
+      : (payload.pickup_preference ? `Preference set to ${payload.pickup_preference}` : 'Location/settings updated');
+    await logAudit("SELLER_UPDATE", "Admin", `${actionDesc} for seller ${seller_id}`);
+    return { message: `Seller settings updated (${actionDesc})` };
   },
 
   getBiodieselBatches: async () => {
