@@ -299,6 +299,61 @@ export const api = {
     const siteQrCode = `RUCO-SITE-${user.uid.slice(0, 8).toUpperCase()}`;
     const siteQrDataUrl = await generateQrDataUrl(siteQrCode);
 
+    // Dynamically resolve assigned agent from Firestore
+    let assigned_agent = null;
+    try {
+      const userSnap = await getDoc(doc(db, "users", user.uid));
+      const userData = userSnap.exists() ? userSnap.data() : null;
+
+      let targetAgentId = userData?.assigned_agent_id;
+      if (!targetAgentId) {
+        const activeReceipt = receipts.find(r => r.status === "created" && (r.agent_id || r.assigned_agent_id));
+        if (activeReceipt) {
+          targetAgentId = activeReceipt.agent_id || activeReceipt.assigned_agent_id;
+        }
+      }
+
+      if (targetAgentId) {
+        const agentSnap = await getDoc(doc(db, "users", targetAgentId));
+        if (agentSnap.exists()) {
+          const a = agentSnap.data();
+          assigned_agent = {
+            id: a.id || a.uid || agentSnap.id,
+            name: a.name || "Field Agent",
+            phone: a.phone || "Not provided",
+            vehicle_no: a.agent_profile?.vehicle_number || "Field Vehicle",
+            vehicle: a.agent_profile?.vehicle_number || "Field Vehicle",
+            email: a.email || "",
+            status: a.agent_profile?.status === "on_route" ? "En Route" : "Active Route",
+            stop_order: 1
+          };
+        }
+      } else {
+        const hasActiveRequest = receipts.some(r => r.status === "created");
+        if (hasActiveRequest) {
+          const agentsSnap = await getDocs(
+            query(collection(db, "users"), where("role", "==", "agent"), where("status", "==", "approved"))
+          );
+          if (!agentsSnap.empty) {
+            const a = agentsSnap.docs[0].data();
+            assigned_agent = {
+              id: a.id || a.uid || agentsSnap.docs[0].id,
+              name: a.name || "Field Agent",
+              phone: a.phone || "Not provided",
+              vehicle_no: a.agent_profile?.vehicle_number || "Field Vehicle",
+              vehicle: a.agent_profile?.vehicle_number || "Field Vehicle",
+              email: a.email || "",
+              status: "Scheduled",
+              stop_order: 1
+            };
+          }
+        }
+      }
+    } catch (agentErr) {
+      console.warn("Could not fetch assigned agent:", agentErr);
+      assigned_agent = null;
+    }
+
     return {
       stats: {
         total_volume,
@@ -313,16 +368,7 @@ export const api = {
           water_saved_liters: Math.round(total_volume * 1000)
         }
       },
-      assigned_agent: {
-        id: "AGT-001",
-        name: "Rahul Sharma (Lead Field Agent)",
-        phone: "+91 98765 43210",
-        vehicle_no: "MH-02-CD-4421",
-        vehicle: "MH-02-CD-4421",
-        email: "agent.rahul@geofield.com",
-        status: "En Route",
-        stop_order: 1
-      },
+      assigned_agent: assigned_agent,
       site_qr: {
         seller_id: user.uid,
         qr_code: siteQrCode,
