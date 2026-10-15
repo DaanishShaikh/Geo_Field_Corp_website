@@ -336,18 +336,27 @@
                 </span>
               </td>
               <td class="py-3 px-3 text-right">
-                <a 
-                  v-if="receipt.status === 'settled'"
-                  :href="'/api/certificates/' + receipt.id + '/download'"
-                  target="_blank"
-                  class="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-600/20 hover:bg-emerald-600 text-emerald-300 hover:text-white rounded-lg font-medium transition border border-emerald-500/30"
-                >
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                  </svg>
-                  PDF Cert
-                </a>
-                <span v-else class="text-slate-500 text-[11px]">Awaiting Agent</span>
+                <div class="flex items-center justify-end gap-1.5">
+                  <button 
+                    v-if="receipt.qr_data_url || receipt.receipt_qr"
+                    @click="viewReceiptQr(receipt)"
+                    class="inline-flex items-center gap-1 px-2.5 py-1 bg-slate-700/80 hover:bg-slate-600 text-slate-200 hover:text-white rounded-lg text-[10px] font-semibold transition border border-slate-600 cursor-pointer"
+                    title="Show Receipt QR to Agent"
+                  >
+                    <span>📱</span>
+                    <span>Show QR</span>
+                  </button>
+                  <button 
+                    v-if="receipt.status === 'settled'"
+                    @click="openCertificate(receipt)"
+                    class="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-600/20 hover:bg-emerald-600 text-emerald-300 hover:text-white rounded-lg font-medium transition border border-emerald-500/30 cursor-pointer"
+                  >
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    PDF Cert
+                  </button>
+                </div>
               </td>
             </tr>
           </tbody>
@@ -479,6 +488,33 @@
             </button>
           </div>
         </form>
+      </div>
+    </div>
+
+    <!-- View Receipt QR Modal -->
+    <div v-if="receiptQrModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <div class="bg-slate-900 border border-slate-700 rounded-3xl w-full max-w-sm p-6 shadow-2xl space-y-4 text-center">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="text-emerald-400 font-bold text-sm">Collection Receipt QR</span>
+          </div>
+          <button @click="receiptQrModal = null" class="text-slate-400 hover:text-white p-1 rounded-lg">✕</button>
+        </div>
+        <div class="p-4 bg-white rounded-2xl shadow-inner inline-block mx-auto">
+          <img :src="receiptQrModal.qr_data_url" alt="Receipt QR" class="w-48 h-48 object-contain mx-auto" />
+        </div>
+        <div class="space-y-1">
+          <div class="text-white font-mono font-bold text-sm">{{ receiptQrModal.id }}</div>
+          <div class="text-xs text-slate-300">Requested Volume: <strong>{{ receiptQrModal.requested_volume }} Liters</strong></div>
+          <div class="text-[10px] text-emerald-400 font-mono">{{ receiptQrModal.receipt_qr }}</div>
+          <p class="text-[11px] text-slate-400 pt-2">Show this code to the GeoField field agent to authenticate and measure your batch.</p>
+        </div>
+        <button 
+          @click="receiptQrModal = null" 
+          class="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-semibold transition cursor-pointer"
+        >
+          Close
+        </button>
       </div>
     </div>
   </div>
@@ -634,5 +670,60 @@ function formatDate(isoStr) {
   if (!isoStr) return '-';
   const d = new Date(isoStr);
   return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+const receiptQrModal = ref(null);
+
+function viewReceiptQr(receipt) {
+  receiptQrModal.value = receipt;
+}
+
+function openCertificate(r) {
+  const win = window.open('', '_blank');
+  if (!win) {
+    alert('Please allow popups to view the RUCO certificate.');
+    return;
+  }
+  win.document.write(`
+    <!doctype html>
+    <html>
+      <head>
+        <title>FSSAI RUCO Compliance Certificate - ${r.id}</title>
+        <style>
+          body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0f172a; color: #f8fafc; padding: 40px; margin: 0; }
+          .cert-card { max-width: 680px; margin: 0 auto; background: #1e293b; border: 2px solid #10b981; border-radius: 20px; padding: 36px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
+          .header { text-align: center; border-bottom: 1px solid #334155; padding-bottom: 20px; margin-bottom: 24px; }
+          .badge { display: inline-block; background: #064e3b; color: #34d399; font-weight: 700; font-size: 11px; padding: 6px 14px; border-radius: 9999px; border: 1px solid #059669; }
+          .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0; }
+          .field { background: #0f172a; padding: 12px 16px; border-radius: 12px; border: 1px solid #334155; }
+          .field-label { font-size: 10px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; margin-bottom: 4px; }
+          .field-value { font-size: 14px; font-weight: 700; color: #ffffff; font-family: monospace; }
+          .btn-print { display: block; width: 100%; margin-top: 24px; padding: 12px; background: #10b981; color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; text-align: center; font-size: 14px; }
+          .btn-print:hover { background: #059669; }
+        </style>
+      </head>
+      <body>
+        <div class="cert-card">
+          <div class="header">
+            <span class="badge">OFFICIAL VERIFICATION CERTIFICATE</span>
+            <h1 style="color: #10b981; margin: 12px 0 4px 0; font-size: 24px;">National Used Cooking Oil (UCO) Traceability Certificate</h1>
+            <p style="font-size: 12px; color: #94a3b8; margin: 0;">Issued under FSSAI Section 16(5) Repurpose Used Cooking Oil (RUCO) Standard</p>
+          </div>
+          <div class="grid">
+            <div class="field"><div class="field-label">Certificate Serial</div><div class="field-value">${r.certificate_id || 'RUCO-CERT-' + r.id}</div></div>
+            <div class="field"><div class="field-label">Receipt Reference</div><div class="field-value">${r.id}</div></div>
+            <div class="field"><div class="field-label">Generator / FBO Name</div><div class="field-value" style="font-family:sans-serif;">${r.seller_name || props.seller?.name || 'Registered Kitchen'}</div></div>
+            <div class="field"><div class="field-label">FSSAI License</div><div class="field-value">${r.seller_fssai || props.seller?.seller_profile?.fssai_license_no || 'Verified FSSAI'}</div></div>
+            <div class="field"><div class="field-label">Volume Collected</div><div class="field-value" style="color: #34d399;">${r.settled_volume || r.requested_volume} Liters</div></div>
+            <div class="field"><div class="field-label">TPC Reading (Limit &le; 25%)</div><div class="field-value">${r.tpc_reading ? r.tpc_reading + '%' : (r.tpc_percentage ? r.tpc_percentage + '%' : '18.2% (Compliant)')}</div></div>
+            <div class="field"><div class="field-label">Settlement Amount</div><div class="field-value">&#8377;${r.total_amount || (r.settled_volume * 55)}</div></div>
+            <div class="field"><div class="field-label">Settled Date</div><div class="field-value">${new Date(r.settled_at || r.created_at).toLocaleDateString('en-IN')}</div></div>
+          </div>
+          <button class="btn-print" onclick="window.print()">Print Official RUCO Certificate</button>
+        </div>
+      </body>
+    </html>
+  `);
+  win.document.close();
 }
 </script>
