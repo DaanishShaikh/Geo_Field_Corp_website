@@ -656,10 +656,10 @@ export const api = {
 
   updateAgentGps: async (latitude, longitude) => {
     const user = auth.currentUser;
-    if (user) {
+    if (user && latitude != null && longitude != null && !isNaN(latitude) && !isNaN(longitude)) {
       await updateDoc(doc(db, "users", user.uid), {
-        "agent_profile.latitude": latitude,
-        "agent_profile.longitude": longitude
+        "agent_profile.latitude": Number(latitude),
+        "agent_profile.longitude": Number(longitude)
       });
     }
     return { message: "GPS position updated" };
