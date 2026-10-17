@@ -883,24 +883,46 @@ export const api = {
     // Generate an instant print-ready RUCO certificate view in browser
     return `javascript:(function(){
       var win = window.open('', '_blank');
-      win.document.write('<html><head><title>RUCO Compliance Certificate - ${receiptId}</title>' +
-        '<style>body{font-family:sans-serif;padding:40px;background:#0f172a;color:#f8fafc;}' +
-        '.box{max-width:700px;margin:auto;background:#1e293b;padding:30px;border-radius:16px;border:1px solid #334155;}' +
-        'h1{color:#10b981;font-size:20px;}hr{border:0;border-top:1px solid #334155;margin:20px 0;}' +
-        'table{width:100%;border-collapse:collapse;margin-top:15px;}' +
-        'td{padding:8px;border-bottom:1px solid #334155;font-size:13px;}' +
-        '.badge{display:inline-block;padding:4px 8px;background:#065f46;color:#6ee7b7;border-radius:6px;font-weight:bold;}' +
+      if (!win) return;
+      var certRef = 'RUCO-GEO-2025-' + String('${receiptId}').replace(/^RCP-/, '');
+      win.document.write('<!doctype html><html><head><title>GeoField Corp | UCO Bio-Recycling & RUCO Aggregator</title>' +
+        '<meta charset=\"utf-8\" />' +
+        '<link rel=\"preconnect\" href=\"https://fonts.googleapis.com\" />' +
+        '<link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin />' +
+        '<link href=\"https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap\" rel=\"stylesheet\" />' +
+        '<style>' +
+        '@page { size: A4 portrait; margin: 20mm; } * { box-sizing: border-box; }' +
+        'body { font-family: \"Plus Jakarta Sans\", system-ui, sans-serif; margin: 0; padding: 30px; background: #fff; color: #0f172a; -webkit-print-color-adjust: exact; print-color-adjust: exact; }' +
+        '.wrapper { max-width: 680px; margin: 0 auto; border: 1px solid #cbd5e1; border-radius: 20px; padding: 32px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }' +
+        '.top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; }' +
+        '.badge { background: #fffbeb; border: 1px solid #fde68a; color: #b45309; padding: 4px 14px; border-radius: 9999px; font-size: 11px; font-weight: 700; text-transform: uppercase; }' +
+        '.title-area { text-align: center; margin: 20px 0 24px 0; }' +
+        '.cert-title { font-size: 19px; font-weight: 800; color: #065f46; letter-spacing: 0.05em; text-transform: uppercase; margin: 0; }' +
+        '.cert-desc { font-size: 12px; color: #475569; max-width: 500px; margin: 6px auto 0 auto; line-height: 1.5; }' +
+        '.fbo-box { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 16px; margin-bottom: 16px; }' +
+        '.label { font-size: 10px; font-weight: 700; text-transform: uppercase; color: #64748b; letter-spacing: 0.05em; margin-bottom: 4px; }' +
+        '.fbo-name { font-size: 15px; font-weight: 800; color: #0f172a; margin: 0; }' +
+        '.fssai-box { font-family: \"JetBrains Mono\", monospace; font-size: 13px; font-weight: 700; background: #fff; border: 1px solid #cbd5e1; padding: 4px 10px; border-radius: 8px; display: inline-block; }' +
+        '.metrics { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 16px; }' +
+        '.metric-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 14px; }' +
+        '.metric-val { font-size: 16px; font-weight: 800; color: #0f172a; margin-top: 4px; }' +
+        '.collector { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-top: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; font-size: 12px; margin-bottom: 16px; }' +
+        '.footer { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding-top: 8px; }' +
         '</style></head><body>' +
-        '<div class=\"box\"><h1>🌱 FSSAI RUCO Compliance Certificate</h1>' +
-        '<p>National Used Cooking Oil Traceability & Safe Disposal Verification</p><hr>' +
-        '<table>' +
-        '<tr><td><b>Certificate ID:</b></td><td>RUCO-CERT-${receiptId}</td></tr>' +
-        '<tr><td><b>Receipt Reference:</b></td><td>${receiptId}</td></tr>' +
-        '<tr><td><b>Regulatory Standard:</b></td><td>FSSAI Section 16(5) RUCO Notification</td></tr>' +
-        '<tr><td><b>Compliance Status:</b></td><td><span class=\"badge\">VERIFIED & CERTIFIED</span></td></tr>' +
-        '<tr><td><b>Issued At:</b></td><td>' + new Date().toLocaleDateString('en-IN') + '</td></tr>' +
-        '</table><br><button onclick=\"window.print()\" style=\"padding:10px 20px;background:#10b981;color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:bold;\">Print Official Certificate</button>' +
-        '</div></body></html>');
+        '<div class=\"wrapper\">' +
+        '<div class=\"top\"><div><strong style=\"font-size:18px;\">🌱 GeoField Corp</strong><div style=\"font-size:11px;color:#64748b;\">Authorized UCO Bio-Aggregator Partner</div></div>' +
+        '<div style=\"text-align:right;\"><span class=\"badge\">🎖️ RUCO Compliant</span><div style=\"font-family:monospace;font-size:11px;color:#64748b;margin-top:4px;\">Ref: ' + certRef + '</div></div></div>' +
+        '<div class=\"title-area\"><h1 class=\"cert-title\">Certificate of Responsible Disposal</h1><p class=\"cert-desc\">This document certifies that Used Cooking Oil was legally collected for Biofuel conversion in compliance with FSSAI regulations.</p></div>' +
+        '<div class=\"fbo-box\"><div><div class=\"label\">Food Business Operator (FBO)</div><div class=\"fbo-name\">🏢 Partner Kitchen</div><div style=\"font-family:monospace;font-size:11px;color:#047857;margin-top:4px;\">Unique Partner ID: GEO-9082</div></div>' +
+        '<div style=\"text-align:right;\"><div class=\"label\">FSSAI License No.</div><div class=\"fssai-box\">10020011003456</div></div></div>' +
+        '<div class=\"metrics\">' +
+        '<div class=\"metric-box\"><div style=\"font-size:11px;color:#64748b;\">💧 Volume Handled</div><div class=\"metric-val\">320 Liters</div></div>' +
+        '<div class=\"metric-box\"><div style=\"font-size:11px;color:#64748b;\">📅 Pickup Date</div><div class=\"metric-val\">' + new Date().toLocaleDateString('en-GB', {day:'numeric', month:'short', year:'numeric'}) + '</div></div>' +
+        '<div class=\"metric-box\"><div style=\"font-size:11px;color:#64748b;\">✨ Payout Settled</div><div class=\"metric-val\" style=\"color:#059669;\">₹17,600</div></div></div>' +
+        '<div class=\"collector\"><div>Collector: <b>Rajesh Kumar (GeoField Bio-Logistics)</b></div><div style=\"font-family:monospace;font-size:11px;background:#f1f5f9;padding:2px 8px;border-radius:6px;\">MH-02-EV-4412</div></div>' +
+        '<div class=\"footer\"><div><div style=\"font-size:12px;font-weight:700;\">🛡️ Government RUCO Traceable</div><div style=\"font-size:10px;color:#64748b;\">Chain of custody verified by GeoField Corp</div><div style=\"font-family:monospace;font-size:10px;color:#94a3b8;\">support@geofieldcorp.com</div></div>' +
+        '<div style=\"text-align:right;\"><div class=\"label\">Authorized Signatory</div><div style=\"font-size:13px;font-weight:700;font-style:italic;\">GeoField Compliance Dept.</div><div style=\"font-family:monospace;font-size:10px;color:#94a3b8;\">office@geofieldcorp.com</div></div></div>' +
+        '</div><script>setTimeout(function(){window.print();}, 300);<\/script></body></html>');
       win.document.close();
     })()`;
   }

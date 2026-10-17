@@ -517,11 +517,18 @@
         </button>
       </div>
     </div>
+    <!-- FSSAI RUCO Compliance Certificate Modal -->
+    <CertificateModal 
+      v-if="selectedCertificate" 
+      :receipt="selectedCertificate" 
+      @close="selectedCertificate = null" 
+    />
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
+import CertificateModal from './CertificateModal.vue';
 
 const props = defineProps({
   seller: Object,
@@ -678,52 +685,14 @@ function viewReceiptQr(receipt) {
   receiptQrModal.value = receipt;
 }
 
+const selectedCertificate = ref(null);
+
 function openCertificate(r) {
-  const win = window.open('', '_blank');
-  if (!win) {
-    alert('Please allow popups to view the RUCO certificate.');
-    return;
-  }
-  win.document.write(`
-    <!doctype html>
-    <html>
-      <head>
-        <title>FSSAI RUCO Compliance Certificate - ${r.id}</title>
-        <style>
-          body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0f172a; color: #f8fafc; padding: 40px; margin: 0; }
-          .cert-card { max-width: 680px; margin: 0 auto; background: #1e293b; border: 2px solid #10b981; border-radius: 20px; padding: 36px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
-          .header { text-align: center; border-bottom: 1px solid #334155; padding-bottom: 20px; margin-bottom: 24px; }
-          .badge { display: inline-block; background: #064e3b; color: #34d399; font-weight: 700; font-size: 11px; padding: 6px 14px; border-radius: 9999px; border: 1px solid #059669; }
-          .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0; }
-          .field { background: #0f172a; padding: 12px 16px; border-radius: 12px; border: 1px solid #334155; }
-          .field-label { font-size: 10px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; margin-bottom: 4px; }
-          .field-value { font-size: 14px; font-weight: 700; color: #ffffff; font-family: monospace; }
-          .btn-print { display: block; width: 100%; margin-top: 24px; padding: 12px; background: #10b981; color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; text-align: center; font-size: 14px; }
-          .btn-print:hover { background: #059669; }
-        </style>
-      </head>
-      <body>
-        <div class="cert-card">
-          <div class="header">
-            <span class="badge">OFFICIAL VERIFICATION CERTIFICATE</span>
-            <h1 style="color: #10b981; margin: 12px 0 4px 0; font-size: 24px;">National Used Cooking Oil (UCO) Traceability Certificate</h1>
-            <p style="font-size: 12px; color: #94a3b8; margin: 0;">Issued under FSSAI Section 16(5) Repurpose Used Cooking Oil (RUCO) Standard</p>
-          </div>
-          <div class="grid">
-            <div class="field"><div class="field-label">Certificate Serial</div><div class="field-value">${r.certificate_id || 'RUCO-CERT-' + r.id}</div></div>
-            <div class="field"><div class="field-label">Receipt Reference</div><div class="field-value">${r.id}</div></div>
-            <div class="field"><div class="field-label">Generator / FBO Name</div><div class="field-value" style="font-family:sans-serif;">${r.seller_name || props.seller?.name || 'Registered Kitchen'}</div></div>
-            <div class="field"><div class="field-label">FSSAI License</div><div class="field-value">${r.seller_fssai || props.seller?.seller_profile?.fssai_license_no || 'Verified FSSAI'}</div></div>
-            <div class="field"><div class="field-label">Volume Collected</div><div class="field-value" style="color: #34d399;">${r.settled_volume || r.requested_volume} Liters</div></div>
-            <div class="field"><div class="field-label">TPC Reading (Limit &le; 25%)</div><div class="field-value">${r.tpc_reading ? r.tpc_reading + '%' : (r.tpc_percentage ? r.tpc_percentage + '%' : '18.2% (Compliant)')}</div></div>
-            <div class="field"><div class="field-label">Settlement Amount</div><div class="field-value">&#8377;${r.total_amount || (r.settled_volume * 55)}</div></div>
-            <div class="field"><div class="field-label">Settled Date</div><div class="field-value">${new Date(r.settled_at || r.created_at).toLocaleDateString('en-IN')}</div></div>
-          </div>
-          <button class="btn-print" onclick="window.print()">Print Official RUCO Certificate</button>
-        </div>
-      </body>
-    </html>
-  `);
-  win.document.close();
+  selectedCertificate.value = {
+    ...r,
+    seller_name: r.seller_name || props.seller?.name,
+    seller_id: r.seller_id || props.seller?.id,
+    seller_fssai: r.seller_fssai || props.seller?.seller_profile?.fssai_license_no
+  };
 }
 </script>
