@@ -1,7 +1,8 @@
 <template>
-  <div class="min-h-screen bg-slate-900 text-slate-100 flex flex-col selection:bg-emerald-500 selection:text-white">
-    <!-- Top Navbar -->
+  <div class="min-h-screen bg-obsidian text-slate-100 flex flex-col selection:bg-emerald-500 selection:text-white">
+    <!-- Top Navbar for Authenticated Portal -->
     <Navbar 
+      v-if="currentUser"
       :user="currentUser" 
       :is-online="isOnline" 
       :offline-count="offlineQueue.length"
