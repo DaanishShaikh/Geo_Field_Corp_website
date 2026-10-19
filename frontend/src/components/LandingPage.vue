@@ -3,6 +3,14 @@
     <!-- Grain Noise Overlay -->
     <div class="grain-overlay" aria-hidden="true"></div>
 
+    <!-- Reading Scroll Progress Bar -->
+    <div class="fixed top-0 inset-x-0 h-[3px] z-50 pointer-events-none bg-transparent">
+      <div 
+        class="h-full bg-gradient-to-r from-bio via-limeglow to-biodark transition-all duration-75 ease-out shadow-[0_0_12px_rgba(34,197,94,0.9)]"
+        :style="{ width: `${scrollProgress * 100}%` }"
+      ></div>
+    </div>
+
     <!-- ========================================================================= -->
     <!-- 1. NAVIGATION BAR                                                         -->
     <!-- ========================================================================= -->
@@ -148,7 +156,7 @@
 
       <div class="relative z-10 mx-auto grid w-full max-w-7xl items-center gap-14 px-5 sm:px-8 lg:grid-cols-12 lg:gap-6">
         <!-- Hero Left Copy Column -->
-        <div class="lg:col-span-7">
+        <div class="lg:col-span-7 transition-all duration-100 ease-out" :style="heroCopyStyle">
           <!-- Eyebrow Badge -->
           <div
             data-testid="hero-eyebrow"
@@ -338,14 +346,15 @@
       ></div>
       <span
         aria-hidden="true"
-        class="text-outline-amber pointer-events-none absolute -top-6 right-0 select-none font-display text-[22vw] font-extrabold leading-none tracking-tighter opacity-60 lg:text-[16rem]"
+        class="text-outline-amber pointer-events-none absolute -top-6 right-0 select-none font-display text-[22vw] font-extrabold leading-none tracking-tighter opacity-60 lg:text-[16rem] transition-transform duration-100 ease-out will-change-transform"
+        :style="toxicWatermarkStyle"
       >
         TOXIC
       </span>
 
       <div class="relative z-10 mx-auto max-w-7xl px-5 sm:px-8">
         <!-- Chapter Tag -->
-        <div class="mb-6 flex items-center gap-4" data-testid="chapter-01">
+        <div class="mb-6 flex items-center gap-4 scroll-reveal" data-testid="chapter-01">
           <span class="font-mono text-xs font-bold tracking-[0.3em] text-bio">01</span>
           <span class="h-px w-12 bg-bio/40"></span>
           <span class="font-mono text-xs uppercase tracking-[0.3em] text-slate-400">The Threat</span>
@@ -356,14 +365,14 @@
           <div class="lg:col-span-7">
             <h2
               data-testid="threat-headline"
-              class="font-display text-3xl font-bold leading-tight tracking-tight text-slate-50 sm:text-4xl lg:text-5xl"
+              class="font-display text-3xl font-bold leading-tight tracking-tight text-slate-50 sm:text-4xl lg:text-5xl scroll-reveal delay-100"
             >
               The <span class="text-hazard">60%</span> Crisis
               <br />
               in Your Kitchen.
             </h2>
 
-            <p class="mt-6 max-w-xl text-base leading-relaxed text-slate-400">
+            <p class="mt-6 max-w-xl text-base leading-relaxed text-slate-400 scroll-reveal delay-150">
               Shockingly, nearly 60% of all Used Cooking Oil generated in India finds
               its way back into the food stream — resold by informal vendors, reheated,
               and returned to the plate. Every reheat multiplies toxic Total Polar
@@ -371,7 +380,7 @@
             </p>
 
             <div class="mt-14 grid gap-10 sm:grid-cols-2">
-              <div data-testid="stat-uco-return" class="border-l-2 border-hazard/60 pl-6">
+              <div data-testid="stat-uco-return" class="border-l-2 border-hazard/60 pl-6 scroll-reveal delay-200">
                 <div class="font-display text-6xl font-extrabold tracking-tight text-hazard sm:text-7xl">
                   {{ animatedUcoReturn }}%
                 </div>
@@ -384,7 +393,7 @@
                 </p>
               </div>
 
-              <div data-testid="stat-tpc-limit" class="border-l-2 border-toxic/60 pl-6">
+              <div data-testid="stat-tpc-limit" class="border-l-2 border-toxic/60 pl-6 scroll-reveal delay-300">
                 <div class="font-display text-6xl font-extrabold tracking-tight text-toxic sm:text-7xl">
                   {{ animatedTpcLimit }}%
                 </div>
@@ -400,7 +409,10 @@
 
           <!-- Right Column -->
           <div class="lg:col-span-5">
-            <div class="relative overflow-hidden rounded-[2rem] border border-toxic/20">
+            <div 
+              class="relative overflow-hidden rounded-[2rem] border border-toxic/20 scroll-reveal-scale delay-200 transition-transform duration-200 ease-out will-change-transform"
+              :style="crisisBurnerStyle"
+            >
               <img
                 src="https://images.unsplash.com/photo-1777823703795-050c8384cdae?crop=entropy&cs=srgb&fm=jpg&q=85&w=1200"
                 alt="Burner flame reheating cooking oil"
@@ -425,7 +437,7 @@
                 v-for="(h, i) in hazards"
                 :key="h.title"
                 :data-testid="`hazard-${i}`"
-                class="group h-full rounded-2xl border border-slate-800 bg-moss/60 p-5 transition-colors duration-300 hover:border-hazard/40"
+                :class="`group h-full rounded-2xl border border-slate-800 bg-moss/60 p-5 transition-all duration-300 hover:border-hazard/40 hover:-translate-y-1.5 scroll-reveal delay-${(i + 1) * 100}`"
               >
                 <component
                   :is="h.icon"
@@ -446,19 +458,21 @@
     <!-- ========================================================================= -->
     <section
       id="process"
+      ref="processSectionRef"
       data-testid="solution-section"
       class="relative scroll-mt-16 overflow-hidden rounded-t-[2.5rem] bg-paper py-28 text-ink sm:rounded-t-[3.5rem] sm:py-36"
     >
       <span
         aria-hidden="true"
-        class="pointer-events-none absolute -bottom-10 left-0 select-none font-display text-[20vw] font-extrabold leading-none tracking-tighter text-ink/[0.04] lg:text-[15rem]"
+        class="pointer-events-none absolute -bottom-10 left-0 select-none font-display text-[20vw] font-extrabold leading-none tracking-tighter text-ink/[0.04] lg:text-[15rem] transition-transform duration-100 ease-out will-change-transform"
+        :style="processWatermarkStyle"
       >
         SCAN &amp; DONE
       </span>
 
       <div class="relative z-10 mx-auto max-w-7xl px-5 sm:px-8">
         <!-- Chapter Tag -->
-        <div class="mb-6 flex items-center gap-4" data-testid="chapter-02">
+        <div class="mb-6 flex items-center gap-4 scroll-reveal" data-testid="chapter-02">
           <span class="font-mono text-xs font-bold tracking-[0.3em] text-biodark">02</span>
           <span class="h-px w-12 bg-ink/30"></span>
           <span class="font-mono text-xs uppercase tracking-[0.3em] text-ink/60">The Fix</span>
@@ -468,7 +482,7 @@
           <div>
             <h2
               data-testid="solution-headline"
-              class="max-w-2xl font-display text-3xl font-bold leading-tight tracking-tight sm:text-4xl lg:text-5xl"
+              class="max-w-2xl font-display text-3xl font-bold leading-tight tracking-tight sm:text-4xl lg:text-5xl scroll-reveal delay-100"
             >
               Frictionless Disposal.
               <br />
@@ -476,7 +490,7 @@
             </h2>
           </div>
           <div>
-            <p class="max-w-sm text-sm leading-relaxed text-ink/60">
+            <p class="max-w-sm text-sm leading-relaxed text-ink/60 scroll-reveal delay-150">
               Three steps between your kitchen and full FSSAI compliance. No calls, no
               paperwork, no waiting on informal collectors.
             </p>
@@ -487,22 +501,27 @@
         <div class="mt-20">
           <div class="relative mb-14 hidden h-16 items-center lg:flex" data-testid="process-track">
             <div class="absolute inset-x-10 top-1/2 h-px -translate-y-1/2 bg-ink/15"></div>
-            <div class="absolute inset-x-10 top-1/2 h-[2px] -translate-y-1/2 origin-left bg-gradient-to-r from-biodark to-bio w-full"></div>
+            <!-- Dynamic Filled Pipeline that advances with truck -->
+            <div 
+              class="absolute left-10 top-1/2 h-[3px] -translate-y-1/2 origin-left bg-gradient-to-r from-biodark via-bio to-limeglow transition-all duration-300 ease-out"
+              :style="{ width: `calc(${processTruckLeft} - 2.5rem)` }"
+            ></div>
             
             <span
-              v-for="pos in ['8%', '50%', '92%']"
+              v-for="(pos, idx) in ['8%', '50%', '92%']"
               :key="pos"
-              class="absolute top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-biodark bg-paper"
+              class="absolute top-1/2 h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 transition-all duration-500"
+              :class="activeProcessStep >= idx ? 'border-biodark bg-biodark scale-125 shadow-[0_0_12px_rgba(16,185,129,0.7)]' : 'border-ink/20 bg-paper'"
               :style="{ left: pos }"
             ></span>
 
             <div
               data-testid="process-van"
-              class="absolute top-1/2 z-10 -translate-y-1/2 transition-all duration-700 ease-out"
+              class="absolute top-1/2 z-10 -translate-y-1/2 transition-all duration-300 ease-out will-change-transform"
               :style="{ left: processTruckLeft }"
             >
-              <span class="grid h-14 w-14 -translate-x-1/2 place-items-center rounded-full bg-bio text-emerald-950 shadow-[0_0_35px_rgba(34,197,94,0.5)]">
-                <Truck :size="24" />
+              <span class="grid h-14 w-14 -translate-x-1/2 place-items-center rounded-full bg-bio text-emerald-950 shadow-[0_0_35px_rgba(34,197,94,0.6)] ring-4 ring-bio/20">
+                <Truck :size="24" class="transition-transform duration-300 hover:scale-110" />
               </span>
             </div>
           </div>
@@ -513,14 +532,31 @@
               v-for="(s, i) in steps"
               :key="s.num"
               :data-testid="`process-step-${i + 1}`"
-              @mouseenter="processActiveStep = i"
-              class="group relative h-full overflow-hidden rounded-[1.75rem] border border-ink/10 bg-white/60 p-8 transition-all duration-500 hover:-translate-y-2 hover:border-biodark/40 hover:shadow-[0_30px_60px_-25px_rgba(16,185,129,0.35)]"
+              @mouseenter="manualHoverStep = i"
+              @mouseleave="manualHoverStep = null"
+              :class="[
+                'group relative h-full overflow-hidden rounded-[1.75rem] border p-8 transition-all duration-500 hover:-translate-y-2 cursor-pointer scroll-reveal-scale',
+                `delay-${(i + 1) * 150}`,
+                activeProcessStep === i 
+                  ? 'border-biodark bg-white shadow-[0_30px_60px_-20px_rgba(16,185,129,0.35)] scale-[1.02]' 
+                  : 'border-ink/10 bg-white/60 hover:border-biodark/40 hover:shadow-xl'
+              ]"
             >
               <div class="flex items-start justify-between">
-                <span class="grid h-14 w-14 place-items-center rounded-2xl bg-biodark/10 text-biodark transition-all duration-500 group-hover:bg-bio group-hover:text-emerald-950">
+                <span 
+                  :class="[
+                    'grid h-14 w-14 place-items-center rounded-2xl transition-all duration-500',
+                    activeProcessStep === i ? 'bg-bio text-emerald-950 scale-110 shadow-lg' : 'bg-biodark/10 text-biodark group-hover:bg-bio group-hover:text-emerald-950'
+                  ]"
+                >
                   <component :is="s.icon" :size="26" />
                 </span>
-                <span class="font-mono text-5xl font-bold text-ink/10 transition-colors duration-500 group-hover:text-biodark/25">
+                <span 
+                  :class="[
+                    'font-mono text-5xl font-bold transition-colors duration-500',
+                    activeProcessStep === i ? 'text-biodark/40' : 'text-ink/10 group-hover:text-biodark/25'
+                  ]"
+                >
                   {{ s.num }}
                 </span>
               </div>
@@ -528,11 +564,16 @@
                 {{ s.title }}
               </h3>
               <p class="mt-3 text-sm leading-relaxed text-ink/60">{{ s.desc }}</p>
-              <span class="mt-6 block h-1 w-10 rounded-full bg-biodark/30 transition-all duration-500 group-hover:w-full group-hover:bg-bio"></span>
+              <span 
+                :class="[
+                  'mt-6 block h-1 rounded-full transition-all duration-500',
+                  activeProcessStep === i ? 'w-full bg-bio' : 'w-10 bg-biodark/30 group-hover:w-full group-hover:bg-bio'
+                ]"
+              ></span>
             </div>
           </div>
 
-          <div class="mt-12 flex items-center justify-center gap-3 font-mono text-[10px] uppercase tracking-[0.3em] text-ink/50">
+          <div class="mt-12 flex items-center justify-center gap-3 font-mono text-[10px] uppercase tracking-[0.3em] text-ink/50 scroll-reveal delay-300">
             <ArrowDown :size="13" class="text-biodark" />
             Then watch what your oil becomes
           </div>
@@ -545,6 +586,7 @@
     <!-- ========================================================================= -->
     <section
       id="impact"
+      ref="impactSectionRef"
       data-testid="impact-section"
       class="relative scroll-mt-20 overflow-hidden py-28 sm:py-36"
     >
@@ -554,14 +596,15 @@
       ></div>
       <span
         aria-hidden="true"
-        class="text-outline pointer-events-none absolute -top-8 left-0 select-none font-display text-[22vw] font-extrabold leading-none tracking-tighter lg:text-[16rem]"
+        class="text-outline pointer-events-none absolute -top-8 left-0 select-none font-display text-[22vw] font-extrabold leading-none tracking-tighter lg:text-[16rem] transition-transform duration-100 ease-out will-change-transform"
+        :style="impactWatermarkStyle"
       >
         GREEN
       </span>
 
       <div class="relative z-10 mx-auto max-w-7xl px-5 sm:px-8">
         <!-- Chapter Tag -->
-        <div class="mb-6 flex items-center gap-4" data-testid="chapter-03">
+        <div class="mb-6 flex items-center gap-4 scroll-reveal" data-testid="chapter-03">
           <span class="font-mono text-xs font-bold tracking-[0.3em] text-bio">03</span>
           <span class="h-px w-12 bg-bio/40"></span>
           <span class="font-mono text-xs uppercase tracking-[0.3em] text-slate-400">The Reward</span>
@@ -569,7 +612,7 @@
 
         <div class="grid items-center gap-14 lg:grid-cols-12">
           <!-- Left Column -->
-          <div class="lg:col-span-5">
+          <div class="lg:col-span-5 scroll-reveal-left delay-100">
             <h2
               data-testid="impact-headline"
               class="font-display text-3xl font-bold leading-tight tracking-tight text-slate-50 sm:text-4xl lg:text-5xl"
@@ -594,10 +637,11 @@
           </div>
 
           <!-- Right Column: Interactive Impact Console -->
-          <div class="lg:col-span-7">
+          <div class="lg:col-span-7 scroll-reveal-right delay-200">
             <div
               data-testid="impact-dashboard"
-              class="glass-panel relative overflow-hidden rounded-[2rem] p-6 shadow-[0_50px_100px_-30px_rgba(0,0,0,0.8)] sm:p-9 transition-transform duration-500 hover:-translate-y-2"
+              class="glass-panel relative overflow-hidden rounded-[2rem] p-6 shadow-[0_50px_100px_-30px_rgba(0,0,0,0.8)] sm:p-9 transition-transform duration-300 hover:-translate-y-2 will-change-transform"
+              :style="impactConsoleStyle"
             >
               <div class="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-bio/15 blur-3xl"></div>
 
@@ -622,10 +666,10 @@
               <!-- 4 Metrics Grid -->
               <div class="mt-7 grid gap-4 sm:grid-cols-2">
                 <div
-                  v-for="m in impactMetrics"
+                  v-for="(m, i) in impactMetrics"
                   :key="m.label"
                   :data-testid="m.testId"
-                  class="rounded-2xl border border-bio/10 bg-obsidian/50 p-5 hover:border-bio/30 transition-colors"
+                  :class="`rounded-2xl border border-bio/10 bg-obsidian/50 p-5 hover:border-bio/30 transition-all duration-300 hover:-translate-y-1 scroll-reveal delay-${(i + 1) * 100}`"
                 >
                   <div class="flex items-center justify-between">
                     <component :is="m.icon" :size="19" class="text-bio" />
@@ -644,7 +688,7 @@
               </div>
 
               <!-- Velocity Chart -->
-              <div class="mt-7 rounded-2xl border border-bio/10 bg-obsidian/50 p-5" data-testid="impact-chart">
+              <div class="mt-7 rounded-2xl border border-bio/10 bg-obsidian/50 p-5 scroll-reveal delay-300" data-testid="impact-chart">
                 <div class="mb-3 flex items-center justify-between font-mono text-[9px] uppercase tracking-[0.2em] text-slate-500">
                   <span>Collection Velocity — 12 Weeks</span>
                   <span class="text-bio font-bold">+214%</span>
@@ -666,6 +710,7 @@
                     stroke="#22C55E"
                     stroke-width="2.5"
                     stroke-linecap="round"
+                    class="chart-path-animated"
                   />
                 </svg>
               </div>
@@ -680,15 +725,17 @@
     <!-- ========================================================================= -->
     <section
       id="register"
+      ref="ctaSectionRef"
       data-testid="final-cta-section"
       class="relative scroll-mt-20 overflow-hidden py-32 sm:py-44"
     >
-      <div class="absolute inset-0">
+      <div class="absolute inset-0 overflow-hidden">
         <img
           src="https://images.unsplash.com/photo-1749983055056-dddeb9dad995?crop=entropy&cs=srgb&fm=jpg&q=85&w=1600"
           alt="Wind turbine generating green power"
           aria-hidden="true"
-          class="h-full w-full object-cover opacity-25"
+          class="h-full w-full object-cover opacity-25 transition-transform duration-200 ease-out will-change-transform"
+          :style="ctaBgStyle"
           loading="lazy"
         />
         <div class="absolute inset-0 bg-gradient-to-b from-obsidian via-obsidian/80 to-obsidian"></div>
@@ -699,13 +746,13 @@
       </div>
 
       <div class="relative z-10 mx-auto max-w-5xl px-5 text-center sm:px-8">
-        <p class="font-mono text-[11px] uppercase tracking-[0.35em] text-bio" data-testid="final-cta-eyebrow">
+        <p class="font-mono text-[11px] uppercase tracking-[0.35em] text-bio scroll-reveal" data-testid="final-cta-eyebrow">
           04 — Join the Network
         </p>
 
         <h2
           data-testid="final-cta-headline"
-          class="mt-8 font-display text-4xl font-extrabold leading-[1.05] tracking-tight text-slate-50 sm:text-5xl lg:text-6xl"
+          class="mt-8 font-display text-4xl font-extrabold leading-[1.05] tracking-tight text-slate-50 sm:text-5xl lg:text-6xl scroll-reveal delay-150"
         >
           <span class="block">Ready to clean up</span>
           <span class="block">your kitchen — and</span>
@@ -714,21 +761,21 @@
           </span>
         </h2>
 
-        <p class="mx-auto mt-7 max-w-lg text-base leading-relaxed text-slate-400 sm:text-lg">
+        <p class="mx-auto mt-7 max-w-lg text-base leading-relaxed text-slate-400 sm:text-lg scroll-reveal delay-200">
           Registration takes 60 seconds. Our agents take care of the rest.
         </p>
 
         <button
           data-testid="final-cta-register-btn"
           @click="$emit('open-register')"
-          class="group relative mx-auto mt-12 flex items-center gap-3 overflow-hidden rounded-full bg-bio px-10 py-5 font-mono text-sm font-bold uppercase tracking-[0.2em] text-emerald-950 shadow-[0_0_60px_rgba(34,197,94,0.4)] transition-all duration-300 hover:shadow-[0_0_90px_rgba(34,197,94,0.6)] hover:scale-105 active:scale-95 cursor-pointer"
+          class="group relative mx-auto mt-12 flex items-center gap-3 overflow-hidden rounded-full bg-bio px-10 py-5 font-mono text-sm font-bold uppercase tracking-[0.2em] text-emerald-950 shadow-[0_0_60px_rgba(34,197,94,0.4)] transition-all duration-300 hover:shadow-[0_0_90px_rgba(34,197,94,0.6)] hover:scale-105 active:scale-95 cursor-pointer scroll-reveal delay-300"
         >
           <span class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 group-hover:translate-x-full"></span>
           Register Now
           <ArrowUpRight :size="18" :stroke-width="2.5" class="transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
         </button>
 
-        <p class="mt-8 font-mono text-[10px] uppercase tracking-[0.25em] text-slate-500">
+        <p class="mt-8 font-mono text-[10px] uppercase tracking-[0.25em] text-slate-500 scroll-reveal delay-400">
           No hardware to buy · No contracts to sign · QR kit ships in 48h
         </p>
       </div>
@@ -941,8 +988,21 @@ const impactMetrics = [
 const isScrolled = ref(false);
 const mobileMenuOpen = ref(false);
 const showStickyRegister = ref(false);
+
+const scrollY = ref(0);
+const scrollProgress = ref(0);
+
 const heroRef = ref(null);
 const crisisSectionRef = ref(null);
+const processSectionRef = ref(null);
+const impactSectionRef = ref(null);
+const ctaSectionRef = ref(null);
+
+// Section scroll progress values (0.0 to 1.0)
+const crisisProgress = ref(0);
+const processProgress = ref(0);
+const impactProgress = ref(0);
+const ctaProgress = ref(0);
 
 // Mouse interactive 3D parallax on Hero visual
 const mouseX = ref(0);
@@ -960,23 +1020,61 @@ function handleHeroMouseLeave() {
   mouseY.value = 0;
 }
 
+// 1. Hero Left Copy parallax
+const heroCopyStyle = computed(() => {
+  const y = scrollY.value;
+  return {
+    transform: `translateY(${y * 0.12}px)`,
+    opacity: Math.max(0, 1 - y / 700),
+  };
+});
+
+// 2. Hero 3D visual card parallax (combines mouse parallax with scroll parallax)
 const heroGlowStyle = computed(() => ({
-  transform: `translate(${mouseX.value * 22}px, ${mouseY.value * 22}px)`,
+  transform: `translate(${mouseX.value * 22}px, ${mouseY.value * 22 + scrollY.value * 0.22}px)`,
 }));
 
 const heroImgStyle = computed(() => ({
-  transform: `translate(${mouseX.value * -16}px, ${mouseY.value * -12}px) rotate(2deg)`,
+  transform: `translate(${mouseX.value * -16}px, ${mouseY.value * -12 + scrollY.value * 0.12}px) rotate(${2 + mouseX.value * 2.5}deg)`,
 }));
 
 const heroCardStyle = computed(() => ({
-  transform: `translate(${mouseX.value * 34}px, ${mouseY.value * 26}px)`,
+  transform: `translate(${mouseX.value * 34}px, ${mouseY.value * 26 + scrollY.value * -0.22}px)`,
 }));
 
 const heroBadgeStyle = computed(() => ({
-  transform: `translate(${mouseX.value * -30}px, ${mouseY.value * -22}px)`,
+  transform: `translate(${mouseX.value * -30}px, ${mouseY.value * -22 + scrollY.value * 0.18}px)`,
 }));
 
-// Animated counters on scroll for Crisis section
+// 3. Watermark text drift on scroll
+const toxicWatermarkStyle = computed(() => ({
+  transform: `translateX(${(crisisProgress.value - 0.45) * -180}px)`,
+}));
+
+const processWatermarkStyle = computed(() => ({
+  transform: `translateX(${(processProgress.value - 0.5) * 200}px)`,
+}));
+
+const impactWatermarkStyle = computed(() => ({
+  transform: `translateX(${(impactProgress.value - 0.5) * -160}px)`,
+}));
+
+// 4. Crisis right burner image parallax
+const crisisBurnerStyle = computed(() => ({
+  transform: `translateY(${(crisisProgress.value - 0.5) * -45}px)`,
+}));
+
+// 5. Impact console parallax
+const impactConsoleStyle = computed(() => ({
+  transform: `translateY(${(1 - impactProgress.value) * 35}px)`,
+}));
+
+// 6. CTA section background image parallax
+const ctaBgStyle = computed(() => ({
+  transform: `scale(${1 + ctaProgress.value * 0.12}) translateY(${(ctaProgress.value - 0.5) * 30}px)`,
+}));
+
+// 7. Animated counters on scroll for Crisis section
 const animatedUcoReturn = ref(0);
 const animatedTpcLimit = ref(0);
 let countStarted = false;
@@ -1003,36 +1101,117 @@ function triggerCounters() {
   requestAnimationFrame(update);
 }
 
-// Process track interactive truck position
-const processActiveStep = ref(0);
-const processTruckLeft = computed(() => {
-  if (processActiveStep.value === 0) return '8%';
-  if (processActiveStep.value === 1) return '50%';
-  return '92%';
+// 8. Process track dynamic truck position & active step
+const manualHoverStep = ref(null);
+
+const activeProcessStep = computed(() => {
+  if (manualHoverStep.value !== null) return manualHoverStep.value;
+  const p = Math.min(Math.max((processProgress.value - 0.22) / 0.55, 0), 1);
+  if (p < 0.35) return 0;
+  if (p < 0.70) return 1;
+  return 2;
 });
 
-// Scroll handlers
-function handleScroll() {
-  const y = window.scrollY;
-  isScrolled.value = y > 40;
-  showStickyRegister.value = y > window.innerHeight * 0.7;
+const processTruckLeft = computed(() => {
+  if (manualHoverStep.value !== null) {
+    if (manualHoverStep.value === 0) return '8%';
+    if (manualHoverStep.value === 1) return '50%';
+    return '92%';
+  }
+  const p = Math.min(Math.max((processProgress.value - 0.22) / 0.55, 0), 1);
+  return `${8 + p * 84}%`;
+});
 
-  // Check if Crisis section is in view to trigger counter animation
-  if (crisisSectionRef.value && !countStarted) {
-    const rect = crisisSectionRef.value.getBoundingClientRect();
-    if (rect.top < window.innerHeight * 0.85) {
-      triggerCounters();
-    }
+// Helper to calculate progress of any section across viewport
+function calcSectionProgress(el) {
+  if (!el) return 0;
+  const rect = el.getBoundingClientRect();
+  const windowHeight = window.innerHeight;
+  const total = rect.height + windowHeight;
+  const current = windowHeight - rect.top;
+  return Math.min(Math.max(current / total, 0), 1);
+}
+
+// Scroll handlers with requestAnimationFrame
+let scrollTicking = false;
+
+function onScroll() {
+  if (!scrollTicking) {
+    window.requestAnimationFrame(() => {
+      handleScroll();
+      scrollTicking = false;
+    });
+    scrollTicking = true;
   }
 }
 
+function handleScroll() {
+  const y = window.scrollY;
+  scrollY.value = y;
+  isScrolled.value = y > 40;
+  showStickyRegister.value = y > window.innerHeight * 0.7;
+
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  scrollProgress.value = docHeight > 0 ? Math.min(Math.max(y / docHeight, 0), 1) : 0;
+
+  // Update progress for all animated sections
+  if (crisisSectionRef.value) {
+    crisisProgress.value = calcSectionProgress(crisisSectionRef.value);
+    if (!countStarted && crisisProgress.value > 0.25) {
+      triggerCounters();
+    }
+  }
+
+  if (processSectionRef.value) {
+    processProgress.value = calcSectionProgress(processSectionRef.value);
+  }
+
+  if (impactSectionRef.value) {
+    impactProgress.value = calcSectionProgress(impactSectionRef.value);
+  }
+
+  if (ctaSectionRef.value) {
+    ctaProgress.value = calcSectionProgress(ctaSectionRef.value);
+  }
+}
+
+// Intersection Observer for scroll-reveal elements
+let revealObserver = null;
+
+function setupRevealObserver() {
+  const elements = document.querySelectorAll('.scroll-reveal, .scroll-reveal-left, .scroll-reveal-right, .scroll-reveal-scale, .chart-path-animated');
+  if (!('IntersectionObserver' in window)) {
+    elements.forEach(el => el.classList.add('in-view'));
+    return;
+  }
+
+  revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+      }
+    });
+  }, {
+    threshold: 0.12,
+    rootMargin: '0px 0px -40px 0px'
+  });
+
+  elements.forEach(el => revealObserver.observe(el));
+}
+
 onMounted(() => {
-  window.addEventListener('scroll', handleScroll, { passive: true });
+  window.addEventListener('scroll', onScroll, { passive: true });
   handleScroll();
+  setTimeout(() => {
+    setupRevealObserver();
+  }, 60);
 });
 
 onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll);
+  window.removeEventListener('scroll', onScroll);
+  if (revealObserver) {
+    revealObserver.disconnect();
+  }
 });
 </script>
 

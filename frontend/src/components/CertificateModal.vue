@@ -230,6 +230,7 @@ function handlePrint() {
       <head>
         <title>GeoField Corp | UCO Bio-Recycling & RUCO Aggregator</title>
         <meta charset="utf-8" />
+        <base href="${window.location.origin}/" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
@@ -340,7 +341,7 @@ function handlePrint() {
           <div class="top-row">
             <div>
               <div class="logo-group">
-                <span style="font-size: 20px;">🌱</span>
+                <img src="/brand/logo-icon.svg" alt="GeoField Corp" style="width: 24px; height: 24px; object-fit: contain;" />
                 <span class="logo-text">GeoField Corp</span>
               </div>
               <div class="subtext">Authorized UCO Bio-Aggregator Partner</div>

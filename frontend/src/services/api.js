@@ -885,8 +885,10 @@ export const api = {
       var win = window.open('', '_blank');
       if (!win) return;
       var certRef = 'RUCO-GEO-2025-' + String('${receiptId}').replace(/^RCP-/, '');
+      var origin = (window && window.location && window.location.origin) ? window.location.origin : '';
       win.document.write('<!doctype html><html><head><title>GeoField Corp | UCO Bio-Recycling & RUCO Aggregator</title>' +
         '<meta charset=\"utf-8\" />' +
+        (origin ? '<base href=\"' + origin + '/\" />' : '') +
         '<link rel=\"preconnect\" href=\"https://fonts.googleapis.com\" />' +
         '<link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin />' +
         '<link href=\"https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap\" rel=\"stylesheet\" />' +
@@ -910,7 +912,7 @@ export const api = {
         '.footer { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding-top: 8px; }' +
         '</style></head><body>' +
         '<div class=\"wrapper\">' +
-        '<div class=\"top\"><div><strong style=\"font-size:18px;\">🌱 GeoField Corp</strong><div style=\"font-size:11px;color:#64748b;\">Authorized UCO Bio-Aggregator Partner</div></div>' +
+        '<div class=\"top\"><div><div style=\"display:flex;align-items:center;gap:8px;\"><img src=\"/brand/logo-icon.svg\" style=\"width:24px;height:24px;object-fit:contain;\" alt=\"GeoField Corp\" /><strong style=\"font-size:18px;\">GeoField Corp</strong></div><div style=\"font-size:11px;color:#64748b;margin-top:2px;\">Authorized UCO Bio-Aggregator Partner</div></div>' +
         '<div style=\"text-align:right;\"><span class=\"badge\">🎖️ RUCO Compliant</span><div style=\"font-family:monospace;font-size:11px;color:#64748b;margin-top:4px;\">Ref: ' + certRef + '</div></div></div>' +
         '<div class=\"title-area\"><h1 class=\"cert-title\">Certificate of Responsible Disposal</h1><p class=\"cert-desc\">This document certifies that Used Cooking Oil was legally collected for Biofuel conversion in compliance with FSSAI regulations.</p></div>' +
         '<div class=\"fbo-box\"><div><div class=\"label\">Food Business Operator (FBO)</div><div class=\"fbo-name\">🏢 Partner Kitchen</div><div style=\"font-family:monospace;font-size:11px;color:#047857;margin-top:4px;\">Unique Partner ID: GEO-9082</div></div>' +
