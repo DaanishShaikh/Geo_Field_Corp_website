@@ -814,24 +814,42 @@
             <ul class="mt-5 space-y-3 text-sm text-slate-400">
               <li>
                 <a
-                  href="mailto:hello@geofieldcorp.in"
-                  data-testid="footer-email"
+                  href="tel:+917972737595"
+                  data-testid="footer-phone"
                   class="flex items-center gap-3 transition-colors hover:text-bio"
                 >
-                  <Mail :size="15" class="text-bio/70" /> hello@geofieldcorp.in
+                  <Phone :size="15" class="text-bio/70 shrink-0" />
+                  <span>+91 7972737595</span>
                 </a>
               </li>
               <li>
                 <a
-                  href="tel:+919820012345"
-                  data-testid="footer-phone"
+                  href="mailto:support@geofieldcorp.com"
+                  data-testid="footer-email"
                   class="flex items-center gap-3 transition-colors hover:text-bio"
                 >
-                  <Phone :size="15" class="text-bio/70" /> +91 98200 12345
+                  <Mail :size="15" class="text-bio/70 shrink-0" />
+                  <span class="flex items-center gap-2">
+                    support@geofieldcorp.com
+                    <span class="rounded bg-bio/10 px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-wider text-bio">Support</span>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="mailto:office@geofieldcorp.com"
+                  data-testid="footer-email-office"
+                  class="flex items-center gap-3 transition-colors hover:text-bio"
+                >
+                  <Mail :size="15" class="text-bio/70 shrink-0" />
+                  <span class="flex items-center gap-2">
+                    office@geofieldcorp.com
+                    <span class="rounded bg-bio/10 px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-wider text-bio">Office</span>
+                  </span>
                 </a>
               </li>
               <li class="flex items-center gap-3" data-testid="footer-location">
-                <MapPin :size="15" class="text-bio/70" /> Mumbai, Maharashtra, India
+                <MapPin :size="15" class="text-bio/70 shrink-0" /> Mumbai, Maharashtra, India
               </li>
             </ul>
           </div>
