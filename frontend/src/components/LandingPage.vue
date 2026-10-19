@@ -500,24 +500,25 @@
         <!-- Animated Process Track with Delivery Truck -->
         <div class="mt-20">
           <div class="relative mb-14 hidden h-16 items-center lg:flex" data-testid="process-track">
-            <div class="absolute inset-x-10 top-1/2 h-px -translate-y-1/2 bg-ink/15"></div>
-            <!-- Dynamic Filled Pipeline that advances with truck -->
+            <!-- Background Rail line from Node 1 (8%) to Node 3 (92%) -->
+            <div class="absolute left-[8%] right-[8%] top-1/2 h-px -translate-y-1/2 bg-ink/15"></div>
+            <!-- Dynamic Filled Pipeline that connects exactly to the active station and truck -->
             <div 
-              class="absolute left-10 top-1/2 h-[3px] -translate-y-1/2 origin-left bg-gradient-to-r from-biodark via-bio to-limeglow transition-all duration-300 ease-out"
-              :style="{ width: `calc(${processTruckLeft} - 2.5rem)` }"
+              class="absolute left-[8%] top-1/2 h-[3px] -translate-y-1/2 origin-left bg-gradient-to-r from-biodark via-bio to-limeglow transition-all duration-700 ease-out"
+              :style="{ width: activeProcessStep === 0 ? '0%' : activeProcessStep === 1 ? '42%' : '84%' }"
             ></div>
             
             <span
               v-for="(pos, idx) in ['8%', '50%', '92%']"
               :key="pos"
-              class="absolute top-1/2 h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 transition-all duration-500"
-              :class="activeProcessStep >= idx ? 'border-biodark bg-biodark scale-125 shadow-[0_0_12px_rgba(16,185,129,0.7)]' : 'border-ink/20 bg-paper'"
+              class="absolute top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 transition-all duration-700"
+              :class="activeProcessStep >= idx ? 'border-biodark bg-biodark scale-125 shadow-[0_0_14px_rgba(16,185,129,0.8)]' : 'border-ink/20 bg-paper'"
               :style="{ left: pos }"
             ></span>
 
             <div
               data-testid="process-van"
-              class="absolute top-1/2 z-10 -translate-y-1/2 transition-all duration-300 ease-out will-change-transform"
+              class="absolute top-1/2 z-10 -translate-y-1/2 transition-all duration-700 ease-out will-change-transform"
               :style="{ left: processTruckLeft }"
             >
               <span class="grid h-14 w-14 -translate-x-1/2 place-items-center rounded-full bg-bio text-emerald-950 shadow-[0_0_35px_rgba(34,197,94,0.6)] ring-4 ring-bio/20">
@@ -526,7 +527,7 @@
             </div>
           </div>
 
-          <!-- 3 Process Steps Cards -->
+          <!-- 3 Process Steps Cards (Always 100% visible, dynamic active highlight) -->
           <div class="grid gap-6 lg:grid-cols-3">
             <div
               v-for="(s, i) in steps"
@@ -535,11 +536,10 @@
               @mouseenter="manualHoverStep = i"
               @mouseleave="manualHoverStep = null"
               :class="[
-                'group relative h-full overflow-hidden rounded-[1.75rem] border p-8 transition-all duration-500 hover:-translate-y-2 cursor-pointer scroll-reveal-scale',
-                `delay-${(i + 1) * 150}`,
+                'group relative h-full overflow-hidden rounded-[1.75rem] border p-8 transition-all duration-500 hover:-translate-y-2 cursor-pointer',
                 activeProcessStep === i 
                   ? 'border-biodark bg-white shadow-[0_30px_60px_-20px_rgba(16,185,129,0.35)] scale-[1.02]' 
-                  : 'border-ink/10 bg-white/60 hover:border-biodark/40 hover:shadow-xl'
+                  : 'border-ink/10 bg-white/70 hover:border-biodark/40 hover:bg-white hover:shadow-xl'
               ]"
             >
               <div class="flex items-start justify-between">
@@ -1106,20 +1106,20 @@ const manualHoverStep = ref(null);
 
 const activeProcessStep = computed(() => {
   if (manualHoverStep.value !== null) return manualHoverStep.value;
-  const p = Math.min(Math.max((processProgress.value - 0.22) / 0.55, 0), 1);
-  if (p < 0.35) return 0;
-  if (p < 0.70) return 1;
+  // Based on section scroll progress:
+  // Step 0: entering the process section
+  // Step 1: middle of the process section
+  // Step 2: scrolled through process section
+  if (processProgress.value < 0.40) return 0;
+  if (processProgress.value < 0.70) return 1;
   return 2;
 });
 
 const processTruckLeft = computed(() => {
-  if (manualHoverStep.value !== null) {
-    if (manualHoverStep.value === 0) return '8%';
-    if (manualHoverStep.value === 1) return '50%';
-    return '92%';
-  }
-  const p = Math.min(Math.max((processProgress.value - 0.22) / 0.55, 0), 1);
-  return `${8 + p * 84}%`;
+  const step = activeProcessStep.value;
+  if (step === 0) return '8%';
+  if (step === 1) return '50%';
+  return '92%';
 });
 
 // Helper to calculate progress of any section across viewport
@@ -1192,8 +1192,8 @@ function setupRevealObserver() {
       }
     });
   }, {
-    threshold: 0.12,
-    rootMargin: '0px 0px -40px 0px'
+    threshold: 0.05,
+    rootMargin: '60px 0px 60px 0px'
   });
 
   elements.forEach(el => revealObserver.observe(el));
