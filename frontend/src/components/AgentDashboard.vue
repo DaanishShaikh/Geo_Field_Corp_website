@@ -262,6 +262,7 @@
       title="Daily Manifest Route"
       subtitle="Assigned stops for collection vehicle"
       :stops="stops"
+      :agents="agentVehicles"
     />
   </div>
 </template>
@@ -282,6 +283,21 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['settle-receipt', 'scan-site', 'scan-receipt', 'toggle-offline', 'sync-offline', 'update-gps', 'inspect-seller']);
+
+const agentVehicles = computed(() => {
+  if (!props.agent) return [];
+  const prof = props.agent.agent_profile || {};
+  return [{
+    id: props.agent.id || props.agent.uid || 'current-agent',
+    name: props.agent.name || 'Your Collection Vehicle',
+    phone: props.agent.phone || '',
+    vehicle_no: prof.vehicle_number || 'Field Vehicle',
+    vehicle_number: prof.vehicle_number || 'Field Vehicle',
+    latitude: prof.latitude || prof.current_lat || 19.0760,
+    longitude: prof.longitude || prof.current_lng || 72.8777,
+    status: 'Live Collection Vehicle'
+  }];
+});
 
 const selectedReceiptId = ref('');
 const activeSeller = ref(null);

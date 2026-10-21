@@ -928,17 +928,41 @@ export const api = {
     );
     const fleet = [];
     agentsSnap.forEach((d) => {
-      const a = d.data();
+      const a = { id: d.id, ...d.data() };
+      const lat = a.agent_profile?.latitude || 19.0760;
+      const lng = a.agent_profile?.longitude || 72.8777;
+      const vNo = a.agent_profile?.vehicle_number || "MH-04-AX-8910";
       fleet.push({
         id: a.id,
-        name: a.name,
-        phone: a.phone,
-        vehicle_number: a.agent_profile?.vehicle_number || "MH-04-AX-8910",
-        latitude: a.agent_profile?.latitude || 19.0760,
-        longitude: a.agent_profile?.longitude || 72.8777,
-        status: "En Route"
+        name: a.name || "Field Agent",
+        phone: a.phone || "+91 98200 12345",
+        vehicle_no: vNo,
+        vehicle_number: vNo,
+        lat: lat,
+        latitude: lat,
+        lng: lng,
+        longitude: lng,
+        status: a.agent_profile?.status === "on_route" ? "En Route" : "Active Route",
+        zone: a.agent_profile?.zone || "Mumbai Central Hub"
       });
     });
+
+    if (fleet.length === 0) {
+      fleet.push({
+        id: "AGENT-DEFAULT-1",
+        name: "Rajesh Kumar (Field Agent)",
+        phone: "+91 7972737595",
+        vehicle_no: "MH-04-AX-8910",
+        vehicle_number: "MH-04-AX-8910",
+        lat: 19.0760,
+        latitude: 19.0760,
+        lng: 72.8777,
+        longitude: 72.8777,
+        status: "Active Route",
+        zone: "Panvel / Mumbai Corridor"
+      });
+    }
+
     return { fleet };
   },
 

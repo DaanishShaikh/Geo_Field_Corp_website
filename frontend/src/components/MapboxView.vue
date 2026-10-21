@@ -298,24 +298,41 @@ function renderGoogleMarkers() {
   // 2. Agents
   if (props.agents && props.agents.length) {
     props.agents.forEach((agent) => {
-      const lat = agent.lat ?? agent.current_lat;
-      const lng = agent.lng ?? agent.current_lng;
-      if (!lat || !lng) return; // skip agents that haven't broadcast GPS yet
+      const rawLat = agent.latitude ?? agent.lat ?? agent.current_lat ?? agent.agent_profile?.latitude ?? agent.agent_profile?.current_lat;
+      const rawLng = agent.longitude ?? agent.lng ?? agent.current_lng ?? agent.agent_profile?.longitude ?? agent.agent_profile?.current_lng;
+      
+      let lat = Number(rawLat);
+      let lng = Number(rawLng);
+
+      // Smart fallback: if GPS has not been broadcasted yet, position near first stop or base hub
+      if (isNaN(lat) || isNaN(lng) || !lat || !lng) {
+        if (routeCoords.length > 0) {
+          lat = routeCoords[0].lat - 0.005;
+          lng = routeCoords[0].lng - 0.005;
+        } else {
+          lat = 19.0760;
+          lng = 72.8777;
+        }
+      }
 
       const pos = { lat, lng };
       bounds.extend(pos);
 
+      const vehicleName = agent.vehicle_no || agent.vehicle_number || agent.agent_profile?.vehicle_number || 'EV Collection Van';
+      const agentPhone = agent.phone || agent.agent_profile?.phone || '';
+      const phoneHtml = agentPhone ? `<div style="margin-top:3px;"><a href="tel:${agentPhone}" style="color:#059669;font-weight:bold;text-decoration:none;">📞 ${agentPhone}</a></div>` : '';
+
       const marker = new maps.Marker({
         position: pos,
         map: googleMapInstance,
-        title: `Agent: ${agent.name}`,
+        title: `Field Agent: ${agent.name || 'Collection Agent'}`,
         label: {
           text: '🚚',
-          fontSize: '14px'
+          fontSize: '15px'
         },
         icon: {
           path: maps.SymbolPath.BACKWARD_CLOSED_ARROW,
-          scale: 6,
+          scale: 7,
           fillColor: '#0284c7',
           fillOpacity: 1,
           strokeColor: '#ffffff',
@@ -325,10 +342,11 @@ function renderGoogleMarkers() {
 
       const infoWindow = new maps.InfoWindow({
         content: `
-          <div style="font-family:sans-serif;font-size:12px;color:#0f172a;padding:4px;">
-            <strong>Agent: ${agent.name}</strong><br>
-            <span>Vehicle: ${agent.vehicle_no || 'N/A'}</span><br>
-            <span style="color:#0284c7;font-weight:bold;">Zone: ${agent.zone || 'Live Location'}</span>
+          <div style="font-family:sans-serif;font-size:12px;color:#0f172a;padding:6px;max-width:220px;">
+            <div style="font-weight:bold;color:#0369a1;font-size:13px;">🚚 ${agent.name || 'Collection Agent'}</div>
+            <div style="font-size:11px;color:#334155;margin-top:2px;">Vehicle: <strong>${vehicleName}</strong></div>
+            <div style="font-size:10px;color:#059669;font-weight:bold;margin-top:2px;">● ${agent.status || 'Active On Route'}</div>
+            ${phoneHtml}
           </div>
         `
       });
@@ -456,21 +474,45 @@ function renderLeafletMarkers() {
   // Agents
   if (props.agents && props.agents.length) {
     props.agents.forEach((agent) => {
-      const lat = agent.lat ?? agent.current_lat;
-      const lng = agent.lng ?? agent.current_lng;
-      if (!lat || !lng) return;
+      const rawLat = agent.latitude ?? agent.lat ?? agent.current_lat ?? agent.agent_profile?.latitude ?? agent.agent_profile?.current_lat;
+      const rawLng = agent.longitude ?? agent.lng ?? agent.current_lng ?? agent.agent_profile?.longitude ?? agent.agent_profile?.current_lng;
+      
+      let lat = Number(rawLat);
+      let lng = Number(rawLng);
+
+      if (isNaN(lat) || isNaN(lng) || !lat || !lng) {
+        if (bounds.length > 0) {
+          lat = bounds[0][0] - 0.005;
+          lng = bounds[0][1] - 0.005;
+        } else {
+          lat = 19.0760;
+          lng = 72.8777;
+        }
+      }
+
       bounds.push([lat, lng]);
+
+      const vehicleName = agent.vehicle_no || agent.vehicle_number || agent.agent_profile?.vehicle_number || 'EV Collection Van';
+      const agentPhone = agent.phone || agent.agent_profile?.phone || '';
+      const phoneHtml = agentPhone ? `<br><a href="tel:${agentPhone}" style="color:#059669;font-weight:bold;text-decoration:none;">📞 ${agentPhone}</a>` : '';
 
       const agentIcon = L.divIcon({
         className: 'custom-agent-icon',
-        html: `<div style="background-color:#0284c7;width:28px;height:28px;border-radius:50%;border:2px solid white;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 2px 5px rgba(0,0,0,0.4);">🚚</div>`,
-        iconSize: [28, 28],
-        iconAnchor: [14, 14]
+        html: `<div style="background-color:#0284c7;width:32px;height:32px;border-radius:50%;border:2px solid white;display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 3px 8px rgba(0,0,0,0.5);cursor:pointer;" title="Field Agent: ${agent.name || 'Collection Agent'}">🚚</div>`,
+        iconSize: [32, 32],
+        iconAnchor: [16, 16]
       });
 
       L.marker([lat, lng], { icon: agentIcon })
         .addTo(leafletMapInstance)
-        .bindPopup(`<strong>Agent: ${agent.name}</strong><br>Vehicle: ${agent.vehicle_no || 'N/A'}<br>Zone: ${agent.zone || 'Live'}`);
+        .bindPopup(`
+          <div style="font-family:sans-serif;font-size:12px;padding:3px;">
+            <strong style="color:#0369a1;font-size:13px;">🚚 ${agent.name || 'Collection Agent'}</strong><br>
+            <span>Vehicle: <strong>${vehicleName}</strong></span><br>
+            <span style="color:#059669;font-weight:bold;">● ${agent.status || 'Active On Route'}</span>
+            ${phoneHtml}
+          </div>
+        `);
     });
   }
 

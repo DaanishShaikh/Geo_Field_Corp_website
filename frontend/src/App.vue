@@ -107,7 +107,7 @@
           <MapboxView 
             :title="currentUser.role === 'admin' ? 'Live Fleet GPS Tracking & Dispatch' : 'Assigned Route Stop Navigation'"
             :subtitle="currentUser.role === 'admin' ? 'Real-time vehicle locations and route clusters' : 'Daily stops arranged in optimized order'"
-            :agents="currentUser.role === 'admin' ? fleetData : []"
+            :agents="logisticsAgents"
             :stops="currentUser.role === 'admin' ? adminManifestStops : agentData.stops"
           />
         </div>
@@ -176,6 +176,52 @@ const biodieselBatches = ref([]);
 const auditLogs = ref([]);
 const approvedSellers = ref([]);
 const activeAgents = ref([]);
+
+const logisticsAgents = computed(() => {
+  if (currentUser.value?.role === 'admin') {
+    if (fleetData.value && fleetData.value.length) return fleetData.value;
+    if (activeAgents.value && activeAgents.value.length) {
+      return activeAgents.value.map(a => ({
+        id: a.id,
+        name: a.name,
+        phone: a.phone,
+        vehicle_no: a.agent_profile?.vehicle_number || 'Field Vehicle',
+        vehicle_number: a.agent_profile?.vehicle_number || 'Field Vehicle',
+        latitude: a.agent_profile?.latitude || 19.0760,
+        longitude: a.agent_profile?.longitude || 72.8777,
+        status: 'Active Route'
+      }));
+    }
+    return [];
+  }
+  if (currentUser.value?.role === 'agent') {
+    const prof = currentUser.value.agent_profile || {};
+    return [{
+      id: currentUser.value.id || currentUser.value.uid,
+      name: currentUser.value.name || 'Your Vehicle (Field Agent)',
+      phone: currentUser.value.phone || '',
+      vehicle_no: prof.vehicle_number || 'Field Vehicle',
+      vehicle_number: prof.vehicle_number || 'Field Vehicle',
+      latitude: prof.latitude || prof.current_lat || 19.0760,
+      longitude: prof.longitude || prof.current_lng || 72.8777,
+      status: 'Live On Route'
+    }];
+  }
+  if (currentUser.value?.role === 'seller' && sellerData.value?.assigned_agent) {
+    const a = sellerData.value.assigned_agent;
+    return [{
+      id: a.id,
+      name: a.name || 'Assigned Collection Agent',
+      phone: a.phone || '',
+      vehicle_no: a.vehicle_no || a.vehicle || 'Collection Van',
+      vehicle_number: a.vehicle_no || a.vehicle || 'Collection Van',
+      latitude: 19.0760,
+      longitude: 72.8777,
+      status: a.status || 'En Route'
+    }];
+  }
+  return [];
+});
 
 // Verification Modal State (Direct Scan & Link URL Preview)
 const verificationSellerId = ref(null);

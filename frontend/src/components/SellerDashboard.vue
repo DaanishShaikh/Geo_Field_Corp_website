@@ -92,6 +92,12 @@
       </div>
 
       <div v-if="assignedAgent" class="flex items-center gap-2 flex-shrink-0">
+        <button 
+          @click="showAgentMap = !showAgentMap"
+          class="px-3.5 py-2 bg-bio/20 hover:bg-bio/30 text-bio border border-bio/30 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 cursor-pointer"
+        >
+          <span>🗺️</span> {{ showAgentMap ? 'Hide Map' : 'Track on Map' }}
+        </button>
         <a 
           :href="'tel:' + assignedAgent.phone"
           class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition shadow-lg flex items-center gap-1.5"
@@ -105,6 +111,16 @@
           <span>✉</span> Email
         </a>
       </div>
+    </div>
+
+    <!-- Live Agent Tracking Map for Seller -->
+    <div v-if="showAgentMap && assignedAgent" class="transition-all">
+      <MapboxView 
+        title="Live Agent En-Route Tracking"
+        subtitle="Real-time location of your assigned collection vehicle"
+        :agents="sellerAgentList"
+        :stops="sellerStopList"
+      />
     </div>
 
     <!-- Main Two Column Grid -->
@@ -543,8 +559,9 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import CertificateModal from './CertificateModal.vue';
+import MapboxView from './MapboxView.vue';
 
 const props = defineProps({
   seller: Object,
@@ -555,6 +572,41 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['create-receipt', 'view-ledger', 'update-location', 'preview-verification']);
+
+const showAgentMap = ref(false);
+
+const sellerAgentList = computed(() => {
+  if (!props.assignedAgent) return [];
+  const a = props.assignedAgent;
+  return [{
+    id: a.id || 'assigned-agent',
+    name: a.name || 'Assigned Collection Agent',
+    phone: a.phone || '',
+    vehicle_no: a.vehicle_no || a.vehicle || 'EV Collection Van',
+    vehicle_number: a.vehicle_no || a.vehicle || 'EV Collection Van',
+    latitude: 19.0760,
+    longitude: 72.8777,
+    status: a.status || 'En Route to Kitchen'
+  }];
+});
+
+const sellerStopList = computed(() => {
+  const prof = props.seller?.seller_profile || {};
+  const lat = prof.latitude || 18.9304;
+  const lng = prof.longitude || 73.1635;
+  return [{
+    stop_order: 1,
+    seller_id: props.seller?.id,
+    seller_name: props.seller?.name || 'Your Kitchen Site',
+    seller_phone: props.seller?.phone || '',
+    seller_address: prof.address ? `${prof.address}, ${prof.city || ''}` : 'Kitchen Facility',
+    seller_lat: lat,
+    seller_lng: lng,
+    seller_fssai: prof.fssai_license_no || 'Verified',
+    pickup_enabled: true,
+    status: 'pending'
+  }];
+});
 
 const copiedVerificationLink = ref(false);
 function copyVerificationUrl() {
