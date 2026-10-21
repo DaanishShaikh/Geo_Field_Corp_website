@@ -53,6 +53,7 @@
             @create-receipt="handleCreateReceipt"
             @view-ledger="currentView = 'receipts'"
             @update-location="handleUpdateSellerLocationSelf"
+            @preview-verification="openSellerVerification"
           />
 
           <AgentDashboard 
@@ -70,6 +71,7 @@
             @toggle-offline="isOnline = !isOnline"
             @sync-offline="handleSyncOffline"
             @update-gps="handleUpdateAgentGps"
+            @inspect-seller="openSellerVerification"
           />
 
           <AdminDashboard 
@@ -87,6 +89,7 @@
             @inject-stop="handleInjectStop"
             @update-seller-location="handleUpdateSellerLocation"
             @delete-user="handleDeleteUser"
+            @inspect-seller="openSellerVerification"
           />
         </div>
 
@@ -125,6 +128,14 @@
       @login="handleLogin"
       @register="handleRegister"
     />
+
+    <!-- Public / Standalone FBO Seller Verification Modal -->
+    <SellerVerificationModal 
+      v-if="verificationSellerId"
+      :seller-id="verificationSellerId"
+      :initial-data="verificationInitialData"
+      @close="clearVerification"
+    />
   </div>
 </template>
 
@@ -143,6 +154,7 @@ import AdminDashboard from './components/AdminDashboard.vue';
 import ReceiptLedger from './components/ReceiptLedger.vue';
 import AuditLedger from './components/AuditLedger.vue';
 import MapboxView from './components/MapboxView.vue';
+import SellerVerificationModal from './components/SellerVerificationModal.vue';
 
 const currentUser = ref(null);
 const currentView = ref('dashboard');
@@ -165,6 +177,56 @@ const auditLogs = ref([]);
 const approvedSellers = ref([]);
 const activeAgents = ref([]);
 
+// Verification Modal State (Direct Scan & Link URL Preview)
+const verificationSellerId = ref(null);
+const verificationInitialData = ref(null);
+
+function openSellerVerification(sellerId, initialData = null) {
+  verificationSellerId.value = sellerId;
+  verificationInitialData.value = initialData || null;
+}
+
+function clearVerification() {
+  verificationSellerId.value = null;
+  verificationInitialData.value = null;
+  if (typeof window !== 'undefined' && window.history && window.history.replaceState) {
+    const url = new URL(window.location);
+    url.searchParams.delete('verify_seller');
+    url.searchParams.delete('verify');
+    url.searchParams.delete('seller_id');
+    url.searchParams.delete('site_id');
+    url.searchParams.delete('name');
+    url.searchParams.delete('phone');
+    url.searchParams.delete('contact');
+    url.searchParams.delete('fssai');
+    url.searchParams.delete('city');
+    url.searchParams.delete('addr');
+    url.searchParams.delete('gst');
+    window.history.replaceState({}, document.title, url.pathname + (url.search ? url.search : ''));
+  }
+}
+
+function checkUrlForVerification() {
+  if (typeof window === 'undefined') return;
+  const urlParams = new URLSearchParams(window.location.search);
+  const verifyId = urlParams.get('verify_seller') || urlParams.get('seller_id') || urlParams.get('verify');
+  if (verifyId) {
+    verificationSellerId.value = verifyId;
+    verificationInitialData.value = {
+      id: verifyId,
+      site_id: urlParams.get('site_id') || `RUCO-SITE-${verifyId.slice(0, 8).toUpperCase()}`,
+      name: urlParams.get('name') || '',
+      phone: urlParams.get('phone') || '',
+      seller_profile: {
+        contact_name: urlParams.get('contact') || '',
+        fssai_license_no: urlParams.get('fssai') || '',
+        city: urlParams.get('city') || '',
+        address: urlParams.get('addr') || '',
+        gst_no: urlParams.get('gst') || ''
+      }
+    };
+  }
+}
 
 function showToast(msg) {
   toastMsg.value = msg;
@@ -182,6 +244,7 @@ onMounted(async () => {
   window.addEventListener('online', () => { isOnline.value = true; handleSyncOffline(); });
   window.addEventListener('offline', () => { isOnline.value = false; });
   
+  checkUrlForVerification();
   await refreshOfflineQueue();
   await checkAuth();
 });

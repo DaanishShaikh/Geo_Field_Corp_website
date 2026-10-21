@@ -127,8 +127,9 @@
         </div>
 
         <div class="p-5 bg-slate-900/90 rounded-xl border border-slate-700 flex flex-col sm:flex-row items-center gap-6">
-          <div class="p-3 bg-white rounded-xl shadow-lg flex-shrink-0">
+          <div class="p-3 bg-white rounded-xl shadow-lg flex-shrink-0 text-center">
             <img :src="siteQr.data_url" alt="Site QR" class="w-36 h-36 object-contain" />
+            <span class="text-[9px] text-slate-600 font-mono block mt-1">Live FBO Verification QR</span>
           </div>
           <div class="space-y-2 text-xs text-slate-300 flex-1">
             <div class="flex items-center justify-between">
@@ -204,17 +205,32 @@
           </div>
         </div>
 
-        <div class="flex flex-col sm:flex-row gap-2">
+        <div class="flex flex-wrap gap-2">
           <button 
             @click="openEditLocation"
-            class="py-2 px-3 bg-teal-600 hover:bg-teal-500 text-white rounded-xl text-xs font-semibold transition flex items-center justify-center gap-2 shadow"
+            class="py-2 px-3 bg-teal-600 hover:bg-teal-500 text-white rounded-xl text-xs font-semibold transition flex items-center justify-center gap-2 shadow cursor-pointer"
           >
             <span>📍</span>
             <span>Update Pickup Spot & GPS</span>
           </button>
           <button 
+            @click="$emit('preview-verification', seller.id, seller)"
+            class="py-2 px-3 bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-400 border border-emerald-500/30 rounded-xl text-xs font-semibold transition flex items-center justify-center gap-1.5 cursor-pointer"
+            title="Inspect what anyone scanning your QR code sees"
+          >
+            <span>👁️</span>
+            <span>Preview Scanned Details</span>
+          </button>
+          <button 
+            @click="copyVerificationUrl"
+            class="py-2 px-3 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-semibold transition flex items-center justify-center gap-1.5 cursor-pointer"
+          >
+            <span>🔗</span>
+            <span>{{ copiedVerificationLink ? 'Link Copied!' : 'Copy Link' }}</span>
+          </button>
+          <button 
             @click="downloadSiteQr"
-            class="flex-1 py-2 px-3 bg-slate-700 hover:bg-slate-600 text-white rounded-xl text-xs font-semibold transition flex items-center justify-center gap-2"
+            class="flex-1 py-2 px-3 bg-slate-700 hover:bg-slate-600 text-white rounded-xl text-xs font-semibold transition flex items-center justify-center gap-2 cursor-pointer"
           >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
@@ -538,7 +554,17 @@ const props = defineProps({
   recentReceipts: Array,
 });
 
-const emit = defineEmits(['create-receipt', 'view-ledger', 'update-location']);
+const emit = defineEmits(['create-receipt', 'view-ledger', 'update-location', 'preview-verification']);
+
+const copiedVerificationLink = ref(false);
+function copyVerificationUrl() {
+  const url = props.siteQr?.verification_url || `${window.location.origin}/?verify_seller=${props.seller?.id}`;
+  navigator.clipboard.writeText(url);
+  copiedVerificationLink.value = true;
+  setTimeout(() => {
+    copiedVerificationLink.value = false;
+  }, 2500);
+}
 
 const requestedVolume = ref(100);
 const creatingReceipt = ref(false);

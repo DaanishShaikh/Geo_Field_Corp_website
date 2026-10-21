@@ -314,9 +314,27 @@ export const api = {
       }
     }
 
-    // Generate dynamic Site Identity QR code
+    // Generate dynamic Site Identity QR code that encodes the public verification link
     const siteQrCode = `RUCO-SITE-${user.uid.slice(0, 8).toUpperCase()}`;
-    const siteQrDataUrl = await generateQrDataUrl(siteQrCode);
+    const baseUrl = (typeof window !== "undefined" && window.location && window.location.origin)
+      ? window.location.origin
+      : "https://geofieldcorp.com";
+
+    const userProfile = await getUserProfile(user.uid);
+    const sp = userProfile?.seller_profile || {};
+    const qrUrl = new URL(baseUrl);
+    qrUrl.searchParams.set("verify_seller", user.uid);
+    qrUrl.searchParams.set("site_id", siteQrCode);
+    if (userProfile?.name) qrUrl.searchParams.set("name", userProfile.name);
+    if (sp.fssai_license_no) qrUrl.searchParams.set("fssai", sp.fssai_license_no);
+    if (userProfile?.phone) qrUrl.searchParams.set("phone", userProfile.phone);
+    if (sp.contact_name) qrUrl.searchParams.set("contact", sp.contact_name);
+    if (sp.city) qrUrl.searchParams.set("city", sp.city);
+    if (sp.address) qrUrl.searchParams.set("addr", sp.address);
+    if (sp.gst_no) qrUrl.searchParams.set("gst", sp.gst_no);
+
+    const verificationUrl = qrUrl.toString();
+    const siteQrDataUrl = await generateQrDataUrl(verificationUrl);
 
     // Dynamically resolve assigned agent from Firestore
     let assigned_agent = null;
@@ -391,6 +409,7 @@ export const api = {
       site_qr: {
         seller_id: user.uid,
         qr_code: siteQrCode,
+        verification_url: verificationUrl,
         data_url: siteQrDataUrl
       },
       recent_receipts: receipts.slice(0, 10)
@@ -469,6 +488,101 @@ export const api = {
     };
   },
 
+  getPublicSellerProfile: async (sellerIdOrCode) => {
+    const clean = String(sellerIdOrCode || "").trim();
+    if (!clean) throw new Error("Seller identifier is required");
+
+    let seller = null;
+    let sellerId = clean;
+
+    // 1. Try direct user doc lookup
+    try {
+      const userSnap = await getDoc(doc(db, "users", clean));
+      if (userSnap.exists()) {
+        seller = { id: clean, ...userSnap.data() };
+        sellerId = clean;
+      }
+    } catch (_) {}
+
+    // 2. Query seller collection if not found directly
+    if (!seller) {
+      try {
+        const sellersSnap = await getDocs(
+          query(collection(db, "users"), where("role", "==", "seller"))
+        );
+        sellersSnap.forEach((d) => {
+          const s = { id: d.id, ...d.data() };
+          const siteCode = `RUCO-SITE-${s.id.slice(0, 8).toUpperCase()}`;
+          if (
+            s.id === clean ||
+            siteCode === clean ||
+            clean.includes(s.id.slice(0, 8).toUpperCase()) ||
+            (s.seller_profile?.fssai_license_no && clean.includes(s.seller_profile.fssai_license_no))
+          ) {
+            seller = s;
+            sellerId = s.id;
+          }
+        });
+      } catch (err) {
+        console.warn("Error querying sellers for public profile:", err);
+      }
+    }
+
+    if (!seller) {
+      throw new Error("No verified FBO found matching: " + clean);
+    }
+
+    // Compute volume & ESG stats
+    let totalVolume = 0;
+    let settledCount = 0;
+    try {
+      const receiptsSnap = await getDocs(
+        query(collection(db, "receipts"), where("seller_id", "==", sellerId))
+      );
+      receiptsSnap.forEach((snap) => {
+        const r = snap.data();
+        if (r.status === "settled") {
+          totalVolume += Number(r.settled_volume || 0);
+          settledCount += 1;
+        }
+      });
+    } catch (_) {}
+
+    const sp = seller.seller_profile || {};
+    return {
+      id: sellerId,
+      site_id: `RUCO-SITE-${sellerId.slice(0, 8).toUpperCase()}`,
+      name: seller.name || "Food Business Operator",
+      email: seller.email || "",
+      phone: seller.phone || "",
+      status: seller.status || "approved",
+      role: seller.role || "seller",
+      created_at: seller.created_at || new Date().toISOString(),
+      seller_profile: {
+        contact_name: sp.contact_name || seller.name || "Primary Representative",
+        alt_contact_name: sp.alt_contact_name || "",
+        alt_phone: sp.alt_phone || "",
+        fssai_license_no: sp.fssai_license_no || "FSSAI-VERIFIED-RUCO",
+        gst_no: sp.gst_no || "",
+        msme_udyam_no: sp.msme_udyam_no || "",
+        address: sp.address || "Registered Facility Site",
+        city: sp.city || "Mumbai",
+        pincode: sp.pincode || "",
+        latitude: sp.latitude || null,
+        longitude: sp.longitude || null,
+        bank_upi_or_cheque: sp.bank_upi_or_cheque || "",
+        pickup_preference: sp.pickup_preference || "Morning (9 AM - 12 PM)",
+        special_instructions: sp.special_instructions || ""
+      },
+      stats: {
+        total_volume: totalVolume,
+        settled_count: settledCount,
+        co2_prevented_kg: Number((totalVolume * 2.8).toFixed(1)),
+        water_saved_liters: Math.round(totalVolume * 1000)
+      }
+    };
+  },
+
   updateSellerProfileLocation: async (payload) => {
     const user = auth.currentUser;
     if (!user) throw new Error("Authentication required");
@@ -544,13 +658,23 @@ export const api = {
   },
 
   scanSiteQr: async (qr_code) => {
-    const clean = String(qr_code || "").trim();
+    let clean = String(qr_code || "").trim();
+    try {
+      if (clean.includes("verify_seller=")) {
+        const u = new URL(clean);
+        clean = u.searchParams.get("verify_seller") || clean;
+      } else if (clean.startsWith("http://") || clean.startsWith("https://")) {
+        const u = new URL(clean);
+        clean = u.searchParams.get("verify_seller") || u.searchParams.get("seller_id") || clean;
+      }
+    } catch (_) {}
+
     const sellersSnap = await getDocs(
       query(collection(db, "users"), where("role", "==", "seller"))
     );
     let foundSeller = null;
     sellersSnap.forEach((d) => {
-      const s = d.data();
+      const s = { id: d.id, ...d.data() };
       const siteQr = `RUCO-SITE-${s.id.slice(0, 8).toUpperCase()}`;
       if (
         s.id === clean || 
@@ -564,7 +688,7 @@ export const api = {
 
     // Fallback to first approved seller if demo preset QR was used
     if (!foundSeller && sellersSnap.size > 0) {
-      foundSeller = sellersSnap.docs[0].data();
+      foundSeller = { id: sellersSnap.docs[0].id, ...sellersSnap.docs[0].data() };
     }
 
     if (!foundSeller) {

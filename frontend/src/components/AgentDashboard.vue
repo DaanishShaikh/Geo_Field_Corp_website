@@ -97,33 +97,76 @@
         </div>
 
         <!-- Selected Seller & Receipt Details Header -->
-        <div v-if="activeSeller || activeReceipt" class="p-3 bg-slate-900/90 rounded-xl border border-slate-700 space-y-1.5 text-xs">
-          <div v-if="activeSeller" class="flex items-center justify-between">
-            <div>
-              <span class="text-slate-400">FBO Seller: </span>
-              <strong class="text-white">{{ activeSeller.name }}</strong>
+        <div v-if="activeSeller || activeReceipt" class="p-3.5 bg-slate-900/90 rounded-xl border border-slate-700 space-y-2.5 text-xs">
+          <!-- Rich Scanned Seller Dossier -->
+          <div v-if="activeSeller" class="space-y-2">
+            <div class="flex items-center justify-between">
+              <div>
+                <span class="text-slate-400 font-mono text-[10px] uppercase tracking-wider block">Authenticated FBO Seller</span>
+                <strong class="text-white text-sm">{{ activeSeller.name }}</strong>
+              </div>
+              <span class="px-2 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 font-mono text-[10px] font-bold">
+                ✓ Verified
+              </span>
             </div>
-            <div v-if="activeSeller.phone" class="flex items-center gap-1.5">
-              <a 
-                :href="'tel:' + activeSeller.phone" 
-                class="px-2 py-0.5 rounded bg-emerald-600/30 hover:bg-emerald-600 text-emerald-300 hover:text-white font-bold text-[10px] transition flex items-center gap-1"
-              >
-                <span>📞</span> {{ activeSeller.phone }}
-              </a>
-              <a 
-                v-if="activeSeller.email"
-                :href="'mailto:' + activeSeller.email" 
-                class="px-1.5 py-0.5 rounded bg-slate-700 hover:bg-slate-600 text-slate-300 hover:text-white text-[10px] transition"
-              >
-                ✉
-              </a>
+
+            <!-- Key Info Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 border-t border-slate-800 text-[11px]">
+              <div>
+                <span class="text-slate-500 block">FSSAI Licence No:</span>
+                <strong class="text-amber-400 font-mono">{{ activeSeller.seller_profile?.fssai_license_no || 'Verified' }}</strong>
+              </div>
+              <div v-if="activeSeller.seller_profile?.gst_no">
+                <span class="text-slate-500 block">GSTIN:</span>
+                <span class="text-slate-200 font-mono">{{ activeSeller.seller_profile.gst_no }}</span>
+              </div>
+              <div>
+                <span class="text-slate-500 block">Primary Contact:</span>
+                <div class="flex items-center gap-2 mt-0.5">
+                  <span class="text-slate-200">{{ activeSeller.seller_profile?.contact_name || activeSeller.name }}</span>
+                  <a 
+                    v-if="activeSeller.phone" 
+                    :href="'tel:' + activeSeller.phone"
+                    class="text-emerald-400 hover:underline font-mono font-bold"
+                  >
+                    📞 {{ activeSeller.phone }}
+                  </a>
+                </div>
+              </div>
+              <div v-if="activeSeller.seller_profile?.alt_phone">
+                <span class="text-slate-500 block">Alt Contact:</span>
+                <a :href="'tel:' + activeSeller.seller_profile.alt_phone" class="text-emerald-400/80 hover:underline font-mono">
+                  📞 {{ activeSeller.seller_profile.alt_phone }}
+                </a>
+              </div>
+            </div>
+
+            <!-- Address & Actions -->
+            <div class="pt-1 border-t border-slate-800 flex items-center justify-between text-[11px]">
+              <div class="text-slate-300 truncate max-w-[240px]">
+                📍 {{ activeSeller.seller_profile?.address || 'Site Registered' }}, {{ activeSeller.seller_profile?.city || 'Mumbai' }}
+              </div>
+              <div class="flex items-center gap-2 flex-shrink-0">
+                <a 
+                  v-if="activeSeller.seller_profile?.latitude && activeSeller.seller_profile?.longitude"
+                  :href="`https://www.google.com/maps?q=${activeSeller.seller_profile.latitude},${activeSeller.seller_profile.longitude}`"
+                  target="_blank"
+                  class="text-teal-300 hover:underline font-mono text-[10px]"
+                >
+                  Map ↗
+                </a>
+                <button 
+                  type="button"
+                  @click="$emit('inspect-seller', activeSeller.id, activeSeller)"
+                  class="px-2 py-0.5 rounded bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 text-[10px] font-semibold border border-emerald-500/40 cursor-pointer"
+                >
+                  Full Dossier
+                </button>
+              </div>
             </div>
           </div>
-          <div v-if="activeSeller" class="flex justify-between">
-            <span class="text-slate-400">FSSAI / Location:</span>
-            <span class="font-mono text-slate-200">{{ activeSeller.seller_profile?.fssai_license_no || 'Verified' }} &bull; {{ activeSeller.seller_profile?.address || 'Bengaluru' }}</span>
-          </div>
-          <div v-if="activeReceipt" class="flex justify-between border-t border-slate-800 pt-1">
+
+          <div v-if="activeReceipt" class="flex justify-between border-t border-slate-800 pt-1.5">
             <span class="text-slate-400">Target Receipt:</span>
             <span class="font-mono text-emerald-400 font-bold">{{ activeReceipt.id }} ({{ activeReceipt.requested_volume }}L Requested)</span>
           </div>
@@ -238,7 +281,7 @@ const props = defineProps({
   isOnline: { type: Boolean, default: true },
 });
 
-const emit = defineEmits(['settle-receipt', 'scan-site', 'scan-receipt', 'toggle-offline', 'sync-offline', 'update-gps']);
+const emit = defineEmits(['settle-receipt', 'scan-site', 'scan-receipt', 'toggle-offline', 'sync-offline', 'update-gps', 'inspect-seller']);
 
 const selectedReceiptId = ref('');
 const activeSeller = ref(null);
@@ -311,12 +354,20 @@ const estimatedPayout = computed(() => {
 });
 
 function handleQrScanned(code) {
-  if (code.includes('SITE') || code.startsWith('SELL-') || code.startsWith('GEO-')) {
-    emit('scan-site', code, (sellerData) => {
+  const c = String(code || '').trim();
+  if (
+    c.includes('verify_seller') || 
+    c.includes('SITE') || 
+    c.startsWith('SELL-') || 
+    c.startsWith('GEO-') ||
+    c.includes('seller_id') ||
+    c.includes('?verify')
+  ) {
+    emit('scan-site', c, (sellerData) => {
       activeSeller.value = sellerData.seller;
     });
   } else {
-    emit('scan-receipt', code, (rctData) => {
+    emit('scan-receipt', c, (rctData) => {
       activeReceipt.value = rctData.receipt;
       selectedReceiptId.value = rctData.receipt.id;
     });
