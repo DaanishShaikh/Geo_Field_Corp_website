@@ -425,7 +425,23 @@ export const api = {
     );
 
     const receipts = [];
-    receiptsSnap.forEach((docSnap) => receipts.push(docSnap.data()));
+    receiptsSnap.forEach((docSnap) => {
+      const r = docSnap.data();
+      if (r.status === "settled") {
+        const vol = Number(r.settled_volume || r.measured_volume || r.requested_volume || 0);
+        const rate = Number(r.actual_rate || 55.0);
+        const total = Number(r.total_amount || r.amount || (vol * rate));
+        r.settled_volume = vol;
+        r.measured_volume = vol;
+        r.actual_rate = rate;
+        r.total_amount = total;
+        r.amount = total;
+        r.tpc_reading = r.tpc_reading ?? r.tpc_percentage ?? 18.0;
+        r.tpc_percentage = r.tpc_percentage ?? r.tpc_reading;
+        r.payment_status = r.payment_status || "paid";
+      }
+      receipts.push(r);
+    });
     receipts.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
     for (const r of receipts) {
@@ -739,18 +755,24 @@ export const api = {
     const ref = doc(db, "receipts", receiptId);
     const snap = await getDoc(ref);
     if (!snap.exists()) throw new Error("Receipt not found: " + receiptId);
+    const existing = snap.data();
 
-    const settledVolume = Number(payload.settled_volume || 0);
-    const actualRate = Number(payload.actual_rate || 55.0);
-    const totalAmount = Number(payload.total_amount || (settledVolume * actualRate));
-    const tpc = Number(payload.tpc_reading || 18.0);
-    const moisture = Number(payload.moisture_pct || 1.2);
+    const settledVolume = Number(payload.settled_volume ?? payload.measured_volume ?? existing.requested_volume ?? 0);
+    const actualRate = Number(payload.actual_rate ?? existing.actual_rate ?? 55.0);
+    const totalAmount = Number(payload.total_amount ?? payload.amount ?? (settledVolume * actualRate));
+    const tpc = Number(payload.tpc_reading ?? payload.tpc_percentage ?? 18.0);
+    const moisture = Number(payload.moisture_pct ?? 1.2);
+    const paymentStatus = payload.payment_status || "paid";
 
     const updateData = {
       settled_volume: settledVolume,
+      measured_volume: settledVolume,
       actual_rate: actualRate,
       total_amount: totalAmount,
+      amount: totalAmount,
       tpc_reading: tpc,
+      tpc_percentage: tpc,
+      payment_status: paymentStatus,
       moisture_pct: moisture,
       status: "settled",
       agent_id: user?.uid || "AGENT-PORTAL",
@@ -760,9 +782,9 @@ export const api = {
     };
 
     await updateDoc(ref, updateData);
-    await logAudit("SETTLE_RECEIPT", profile?.name, `Settled receipt ${receiptId}: ${settledVolume}L @ ₹${actualRate}/L (TPC: ${tpc}%)`);
+    await logAudit("SETTLE_RECEIPT", profile?.name, `Settled receipt ${receiptId}: ${settledVolume}L @ ₹${actualRate}/L (₹${totalAmount})`);
 
-    return { message: "Receipt settled successfully", receipt: { ...snap.data(), ...updateData } };
+    return { message: "Receipt settled successfully", receipt: { ...existing, ...updateData } };
   },
 
   syncOfflineQueue: async (queue) => {
@@ -886,7 +908,23 @@ export const api = {
   getAdminReceipts: async (params = {}) => {
     const snap = await getDocs(collection(db, "receipts"));
     const receipts = [];
-    snap.forEach((d) => receipts.push(d.data()));
+    snap.forEach((d) => {
+      const r = d.data();
+      if (r.status === "settled") {
+        const vol = Number(r.settled_volume || r.measured_volume || r.requested_volume || 0);
+        const rate = Number(r.actual_rate || 55.0);
+        const total = Number(r.total_amount || r.amount || (vol * rate));
+        r.settled_volume = vol;
+        r.measured_volume = vol;
+        r.actual_rate = rate;
+        r.total_amount = total;
+        r.amount = total;
+        r.tpc_reading = r.tpc_reading ?? r.tpc_percentage ?? 18.0;
+        r.tpc_percentage = r.tpc_percentage ?? r.tpc_reading;
+        r.payment_status = r.payment_status || "paid";
+      }
+      receipts.push(r);
+    });
     receipts.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
     return { receipts };
   },

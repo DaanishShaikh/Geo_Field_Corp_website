@@ -65,31 +65,32 @@
 
             <!-- Volume -->
             <td class="py-3 px-3">
-              <span class="font-bold text-white">{{ r.measured_volume || r.requested_volume }} L</span>
-              <div v-if="!r.measured_volume" class="text-[10px] text-amber-400">Requested</div>
+              <span class="font-bold text-white font-mono">{{ r.settled_volume || r.measured_volume || r.requested_volume }} L</span>
+              <div v-if="r.status === 'settled'" class="text-[10px] text-emerald-400 font-semibold">Settled</div>
+              <div v-else class="text-[10px] text-amber-400 font-semibold">Requested</div>
             </td>
 
             <!-- TPC % -->
             <td class="py-3 px-3">
-              <span v-if="r.tpc_percentage" :class="r.tpc_percentage <= 22 ? 'text-emerald-400' : (r.tpc_percentage >= 30 ? 'text-rose-400' : 'text-slate-300')" class="font-semibold">
-                {{ r.tpc_percentage }}%
+              <span v-if="r.tpc_reading != null || r.tpc_percentage != null" :class="(r.tpc_reading ?? r.tpc_percentage) <= 22 ? 'text-emerald-400' : ((r.tpc_reading ?? r.tpc_percentage) >= 30 ? 'text-rose-400' : 'text-slate-300')" class="font-semibold font-mono">
+                {{ r.tpc_reading ?? r.tpc_percentage }}%
               </span>
               <span v-else class="text-slate-500">-</span>
             </td>
 
             <!-- Amount -->
             <td class="py-3 px-3">
-              <span v-if="r.amount" class="font-bold text-emerald-400">₹{{ formatNumber(r.amount) }}</span>
+              <span v-if="getReceiptAmount(r)" class="font-bold text-emerald-400 font-mono">₹{{ formatNumber(getReceiptAmount(r)) }}</span>
               <span v-else class="text-slate-500">Pending</span>
             </td>
 
             <!-- Payment Status -->
             <td class="py-3 px-3">
               <span 
-                :class="r.payment_status === 'paid' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-slate-700 text-slate-300 border-slate-600'"
-                class="px-2 py-0.5 rounded-full text-[10px] uppercase font-semibold border"
+                :class="(r.payment_status === 'paid' || r.status === 'settled') ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-slate-700 text-slate-300 border-slate-600'"
+                class="px-2 py-0.5 rounded-full text-[10px] uppercase font-semibold border font-mono"
               >
-                {{ r.payment_status }}
+                {{ r.payment_status || (r.status === 'settled' ? 'paid' : 'pending') }}
               </span>
             </td>
 
@@ -200,6 +201,17 @@ const filteredReceipts = computed(() => {
 
 function formatNumber(val) {
   return Number(val || 0).toLocaleString('en-IN');
+}
+
+function getReceiptAmount(r) {
+  if (r.total_amount && Number(r.total_amount) > 0) return Number(r.total_amount);
+  if (r.amount && Number(r.amount) > 0) return Number(r.amount);
+  if (r.status === 'settled') {
+    const vol = Number(r.settled_volume || r.measured_volume || r.requested_volume || 0);
+    const rate = Number(r.actual_rate || 55.0);
+    return Math.round(vol * rate);
+  }
+  return null;
 }
 
 function openCertificate(r) {

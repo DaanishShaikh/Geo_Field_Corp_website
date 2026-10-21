@@ -354,10 +354,10 @@
             <tr v-for="receipt in recentReceipts" :key="receipt.id" class="hover:bg-slate-700/30 transition">
               <td class="py-3 px-3 font-mono font-bold text-white">{{ receipt.id }}</td>
               <td class="py-3 px-3 text-slate-300">{{ formatDate(receipt.created_at) }}</td>
-              <td class="py-3 px-3 text-slate-200">{{ receipt.measured_volume || receipt.requested_volume }} L</td>
-              <td class="py-3 px-3 text-slate-300">{{ receipt.tpc_percentage ? receipt.tpc_percentage + '%' : 'Pending' }}</td>
-              <td class="py-3 px-3 font-semibold text-emerald-400">
-                {{ receipt.amount ? '₹' + formatNumber(receipt.amount) : 'Pending' }}
+              <td class="py-3 px-3 text-slate-200 font-mono">{{ receipt.settled_volume || receipt.measured_volume || receipt.requested_volume }} L</td>
+              <td class="py-3 px-3 text-slate-300 font-mono">{{ (receipt.tpc_reading != null || receipt.tpc_percentage != null) ? (receipt.tpc_reading ?? receipt.tpc_percentage) + '%' : (receipt.status === 'settled' ? '18%' : 'Pending') }}</td>
+              <td class="py-3 px-3 font-semibold text-emerald-400 font-mono">
+                {{ getReceiptAmount(receipt) ? '₹' + formatNumber(getReceiptAmount(receipt)) : 'Pending' }}
               </td>
               <td class="py-3 px-3">
                 <span 
@@ -749,6 +749,17 @@ function downloadSiteQr() {
 
 function formatNumber(val) {
   return Number(val || 0).toLocaleString('en-IN');
+}
+
+function getReceiptAmount(r) {
+  if (r.total_amount && Number(r.total_amount) > 0) return Number(r.total_amount);
+  if (r.amount && Number(r.amount) > 0) return Number(r.amount);
+  if (r.status === 'settled') {
+    const vol = Number(r.settled_volume || r.measured_volume || r.requested_volume || 0);
+    const rate = Number(r.actual_rate || 55.0);
+    return Math.round(vol * rate);
+  }
+  return null;
 }
 
 function formatDate(isoStr) {
