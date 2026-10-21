@@ -225,6 +225,47 @@
             </div>
           </div>
 
+          <!-- Recalculate Rate & Breakdown Card -->
+          <div class="p-3 bg-slate-900/90 rounded-xl border border-slate-700 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-semibold text-slate-300">Rate & Payout Calculation</span>
+              <button 
+                type="button" 
+                @click="recalculateRate"
+                class="px-2.5 py-1 bg-bio/15 hover:bg-bio/25 border border-bio/40 text-bio rounded-lg text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-sm active:scale-95"
+              >
+                <span>🔄</span> Recalculate
+              </button>
+            </div>
+
+            <!-- Real-time Rate Breakdown Strip -->
+            <div class="grid grid-cols-3 gap-2 pt-1 border-t border-slate-800 text-center font-mono">
+              <div class="bg-slate-800/60 p-2 rounded-lg">
+                <span class="text-[9px] uppercase text-slate-400 block">Base Rate</span>
+                <span class="text-xs font-bold text-slate-200">₹55.00/L</span>
+              </div>
+              <div class="bg-slate-800/60 p-2 rounded-lg">
+                <span class="text-[9px] uppercase text-slate-400 block">TPC Adjustment</span>
+                <span class="text-xs font-bold" :class="rateBreakdown.color">
+                  {{ rateBreakdown.bonus }}
+                </span>
+              </div>
+              <div class="bg-slate-800/60 p-2 rounded-lg border border-bio/30">
+                <span class="text-[9px] uppercase text-slate-400 block">Calculated Rate</span>
+                <span class="text-xs font-bold text-bio">₹{{ calculatedRate }}.00/L</span>
+              </div>
+            </div>
+
+            <div class="text-[11px] text-slate-400 flex items-center justify-between pt-0.5">
+              <span>Rule: <strong class="text-slate-300">{{ rateBreakdown.label }}</strong></span>
+              <span class="font-mono text-emerald-400 font-bold text-xs">Total: ₹{{ formatNumber(estimatedPayout) }}</span>
+            </div>
+
+            <div v-if="recalculatedNotice" class="text-[11px] font-mono font-bold text-bio bg-bio/10 border border-bio/30 p-1.5 rounded-lg text-center animate-pulse">
+              {{ recalculatedNotice }}
+            </div>
+          </div>
+
           <!-- Payment Settlement Option -->
           <div class="grid grid-cols-2 gap-3">
             <div>
@@ -360,14 +401,36 @@ watch(selectedReceiptId, (newId) => {
   }
 });
 
-const estimatedPayout = computed(() => {
-  const vol = Number(form.value.measured_volume) || 0;
+const recalculatedNotice = ref('');
+
+const calculatedRate = computed(() => {
   const tpc = Number(form.value.tpc_percentage) || 20;
   let rate = 55;
   if (tpc <= 22) rate += 5;
   else if (tpc >= 30) rate -= 8;
-  return Math.max(0, Math.round(vol * rate));
+  return rate;
 });
+
+const rateBreakdown = computed(() => {
+  const tpc = Number(form.value.tpc_percentage) || 20;
+  if (tpc <= 22) return { bonus: '+₹5.00/L', label: 'Premium Grade (Low TPC ≤ 22%)', color: 'text-bio' };
+  if (tpc >= 30) return { bonus: '-₹8.00/L', label: 'High Degradation (TPC ≥ 30%)', color: 'text-rose-400' };
+  return { bonus: '₹0.00', label: 'Standard Compliant Grade', color: 'text-slate-300' };
+});
+
+const estimatedPayout = computed(() => {
+  const vol = Number(form.value.measured_volume) || 0;
+  return Math.max(0, Math.round(vol * calculatedRate.value));
+});
+
+function recalculateRate() {
+  const rate = calculatedRate.value;
+  const total = estimatedPayout.value;
+  recalculatedNotice.value = `✓ Recalculated: ₹${rate}.00/L (${rateBreakdown.value.label}) • Estimated Total: ₹${formatNumber(total)}`;
+  setTimeout(() => {
+    recalculatedNotice.value = '';
+  }, 4500);
+}
 
 function handleQrScanned(code) {
   const c = String(code || '').trim();
@@ -396,7 +459,12 @@ async function submitSettlement() {
   try {
     await emit('settle-receipt', selectedReceiptId.value, {
       measured_volume: form.value.measured_volume,
+      settled_volume: form.value.measured_volume,
       tpc_percentage: form.value.tpc_percentage,
+      tpc_reading: form.value.tpc_percentage,
+      actual_rate: calculatedRate.value,
+      total_amount: estimatedPayout.value,
+      amount: estimatedPayout.value,
       payment_status: form.value.payment_status,
     });
     selectedReceiptId.value = '';
