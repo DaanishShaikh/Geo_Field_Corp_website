@@ -405,6 +405,43 @@
                 </p>
               </div>
             </div>
+
+            <!-- Toxicity Per Reheat Bar Card -->
+            <div 
+              data-testid="toxicity-per-reheat-bar"
+              class="mt-10 rounded-2xl border border-slate-800/80 bg-slate-900/40 p-4 sm:p-5 scroll-reveal delay-300 backdrop-blur-sm"
+            >
+              <div class="flex items-center justify-between font-mono text-[10px] tracking-[0.25em] uppercase mb-3">
+                <span class="text-slate-400 font-semibold">Toxicity Per Reheat</span>
+                <span class="text-hazard font-bold tracking-widest flex items-center gap-1.5">
+                  <span class="inline-block h-1.5 w-1.5 rounded-full bg-hazard animate-pulse"></span>
+                  TPC Danger Zone
+                </span>
+              </div>
+              
+              <!-- Gradient Bar with 25% Mark -->
+              <div class="relative h-3.5 w-full rounded-full overflow-hidden bg-slate-950/80 p-0.5 shadow-inner">
+                <div 
+                  class="h-full w-full rounded-full relative"
+                  style="background: linear-gradient(90deg, #22c55e 0%, #22c55e 12%, #eab308 25%, #f97316 45%, #ef4444 75%, #dc2626 100%);"
+                >
+                  <!-- 25% FSSAI Limit Divider Mark -->
+                  <div 
+                    class="absolute top-0 bottom-0 left-[25%] w-0.5 bg-white shadow-[0_0_8px_rgba(255,255,255,0.95)] z-10"
+                    title="25% FSSAI Limit"
+                  ></div>
+                </div>
+              </div>
+              
+              <!-- Bottom Markers -->
+              <div class="relative mt-2.5 font-mono text-[10px] uppercase tracking-wider flex justify-between items-center text-slate-300">
+                <span class="text-bio font-bold">0% Fresh</span>
+                <span class="absolute left-[25%] -translate-x-1/2 whitespace-nowrap text-toxic font-bold">
+                  25% FSSAI Limit
+                </span>
+                <span class="text-hazard font-bold">100% Reused</span>
+              </div>
+            </div>
           </div>
 
           <!-- Right Column -->
