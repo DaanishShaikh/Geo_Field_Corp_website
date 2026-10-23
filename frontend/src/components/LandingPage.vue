@@ -724,31 +724,77 @@
                 </div>
               </div>
 
-              <!-- Velocity Chart -->
-              <div class="mt-7 rounded-2xl border border-bio/10 bg-obsidian/50 p-5 scroll-reveal delay-300" data-testid="impact-chart">
+              <!-- Velocity Chart (Animated Up & Stop) -->
+              <div 
+                ref="impactChartRef"
+                class="mt-7 rounded-2xl border border-bio/10 bg-obsidian/50 p-5 scroll-reveal delay-300 transition-all duration-300 cursor-pointer group" 
+                data-testid="impact-chart"
+                title="Click to replay velocity chart animation"
+                @click="replayVelocityChartAnimation"
+              >
                 <div class="mb-3 flex items-center justify-between font-mono text-[9px] uppercase tracking-[0.2em] text-slate-500">
-                  <span>Collection Velocity — 12 Weeks</span>
-                  <span class="text-bio font-bold">+214%</span>
+                  <span class="flex items-center gap-1.5">
+                    <span 
+                      class="h-1.5 w-1.5 rounded-full transition-colors duration-500"
+                      :class="velocityChartProgress > 0 ? 'bg-bio animate-pulse' : 'bg-slate-600'"
+                    ></span>
+                    Collection Velocity — 12 Weeks
+                  </span>
+                  <span class="text-bio font-bold text-[11px] tracking-wider transition-all duration-300">
+                    +{{ animatedVelocityPercent }}%
+                  </span>
                 </div>
-                <svg viewBox="0 0 480 110" class="h-24 w-full" preserveAspectRatio="none">
+                <svg viewBox="0 0 480 110" class="h-24 w-full overflow-visible" preserveAspectRatio="none">
                   <defs>
                     <linearGradient id="areaFill" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stop-color="#22C55E" stop-opacity="0.25" />
+                      <stop offset="0%" stop-color="#22C55E" stop-opacity="0.32" />
+                      <stop offset="70%" stop-color="#22C55E" stop-opacity="0.08" />
                       <stop offset="100%" stop-color="#22C55E" stop-opacity="0" />
                     </linearGradient>
                   </defs>
+                  
+                  <!-- Area Fill (Interpolated path rising up from bottom baseline) -->
                   <path
-                    d="M0 95 C 50 88, 80 92, 120 74 S 200 66, 240 52 S 330 44, 370 26 S 440 18, 480 10 L 480 110 L 0 110 Z"
+                    :d="currentChartAreaPath"
                     fill="url(#areaFill)"
+                    class="transition-opacity duration-300"
+                    :style="{ opacity: velocityChartProgress > 0.05 ? 1 : 0 }"
                   />
+                  
+                  <!-- Rising Stroke Line (Interpolated path rising up to peak) -->
                   <path
-                    d="M0 95 C 50 88, 80 92, 120 74 S 200 66, 240 52 S 330 44, 370 26 S 440 18, 480 10"
+                    :d="currentChartLinePath"
                     fill="none"
                     stroke="#22C55E"
                     stroke-width="2.5"
                     stroke-linecap="round"
-                    class="chart-path-animated"
+                    stroke-linejoin="round"
+                    class="drop-shadow-[0_0_8px_rgba(34,197,94,0.6)]"
                   />
+
+                  <!-- Traveling / Pulsing Peak Node -->
+                  <g v-if="velocityChartProgress > 0.08">
+                    <!-- Halo pulse when reaching the top -->
+                    <circle 
+                      v-if="velocityChartProgress >= 0.95"
+                      cx="476" 
+                      :cy="peakMarkerY" 
+                      r="9" 
+                      fill="#22C55E" 
+                      fill-opacity="0.25"
+                      class="animate-ping origin-center" 
+                    />
+                    <!-- Core beacon circle that rides the line up -->
+                    <circle 
+                      cx="476" 
+                      :cy="peakMarkerY" 
+                      r="4" 
+                      fill="#22C55E" 
+                      stroke="#0A0F0D" 
+                      stroke-width="1.5"
+                      class="drop-shadow-[0_0_6px_rgba(34,197,94,0.9)]"
+                    />
+                  </g>
                 </svg>
               </div>
             </div>
@@ -1051,6 +1097,7 @@ const heroRef = ref(null);
 const crisisSectionRef = ref(null);
 const processSectionRef = ref(null);
 const impactSectionRef = ref(null);
+const impactChartRef = ref(null);
 const ctaSectionRef = ref(null);
 
 // Section scroll progress values (0.0 to 1.0)
@@ -1177,6 +1224,75 @@ const processTruckLeft = computed(() => {
   return '92%';
 });
 
+// 9. Interactive Velocity Chart Animation ("Go up and stop")
+const velocityChartProgress = ref(0);
+const animatedVelocityPercent = ref(0);
+let velocityChartStarted = false;
+let chartObserver = null;
+
+function triggerVelocityChartAnimation() {
+  if (velocityChartStarted) return;
+  velocityChartStarted = true;
+
+  const duration = 2000;
+  const startTime = performance.now();
+
+  function step(now) {
+    const elapsed = now - startTime;
+    const p = Math.min(elapsed / duration, 1);
+    // Smooth ease-out cubic curve: rapidly climbs then decelerates gracefully to stop at the peak
+    const easeOut = 1 - Math.pow(1 - p, 3);
+
+    velocityChartProgress.value = easeOut;
+    animatedVelocityPercent.value = Math.round(214 * easeOut);
+
+    if (p < 1) {
+      requestAnimationFrame(step);
+    } else {
+      velocityChartProgress.value = 1;
+      animatedVelocityPercent.value = 214;
+    }
+  }
+
+  requestAnimationFrame(step);
+}
+
+function replayVelocityChartAnimation() {
+  velocityChartStarted = false;
+  velocityChartProgress.value = 0;
+  animatedVelocityPercent.value = 0;
+  triggerVelocityChartAnimation();
+}
+
+const currentChartLinePath = computed(() => {
+  const k = velocityChartProgress.value;
+  const base = 105;
+  const getY = (targetY) => (base - (base - targetY) * k).toFixed(1);
+
+  const y0 = getY(95);
+  const y1 = getY(88);
+  const y2 = getY(92);
+  const y3 = getY(74);
+  const y4 = getY(66);
+  const y5 = getY(52);
+  const y6 = getY(44);
+  const y7 = getY(26);
+  const y8 = getY(18);
+  const y9 = getY(10);
+
+  return `M0 ${y0} C 50 ${y1}, 80 ${y2}, 120 ${y3} S 200 ${y4}, 240 ${y5} S 330 ${y6}, 370 ${y7} S 440 ${y8}, 480 ${y9}`;
+});
+
+const currentChartAreaPath = computed(() => {
+  return `${currentChartLinePath.value} L 480 110 L 0 110 Z`;
+});
+
+const peakMarkerY = computed(() => {
+  const base = 105;
+  const target = 10;
+  return Number((base - (base - target) * velocityChartProgress.value).toFixed(1));
+});
+
 // Helper to calculate progress of any section across viewport
 function calcSectionProgress(el) {
   if (!el) return 0;
@@ -1223,6 +1339,9 @@ function handleScroll() {
 
   if (impactSectionRef.value) {
     impactProgress.value = calcSectionProgress(impactSectionRef.value);
+    if (!velocityChartStarted && impactProgress.value > 0.15) {
+      triggerVelocityChartAnimation();
+    }
   }
 
   if (ctaSectionRef.value) {
@@ -1234,7 +1353,7 @@ function handleScroll() {
 let revealObserver = null;
 
 function setupRevealObserver() {
-  const elements = document.querySelectorAll('.scroll-reveal, .scroll-reveal-left, .scroll-reveal-right, .scroll-reveal-scale, .chart-path-animated');
+  const elements = document.querySelectorAll('.scroll-reveal, .scroll-reveal-left, .scroll-reveal-right, .scroll-reveal-scale');
   if (!('IntersectionObserver' in window)) {
     elements.forEach(el => el.classList.add('in-view'));
     return;
@@ -1260,12 +1379,29 @@ onMounted(() => {
   setTimeout(() => {
     setupRevealObserver();
   }, 60);
+
+  if (impactChartRef.value && 'IntersectionObserver' in window) {
+    chartObserver = new IntersectionObserver((entries) => {
+      if (entries[0] && entries[0].isIntersecting) {
+        triggerVelocityChartAnimation();
+      }
+    }, { threshold: 0.15 });
+    chartObserver.observe(impactChartRef.value);
+  } else {
+    setTimeout(() => {
+      if (!velocityChartStarted) triggerVelocityChartAnimation();
+    }, 1000);
+  }
 });
 
 onUnmounted(() => {
   window.removeEventListener('scroll', onScroll);
   if (revealObserver) {
     revealObserver.disconnect();
+  }
+  if (chartObserver) {
+    chartObserver.disconnect();
+    chartObserver = null;
   }
 });
 </script>
