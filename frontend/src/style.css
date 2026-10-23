@@ -58,17 +58,21 @@ code, pre {
   z-index: 70;
   pointer-events: none;
   opacity: 0.05;
+  contain: strict;
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+  backface-visibility: hidden;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   animation: grain-shift 9s steps(6) infinite;
 }
 
 @keyframes grain-shift {
-  0%, 100% { transform: translate(0, 0); }
-  10% { transform: translate(-5%, -10%); }
-  30% { transform: translate(3%, -15%); }
-  50% { transform: translate(12%, 9%); }
-  70% { transform: translate(9%, 4%); }
-  90% { transform: translate(-1%, 7%); }
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  10% { transform: translate3d(-5%, -10%, 0); }
+  30% { transform: translate3d(3%, -15%, 0); }
+  50% { transform: translate3d(12%, 9%, 0); }
+  70% { transform: translate3d(9%, 4%, 0); }
+  90% { transform: translate3d(-1%, 7%, 0); }
 }
 
 /* Reference site utility classes */
@@ -134,6 +138,7 @@ code, pre {
 .scroll-reveal.in-view {
   opacity: 1;
   transform: translateY(0);
+  will-change: auto;
 }
 
 .scroll-reveal-left {
@@ -146,6 +151,7 @@ code, pre {
 .scroll-reveal-left.in-view {
   opacity: 1;
   transform: translateX(0);
+  will-change: auto;
 }
 
 .scroll-reveal-right {
@@ -158,6 +164,7 @@ code, pre {
 .scroll-reveal-right.in-view {
   opacity: 1;
   transform: translateX(0);
+  will-change: auto;
 }
 
 .scroll-reveal-scale {
@@ -170,6 +177,7 @@ code, pre {
 .scroll-reveal-scale.in-view {
   opacity: 1;
   transform: scale(1) translateY(0);
+  will-change: auto;
 }
 
 /* Stagger transition delays */
@@ -216,3 +224,23 @@ code, pre {
   stroke-dashoffset: 0;
 }
 
+
+/* Prefers reduced motion accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .scroll-reveal,
+  .scroll-reveal-left,
+  .scroll-reveal-right,
+  .scroll-reveal-scale {
+    transition: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+  .animate-marquee,
+  .animate-pulse-dot,
+  .animate-spin-slow,
+  .animate-float-1,
+  .animate-float-2,
+  .grain-overlay {
+    animation: none !important;
+  }
+}

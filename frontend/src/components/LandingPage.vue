@@ -4,10 +4,10 @@
     <div class="grain-overlay" aria-hidden="true"></div>
 
     <!-- Reading Scroll Progress Bar -->
-    <div class="fixed top-0 inset-x-0 h-[3px] z-50 pointer-events-none bg-transparent">
+    <div class="fixed top-0 inset-x-0 h-[3px] z-50 pointer-events-none bg-transparent overflow-hidden">
       <div 
-        class="h-full bg-gradient-to-r from-bio via-limeglow to-biodark transition-all duration-75 ease-out shadow-[0_0_12px_rgba(34,197,94,0.9)]"
-        :style="{ width: `${scrollProgress * 100}%` }"
+        class="h-full w-full bg-gradient-to-r from-bio via-limeglow to-biodark shadow-[0_0_12px_rgba(34,197,94,0.9)] origin-left will-change-transform"
+        :style="{ transform: `scaleX(${scrollProgress})` }"
       ></div>
     </div>
 
@@ -156,7 +156,7 @@
 
       <div class="relative z-10 mx-auto grid w-full max-w-7xl items-center gap-14 px-5 sm:px-8 lg:grid-cols-12 lg:gap-6">
         <!-- Hero Left Copy Column -->
-        <div class="lg:col-span-7 transition-all duration-100 ease-out" :style="heroCopyStyle">
+        <div class="lg:col-span-7 will-change-transform" :style="heroCopyStyle">
           <!-- Eyebrow Badge -->
           <div
             data-testid="hero-eyebrow"
@@ -241,13 +241,13 @@
         >
           <!-- Dynamic Radial Glow Behind Card -->
           <div
-            class="absolute inset-6 rounded-[2.5rem] bg-[radial-gradient(circle_at_50%_45%,rgba(34,197,94,0.28),transparent_68%)] blur-2xl transition-transform duration-300 ease-out pointer-events-none"
+            class="absolute inset-6 rounded-[2.5rem] bg-[radial-gradient(circle_at_50%_45%,rgba(34,197,94,0.28),transparent_68%)] blur-2xl pointer-events-none will-change-transform"
             :style="heroGlowStyle"
           ></div>
 
           <!-- Main Tilted Kitchen Image Card -->
           <div
-            class="absolute inset-x-8 top-6 bottom-16 overflow-hidden rounded-[2rem] border border-bio/20 shadow-[0_40px_80px_-20px_rgba(0,0,0,0.7)] sm:inset-x-14 transition-transform duration-300 ease-out"
+            class="absolute inset-x-8 top-6 bottom-16 overflow-hidden rounded-[2rem] border border-bio/20 shadow-[0_40px_80px_-20px_rgba(0,0,0,0.7)] sm:inset-x-14 will-change-transform"
             :style="heroImgStyle"
           >
             <img
@@ -271,7 +271,7 @@
           <!-- Floating Glass Card (Scan Verified) -->
           <div
             data-testid="hero-scan-card"
-            class="glass-panel absolute right-0 top-2 w-48 rounded-2xl p-4 sm:right-2 sm:w-56 transition-transform duration-300 ease-out shadow-2xl"
+            class="glass-panel absolute right-0 top-2 w-48 rounded-2xl p-4 sm:right-2 sm:w-56 shadow-2xl will-change-transform"
             :style="heroCardStyle"
           >
             <div class="flex items-center gap-3">
@@ -292,7 +292,7 @@
           <!-- Floating Glass Badge (CO₂ Offset) -->
           <div
             data-testid="hero-offset-badge"
-            class="glass-panel absolute bottom-2 left-0 flex items-center gap-3 rounded-2xl px-4 py-3 sm:left-4 transition-transform duration-300 ease-out shadow-2xl"
+            class="glass-panel absolute bottom-2 left-0 flex items-center gap-3 rounded-2xl px-4 py-3 sm:left-4 shadow-2xl will-change-transform"
             :style="heroBadgeStyle"
           >
             <span class="relative grid h-10 w-10 place-items-center">
@@ -346,7 +346,7 @@
       ></div>
       <span
         aria-hidden="true"
-        class="text-outline-amber pointer-events-none absolute -top-6 right-0 select-none font-display text-[22vw] font-extrabold leading-none tracking-tighter opacity-60 lg:text-[16rem] transition-transform duration-100 ease-out will-change-transform"
+        class="text-outline-amber pointer-events-none absolute -top-6 right-0 select-none font-display text-[22vw] font-extrabold leading-none tracking-tighter opacity-60 lg:text-[16rem] will-change-transform"
         :style="toxicWatermarkStyle"
       >
         TOXIC
@@ -447,7 +447,7 @@
           <!-- Right Column -->
           <div class="lg:col-span-5">
             <div 
-              class="relative overflow-hidden rounded-[2rem] border border-toxic/20 scroll-reveal-scale delay-200 transition-transform duration-200 ease-out will-change-transform"
+              class="relative overflow-hidden rounded-[2rem] border border-toxic/20 scroll-reveal-scale delay-200 will-change-transform"
               :style="crisisBurnerStyle"
             >
               <img
@@ -501,7 +501,7 @@
     >
       <span
         aria-hidden="true"
-        class="pointer-events-none absolute -bottom-10 left-0 select-none font-display text-[20vw] font-extrabold leading-none tracking-tighter text-ink/[0.04] lg:text-[15rem] transition-transform duration-100 ease-out will-change-transform"
+        class="pointer-events-none absolute -bottom-10 left-0 select-none font-display text-[20vw] font-extrabold leading-none tracking-tighter text-ink/[0.04] lg:text-[15rem] will-change-transform"
         :style="processWatermarkStyle"
       >
         SCAN &amp; DONE
@@ -633,7 +633,7 @@
       ></div>
       <span
         aria-hidden="true"
-        class="text-outline pointer-events-none absolute -top-8 left-0 select-none font-display text-[22vw] font-extrabold leading-none tracking-tighter lg:text-[16rem] transition-transform duration-100 ease-out will-change-transform"
+        class="text-outline pointer-events-none absolute -top-8 left-0 select-none font-display text-[22vw] font-extrabold leading-none tracking-tighter lg:text-[16rem] will-change-transform"
         :style="impactWatermarkStyle"
       >
         GREEN
@@ -817,7 +817,7 @@
           src="https://images.unsplash.com/photo-1749983055056-dddeb9dad995?crop=entropy&cs=srgb&fm=jpg&q=85&w=1600"
           alt="Wind turbine generating green power"
           aria-hidden="true"
-          class="h-full w-full object-cover opacity-25 transition-transform duration-200 ease-out will-change-transform"
+          class="h-full w-full object-cover opacity-25 will-change-transform"
           :style="ctaBgStyle"
           loading="lazy"
         />
@@ -1110,70 +1110,88 @@ const ctaProgress = ref(0);
 const mouseX = ref(0);
 const mouseY = ref(0);
 
+let heroRectCache = null;
+let mouseMoveTicking = false;
+let pendingMouseX = 0;
+let pendingMouseY = 0;
+
 function handleHeroMouseMove(e) {
-  if (!heroRef.value) return;
-  const rect = heroRef.value.getBoundingClientRect();
-  mouseX.value = (e.clientX - rect.left) / rect.width - 0.5;
-  mouseY.value = (e.clientY - rect.top) / rect.height - 0.5;
+  if (!heroRectCache) {
+    if (heroRef.value) heroRectCache = heroRef.value.getBoundingClientRect();
+    else return;
+  }
+  pendingMouseX = (e.clientX - heroRectCache.left) / heroRectCache.width - 0.5;
+  pendingMouseY = (e.clientY - heroRectCache.top) / heroRectCache.height - 0.5;
+
+  if (!mouseMoveTicking) {
+    mouseMoveTicking = true;
+    window.requestAnimationFrame(() => {
+      mouseX.value = pendingMouseX;
+      mouseY.value = pendingMouseY;
+      mouseMoveTicking = false;
+    });
+  }
 }
 
 function handleHeroMouseLeave() {
+  pendingMouseX = 0;
+  pendingMouseY = 0;
   mouseX.value = 0;
   mouseY.value = 0;
 }
 
-// 1. Hero Left Copy parallax
+// 1. Hero Left Copy parallax (GPU accelerated translate3d)
 const heroCopyStyle = computed(() => {
   const y = scrollY.value;
   return {
-    transform: `translateY(${y * 0.12}px)`,
-    opacity: Math.max(0, 1 - y / 700),
+    transform: `translate3d(0, ${(y * 0.12).toFixed(1)}px, 0)`,
+    opacity: Math.max(0, 1 - y / 700).toFixed(2),
   };
 });
 
-// 2. Hero 3D visual card parallax (combines mouse parallax with scroll parallax)
+// 2. Hero 3D visual card parallax (combines mouse parallax with scroll parallax, GPU accelerated)
 const heroGlowStyle = computed(() => ({
-  transform: `translate(${mouseX.value * 22}px, ${mouseY.value * 22 + scrollY.value * 0.22}px)`,
+  transform: `translate3d(${(mouseX.value * 22).toFixed(1)}px, ${(mouseY.value * 22 + scrollY.value * 0.22).toFixed(1)}px, 0)`,
 }));
 
 const heroImgStyle = computed(() => ({
-  transform: `translate(${mouseX.value * -16}px, ${mouseY.value * -12 + scrollY.value * 0.12}px) rotate(${2 + mouseX.value * 2.5}deg)`,
+  transform: `translate3d(${(mouseX.value * -16).toFixed(1)}px, ${(mouseY.value * -12 + scrollY.value * 0.12).toFixed(1)}px, 0) rotate(${(2 + mouseX.value * 2.5).toFixed(2)}deg)`,
 }));
 
 const heroCardStyle = computed(() => ({
-  transform: `translate(${mouseX.value * 34}px, ${mouseY.value * 26 + scrollY.value * -0.22}px)`,
+  transform: `translate3d(${(mouseX.value * 34).toFixed(1)}px, ${(mouseY.value * 26 + scrollY.value * -0.22).toFixed(1)}px, 0)`,
 }));
 
 const heroBadgeStyle = computed(() => ({
-  transform: `translate(${mouseX.value * -30}px, ${mouseY.value * -22 + scrollY.value * 0.18}px)`,
+  transform: `translate3d(${(mouseX.value * -30).toFixed(1)}px, ${(mouseY.value * -22 + scrollY.value * 0.18).toFixed(1)}px, 0)`,
 }));
 
-// 3. Watermark text drift on scroll
+// 3. Watermark text drift on scroll (smooth 60 FPS translate3d)
 const toxicWatermarkStyle = computed(() => ({
-  transform: `translateX(${(crisisProgress.value - 0.45) * -180}px)`,
+  transform: `translate3d(${((crisisProgress.value - 0.45) * -180).toFixed(1)}px, 0, 0)`,
 }));
 
 const processWatermarkStyle = computed(() => ({
-  transform: `translateX(${(processProgress.value - 0.5) * 200}px)`,
+  transform: `translate3d(${((processProgress.value - 0.5) * 200).toFixed(1)}px, 0, 0)`,
 }));
 
 const impactWatermarkStyle = computed(() => ({
-  transform: `translateX(${(impactProgress.value - 0.5) * -160}px)`,
+  transform: `translate3d(${((impactProgress.value - 0.5) * -160).toFixed(1)}px, 0, 0)`,
 }));
 
 // 4. Crisis right burner image parallax
 const crisisBurnerStyle = computed(() => ({
-  transform: `translateY(${(crisisProgress.value - 0.5) * -45}px)`,
+  transform: `translate3d(0, ${((crisisProgress.value - 0.5) * -45).toFixed(1)}px, 0)`,
 }));
 
 // 5. Impact console parallax
 const impactConsoleStyle = computed(() => ({
-  transform: `translateY(${(1 - impactProgress.value) * 35}px)`,
+  transform: `translate3d(0, ${((1 - impactProgress.value) * 35).toFixed(1)}px, 0)`,
 }));
 
 // 6. CTA section background image parallax
 const ctaBgStyle = computed(() => ({
-  transform: `scale(${1 + ctaProgress.value * 0.12}) translateY(${(ctaProgress.value - 0.5) * 30}px)`,
+  transform: `scale(${(1 + ctaProgress.value * 0.12).toFixed(3)}) translate3d(0, ${((ctaProgress.value - 0.5) * 30).toFixed(1)}px, 0)`,
 }));
 
 // 7. Animated counters on scroll for Crisis section
@@ -1293,14 +1311,56 @@ const peakMarkerY = computed(() => {
   return Number((base - (base - target) * velocityChartProgress.value).toFixed(1));
 });
 
-// Helper to calculate progress of any section across viewport
-function calcSectionProgress(el) {
-  if (!el) return 0;
-  const rect = el.getBoundingClientRect();
-  const windowHeight = window.innerHeight;
-  const total = rect.height + windowHeight;
-  const current = windowHeight - rect.top;
-  return Math.min(Math.max(current / total, 0), 1);
+// Cached layout metrics to prevent forced synchronous layout thrashing during scroll
+let cachedLayout = null;
+let resizeTicking = false;
+
+function updateLayoutCache() {
+  if (typeof window === 'undefined') return;
+  const windowHeight = window.innerHeight || 800;
+  const docHeight = Math.max(1, (document.documentElement.scrollHeight || 5000) - windowHeight);
+
+  function getMetrics(el) {
+    if (!el) return null;
+    const rect = el.getBoundingClientRect();
+    const top = rect.top + (window.scrollY || window.pageYOffset || 0);
+    return {
+      top,
+      height: rect.height,
+      total: rect.height + windowHeight,
+    };
+  }
+
+  cachedLayout = {
+    windowHeight,
+    docHeight,
+    crisis: getMetrics(crisisSectionRef.value),
+    process: getMetrics(processSectionRef.value),
+    impact: getMetrics(impactSectionRef.value),
+    cta: getMetrics(ctaSectionRef.value),
+  };
+
+  if (heroRef.value) {
+    heroRectCache = heroRef.value.getBoundingClientRect();
+  }
+}
+
+function onWindowResize() {
+  if (!resizeTicking) {
+    resizeTicking = true;
+    window.requestAnimationFrame(() => {
+      updateLayoutCache();
+      handleScroll();
+      resizeTicking = false;
+    });
+  }
+}
+
+// Pure math section progress calculation using cached metrics (0ms DOM cost during scroll)
+function calcSectionProgress(metrics, y, windowHeight) {
+  if (!metrics || metrics.total <= 0) return 0;
+  const current = windowHeight - (metrics.top - y);
+  return Math.min(Math.max(current / metrics.total, 0), 1);
 }
 
 // Scroll handlers with requestAnimationFrame
@@ -1317,35 +1377,43 @@ function onScroll() {
 }
 
 function handleScroll() {
-  const y = window.scrollY;
+  const y = window.scrollY || window.pageYOffset || 0;
   scrollY.value = y;
   isScrolled.value = y > 40;
-  showStickyRegister.value = y > window.innerHeight * 0.7;
+  
+  if (!cachedLayout) {
+    updateLayoutCache();
+  }
 
-  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-  scrollProgress.value = docHeight > 0 ? Math.min(Math.max(y / docHeight, 0), 1) : 0;
+  const wh = cachedLayout ? cachedLayout.windowHeight : (window.innerHeight || 800);
+  const dh = cachedLayout ? cachedLayout.docHeight : 4000;
+  
+  showStickyRegister.value = y > wh * 0.7;
+  scrollProgress.value = dh > 0 ? Math.min(Math.max(y / dh, 0), 1) : 0;
 
-  // Update progress for all animated sections
-  if (crisisSectionRef.value) {
-    crisisProgress.value = calcSectionProgress(crisisSectionRef.value);
-    if (!countStarted && crisisProgress.value > 0.25) {
-      triggerCounters();
+  // Update progress for all animated sections using pure math (no getBoundingClientRect reflows)
+  if (cachedLayout) {
+    if (cachedLayout.crisis) {
+      crisisProgress.value = calcSectionProgress(cachedLayout.crisis, y, wh);
+      if (!countStarted && crisisProgress.value > 0.25) {
+        triggerCounters();
+      }
     }
-  }
 
-  if (processSectionRef.value) {
-    processProgress.value = calcSectionProgress(processSectionRef.value);
-  }
-
-  if (impactSectionRef.value) {
-    impactProgress.value = calcSectionProgress(impactSectionRef.value);
-    if (!velocityChartStarted && impactProgress.value > 0.15) {
-      triggerVelocityChartAnimation();
+    if (cachedLayout.process) {
+      processProgress.value = calcSectionProgress(cachedLayout.process, y, wh);
     }
-  }
 
-  if (ctaSectionRef.value) {
-    ctaProgress.value = calcSectionProgress(ctaSectionRef.value);
+    if (cachedLayout.impact) {
+      impactProgress.value = calcSectionProgress(cachedLayout.impact, y, wh);
+      if (!velocityChartStarted && impactProgress.value > 0.15) {
+        triggerVelocityChartAnimation();
+      }
+    }
+
+    if (cachedLayout.cta) {
+      ctaProgress.value = calcSectionProgress(cachedLayout.cta, y, wh);
+    }
   }
 }
 
@@ -1375,10 +1443,51 @@ function setupRevealObserver() {
 
 onMounted(() => {
   window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onWindowResize, { passive: true });
+  
+  // Initialize layout cache after initial paint
+  updateLayoutCache();
   handleScroll();
+
   setTimeout(() => {
+    updateLayoutCache();
     setupRevealObserver();
-  }, 60);
+  }, 100);
+
+  // Setup diagnostic 60 FPS telemetry helper on window
+  if (typeof window !== 'undefined') {
+    let frameCount = 0;
+    let lastTime = performance.now();
+    let droppedFrames = 0;
+    let totalFrameTime = 0;
+    let maxFrameTime = 0;
+
+    function trackFps(now) {
+      const delta = now - lastTime;
+      lastTime = now;
+      if (delta > 0 && delta < 1000) {
+        frameCount++;
+        totalFrameTime += delta;
+        if (delta > maxFrameTime) maxFrameTime = delta;
+        if (delta > 18.0) droppedFrames++;
+      }
+      requestAnimationFrame(trackFps);
+    }
+    requestAnimationFrame(trackFps);
+
+    window.__getFpsReport = () => {
+      const avgDelta = frameCount > 0 ? totalFrameTime / frameCount : 0;
+      const fps = avgDelta > 0 ? (1000 / avgDelta).toFixed(1) : '0';
+      return {
+        fps: Number(fps),
+        avgFrameTimeMs: Number(avgDelta.toFixed(2)),
+        maxFrameTimeMs: Number(maxFrameTime.toFixed(2)),
+        droppedFrames,
+        totalFrames: frameCount,
+        droppedPercent: frameCount > 0 ? ((droppedFrames / frameCount) * 100).toFixed(1) + '%' : '0%'
+      };
+    };
+  }
 
   if (impactChartRef.value && 'IntersectionObserver' in window) {
     chartObserver = new IntersectionObserver((entries) => {
@@ -1396,6 +1505,7 @@ onMounted(() => {
 
 onUnmounted(() => {
   window.removeEventListener('scroll', onScroll);
+  window.removeEventListener('resize', onWindowResize);
   if (revealObserver) {
     revealObserver.disconnect();
   }
