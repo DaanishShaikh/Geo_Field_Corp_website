@@ -1039,18 +1039,26 @@ export const api = {
   },
 
   createBiodieselBatch: async (payload) => {
-    const batchId = "BATCH-" + Math.floor(1000 + Math.random() * 9000);
+    const codeSuffix = Math.floor(1000 + Math.random() * 9000);
+    const dateStr = new Date().toISOString().split('T')[0];
+    const batchCode = payload.batch_code || `RUCO-BIO-${dateStr.replace(/-/g, '')}-${codeSuffix}`;
+    const totalVolume = Number(payload.total_volume || payload.volume_liters || 1000);
+    const refinery = payload.refinery_destination || payload.destination_refinery || "Karnataka State Biofuel Board, Bengaluru";
     const newBatch = {
-      id: batchId,
-      batch_number: batchId,
-      volume_liters: Number(payload.volume_liters || 500),
-      destination_refinery: payload.destination_refinery || "BioFuels India Pvt Ltd",
-      status: "dispatched",
+      id: batchCode,
+      batch_code: batchCode,
+      batch_number: batchCode,
+      total_volume: totalVolume,
+      volume_liters: totalVolume,
+      refinery_destination: refinery,
+      destination_refinery: refinery,
+      status: payload.status || "Dispatched",
+      dispatch_date: payload.dispatch_date || dateStr,
       created_at: new Date().toISOString()
     };
-    await setDoc(doc(db, "batches", batchId), newBatch);
-    await logAudit("CREATE_BATCH", "Admin", `Created batch ${batchId} for ${newBatch.volume_liters}L`);
-    return { message: "Biodiesel batch created", batch: newBatch };
+    await setDoc(doc(db, "batches", batchCode), newBatch);
+    await logAudit("CREATE_BATCH", "Admin", `Created batch ${batchCode} for ${totalVolume}L to ${refinery}`);
+    return { message: "Biodiesel compliance batch created successfully", batch: newBatch };
   },
 
   getAuditLogs: async () => {

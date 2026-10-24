@@ -99,6 +99,7 @@
             @update-rate-card="handleUpdateRateCard"
             @inject-stop="handleInjectStop"
             @update-seller-location="handleUpdateSellerLocation"
+            @create-batch="handleCreateBatch"
             @delete-user="handleDeleteUser"
             @inspect-seller="openSellerVerification"
           />
@@ -547,6 +548,16 @@ async function handleUpdateSellerLocation(sellerId, payload) {
     await loadRoleData();
   } catch (e) {
     showToast(e.message || 'Failed to update location');
+  }
+}
+
+async function handleCreateBatch(batchPayload) {
+  try {
+    const res = await api.createBiodieselBatch(batchPayload);
+    showToast(res.message || 'Biodiesel compliance batch created');
+    await loadRoleData();
+  } catch (e) {
+    showToast(e.message || 'Failed to create batch');
   }
 }
 

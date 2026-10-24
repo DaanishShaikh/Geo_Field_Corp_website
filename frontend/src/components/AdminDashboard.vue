@@ -940,7 +940,7 @@
           <p class="text-xs text-slate-400">Bulk delivery records proving UCO conversion at certified refineries</p>
         </div>
         <button 
-          @click="showBatchModal = true"
+          @click="openBatchModal"
           class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold transition shadow shrink-0 min-h-[36px]"
         >
           + Aggregate Batch
@@ -959,6 +959,11 @@
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-700/60">
+            <tr v-if="!batches || !batches.length">
+              <td colspan="5" class="py-6 text-center text-slate-500">
+                No aggregated batches recorded yet. Click "+ Aggregate Batch" above to log a bulk shipment to a certified refinery.
+              </td>
+            </tr>
             <tr v-for="b in batches" :key="b.id" class="hover:bg-slate-700/30">
               <td class="py-3 px-3 font-mono font-bold text-white">{{ b.batch_code }}</td>
               <td class="py-3 px-3 font-semibold text-emerald-400">{{ b.total_volume }} Liters</td>
@@ -972,6 +977,139 @@
             </tr>
           </tbody>
         </table>
+      </div>
+    </div>
+
+    <!-- Aggregate Downstream Biodiesel Batch Modal -->
+    <div v-if="showBatchModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4">
+      <div class="bg-slate-900 border border-slate-700 rounded-2xl sm:rounded-3xl max-w-lg w-full p-4 sm:p-6 space-y-4 shadow-2xl max-h-[92dvh] overflow-y-auto">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center text-sm font-bold shrink-0">
+              ⚗️
+            </div>
+            <div>
+              <h3 class="text-sm sm:text-base font-bold text-white">Aggregate Downstream Biodiesel Batch</h3>
+              <p class="text-xs text-slate-400">Record bulk UCO handover to certified conversion refineries</p>
+            </div>
+          </div>
+          <button @click="closeBatchModal" class="text-slate-400 hover:text-white text-lg p-1">&times;</button>
+        </div>
+
+        <form @submit.prevent="handleCreateBatch" class="space-y-3.5 text-xs">
+          <!-- Batch Code (Auto-generated or custom) -->
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">Official Batch Tracking Code</label>
+            <div class="relative">
+              <input 
+                v-model="batchForm.batch_code" 
+                type="text" 
+                required 
+                class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white font-mono text-xs focus:outline-none focus:border-emerald-500"
+              />
+              <button 
+                type="button" 
+                @click="regenerateBatchCode"
+                class="absolute right-2 top-1.5 px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-[10px] text-slate-300 border border-slate-700"
+              >
+                🔄 Gen
+              </button>
+            </div>
+            <span class="text-[10px] text-slate-500">Government traceable manifest identifier</span>
+          </div>
+
+          <!-- Total Volume to Aggregate -->
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">Total Aggregated Volume (Liters)</label>
+            <div class="relative">
+              <input 
+                v-model.number="batchForm.total_volume" 
+                type="number" 
+                min="10" 
+                step="1" 
+                required 
+                placeholder="e.g. 1500" 
+                class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white font-mono text-xs focus:outline-none focus:border-emerald-500"
+              />
+              <span class="absolute right-3 top-2 text-[10px] text-slate-500 font-mono">Liters</span>
+            </div>
+            <span class="text-[10px] text-slate-500">Total volume pooled across settled FBO collections</span>
+          </div>
+
+          <!-- Certified Refinery Destination -->
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">Destination Biofuel Refinery / Conversion Plant</label>
+            <select 
+              v-model="batchForm.refinery_destination" 
+              required
+              class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-emerald-500"
+            >
+              <option value="Karnataka State Biofuel Board, Bengaluru">🏢 Karnataka State Biofuel Board, Bengaluru</option>
+              <option value="BioFuels India Pvt Ltd, Whitefield">🏭 BioFuels India Pvt Ltd, Whitefield</option>
+              <option value="Southern Bio-Refineries Corp, Hosur">🌱 Southern Bio-Refineries Corp, Hosur</option>
+              <option value="Indian Oil Corp (IOCL) Biodiesel Blending Unit">⛽ Indian Oil Corp (IOCL) Biodiesel Blending Unit</option>
+              <option value="Certified FSSAI Transesterification Facility">🔬 Certified FSSAI Transesterification Facility</option>
+            </select>
+          </div>
+
+          <!-- Dispatch Date & Status -->
+          <div class="grid grid-cols-2 gap-2.5">
+            <div>
+              <label class="block text-slate-300 font-semibold mb-1">Dispatch Date</label>
+              <input 
+                v-model="batchForm.dispatch_date" 
+                type="date" 
+                required 
+                class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-emerald-500"
+              />
+            </div>
+            <div>
+              <label class="block text-slate-300 font-semibold mb-1">Batch Status</label>
+              <select 
+                v-model="batchForm.status" 
+                class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-emerald-500"
+              >
+                <option value="Dispatched">Dispatched</option>
+                <option value="Aggregated">Aggregated</option>
+                <option value="In Transit">In Transit</option>
+                <option value="Processed">Processed</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Live Environmental ESG Impact for this Batch -->
+          <div v-if="batchForm.total_volume > 0" class="p-3 bg-emerald-950/40 border border-emerald-800/60 rounded-xl space-y-1.5">
+            <div class="text-[10px] font-bold uppercase tracking-wider text-emerald-400">
+              🌱 Verified Batch ESG Impact:
+            </div>
+            <div class="grid grid-cols-2 gap-2 text-xs font-mono">
+              <div class="text-slate-300">
+                CO₂ Offset: <strong class="text-emerald-400">{{ (batchForm.total_volume * 0.0028).toFixed(2) }} t</strong> ({{ (batchForm.total_volume * 2.8).toFixed(1) }} kg)
+              </div>
+              <div class="text-slate-300">
+                Water Shielded: <strong class="text-cyan-300">{{ formatNumber(batchForm.total_volume * 1000) }} L</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="flex items-center gap-2 pt-2 border-t border-slate-800">
+            <button 
+              type="button" 
+              @click="closeBatchModal" 
+              class="flex-1 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl font-semibold text-xs transition min-h-[40px]"
+            >
+              Cancel
+            </button>
+            <button 
+              type="submit" 
+              :disabled="submittingBatch"
+              class="flex-1 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white rounded-xl font-bold text-xs transition shadow min-h-[40px] flex items-center justify-center gap-1.5"
+            >
+              <span>{{ submittingBatch ? 'Saving...' : '✓ Authorize & Dispatch Batch' }}</span>
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
@@ -1015,6 +1153,44 @@ const injectForm = ref({
 });
 
 const showBatchModal = ref(false);
+const submittingBatch = ref(false);
+
+const batchForm = ref({
+  batch_code: '',
+  total_volume: 1500,
+  refinery_destination: 'Karnataka State Biofuel Board, Bengaluru',
+  dispatch_date: new Date().toISOString().split('T')[0],
+  status: 'Dispatched'
+});
+
+function regenerateBatchCode() {
+  const d = new Date().toISOString().split('T')[0].replace(/-/g, '');
+  const rand = Math.floor(100 + Math.random() * 900);
+  batchForm.value.batch_code = `RUCO-BIO-BATCH-${d}-${rand}`;
+}
+
+function openBatchModal() {
+  regenerateBatchCode();
+  showBatchModal.value = true;
+}
+
+function closeBatchModal() {
+  showBatchModal.value = false;
+}
+
+async function handleCreateBatch() {
+  submittingBatch.value = true;
+  try {
+    await emit('create-batch', { ...batchForm.value });
+    closeBatchModal();
+  } finally {
+    submittingBatch.value = false;
+  }
+}
+
+function formatNumber(val) {
+  return Number(val || 0).toLocaleString('en-IN');
+}
 
 // 12-point KYC dossier state
 const inspectingSeller = ref(null);
