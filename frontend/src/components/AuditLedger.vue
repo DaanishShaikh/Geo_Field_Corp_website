@@ -1,17 +1,17 @@
 <template>
-  <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-6 shadow-xl space-y-4">
-    <div class="flex items-center justify-between">
+  <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-4 sm:p-6 shadow-xl space-y-4">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
       <div>
         <h2 class="text-base font-bold text-white">Append-Only Compliance Audit Trail</h2>
         <p class="text-xs text-slate-400">Tamper-proof, timestamped, immutable system events</p>
       </div>
-      <span class="text-xs font-mono px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+      <span class="text-xs font-mono px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 w-fit">
         {{ auditLogs.length }} Events Recorded
       </span>
     </div>
 
     <div class="overflow-x-auto">
-      <table class="w-full text-left text-xs">
+      <table class="w-full text-left text-xs min-w-[640px]">
         <thead>
           <tr class="border-b border-slate-700 text-slate-400 text-[11px] uppercase tracking-wider">
             <th class="py-3 px-3">Timestamp</th>

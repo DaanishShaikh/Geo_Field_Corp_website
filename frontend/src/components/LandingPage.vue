@@ -89,35 +89,35 @@
       <div
         v-if="mobileMenuOpen"
         data-testid="nav-mobile-menu"
-        class="fixed inset-0 z-[90] flex flex-col bg-obsidian/95 backdrop-blur-2xl lg:hidden p-5"
+        class="fixed inset-0 z-[90] flex flex-col bg-obsidian/95 backdrop-blur-2xl lg:hidden p-5 pt-[max(1.25rem,env(safe-area-inset-top))] pb-[max(1.25rem,env(safe-area-inset-bottom))] overflow-y-auto"
       >
-        <div class="flex items-center justify-between py-2">
+        <div class="flex items-center justify-between py-2 shrink-0">
           <img src="/brand/logo.svg" alt="GeoField Corp" class="h-8 w-auto" />
           <button
             data-testid="nav-menu-close-btn"
             @click="mobileMenuOpen = false"
-            class="grid h-10 w-10 place-items-center rounded-full border border-bio/20 text-slate-300"
+            class="grid h-11 w-11 place-items-center rounded-full border border-bio/20 text-slate-300 hover:text-white hover:border-bio/50 active:scale-95 transition"
             aria-label="Close menu"
           >
-            <X :size="18" />
+            <X :size="20" />
           </button>
         </div>
 
-        <nav class="flex flex-1 flex-col justify-center gap-2 px-6">
+        <nav class="flex flex-1 flex-col justify-center gap-1 sm:gap-2 px-3 sm:px-6 my-auto py-6">
           <a
             v-for="link in navLinks"
             :key="link.id"
             :href="link.href"
             :data-testid="`nav-mobile-link-${link.id}`"
             @click="mobileMenuOpen = false"
-            class="border-b border-bio/10 py-5 font-display text-3xl font-bold text-slate-100 transition-colors hover:text-bio"
+            class="border-b border-bio/10 py-3.5 sm:py-5 font-display text-2xl sm:text-3xl font-bold text-slate-100 transition-colors hover:text-bio min-h-[44px] flex items-center"
           >
             {{ link.label }}
           </a>
 
           <button
             @click="mobileMenuOpen = false; $emit('open-login')"
-            class="py-4 text-left font-display text-2xl font-bold text-slate-400 border-b border-bio/10 hover:text-white"
+            class="py-3.5 sm:py-4 text-left font-display text-xl sm:text-2xl font-bold text-slate-400 border-b border-bio/10 hover:text-white min-h-[44px] flex items-center cursor-pointer transition-colors"
           >
             Sign In to Portal
           </button>
@@ -125,7 +125,7 @@
           <button
             data-testid="nav-mobile-register-btn"
             @click="mobileMenuOpen = false; $emit('open-register')"
-            class="mt-8 flex items-center justify-center gap-2 rounded-full bg-bio py-4 font-mono text-xs font-bold uppercase tracking-[0.2em] text-emerald-950 shadow-[0_0_30px_rgba(34,197,94,0.4)]"
+            class="mt-6 sm:mt-8 flex items-center justify-center gap-2 rounded-full bg-bio py-3.5 sm:py-4 font-mono text-xs font-bold uppercase tracking-[0.18em] text-emerald-950 shadow-[0_0_30px_rgba(34,197,94,0.4)] min-h-[48px] active:scale-95 transition cursor-pointer"
           >
             Join the Clean Network <ArrowUpRight :size="15" :stroke-width="2.5" />
           </button>
@@ -171,7 +171,7 @@
           <!-- Staggered Headline Lines -->
           <h1
             data-testid="hero-headline"
-            class="font-display text-4xl font-extrabold leading-[1.04] tracking-tight text-slate-50 sm:text-5xl lg:text-6xl xl:text-7xl"
+            class="font-display text-3xl font-extrabold leading-[1.08] tracking-tight text-slate-50 xs:text-4xl sm:text-5xl lg:text-6xl xl:text-7xl sm:leading-[1.04]"
           >
             <span class="block overflow-hidden pb-1">
               <span class="block">Stop the</span>
@@ -192,7 +192,7 @@
           <!-- Subheadline -->
           <p
             data-testid="hero-subheadline"
-            class="mt-7 max-w-xl text-base leading-relaxed text-slate-400 sm:text-lg"
+            class="mt-6 sm:mt-7 max-w-xl text-sm leading-relaxed text-slate-400 sm:text-lg"
           >
             Join India's smartest RUCO aggregation network. We take the hassle out of
             FSSAI compliance with instant QR-based disposal, cluster-based pickups, and
@@ -200,11 +200,11 @@
           </p>
 
           <!-- CTAs -->
-          <div class="mt-10 flex flex-wrap items-center gap-4">
+          <div class="mt-8 sm:mt-10 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 sm:gap-4">
             <button
               data-testid="hero-register-btn"
               @click="$emit('open-register')"
-              class="group relative flex items-center gap-3 overflow-hidden rounded-full bg-bio px-8 py-4 font-mono text-xs font-bold uppercase tracking-[0.2em] text-emerald-950 transition-all duration-500 hover:scale-[1.04] hover:shadow-[0_0_50px_rgba(34,197,94,0.6)] active:scale-[0.97] cursor-pointer"
+              class="group relative flex items-center justify-center gap-3 overflow-hidden rounded-full bg-bio px-6 py-3.5 sm:px-8 sm:py-4 font-mono text-xs font-bold uppercase tracking-[0.16em] sm:tracking-[0.2em] text-emerald-950 transition-all duration-500 hover:scale-[1.04] hover:shadow-[0_0_50px_rgba(34,197,94,0.6)] active:scale-[0.97] cursor-pointer min-h-[48px] w-full sm:w-auto"
             >
               <span class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 group-hover:translate-x-full"></span>
               Join the Clean Network
@@ -214,7 +214,7 @@
             <a
               data-testid="hero-process-link"
               href="#process"
-              class="group flex items-center gap-2 rounded-full border border-slate-700 px-7 py-4 font-mono text-xs uppercase tracking-[0.2em] text-slate-300 transition-all duration-500 hover:-translate-y-0.5 hover:border-bio/50 hover:text-bio"
+              class="group flex items-center justify-center gap-2 rounded-full border border-slate-700 px-6 py-3.5 sm:px-7 sm:py-4 font-mono text-xs uppercase tracking-[0.16em] sm:tracking-[0.2em] text-slate-300 transition-all duration-500 hover:-translate-y-0.5 hover:border-bio/50 hover:text-bio min-h-[48px] w-full sm:w-auto"
             >
               See how it works
               <span class="transition-transform duration-500 group-hover:translate-y-1">↓</span>
@@ -224,7 +224,7 @@
           <!-- Proof Strip -->
           <div
             data-testid="hero-proof-strip"
-            class="mt-12 flex flex-wrap gap-x-8 gap-y-3 font-mono text-[10px] uppercase tracking-[0.25em] text-slate-500"
+            class="mt-10 sm:mt-12 flex flex-wrap gap-x-6 sm:gap-x-8 gap-y-2 font-mono text-[10px] uppercase tracking-[0.22em] sm:tracking-[0.25em] text-slate-500"
           >
             <span>60-Sec Registration</span>
             <span class="text-bio/60">/</span>
@@ -237,17 +237,17 @@
         <!-- Hero Right 3D Visual Card -->
         <div
           data-testid="hero-visual"
-          class="relative h-[440px] sm:h-[520px] lg:col-span-5 lg:h-[580px]"
+          class="relative h-[400px] xs:h-[440px] sm:h-[520px] lg:col-span-5 lg:h-[580px]"
         >
           <!-- Dynamic Radial Glow Behind Card -->
           <div
-            class="absolute inset-6 rounded-[2.5rem] bg-[radial-gradient(circle_at_50%_45%,rgba(34,197,94,0.28),transparent_68%)] blur-2xl pointer-events-none will-change-transform"
+            class="absolute inset-4 sm:inset-6 rounded-[2.5rem] bg-[radial-gradient(circle_at_50%_45%,rgba(34,197,94,0.28),transparent_68%)] blur-2xl pointer-events-none will-change-transform"
             :style="heroGlowStyle"
           ></div>
 
           <!-- Main Tilted Kitchen Image Card -->
           <div
-            class="absolute inset-x-8 top-6 bottom-16 overflow-hidden rounded-[2rem] border border-bio/20 shadow-[0_40px_80px_-20px_rgba(0,0,0,0.7)] sm:inset-x-14 will-change-transform"
+            class="absolute inset-x-4 sm:inset-x-14 top-4 sm:top-6 bottom-14 sm:bottom-16 overflow-hidden rounded-[1.75rem] sm:rounded-[2rem] border border-bio/20 shadow-[0_40px_80px_-20px_rgba(0,0,0,0.7)] will-change-transform"
             :style="heroImgStyle"
           >
             <img
@@ -257,12 +257,12 @@
               loading="eager"
             />
             <div class="absolute inset-0 bg-gradient-to-t from-obsidian/90 via-obsidian/20 to-transparent"></div>
-            <div class="absolute bottom-5 left-5 right-5 flex items-end justify-between">
+            <div class="absolute bottom-4 sm:bottom-5 left-4 sm:left-5 right-4 sm:right-5 flex items-end justify-between">
               <div>
                 <p class="font-mono text-[9px] uppercase tracking-[0.3em] text-bio">Source Kitchen</p>
-                <p class="mt-1 font-display text-lg font-bold text-slate-100">Cluster 04 — Andheri West</p>
+                <p class="mt-0.5 sm:mt-1 font-display text-base sm:text-lg font-bold text-slate-100">Cluster 04 — Andheri West</p>
               </div>
-              <span class="rounded-full border border-bio/30 bg-obsidian/60 px-3 py-1 font-mono text-[9px] uppercase tracking-[0.2em] text-bio backdrop-blur">
+              <span class="rounded-full border border-bio/30 bg-obsidian/60 px-2.5 sm:px-3 py-1 font-mono text-[8px] sm:text-[9px] uppercase tracking-[0.2em] text-bio backdrop-blur">
                 Live Route
               </span>
             </div>
@@ -271,19 +271,20 @@
           <!-- Floating Glass Card (Scan Verified) -->
           <div
             data-testid="hero-scan-card"
-            class="glass-panel absolute right-0 top-2 w-48 rounded-2xl p-4 sm:right-2 sm:w-56 shadow-2xl will-change-transform"
+            class="glass-panel absolute right-0 top-1 sm:top-2 w-44 sm:w-56 rounded-2xl p-3 sm:p-4 sm:right-2 shadow-2xl will-change-transform"
             :style="heroCardStyle"
           >
-            <div class="flex items-center gap-3">
-              <span class="grid h-11 w-11 place-items-center rounded-xl bg-bio/15 text-bio">
-                <QrCode :size="22" />
+            <div class="flex items-center gap-2.5 sm:gap-3">
+              <span class="grid h-9 w-9 sm:h-11 sm:w-11 place-items-center rounded-xl bg-bio/15 text-bio shrink-0">
+                <QrCode :size="18" class="sm:hidden" />
+                <QrCode :size="22" class="hidden sm:block" />
               </span>
               <div>
-                <p class="font-mono text-[9px] uppercase tracking-[0.25em] text-slate-400">Scan Verified</p>
-                <p class="font-display text-base font-bold text-slate-100">42.6 L logged</p>
+                <p class="font-mono text-[8px] sm:text-[9px] uppercase tracking-[0.22em] text-slate-400">Scan Verified</p>
+                <p class="font-display text-sm sm:text-base font-bold text-slate-100">42.6 L logged</p>
               </div>
             </div>
-            <div class="mt-3 flex items-center justify-between border-t border-bio/10 pt-3 font-mono text-[9px] uppercase tracking-[0.15em]">
+            <div class="mt-2.5 sm:mt-3 flex items-center justify-between border-t border-bio/10 pt-2 sm:pt-3 font-mono text-[8px] sm:text-[9px] uppercase tracking-[0.15em]">
               <span class="text-slate-500">FSSAI Receipt</span>
               <span class="text-bio">#GF-0421</span>
             </div>
@@ -292,18 +293,19 @@
           <!-- Floating Glass Badge (CO₂ Offset) -->
           <div
             data-testid="hero-offset-badge"
-            class="glass-panel absolute bottom-2 left-0 flex items-center gap-3 rounded-2xl px-4 py-3 sm:left-4 shadow-2xl will-change-transform"
+            class="glass-panel absolute bottom-1 sm:bottom-2 left-0 flex items-center gap-2.5 sm:gap-3 rounded-2xl px-3.5 py-2.5 sm:px-4 sm:py-3 sm:left-4 shadow-2xl will-change-transform"
             :style="heroBadgeStyle"
           >
-            <span class="relative grid h-10 w-10 place-items-center">
+            <span class="relative grid h-8 w-8 sm:h-10 sm:w-10 place-items-center shrink-0">
               <svg viewBox="0 0 40 40" class="absolute inset-0 animate-spin-slow">
                 <circle cx="20" cy="20" r="17" fill="none" stroke="rgba(34,197,94,0.25)" stroke-width="1.5" stroke-dasharray="4 5" />
               </svg>
-              <Leaf :size="18" class="text-limeglow" />
+              <Leaf :size="15" class="text-limeglow sm:hidden" />
+              <Leaf :size="18" class="text-limeglow hidden sm:block" />
             </span>
             <div>
-              <p className="font-mono text-[9px] uppercase tracking-[0.25em] text-slate-400">CO₂ Offset</p>
-              <p className="font-display text-base font-bold text-limeglow">+31.1 T</p>
+              <p class="font-mono text-[8px] sm:text-[9px] uppercase tracking-[0.22em] text-slate-400">CO₂ Offset</p>
+              <p class="font-display text-sm sm:text-base font-bold text-limeglow">+31.1 T</p>
             </div>
           </div>
 
@@ -338,7 +340,7 @@
       id="crisis"
       ref="crisisSectionRef"
       data-testid="threat-section"
-      class="relative scroll-mt-20 overflow-hidden py-28 sm:py-36"
+      class="relative scroll-mt-20 overflow-hidden py-16 sm:py-32 lg:py-36"
     >
       <div
         class="pointer-events-none absolute inset-0"
@@ -360,47 +362,47 @@
           <span class="font-mono text-xs uppercase tracking-[0.3em] text-slate-400">The Threat</span>
         </div>
 
-        <div class="grid gap-16 lg:grid-cols-12">
+        <div class="grid gap-10 lg:grid-cols-12 lg:gap-16">
           <!-- Left Column -->
           <div class="lg:col-span-7">
             <h2
               data-testid="threat-headline"
-              class="font-display text-3xl font-bold leading-tight tracking-tight text-slate-50 sm:text-4xl lg:text-5xl scroll-reveal delay-100"
+              class="font-display text-2xl font-bold leading-tight tracking-tight text-slate-50 xs:text-3xl sm:text-4xl lg:text-5xl scroll-reveal delay-100"
             >
               The <span class="text-hazard">60%</span> Crisis
               <br />
               in Your Kitchen.
             </h2>
 
-            <p class="mt-6 max-w-xl text-base leading-relaxed text-slate-400 scroll-reveal delay-150">
+            <p class="mt-5 sm:mt-6 max-w-xl text-sm leading-relaxed text-slate-400 sm:text-base scroll-reveal delay-150">
               Shockingly, nearly 60% of all Used Cooking Oil generated in India finds
               its way back into the food stream — resold by informal vendors, reheated,
               and returned to the plate. Every reheat multiplies toxic Total Polar
               Compounds.
             </p>
 
-            <div class="mt-14 grid gap-10 sm:grid-cols-2">
-              <div data-testid="stat-uco-return" class="border-l-2 border-hazard/60 pl-6 scroll-reveal delay-200">
-                <div class="font-display text-6xl font-extrabold tracking-tight text-hazard sm:text-7xl">
+            <div class="mt-8 sm:mt-14 grid gap-6 sm:gap-10 sm:grid-cols-2">
+              <div data-testid="stat-uco-return" class="border-l-2 border-hazard/60 pl-5 sm:pl-6 scroll-reveal delay-200">
+                <div class="font-display text-5xl font-extrabold tracking-tight text-hazard sm:text-7xl">
                   {{ animatedUcoReturn }}%
                 </div>
-                <p class="mt-3 font-mono text-[10px] uppercase tracking-[0.25em] text-hazard/80">
+                <p class="mt-2.5 sm:mt-3 font-mono text-[10px] uppercase tracking-[0.25em] text-hazard/80">
                   High Risk
                 </p>
-                <p class="mt-2 text-sm leading-relaxed text-slate-400">
+                <p class="mt-1.5 sm:mt-2 text-xs sm:text-sm leading-relaxed text-slate-400">
                   of UCO in India returns to the food stream through illegal
                   recirculation.
                 </p>
               </div>
 
-              <div data-testid="stat-tpc-limit" class="border-l-2 border-toxic/60 pl-6 scroll-reveal delay-300">
-                <div class="font-display text-6xl font-extrabold tracking-tight text-toxic sm:text-7xl">
+              <div data-testid="stat-tpc-limit" class="border-l-2 border-toxic/60 pl-5 sm:pl-6 scroll-reveal delay-300">
+                <div class="font-display text-5xl font-extrabold tracking-tight text-toxic sm:text-7xl">
                   {{ animatedTpcLimit }}%
                 </div>
-                <p class="mt-3 font-mono text-[10px] uppercase tracking-[0.25em] text-toxic/80">
+                <p class="mt-2.5 sm:mt-3 font-mono text-[10px] uppercase tracking-[0.25em] text-toxic/80">
                   FSSAI Mandate
                 </p>
-                <p class="mt-2 text-sm leading-relaxed text-slate-400">
+                <p class="mt-1.5 sm:mt-2 text-xs sm:text-sm leading-relaxed text-slate-400">
                   TPC limit — oil above this is strictly unsafe for human consumption.
                 </p>
               </div>
@@ -409,11 +411,11 @@
             <!-- Toxicity Per Reheat Bar Card -->
             <div 
               data-testid="toxicity-per-reheat-bar"
-              class="mt-10 rounded-2xl border border-slate-800/80 bg-slate-900/40 p-4 sm:p-5 scroll-reveal delay-300 backdrop-blur-sm"
+              class="mt-8 sm:mt-10 rounded-2xl border border-slate-800/80 bg-slate-900/40 p-4 sm:p-5 scroll-reveal delay-300 backdrop-blur-sm"
             >
-              <div class="flex items-center justify-between font-mono text-[10px] tracking-[0.25em] uppercase mb-3">
+              <div class="flex items-center justify-between font-mono text-[9px] sm:text-[10px] tracking-[0.2em] sm:tracking-[0.25em] uppercase mb-3">
                 <span class="text-slate-400 font-semibold">Toxicity Per Reheat</span>
-                <span class="text-hazard font-bold tracking-widest flex items-center gap-1.5">
+                <span class="text-hazard font-bold tracking-wider sm:tracking-widest flex items-center gap-1.5">
                   <span class="inline-block h-1.5 w-1.5 rounded-full bg-hazard animate-pulse"></span>
                   TPC Danger Zone
                 </span>
@@ -434,7 +436,7 @@
               </div>
               
               <!-- Bottom Markers -->
-              <div class="relative mt-2.5 font-mono text-[10px] uppercase tracking-wider flex justify-between items-center text-slate-300">
+              <div class="relative mt-2.5 font-mono text-[8px] xs:text-[9px] sm:text-[10px] uppercase tracking-wider flex justify-between items-center text-slate-300">
                 <span class="text-bio font-bold">0% Fresh</span>
                 <span class="absolute left-[25%] -translate-x-1/2 whitespace-nowrap text-toxic font-bold">
                   25% FSSAI Limit
@@ -497,7 +499,7 @@
       id="process"
       ref="processSectionRef"
       data-testid="solution-section"
-      class="relative scroll-mt-16 overflow-hidden rounded-t-[2.5rem] bg-paper py-28 text-ink sm:rounded-t-[3.5rem] sm:py-36"
+      class="relative scroll-mt-16 overflow-hidden rounded-t-[2.5rem] bg-paper py-16 sm:py-32 lg:py-36 text-ink sm:rounded-t-[3.5rem]"
     >
       <span
         aria-hidden="true"
@@ -515,11 +517,11 @@
           <span class="font-mono text-xs uppercase tracking-[0.3em] text-ink/60">The Fix</span>
         </div>
 
-        <div class="flex flex-wrap items-end justify-between gap-8">
+        <div class="flex flex-wrap items-end justify-between gap-6 sm:gap-8">
           <div>
             <h2
               data-testid="solution-headline"
-              class="max-w-2xl font-display text-3xl font-bold leading-tight tracking-tight sm:text-4xl lg:text-5xl scroll-reveal delay-100"
+              class="max-w-2xl font-display text-2xl font-bold leading-tight tracking-tight sm:text-4xl lg:text-5xl scroll-reveal delay-100"
             >
               Frictionless Disposal.
               <br />
@@ -527,7 +529,7 @@
             </h2>
           </div>
           <div>
-            <p class="max-w-sm text-sm leading-relaxed text-ink/60 scroll-reveal delay-150">
+            <p class="max-w-sm text-xs sm:text-sm leading-relaxed text-ink/60 scroll-reveal delay-150">
               Three steps between your kitchen and full FSSAI compliance. No calls, no
               paperwork, no waiting on informal collectors.
             </p>
@@ -535,7 +537,7 @@
         </div>
 
         <!-- Animated Process Track with Delivery Truck -->
-        <div class="mt-20">
+        <div class="mt-12 sm:mt-20">
           <div class="relative mb-14 hidden h-16 items-center lg:flex" data-testid="process-track">
             <!-- Background Rail line from Node 1 (8%) to Node 3 (92%) -->
             <div class="absolute left-[8%] right-[8%] top-1/2 h-px -translate-y-1/2 bg-ink/15"></div>
@@ -565,7 +567,7 @@
           </div>
 
           <!-- 3 Process Steps Cards (Always 100% visible, dynamic active highlight) -->
-          <div class="grid gap-6 lg:grid-cols-3">
+          <div class="grid gap-4 sm:gap-6 lg:grid-cols-3">
             <div
               v-for="(s, i) in steps"
               :key="s.num"
@@ -573,44 +575,45 @@
               @mouseenter="manualHoverStep = i"
               @mouseleave="manualHoverStep = null"
               :class="[
-                'group relative h-full overflow-hidden rounded-[1.75rem] border p-8 transition-all duration-500 hover:-translate-y-2 cursor-pointer',
+                'group relative h-full overflow-hidden rounded-2xl sm:rounded-[1.75rem] border p-5 sm:p-8 transition-all duration-500 hover:-translate-y-2 cursor-pointer',
                 activeProcessStep === i 
-                  ? 'border-biodark bg-white shadow-[0_30px_60px_-20px_rgba(16,185,129,0.35)] scale-[1.02]' 
+                  ? 'border-biodark bg-white shadow-[0_30px_60px_-20px_rgba(16,185,129,0.35)] scale-[1.01] sm:scale-[1.02]' 
                   : 'border-ink/10 bg-white/70 hover:border-biodark/40 hover:bg-white hover:shadow-xl'
               ]"
             >
               <div class="flex items-start justify-between">
                 <span 
                   :class="[
-                    'grid h-14 w-14 place-items-center rounded-2xl transition-all duration-500',
-                    activeProcessStep === i ? 'bg-bio text-emerald-950 scale-110 shadow-lg' : 'bg-biodark/10 text-biodark group-hover:bg-bio group-hover:text-emerald-950'
+                    'grid h-12 w-12 sm:h-14 sm:w-14 place-items-center rounded-2xl transition-all duration-500 shrink-0',
+                    activeProcessStep === i ? 'bg-bio text-emerald-950 scale-105 sm:scale-110 shadow-lg' : 'bg-biodark/10 text-biodark group-hover:bg-bio group-hover:text-emerald-950'
                   ]"
                 >
-                  <component :is="s.icon" :size="26" />
+                  <component :is="s.icon" :size="22" class="sm:hidden" />
+                  <component :is="s.icon" :size="26" class="hidden sm:block" />
                 </span>
                 <span 
                   :class="[
-                    'font-mono text-5xl font-bold transition-colors duration-500',
+                    'font-mono text-4xl sm:text-5xl font-bold transition-colors duration-500',
                     activeProcessStep === i ? 'text-biodark/40' : 'text-ink/10 group-hover:text-biodark/25'
                   ]"
                 >
                   {{ s.num }}
                 </span>
               </div>
-              <h3 class="mt-8 font-display text-xl font-bold tracking-tight sm:text-2xl">
+              <h3 class="mt-6 sm:mt-8 font-display text-lg sm:text-2xl font-bold tracking-tight">
                 {{ s.title }}
               </h3>
-              <p class="mt-3 text-sm leading-relaxed text-ink/60">{{ s.desc }}</p>
+              <p class="mt-2.5 sm:mt-3 text-xs sm:text-sm leading-relaxed text-ink/60">{{ s.desc }}</p>
               <span 
                 :class="[
-                  'mt-6 block h-1 rounded-full transition-all duration-500',
+                  'mt-5 sm:mt-6 block h-1 rounded-full transition-all duration-500',
                   activeProcessStep === i ? 'w-full bg-bio' : 'w-10 bg-biodark/30 group-hover:w-full group-hover:bg-bio'
                 ]"
               ></span>
             </div>
           </div>
 
-          <div class="mt-12 flex items-center justify-center gap-3 font-mono text-[10px] uppercase tracking-[0.3em] text-ink/50 scroll-reveal delay-300">
+          <div class="mt-10 sm:mt-12 flex items-center justify-center gap-3 font-mono text-[10px] uppercase tracking-[0.3em] text-ink/50 scroll-reveal delay-300">
             <ArrowDown :size="13" class="text-biodark" />
             Then watch what your oil becomes
           </div>
@@ -625,7 +628,7 @@
       id="impact"
       ref="impactSectionRef"
       data-testid="impact-section"
-      class="relative scroll-mt-20 overflow-hidden py-28 sm:py-36"
+      class="relative scroll-mt-20 overflow-hidden py-16 sm:py-32 lg:py-36"
     >
       <div
         class="pointer-events-none absolute inset-0"
@@ -647,12 +650,12 @@
           <span class="font-mono text-xs uppercase tracking-[0.3em] text-slate-400">The Reward</span>
         </div>
 
-        <div class="grid items-center gap-14 lg:grid-cols-12">
+        <div class="grid items-center gap-10 lg:grid-cols-12 lg:gap-14">
           <!-- Left Column -->
           <div class="lg:col-span-5 scroll-reveal-left delay-100">
             <h2
               data-testid="impact-headline"
-              class="font-display text-3xl font-bold leading-tight tracking-tight text-slate-50 sm:text-4xl lg:text-5xl"
+              class="font-display text-2xl font-bold leading-tight tracking-tight text-slate-50 xs:text-3xl sm:text-4xl lg:text-5xl"
             >
               Track Your
               <br />
@@ -661,13 +664,13 @@
               </span>
             </h2>
 
-            <p class="mt-6 max-w-md text-base leading-relaxed text-slate-400">
+            <p class="mt-5 sm:mt-6 max-w-md text-sm leading-relaxed text-slate-400 sm:text-base">
               Every litre you hand over is weighed, certified, and traced to a refinery.
               Your dashboard turns compliance into a story worth telling — and a payout
               worth collecting.
             </p>
 
-            <div class="mt-8 flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.25em] text-slate-500">
+            <div class="mt-6 sm:mt-8 flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.25em] text-slate-500">
               <span class="h-1.5 w-1.5 rounded-full bg-bio animate-pulse-dot"></span>
               Dashboard preview — sample data
             </div>
@@ -677,48 +680,48 @@
           <div class="lg:col-span-7 scroll-reveal-right delay-200">
             <div
               data-testid="impact-dashboard"
-              class="glass-panel relative overflow-hidden rounded-[2rem] p-6 shadow-[0_50px_100px_-30px_rgba(0,0,0,0.8)] sm:p-9 transition-transform duration-300 hover:-translate-y-2 will-change-transform"
+              class="glass-panel relative overflow-hidden rounded-2xl sm:rounded-[2rem] p-4 sm:p-9 shadow-[0_50px_100px_-30px_rgba(0,0,0,0.8)] transition-transform duration-300 hover:-translate-y-2 will-change-transform"
               :style="impactConsoleStyle"
             >
               <div class="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-bio/15 blur-3xl"></div>
 
               <!-- Console Header -->
-              <div class="flex items-center justify-between border-b border-bio/10 pb-5">
-                <div class="flex items-center gap-3">
+              <div class="flex items-center justify-between border-b border-bio/10 pb-4 sm:pb-5">
+                <div class="flex items-center gap-2.5 sm:gap-3">
                   <span class="flex gap-1.5">
-                    <span class="h-2.5 w-2.5 rounded-full bg-hazard/70"></span>
-                    <span class="h-2.5 w-2.5 rounded-full bg-toxic/70"></span>
-                    <span class="h-2.5 w-2.5 rounded-full bg-bio/80"></span>
+                    <span class="h-2 w-2 sm:h-2.5 sm:w-2.5 rounded-full bg-hazard/70"></span>
+                    <span class="h-2 w-2 sm:h-2.5 sm:w-2.5 rounded-full bg-toxic/70"></span>
+                    <span class="h-2 w-2 sm:h-2.5 sm:w-2.5 rounded-full bg-bio/80"></span>
                   </span>
-                  <span class="font-mono text-[10px] uppercase tracking-[0.25em] text-slate-400">
+                  <span class="font-mono text-[9px] sm:text-[10px] uppercase tracking-[0.2em] sm:tracking-[0.25em] text-slate-400">
                     GeoField Impact Console
                   </span>
                 </div>
-                <span class="flex items-center gap-2 rounded-full border border-bio/25 bg-bio/10 px-3 py-1 font-mono text-[9px] uppercase tracking-[0.2em] text-bio">
+                <span class="flex items-center gap-1.5 sm:gap-2 rounded-full border border-bio/25 bg-bio/10 px-2.5 sm:px-3 py-1 font-mono text-[8px] sm:text-[9px] uppercase tracking-[0.2em] text-bio">
                   <span class="h-1 w-1 rounded-full bg-bio animate-pulse-dot"></span>
                   Live
                 </span>
               </div>
 
               <!-- 4 Metrics Grid -->
-              <div class="mt-7 grid gap-4 sm:grid-cols-2">
+              <div class="mt-5 sm:mt-7 grid grid-cols-1 xs:grid-cols-2 gap-3 sm:gap-4">
                 <div
                   v-for="(m, i) in impactMetrics"
                   :key="m.label"
                   :data-testid="m.testId"
-                  :class="`rounded-2xl border border-bio/10 bg-obsidian/50 p-5 hover:border-bio/30 transition-all duration-300 hover:-translate-y-1 scroll-reveal delay-${(i + 1) * 100}`"
+                  :class="`rounded-xl sm:rounded-2xl border border-bio/10 bg-obsidian/50 p-4 sm:p-5 hover:border-bio/30 transition-all duration-300 hover:-translate-y-1 scroll-reveal delay-${(i + 1) * 100}`"
                 >
                   <div class="flex items-center justify-between">
-                    <component :is="m.icon" :size="19" class="text-bio" />
-                    <span class="flex items-center gap-1 font-mono text-[9px] uppercase tracking-[0.15em] text-limeglow">
+                    <component :is="m.icon" :size="18" class="text-bio" />
+                    <span class="flex items-center gap-1 font-mono text-[8px] sm:text-[9px] uppercase tracking-[0.15em] text-limeglow">
                       <TrendingUp :size="11" />
                       {{ m.trend }}
                     </span>
                   </div>
-                  <p class="mt-4 font-display text-2xl font-extrabold tracking-tight text-slate-50 sm:text-3xl">
+                  <p class="mt-3 sm:mt-4 font-display text-xl sm:text-3xl font-extrabold tracking-tight text-slate-50">
                     {{ m.value }}
                   </p>
-                  <p class="mt-1 font-mono text-[10px] uppercase tracking-[0.2em] text-slate-500">
+                  <p class="mt-1 font-mono text-[9px] sm:text-[10px] uppercase tracking-[0.18em] sm:tracking-[0.2em] text-slate-500">
                     {{ m.label }}
                   </p>
                 </div>
@@ -727,7 +730,7 @@
               <!-- Velocity Chart (Animated Up & Stop) -->
               <div 
                 ref="impactChartRef"
-                class="mt-7 rounded-2xl border border-bio/10 bg-obsidian/50 p-5 scroll-reveal delay-300 transition-all duration-300 cursor-pointer group" 
+                class="mt-5 sm:mt-7 rounded-xl sm:rounded-2xl border border-bio/10 bg-obsidian/50 p-4 sm:p-5 scroll-reveal delay-300 transition-all duration-300 cursor-pointer group" 
                 data-testid="impact-chart"
                 title="Click to replay velocity chart animation"
                 @click="replayVelocityChartAnimation"
@@ -738,13 +741,13 @@
                       class="h-1.5 w-1.5 rounded-full transition-colors duration-500"
                       :class="velocityChartProgress > 0 ? 'bg-bio animate-pulse' : 'bg-slate-600'"
                     ></span>
-                    Collection Velocity — 12 Weeks
+                    Collection Velocity — 12 Wks
                   </span>
-                  <span class="text-bio font-bold text-[11px] tracking-wider transition-all duration-300">
+                  <span class="text-bio font-bold text-[10px] sm:text-[11px] tracking-wider transition-all duration-300">
                     +{{ animatedVelocityPercent }}%
                   </span>
                 </div>
-                <svg viewBox="0 0 480 110" class="h-24 w-full overflow-visible" preserveAspectRatio="none">
+                <svg viewBox="0 0 480 110" class="h-20 sm:h-24 w-full overflow-visible" preserveAspectRatio="none">
                   <defs>
                     <linearGradient id="areaFill" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="0%" stop-color="#22C55E" stop-opacity="0.32" />
@@ -810,7 +813,7 @@
       id="register"
       ref="ctaSectionRef"
       data-testid="final-cta-section"
-      class="relative scroll-mt-20 overflow-hidden py-32 sm:py-44"
+      class="relative scroll-mt-20 overflow-hidden py-20 sm:py-36 lg:py-44"
     >
       <div class="absolute inset-0 overflow-hidden">
         <img
@@ -829,13 +832,13 @@
       </div>
 
       <div class="relative z-10 mx-auto max-w-5xl px-5 text-center sm:px-8">
-        <p class="font-mono text-[11px] uppercase tracking-[0.35em] text-bio scroll-reveal" data-testid="final-cta-eyebrow">
+        <p class="font-mono text-[10px] sm:text-[11px] uppercase tracking-[0.35em] text-bio scroll-reveal" data-testid="final-cta-eyebrow">
           04 — Join the Network
         </p>
 
         <h2
           data-testid="final-cta-headline"
-          class="mt-8 font-display text-4xl font-extrabold leading-[1.05] tracking-tight text-slate-50 sm:text-5xl lg:text-6xl scroll-reveal delay-150"
+          class="mt-6 sm:mt-8 font-display text-3xl font-extrabold leading-[1.08] tracking-tight text-slate-50 sm:text-5xl lg:text-6xl scroll-reveal delay-150"
         >
           <span class="block">Ready to clean up</span>
           <span class="block">your kitchen — and</span>
@@ -844,21 +847,21 @@
           </span>
         </h2>
 
-        <p class="mx-auto mt-7 max-w-lg text-base leading-relaxed text-slate-400 sm:text-lg scroll-reveal delay-200">
+        <p class="mx-auto mt-5 sm:mt-7 max-w-lg text-sm sm:text-lg leading-relaxed text-slate-400 scroll-reveal delay-200">
           Registration takes 60 seconds. Our agents take care of the rest.
         </p>
 
         <button
           data-testid="final-cta-register-btn"
           @click="$emit('open-register')"
-          class="group relative mx-auto mt-12 flex items-center gap-3 overflow-hidden rounded-full bg-bio px-10 py-5 font-mono text-sm font-bold uppercase tracking-[0.2em] text-emerald-950 shadow-[0_0_60px_rgba(34,197,94,0.4)] transition-all duration-300 hover:shadow-[0_0_90px_rgba(34,197,94,0.6)] hover:scale-105 active:scale-95 cursor-pointer scroll-reveal delay-300"
+          class="group relative mx-auto mt-8 sm:mt-12 flex items-center justify-center gap-3 overflow-hidden rounded-full bg-bio px-8 py-4 sm:px-10 sm:py-5 font-mono text-xs sm:text-sm font-bold uppercase tracking-[0.18em] sm:tracking-[0.2em] text-emerald-950 shadow-[0_0_60px_rgba(34,197,94,0.4)] transition-all duration-300 hover:shadow-[0_0_90px_rgba(34,197,94,0.6)] hover:scale-105 active:scale-95 cursor-pointer scroll-reveal delay-300 w-full sm:w-auto max-w-xs min-h-[48px]"
         >
           <span class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 group-hover:translate-x-full"></span>
           Register Now
           <ArrowUpRight :size="18" :stroke-width="2.5" class="transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
         </button>
 
-        <p class="mt-8 font-mono text-[10px] uppercase tracking-[0.25em] text-slate-500 scroll-reveal delay-400">
+        <p class="mt-6 sm:mt-8 font-mono text-[9px] sm:text-[10px] uppercase tracking-[0.22em] sm:tracking-[0.25em] text-slate-500 scroll-reveal delay-400">
           No hardware to buy · No contracts to sign · QR kit ships in 48h
         </p>
       </div>
@@ -870,20 +873,20 @@
     <footer
       id="contact"
       data-testid="footer"
-      class="border-t border-bio/10 bg-[#080C0A] py-16"
+      class="border-t border-bio/10 bg-[#080C0A] py-12 sm:py-16"
     >
       <div class="mx-auto max-w-7xl px-5 sm:px-8">
-        <div class="grid gap-12 md:grid-cols-3">
+        <div class="grid gap-8 sm:gap-12 md:grid-cols-3">
           <!-- Col 1: Brand Info -->
           <div>
             <div class="flex items-center">
               <img
                 src="/brand/logo.svg"
                 alt="GeoField Corp — Renew. Refine. Return."
-                class="h-12 w-auto"
+                class="h-10 sm:h-12 w-auto"
               />
             </div>
-            <p class="mt-5 max-w-xs text-sm leading-relaxed text-slate-500">
+            <p class="mt-4 sm:mt-5 max-w-xs text-xs sm:text-sm leading-relaxed text-slate-500">
               Powering the clean-energy transition through traceable, compliant
               supply chains.
             </p>
@@ -894,12 +897,12 @@
             <p class="font-mono text-[10px] uppercase tracking-[0.3em] text-slate-500">
               Contact
             </p>
-            <ul class="mt-5 space-y-3 text-sm text-slate-400">
+            <ul class="mt-4 sm:mt-5 space-y-3 text-xs sm:text-sm text-slate-400">
               <li>
                 <a
                   href="tel:+917972737595"
                   data-testid="footer-phone"
-                  class="flex items-center gap-3 transition-colors hover:text-bio"
+                  class="flex items-center gap-3 transition-colors hover:text-bio min-h-[36px]"
                 >
                   <Phone :size="15" class="text-bio/70 shrink-0" />
                   <span>+91 7972737595</span>
@@ -909,11 +912,11 @@
                 <a
                   href="mailto:support@geofieldcorp.com"
                   data-testid="footer-email"
-                  class="flex items-center gap-3 transition-colors hover:text-bio"
+                  class="flex items-center gap-3 transition-colors hover:text-bio min-h-[36px]"
                 >
                   <Mail :size="15" class="text-bio/70 shrink-0" />
-                  <span class="flex items-center gap-2">
-                    support@geofieldcorp.com
+                  <span class="flex flex-wrap items-center gap-1.5">
+                    <span class="break-all">support@geofieldcorp.com</span>
                     <span class="rounded bg-bio/10 px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-wider text-bio">Support</span>
                   </span>
                 </a>
@@ -922,16 +925,16 @@
                 <a
                   href="mailto:office@geofieldcorp.com"
                   data-testid="footer-email-office"
-                  class="flex items-center gap-3 transition-colors hover:text-bio"
+                  class="flex items-center gap-3 transition-colors hover:text-bio min-h-[36px]"
                 >
                   <Mail :size="15" class="text-bio/70 shrink-0" />
-                  <span class="flex items-center gap-2">
-                    office@geofieldcorp.com
+                  <span class="flex flex-wrap items-center gap-1.5">
+                    <span class="break-all">office@geofieldcorp.com</span>
                     <span class="rounded bg-bio/10 px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-wider text-bio">Office</span>
                   </span>
                 </a>
               </li>
-              <li class="flex items-center gap-3" data-testid="footer-location">
+              <li class="flex items-center gap-3 min-h-[36px]" data-testid="footer-location">
                 <MapPin :size="15" class="text-bio/70 shrink-0" /> Mumbai, Maharashtra, India
               </li>
             </ul>
@@ -942,16 +945,16 @@
             <p class="font-mono text-[10px] uppercase tracking-[0.3em] text-slate-500">
               Navigate
             </p>
-            <ul class="mt-5 space-y-3 text-sm text-slate-400">
-              <li><a href="#crisis" data-testid="footer-link-crisis" class="transition-colors hover:text-bio">The Crisis</a></li>
-              <li><a href="#process" data-testid="footer-link-process" class="transition-colors hover:text-bio">The Process</a></li>
-              <li><a href="#impact" data-testid="footer-link-impact" class="transition-colors hover:text-bio">Impact</a></li>
-              <li><a href="#register" data-testid="footer-link-register" class="transition-colors hover:text-bio">Register</a></li>
+            <ul class="mt-4 sm:mt-5 space-y-3 text-xs sm:text-sm text-slate-400">
+              <li><a href="#crisis" data-testid="footer-link-crisis" class="inline-block py-1 transition-colors hover:text-bio min-h-[32px]">The Crisis</a></li>
+              <li><a href="#process" data-testid="footer-link-process" class="inline-block py-1 transition-colors hover:text-bio min-h-[32px]">The Process</a></li>
+              <li><a href="#impact" data-testid="footer-link-impact" class="inline-block py-1 transition-colors hover:text-bio min-h-[32px]">Impact</a></li>
+              <li><a href="#register" data-testid="footer-link-register" class="inline-block py-1 transition-colors hover:text-bio min-h-[32px]">Register</a></li>
             </ul>
           </div>
         </div>
 
-        <div class="mt-14 flex flex-wrap items-center justify-between gap-4 border-t border-bio/10 pt-8 font-mono text-[10px] uppercase tracking-[0.2em] text-slate-600">
+        <div class="mt-10 sm:mt-14 flex flex-wrap items-center justify-between gap-4 border-t border-bio/10 pt-6 sm:pt-8 font-mono text-[10px] uppercase tracking-[0.2em] text-slate-600">
           <span>© 2026 GeoField Corp</span>
           <span>Waste → Energy · Traceable · Compliant</span>
         </div>
@@ -973,7 +976,7 @@
         v-if="showStickyRegister"
         data-testid="sticky-register-btn"
         @click="$emit('open-register')"
-        class="fixed bottom-5 left-1/2 z-50 flex -translate-x-1/2 items-center gap-2 rounded-full bg-bio px-7 py-3.5 font-mono text-xs font-bold uppercase tracking-[0.2em] text-emerald-950 shadow-[0_0_40px_rgba(34,197,94,0.45)] transition-transform duration-300 hover:scale-[1.07] active:scale-95 lg:hidden"
+        class="fixed bottom-[max(1.25rem,env(safe-area-inset-bottom))] left-1/2 z-50 flex -translate-x-1/2 items-center gap-2 rounded-full bg-bio px-6 py-3 sm:px-7 sm:py-3.5 font-mono text-xs font-bold uppercase tracking-[0.18em] sm:tracking-[0.2em] text-emerald-950 shadow-[0_0_40px_rgba(34,197,94,0.5)] transition-transform duration-300 hover:scale-[1.07] active:scale-95 lg:hidden whitespace-nowrap min-h-[44px] cursor-pointer"
       >
         Register Now <ArrowUpRight :size="15" :stroke-width="2.5" />
       </button>
@@ -1089,6 +1092,7 @@ const impactMetrics = [
 const isScrolled = ref(false);
 const mobileMenuOpen = ref(false);
 const showStickyRegister = ref(false);
+const isMobile = ref(typeof window !== 'undefined' ? window.innerWidth < 1024 : false);
 
 const scrollY = ref(0);
 const scrollProgress = ref(0);
@@ -1142,6 +1146,12 @@ function handleHeroMouseLeave() {
 
 // 1. Hero Left Copy parallax (GPU accelerated translate3d)
 const heroCopyStyle = computed(() => {
+  if (isMobile.value) {
+    return {
+      transform: 'none',
+      opacity: 1,
+    };
+  }
   const y = scrollY.value;
   return {
     transform: `translate3d(0, ${(y * 0.12).toFixed(1)}px, 0)`,
@@ -1150,21 +1160,41 @@ const heroCopyStyle = computed(() => {
 });
 
 // 2. Hero 3D visual card parallax (combines mouse parallax with scroll parallax, GPU accelerated)
-const heroGlowStyle = computed(() => ({
-  transform: `translate3d(${(mouseX.value * 22).toFixed(1)}px, ${(mouseY.value * 22 + scrollY.value * 0.22).toFixed(1)}px, 0)`,
-}));
+const heroGlowStyle = computed(() => {
+  if (isMobile.value) {
+    return { transform: 'none' };
+  }
+  return {
+    transform: `translate3d(${(mouseX.value * 22).toFixed(1)}px, ${(mouseY.value * 22 + scrollY.value * 0.22).toFixed(1)}px, 0)`,
+  };
+});
 
-const heroImgStyle = computed(() => ({
-  transform: `translate3d(${(mouseX.value * -16).toFixed(1)}px, ${(mouseY.value * -12 + scrollY.value * 0.12).toFixed(1)}px, 0) rotate(${(2 + mouseX.value * 2.5).toFixed(2)}deg)`,
-}));
+const heroImgStyle = computed(() => {
+  if (isMobile.value) {
+    return { transform: 'none' };
+  }
+  return {
+    transform: `translate3d(${(mouseX.value * -16).toFixed(1)}px, ${(mouseY.value * -12 + scrollY.value * 0.12).toFixed(1)}px, 0) rotate(${(2 + mouseX.value * 2.5).toFixed(2)}deg)`,
+  };
+});
 
-const heroCardStyle = computed(() => ({
-  transform: `translate3d(${(mouseX.value * 34).toFixed(1)}px, ${(mouseY.value * 26 + scrollY.value * -0.22).toFixed(1)}px, 0)`,
-}));
+const heroCardStyle = computed(() => {
+  if (isMobile.value) {
+    return { transform: 'none' };
+  }
+  return {
+    transform: `translate3d(${(mouseX.value * 34).toFixed(1)}px, ${(mouseY.value * 26 + scrollY.value * -0.22).toFixed(1)}px, 0)`,
+  };
+});
 
-const heroBadgeStyle = computed(() => ({
-  transform: `translate3d(${(mouseX.value * -30).toFixed(1)}px, ${(mouseY.value * -22 + scrollY.value * 0.18).toFixed(1)}px, 0)`,
-}));
+const heroBadgeStyle = computed(() => {
+  if (isMobile.value) {
+    return { transform: 'none' };
+  }
+  return {
+    transform: `translate3d(${(mouseX.value * -30).toFixed(1)}px, ${(mouseY.value * -22 + scrollY.value * 0.18).toFixed(1)}px, 0)`,
+  };
+});
 
 // 3. Watermark text drift on scroll (smooth 60 FPS translate3d)
 const toxicWatermarkStyle = computed(() => ({
@@ -1349,6 +1379,7 @@ function onWindowResize() {
   if (!resizeTicking) {
     resizeTicking = true;
     window.requestAnimationFrame(() => {
+      isMobile.value = window.innerWidth < 1024;
       updateLayoutCache();
       handleScroll();
       resizeTicking = false;

@@ -1,20 +1,20 @@
 <template>
-  <div class="space-y-6">
+  <div class="space-y-5 sm:space-y-6">
     <!-- Super Admin Command Bar -->
-    <div class="flex flex-wrap items-center justify-between gap-3 bg-gradient-to-r from-slate-800/90 to-slate-900/90 p-4 rounded-2xl border border-slate-700/80 shadow-xl">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-teal-500/10 border border-teal-500/20 text-teal-400 flex items-center justify-center font-bold text-lg shadow-inner">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-gradient-to-r from-slate-800/90 to-slate-900/90 p-3.5 sm:p-4 rounded-2xl border border-slate-700/80 shadow-xl">
+      <div class="flex items-center gap-3 min-w-0">
+        <div class="w-10 h-10 rounded-xl bg-teal-500/10 border border-teal-500/20 text-teal-400 flex items-center justify-center font-bold text-lg shadow-inner shrink-0">
           🏢
         </div>
-        <div>
-          <div class="text-sm font-bold text-white flex items-center gap-2">
+        <div class="min-w-0">
+          <div class="text-xs sm:text-sm font-bold text-white flex flex-wrap items-center gap-1.5 sm:gap-2">
             <span>GeoField Super Admin Command Center</span>
             <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">System Live</span>
           </div>
-          <div class="text-xs text-slate-400">Total System Oversight: <span class="text-slate-200 font-semibold">{{ approvedSellers.length }} Registered Kitchens</span> &bull; <span class="text-slate-200 font-semibold">{{ activeAgents.length }} Active Fleet Agents</span></div>
+          <div class="text-[11px] sm:text-xs text-slate-400 truncate">Total System Oversight: <span class="text-slate-200 font-semibold">{{ approvedSellers.length }} Kitchens</span> &bull; <span class="text-slate-200 font-semibold">{{ activeAgents.length }} Fleet Agents</span></div>
         </div>
       </div>
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-2 shrink-0">
         <span class="px-3 py-1.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 text-xs font-semibold flex items-center gap-1.5">
           <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
           Fleet Dispatch Ready
@@ -23,29 +23,29 @@
     </div>
 
     <!-- Super Admin Header Stats -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-5 shadow-lg">
-        <div class="text-xs font-semibold text-slate-400 mb-1">PENDING ONBOARDING</div>
-        <div class="text-2xl font-black text-amber-400">{{ stats.pending_approvals_count || 0 }}</div>
-        <div class="text-[11px] text-slate-400 mt-2">Sellers & Agents awaiting review</div>
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+      <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-3.5 sm:p-5 shadow-lg">
+        <div class="text-[10px] sm:text-xs font-semibold text-slate-400 mb-1">PENDING ONBOARDING</div>
+        <div class="text-xl sm:text-2xl font-black text-amber-400">{{ stats.pending_approvals_count || 0 }}</div>
+        <div class="text-[10px] sm:text-[11px] text-slate-400 mt-1.5 sm:mt-2">Sellers & Agents awaiting review</div>
       </div>
 
-      <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-5 shadow-lg">
-        <div class="text-xs font-semibold text-slate-400 mb-1">TOTAL UCO COLLECTED</div>
-        <div class="text-2xl font-black text-white">{{ stats.total_volume_collected_liters || 0 }} L</div>
-        <div class="text-[11px] text-emerald-400 mt-2">Platform-wide settled volume</div>
+      <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-3.5 sm:p-5 shadow-lg">
+        <div class="text-[10px] sm:text-xs font-semibold text-slate-400 mb-1">TOTAL UCO COLLECTED</div>
+        <div class="text-xl sm:text-2xl font-black text-white">{{ stats.total_volume_collected_liters || 0 }} L</div>
+        <div class="text-[10px] sm:text-[11px] text-emerald-400 mt-1.5 sm:mt-2">Platform-wide settled volume</div>
       </div>
 
-      <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-5 shadow-lg">
-        <div class="text-xs font-semibold text-slate-400 mb-1">FLAGGED / DISPUTED</div>
-        <div class="text-2xl font-black text-rose-400">{{ stats.flagged_receipts_count || 0 }}</div>
-        <div class="text-[11px] text-slate-400 mt-2">Audited errors & discrepancies</div>
+      <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-3.5 sm:p-5 shadow-lg">
+        <div class="text-[10px] sm:text-xs font-semibold text-slate-400 mb-1">FLAGGED / DISPUTED</div>
+        <div class="text-xl sm:text-2xl font-black text-rose-400">{{ stats.flagged_receipts_count || 0 }}</div>
+        <div class="text-[10px] sm:text-[11px] text-slate-400 mt-1.5 sm:mt-2">Audited errors & discrepancies</div>
       </div>
 
-      <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-5 shadow-lg">
-        <div class="text-xs font-semibold text-slate-400 mb-1">ACTIVE FLEET AGENTS</div>
-        <div class="text-2xl font-black text-cyan-300">{{ stats.active_agents_count || 0 }}</div>
-        <div class="text-[11px] text-slate-400 mt-2">EV collection trucks deployed</div>
+      <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-3.5 sm:p-5 shadow-lg">
+        <div class="text-[10px] sm:text-xs font-semibold text-slate-400 mb-1">ACTIVE FLEET AGENTS</div>
+        <div class="text-xl sm:text-2xl font-black text-cyan-300">{{ stats.active_agents_count || 0 }}</div>
+        <div class="text-[10px] sm:text-[11px] text-slate-400 mt-1.5 sm:mt-2">EV collection trucks deployed</div>
       </div>
     </div>
 
@@ -94,31 +94,31 @@
               </div>
             </div>
 
-            <div class="flex items-center gap-2 flex-shrink-0">
+            <div class="flex flex-wrap items-center gap-2 flex-shrink-0">
               <button 
                 v-if="u.role === 'seller'"
                 @click="inspectingSeller = u"
-                class="px-2.5 py-1.5 bg-blue-600/20 hover:bg-blue-600 text-blue-300 hover:text-white rounded-lg text-xs font-bold border border-blue-500/30 transition shadow flex items-center gap-1"
+                class="px-2.5 py-1.5 bg-blue-600/20 hover:bg-blue-600 text-blue-300 hover:text-white rounded-lg text-xs font-bold border border-blue-500/30 transition shadow flex items-center gap-1 min-h-[36px]"
               >
                 <span>🔍</span>
                 <span>Inspect 12 Documents</span>
               </button>
               <button 
                 @click="$emit('update-user-status', u.id, 'approved')"
-                class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold transition shadow"
+                class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold transition shadow min-h-[36px]"
               >
                 Approve
               </button>
               <button 
                 @click="$emit('update-user-status', u.id, 'rejected')"
-                class="px-3 py-1.5 bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white rounded-lg text-xs font-semibold border border-rose-500/30 transition"
+                class="px-3 py-1.5 bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white rounded-lg text-xs font-semibold border border-rose-500/30 transition min-h-[36px]"
               >
                 Reject
               </button>
               <button 
                 @click="$emit('delete-user', u.id, u.name)"
                 title="Permanently Delete Account"
-                class="px-2.5 py-1.5 bg-slate-800 hover:bg-rose-900/60 text-slate-400 hover:text-rose-300 rounded-lg text-xs font-semibold border border-slate-700 hover:border-rose-500/30 transition"
+                class="px-2.5 py-1.5 bg-slate-800 hover:bg-rose-900/60 text-slate-400 hover:text-rose-300 rounded-lg text-xs font-semibold border border-slate-700 hover:border-rose-500/30 transition min-h-[36px]"
               >
                 🗑️
               </button>
@@ -145,7 +145,7 @@
         </div>
 
         <form @submit.prevent="saveRateCard" class="space-y-4">
-          <div class="grid grid-cols-3 gap-3">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3">
             <div>
               <label class="block text-xs font-semibold text-slate-300 mb-1">Base Rate / L</label>
               <div class="relative">
@@ -197,7 +197,7 @@
           <button 
             type="submit" 
             :disabled="savingRate"
-            class="w-full py-2.5 bg-slate-700 hover:bg-slate-600 text-white font-bold text-xs rounded-xl shadow transition"
+            class="w-full py-2.5 min-h-[44px] bg-slate-700 hover:bg-slate-600 text-white font-bold text-xs rounded-xl shadow transition"
           >
             {{ savingRate ? 'Updating...' : 'Save & Publish Rate Card' }}
           </button>
@@ -241,7 +241,7 @@
     </div>
 
     <!-- FBO Pickup Location & Route Preferences Management -->
-    <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-6 shadow-xl space-y-4">
+    <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-4 sm:p-6 shadow-xl space-y-4">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <div class="flex items-center gap-2.5">
           <div class="w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 flex items-center justify-center text-sm font-bold">
@@ -257,8 +257,108 @@
         </span>
       </div>
 
-      <div class="overflow-x-auto">
-        <table class="w-full text-left text-xs">
+      <!-- Mobile Card Layout (< md) -->
+      <div class="block md:hidden space-y-3">
+        <div v-if="!approvedSellers.length" class="py-6 text-center text-slate-500 text-xs">
+          No approved sellers registered yet.
+        </div>
+        <div 
+          v-for="seller in approvedSellers" 
+          :key="seller.id"
+          class="bg-slate-900/90 rounded-xl p-4 border border-slate-700 space-y-3"
+        >
+          <div class="flex items-start justify-between gap-2">
+            <div>
+              <div class="font-bold text-white text-sm">{{ seller.name }}</div>
+              <div class="text-[10px] text-slate-400 font-mono">ID: {{ seller.id }} &bull; {{ seller.phone || 'No phone' }}</div>
+            </div>
+            <span 
+              :class="seller.status === 'blacklisted' ? 'bg-amber-600/20 text-amber-400 border-amber-500/30' : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'"
+              class="px-2 py-0.5 rounded-full text-[9px] font-bold uppercase border shrink-0"
+            >
+              {{ seller.status === 'blacklisted' ? '⛔ Blacklisted' : '✓ Active' }}
+            </span>
+          </div>
+
+          <div class="text-xs text-slate-300 bg-slate-950/60 p-2.5 rounded-lg border border-slate-800">
+            <div class="text-[10px] text-slate-400 uppercase font-semibold">Address & GPS:</div>
+            <div class="text-white mt-0.5">{{ seller.seller_profile?.address || 'Address not set' }}</div>
+            <div class="text-[10px] font-mono text-cyan-400 mt-0.5">
+              {{ (seller.seller_profile?.latitude || 12.9716).toFixed(4) }}, {{ (seller.seller_profile?.longitude || 77.5946).toFixed(4) }}
+            </div>
+          </div>
+
+          <div class="space-y-1">
+            <label class="block text-[10px] font-semibold text-slate-400 uppercase">Pickup Window:</label>
+            <select 
+              :value="seller.seller_profile?.pickup_preference || 'Morning (9 AM - 12 PM)'"
+              @change="handleUpdatePreference(seller.id, $event.target.value)"
+              class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 focus:border-emerald-500 focus:outline-none"
+            >
+              <option value="Morning (9 AM - 12 PM)">⏰ Morning (9 AM - 12 PM)</option>
+              <option value="Afternoon (1 PM - 4 PM)">⏰ Afternoon (1 PM - 4 PM)</option>
+              <option value="Evening (5 PM - 8 PM)">⏰ Evening (5 PM - 8 PM)</option>
+              <option value="Custom / Night (9 PM - 12 AM)">🌙 Custom / Night (9 PM - 12 AM)</option>
+              <option value="On-Demand Collection">⚡ On-Demand Collection</option>
+            </select>
+          </div>
+
+          <div>
+            <button 
+              @click="handleTogglePickup(seller)"
+              :class="seller.seller_profile?.pickup_enabled !== false ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40 hover:bg-emerald-500/30' : 'bg-rose-500/20 text-rose-300 border-rose-500/40 hover:bg-rose-500/30'"
+              class="w-full py-2 px-3 rounded-xl text-xs font-bold uppercase border transition flex items-center justify-center gap-1.5 min-h-[40px]"
+            >
+              <span 
+                :class="seller.seller_profile?.pickup_enabled !== false ? 'bg-emerald-400' : 'bg-rose-400'"
+                class="w-2 h-2 rounded-full"
+              ></span>
+              {{ seller.seller_profile?.pickup_enabled !== false ? 'Pickup Enabled' : 'Pickup Disabled' }}
+            </button>
+          </div>
+
+          <!-- Actions -->
+          <div class="flex flex-wrap items-center gap-1.5 pt-2 border-t border-slate-800">
+            <button 
+              @click="inspectingSeller = seller"
+              class="flex-1 py-1.5 px-2 bg-blue-600/20 hover:bg-blue-600 text-blue-300 hover:text-white rounded-lg text-xs font-semibold border border-blue-500/30 transition text-center min-h-[36px]"
+            >
+              📋 Dossier
+            </button>
+            <button 
+              @click="openEditLocationModal(seller)"
+              class="flex-1 py-1.5 px-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg text-xs font-semibold transition text-center min-h-[36px]"
+            >
+              ✏️ Edit
+            </button>
+            <button 
+              @click="$emit('update-user-status', seller.id, 'pending')"
+              title="Move back to Pending Onboarding Queue for Re-Approval"
+              class="py-1.5 px-2 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 rounded-lg text-xs font-semibold border border-amber-500/30 transition min-h-[36px]"
+            >
+              ⏳ Pending
+            </button>
+            <button 
+              @click="$emit('update-user-status', seller.id, seller.status === 'blacklisted' ? 'approved' : 'blacklisted')"
+              :class="seller.status === 'blacklisted' ? 'bg-emerald-600/20 text-emerald-300 border-emerald-500/30 hover:bg-emerald-600 hover:text-white' : 'bg-amber-600/20 text-amber-300 border-amber-500/30 hover:bg-amber-600 hover:text-white'"
+              class="py-1.5 px-2.5 rounded-lg text-xs font-semibold border transition min-h-[36px]"
+            >
+              {{ seller.status === 'blacklisted' ? '✓ Unblock' : '⛔ Blacklist' }}
+            </button>
+            <button 
+              @click="$emit('delete-user', seller.id, seller.name)"
+              title="Permanently Delete Seller Account"
+              class="py-1.5 px-2 bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white rounded-lg text-xs font-semibold border border-rose-500/30 transition min-h-[36px]"
+            >
+              🗑️
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Desktop Table Layout (>= md) -->
+      <div class="hidden md:block overflow-x-auto">
+        <table class="w-full text-left text-xs min-w-[680px]">
           <thead>
             <tr class="border-b border-slate-700 text-slate-400 text-[11px] uppercase tracking-wider">
               <th class="py-3 px-3">FBO / Kitchen</th>
@@ -365,8 +465,8 @@
     </div>
 
     <!-- 12-Point Seller KYC & Document Verification Dossier Modal -->
-    <div v-if="inspectingSeller" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div class="bg-slate-900 border border-slate-700 rounded-3xl max-w-2xl w-full p-6 space-y-5 shadow-2xl max-h-[92vh] overflow-y-auto">
+    <div v-if="inspectingSeller" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4">
+      <div class="bg-slate-900 border border-slate-700 rounded-2xl sm:rounded-3xl max-w-2xl w-full p-4 sm:p-6 space-y-4 sm:space-y-5 shadow-2xl max-h-[92dvh] overflow-y-auto">
         <div class="flex justify-between items-start border-b border-slate-800 pb-3">
           <div>
             <div class="flex items-center gap-2">
@@ -517,20 +617,20 @@
         </div>
 
         <!-- Action Controls inside Modal -->
-        <div class="flex items-center justify-between pt-3 border-t border-slate-800">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 border-t border-slate-800">
           <button 
             type="button" 
             @click="inspectingSeller = null" 
-            class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl font-semibold text-xs"
+            class="w-full sm:w-auto px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl font-semibold text-xs min-h-[40px]"
           >
             Close Dossier
           </button>
 
-          <div class="flex items-center gap-2">
+          <div class="flex flex-wrap items-center gap-2">
             <button 
               type="button" 
               @click="$emit('delete-user', inspectingSeller.id, inspectingSeller.name); inspectingSeller = null" 
-              class="px-3 py-2 bg-rose-950/40 hover:bg-rose-900 text-rose-300 rounded-xl font-semibold text-xs border border-rose-500/30 transition flex items-center gap-1"
+              class="px-3 py-2 bg-rose-950/40 hover:bg-rose-900 text-rose-300 rounded-xl font-semibold text-xs border border-rose-500/30 transition flex items-center gap-1 min-h-[40px]"
             >
               <span>🗑️</span>
               <span>Delete Account</span>
@@ -541,21 +641,21 @@
               type="button" 
               @click="$emit('update-user-status', inspectingSeller.id, inspectingSeller.status === 'blacklisted' ? 'approved' : 'blacklisted'); inspectingSeller.status = inspectingSeller.status === 'blacklisted' ? 'approved' : 'blacklisted'" 
               :class="inspectingSeller.status === 'blacklisted' ? 'bg-emerald-600/20 text-emerald-300 border-emerald-500/30 hover:bg-emerald-600 hover:text-white' : 'bg-amber-600/20 text-amber-300 border-amber-500/30 hover:bg-amber-600 hover:text-white'"
-              class="px-3.5 py-2 rounded-xl text-xs font-bold border transition"
+              class="px-3.5 py-2 rounded-xl text-xs font-bold border transition min-h-[40px]"
             >
               {{ inspectingSeller.status === 'blacklisted' ? '✓ Unblock Seller' : '⛔ Blacklist Seller' }}
             </button>
 
-            <div v-if="inspectingSeller.status === 'pending'" class="flex items-center gap-2">
+            <div v-if="inspectingSeller.status === 'pending'" class="flex flex-wrap items-center gap-2">
               <button 
                 @click="$emit('update-user-status', inspectingSeller.id, 'rejected'); inspectingSeller = null" 
-                class="px-4 py-2 bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white rounded-xl text-xs font-bold border border-rose-500/30 transition"
+                class="px-4 py-2 bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white rounded-xl text-xs font-bold border border-rose-500/30 transition min-h-[40px]"
               >
                 ✕ Reject
               </button>
               <button 
                 @click="$emit('update-user-status', inspectingSeller.id, 'approved'); inspectingSeller = null" 
-                class="px-5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition shadow"
+                class="px-5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition shadow min-h-[40px]"
               >
                 ✓ Approve & Authorize
               </button>
@@ -566,8 +666,8 @@
     </div>
 
     <!-- Edit Location Modal -->
-    <div v-if="editingSeller" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+    <div v-if="editingSeller" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4">
+      <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-md w-full p-4 sm:p-6 space-y-4 shadow-2xl max-h-[92dvh] overflow-y-auto">
         <div class="flex justify-between items-center">
           <h3 class="text-sm font-bold text-white">Edit Location: {{ editingSeller.name }}</h3>
           <button @click="editingSeller = null" class="text-slate-400 hover:text-white">&times;</button>
@@ -630,7 +730,7 @@
     </div>
 
     <!-- Active Fleet Agents Directory -->
-    <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-6 shadow-xl space-y-4">
+    <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-4 sm:p-6 shadow-xl space-y-4">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <div class="flex items-center gap-2.5">
           <div class="w-8 h-8 rounded-lg bg-teal-500/10 text-teal-400 border border-teal-500/20 flex items-center justify-center text-sm font-bold">
@@ -646,8 +746,95 @@
         </span>
       </div>
 
-      <div class="overflow-x-auto">
-        <table class="w-full text-left text-xs">
+      <!-- Mobile Card Layout (< md) -->
+      <div class="block md:hidden space-y-3">
+        <div v-if="!activeAgents.length" class="py-6 text-center text-slate-500 text-xs">
+          No active field agents registered. Approve pending agents in the queue above.
+        </div>
+        <div 
+          v-for="agent in activeAgents" 
+          :key="agent.id"
+          class="bg-slate-900/90 rounded-xl p-4 border border-slate-700 space-y-3"
+        >
+          <div class="flex items-start justify-between gap-2">
+            <div>
+              <div class="font-bold text-white text-sm">{{ agent.name }}</div>
+              <div class="text-[10px] text-teal-400 font-mono">ID: {{ agent.id }}</div>
+            </div>
+            <span 
+              :class="agent.status === 'blacklisted' ? 'bg-amber-600/10 text-amber-400 border-amber-500/20' : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'"
+              class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase border flex items-center gap-1.5 shrink-0"
+            >
+              <span 
+                :class="agent.status === 'blacklisted' ? 'bg-amber-400' : 'bg-emerald-400 animate-pulse'"
+                class="w-1.5 h-1.5 rounded-full"
+              ></span>
+              {{ agent.status === 'blacklisted' ? 'Suspended' : 'Active · On Route' }}
+            </span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 text-xs">
+            <div class="bg-slate-950/60 p-2.5 rounded-lg border border-slate-800">
+              <span class="text-[10px] text-slate-400 uppercase font-semibold block mb-0.5">Vehicle:</span>
+              <span class="font-mono font-bold text-cyan-300">{{ agent.agent_profile?.vehicle_no || 'N/A' }}</span>
+            </div>
+            <div class="bg-slate-950/60 p-2.5 rounded-lg border border-slate-800">
+              <span class="text-[10px] text-slate-400 uppercase font-semibold block mb-0.5">Phone:</span>
+              <a v-if="agent.phone" :href="'tel:' + agent.phone" class="text-emerald-400 font-bold hover:underline font-mono">
+                {{ agent.phone }}
+              </a>
+              <span v-else class="text-slate-500">No phone</span>
+            </div>
+          </div>
+
+          <div class="text-xs text-slate-400 truncate">
+            Email: <span class="text-slate-300">{{ agent.email }}</span>
+          </div>
+
+          <!-- Direct Actions -->
+          <div class="flex flex-wrap items-center gap-1.5 pt-2 border-t border-slate-800">
+            <a 
+              v-if="agent.phone"
+              :href="'tel:' + agent.phone"
+              class="flex-1 py-1.5 px-2 rounded-lg bg-emerald-600/30 hover:bg-emerald-600 text-emerald-300 hover:text-white font-bold text-xs transition flex items-center justify-center gap-1 min-h-[36px]"
+            >
+              <span>📞</span> Call
+            </a>
+            <a 
+              v-if="agent.email"
+              :href="'mailto:' + agent.email"
+              class="flex-1 py-1.5 px-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs transition text-center min-h-[36px] flex items-center justify-center"
+            >
+              ✉ Email
+            </a>
+            <button 
+              @click="$emit('update-user-status', agent.id, 'pending')"
+              title="Move back to Pending Onboarding Queue for Re-Approval"
+              class="py-1.5 px-2 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 rounded-lg text-xs font-semibold border border-amber-500/30 transition min-h-[36px]"
+            >
+              ⏳ Pending
+            </button>
+            <button 
+              @click="$emit('update-user-status', agent.id, agent.status === 'blacklisted' ? 'approved' : 'blacklisted')"
+              :class="agent.status === 'blacklisted' ? 'bg-emerald-600/20 text-emerald-300 border-emerald-500/30 hover:bg-emerald-600 hover:text-white' : 'bg-amber-600/20 text-amber-300 border-amber-500/30 hover:bg-amber-600 hover:text-white'"
+              class="py-1.5 px-2.5 rounded-lg text-xs font-semibold border transition min-h-[36px]"
+            >
+              {{ agent.status === 'blacklisted' ? '✓ Unblock' : '⛔ Suspend' }}
+            </button>
+            <button 
+              @click="$emit('delete-user', agent.id, agent.name)"
+              title="Permanently Delete Agent Account"
+              class="py-1.5 px-2 bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white rounded-lg text-xs font-semibold border border-rose-500/30 transition min-h-[36px]"
+            >
+              🗑️
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Desktop Table Layout (>= md) -->
+      <div class="hidden md:block overflow-x-auto">
+        <table class="w-full text-left text-xs min-w-[640px]">
           <thead>
             <tr class="border-b border-slate-700 text-slate-400 text-[11px] uppercase tracking-wider">
               <th class="py-3 px-3">Agent Officer</th>
@@ -746,22 +933,22 @@
     />
 
     <!-- Downstream Biodiesel Compliance Engine -->
-    <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-6 shadow-xl space-y-4">
-      <div class="flex items-center justify-between">
+    <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-4 sm:p-6 shadow-xl space-y-4">
+      <div class="flex items-center justify-between gap-2">
         <div>
           <h2 class="text-sm font-bold text-white">Downstream Biodiesel Compliance Batches</h2>
           <p class="text-xs text-slate-400">Bulk delivery records proving UCO conversion at certified refineries</p>
         </div>
         <button 
           @click="showBatchModal = true"
-          class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold transition shadow"
+          class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold transition shadow shrink-0 min-h-[36px]"
         >
           + Aggregate Batch
         </button>
       </div>
 
       <div class="overflow-x-auto">
-        <table class="w-full text-left text-xs">
+        <table class="w-full text-left text-xs min-w-[500px]">
           <thead>
             <tr class="border-b border-slate-700 text-slate-400 text-[11px] uppercase tracking-wider">
               <th class="py-3 px-3">Batch Code</th>

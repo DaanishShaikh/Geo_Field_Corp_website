@@ -1,13 +1,13 @@
 <template>
   <div 
-    class="fixed inset-0 bg-slate-950/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto"
+    class="fixed inset-0 bg-slate-950/75 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4 overflow-y-auto"
     @click.self="$emit('close')"
   >
-    <div class="relative w-full max-w-2xl bg-white rounded-3xl p-6 sm:p-8 shadow-2xl border-2 border-emerald-400/40 text-slate-900 my-8">
+    <div class="relative w-full max-w-2xl bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-8 shadow-2xl border-2 border-emerald-400/40 text-slate-900 my-4 sm:my-8 max-h-[92dvh] overflow-y-auto">
       <!-- Modal Top Title Bar -->
-      <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+      <div class="flex items-center justify-between pb-3 sm:pb-4 border-b border-slate-100 gap-2">
         <div class="flex items-center gap-3">
-          <img src="/brand/logo.svg" alt="GeoField Corp" class="h-7 w-auto" />
+          <img src="/brand/logo.svg" alt="GeoField Corp" class="h-6 sm:h-7 w-auto" />
         </div>
         <div class="text-right">
           <div class="flex items-center justify-end gap-2">
@@ -16,12 +16,12 @@
               Verified
             </span>
           </div>
-          <p class="text-xs text-slate-400 mt-0.5">Repurpose Used Cooking Oil (RUCO) Initiative</p>
+          <p class="text-[11px] sm:text-xs text-slate-400 mt-0.5">Repurpose Used Cooking Oil (RUCO) Initiative</p>
         </div>
       </div>
 
       <!-- Printable Certificate Container -->
-      <div id="print-area" class="printable-certificate mt-5 border border-slate-200 rounded-2xl p-6 sm:p-7 bg-white shadow-xs space-y-6">
+      <div id="print-area" class="printable-certificate mt-4 sm:mt-5 border border-slate-200 rounded-xl sm:rounded-2xl p-4 sm:p-7 bg-white shadow-xs space-y-4 sm:space-y-6">
         <!-- Certificate Header Row -->
         <div class="flex items-start justify-between gap-4">
           <div>
@@ -145,16 +145,16 @@
       </div>
 
       <!-- Modal Footer Buttons (Hidden on Print) -->
-      <div class="mt-6 flex items-center justify-end gap-3 pt-3 border-t border-slate-100 no-print">
+      <div class="mt-5 sm:mt-6 flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2.5 sm:gap-3 pt-3 border-t border-slate-100 no-print">
         <button
           @click="$emit('close')"
-          class="px-5 py-2.5 rounded-xl border border-slate-300 text-slate-700 hover:bg-slate-100 text-xs font-bold transition cursor-pointer"
+          class="w-full sm:w-auto px-5 py-2.5 rounded-xl border border-slate-300 text-slate-700 hover:bg-slate-100 text-xs font-bold transition cursor-pointer min-h-[44px] text-center"
         >
           Close
         </button>
         <button
           @click="handlePrint"
-          class="px-6 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 text-xs font-bold transition flex items-center gap-2 cursor-pointer shadow-xs"
+          class="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer shadow-xs min-h-[44px]"
         >
           <span>🖨️</span>
           <span>Download & Print Certificate</span>

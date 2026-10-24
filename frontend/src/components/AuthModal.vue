@@ -1,10 +1,10 @@
 <template>
-  <div class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
-    <div class="bg-slate-900 border border-slate-700 rounded-3xl w-full max-w-lg p-6 sm:p-8 shadow-2xl space-y-6 relative max-h-[90vh] overflow-y-auto">
+  <div class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-slate-900 border border-slate-700 rounded-2xl sm:rounded-3xl w-full max-w-lg p-4 sm:p-8 shadow-2xl space-y-5 sm:space-y-6 relative max-h-[92dvh] overflow-y-auto">
       <!-- Close Button -->
       <button 
         @click="$emit('close')" 
-        class="absolute right-5 top-5 text-slate-400 hover:text-white p-1.5 rounded-xl hover:bg-slate-800 transition"
+        class="absolute right-4 top-4 sm:right-5 sm:top-5 text-slate-400 hover:text-white p-2 rounded-xl hover:bg-slate-800 transition min-h-[40px] min-w-[40px] flex items-center justify-center cursor-pointer"
         aria-label="Close"
       >
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -13,11 +13,11 @@
       </button>
 
       <!-- Brand Header -->
-      <div class="text-center space-y-1">
+      <div class="text-center space-y-1 pt-1 sm:pt-0">
         <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center font-black text-white text-lg mx-auto shadow-lg shadow-emerald-950/50">
           G
         </div>
-        <h2 class="text-xl font-extrabold text-white">GeoField RUCO Trace</h2>
+        <h2 class="text-lg sm:text-xl font-extrabold text-white">GeoField RUCO Trace</h2>
         <p class="text-xs text-slate-400">National Used Cooking Oil Compliance & Traceability System</p>
       </div>
 
@@ -26,14 +26,14 @@
         <button 
           @click="mode = 'login'" 
           :class="mode === 'login' ? 'bg-slate-800 text-white font-bold shadow' : 'text-slate-400 hover:text-slate-200 font-medium'"
-          class="py-2 text-xs rounded-xl transition"
+          class="py-2.5 text-xs rounded-xl transition min-h-[40px] cursor-pointer"
         >
           Sign In
         </button>
         <button 
           @click="mode = 'register'" 
           :class="mode === 'register' ? 'bg-slate-800 text-white font-bold shadow' : 'text-slate-400 hover:text-slate-200 font-medium'"
-          class="py-2 text-xs rounded-xl transition"
+          class="py-2.5 text-xs rounded-xl transition min-h-[40px] cursor-pointer"
         >
           New Onboarding
         </button>
@@ -334,18 +334,18 @@
           </div>
 
           <!-- Step 2 Actions -->
-          <div class="pt-3 border-t border-slate-800 flex items-center justify-between gap-2">
+          <div class="pt-3 border-t border-slate-800 flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-2.5">
             <button 
               type="button" 
               @click="currentStep = 1"
-              class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold rounded-xl transition cursor-pointer"
+              class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold rounded-xl transition cursor-pointer min-h-[44px] flex items-center justify-center"
             >
               &larr; Back
             </button>
             <button 
               type="button" 
               @click="goToStep(3)"
-              class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow-lg transition flex items-center gap-2 cursor-pointer"
+              class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow-lg transition flex items-center justify-center gap-2 cursor-pointer min-h-[44px]"
             >
               <span>Next: Location & GPS</span>
               <span>&rarr;</span>
@@ -471,18 +471,18 @@
           </div>
 
           <!-- Step 3 Actions -->
-          <div class="pt-3 border-t border-slate-800 flex items-center justify-between gap-2">
+          <div class="pt-3 border-t border-slate-800 flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-2.5">
             <button 
               type="button" 
               @click="currentStep = 2"
-              class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold rounded-xl transition cursor-pointer"
+              class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold rounded-xl transition cursor-pointer min-h-[44px] flex items-center justify-center"
             >
               &larr; Back
             </button>
             <button 
               type="submit" 
               :disabled="loading"
-              class="px-6 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-bold text-xs rounded-xl shadow-lg transition disabled:opacity-50 cursor-pointer"
+              class="px-6 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-bold text-xs rounded-xl shadow-lg transition disabled:opacity-50 cursor-pointer min-h-[44px] flex items-center justify-center"
             >
               {{ loading ? 'Submitting Application...' : 'Complete & Submit Application' }}
             </button>

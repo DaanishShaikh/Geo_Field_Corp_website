@@ -30,17 +30,28 @@
     />
 
     <!-- 2. AUTHENTICATED PLATFORM PORTAL (When logged in) -->
-    <div v-else class="flex-1 flex overflow-hidden">
+    <div v-else class="flex-1 flex overflow-hidden relative">
+      <!-- Mobile Sidebar Backdrop Overlay -->
+      <transition name="fade">
+        <div 
+          v-if="sidebarOpen" 
+          @click="sidebarOpen = false" 
+          class="fixed inset-0 bg-slate-950/70 backdrop-blur-xs z-25 lg:hidden"
+          aria-hidden="true"
+        ></div>
+      </transition>
+
       <!-- Left Sidebar Navigation -->
       <Sidebar 
         :user="currentUser" 
         :current-view="currentView" 
         :is-open="sidebarOpen"
         @navigate="handleNavigate"
+        @close="sidebarOpen = false"
       />
 
       <!-- Main Portal Workspace -->
-      <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 space-y-6">
+      <main class="flex-1 overflow-y-auto p-3.5 sm:p-6 lg:p-8 space-y-5 sm:space-y-6">
         <!-- 1. Dashboard View (Seller / Agent / Admin) -->
         <div v-if="currentView === 'dashboard'">
           <SellerDashboard 

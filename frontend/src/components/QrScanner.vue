@@ -1,8 +1,8 @@
 <template>
-  <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-5 shadow-xl">
-    <div class="flex items-center justify-between mb-4">
+  <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-4 sm:p-5 shadow-xl">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
       <div class="flex items-center gap-2.5">
-        <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center">
+        <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center shrink-0">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path>
           </svg>
@@ -16,7 +16,7 @@
         <button 
           @click="toggleCamera"
           :class="isCameraActive ? 'bg-rose-500/20 text-rose-300 border-rose-500/30' : 'bg-emerald-600 text-white'"
-          class="px-3 py-1.5 rounded-lg text-xs font-semibold border border-transparent transition"
+          class="w-full sm:w-auto px-4 py-2 rounded-xl text-xs font-semibold border border-transparent transition min-h-[40px] flex items-center justify-center"
         >
           {{ isCameraActive ? 'Stop Camera' : 'Start Camera' }}
         </button>
@@ -52,16 +52,16 @@
       </div>
 
       <!-- Manual Input fallback -->
-      <form @submit.prevent="onManualSubmit" class="flex gap-2 mt-2">
+      <form @submit.prevent="onManualSubmit" class="flex flex-col sm:flex-row gap-2 mt-2">
         <input 
           v-model="manualCode" 
           type="text" 
           placeholder="Or paste QR payload (e.g. RUCO-SITE-GEO-9082)" 
-          class="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500"
+          class="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 min-h-[40px]"
         />
         <button 
           type="submit" 
-          class="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 text-white rounded-lg text-xs font-medium transition"
+          class="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-xl text-xs font-semibold transition min-h-[40px]"
         >
           Scan
         </button>

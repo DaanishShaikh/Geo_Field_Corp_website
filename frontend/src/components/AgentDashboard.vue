@@ -1,65 +1,65 @@
 <template>
-  <div class="space-y-6">
+  <div class="space-y-5 sm:space-y-6">
     <!-- Header Stats & Offline Mode Bar -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-5 shadow-lg">
-        <div class="text-xs font-semibold text-slate-400 mb-1">ASSIGNED MANIFEST STOPS</div>
-        <div class="text-2xl font-black text-white">{{ stats.total_assigned_stops || 0 }}</div>
-        <div class="text-[11px] text-emerald-400 mt-2">{{ stats.visited_stops || 0 }} visited today</div>
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+      <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-3.5 sm:p-5 shadow-lg">
+        <div class="text-[10px] sm:text-xs font-semibold text-slate-400 mb-1 truncate">ASSIGNED STOPS</div>
+        <div class="text-xl sm:text-2xl font-black text-white">{{ stats.total_assigned_stops || 0 }}</div>
+        <div class="text-[10px] sm:text-[11px] text-emerald-400 mt-1.5 sm:mt-2 truncate">{{ stats.visited_stops || 0 }} visited today</div>
       </div>
 
-      <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-5 shadow-lg">
-        <div class="text-xs font-semibold text-slate-400 mb-1">OPEN RECEIPTS</div>
-        <div class="text-2xl font-black text-amber-400">{{ stats.open_receipts_count || 0 }}</div>
-        <div class="text-[11px] text-slate-400 mt-2">Ready for physical collection</div>
+      <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-3.5 sm:p-5 shadow-lg">
+        <div class="text-[10px] sm:text-xs font-semibold text-slate-400 mb-1 truncate">OPEN RECEIPTS</div>
+        <div class="text-xl sm:text-2xl font-black text-amber-400">{{ stats.open_receipts_count || 0 }}</div>
+        <div class="text-[10px] sm:text-[11px] text-slate-400 mt-1.5 sm:mt-2 truncate">Ready for collection</div>
       </div>
 
-      <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-5 shadow-lg flex flex-col justify-between">
+      <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-3.5 sm:p-5 shadow-lg flex flex-col justify-between">
         <div>
-          <div class="flex items-center justify-between text-xs font-semibold text-slate-400 mb-1">
+          <div class="flex items-center justify-between text-[10px] sm:text-xs font-semibold text-slate-400 mb-1">
             <span>VEHICLE & GPS</span>
-            <span v-if="gpsSynced" class="text-[10px] text-emerald-400 font-mono">Synced ✓</span>
+            <span v-if="gpsSynced" class="text-[9px] sm:text-[10px] text-emerald-400 font-mono">Synced ✓</span>
           </div>
-          <div class="text-xl font-bold font-mono text-cyan-300">{{ agent.agent_profile?.vehicle_no || 'EV-COLLECTOR' }}</div>
-          <div class="text-[11px] text-slate-400 mt-1 font-mono flex items-center gap-1">
+          <div class="text-base sm:text-xl font-bold font-mono text-cyan-300 truncate">{{ agent.agent_profile?.vehicle_no || 'EV-COLLECTOR' }}</div>
+          <div class="text-[10px] sm:text-[11px] text-slate-400 mt-1 font-mono flex items-center gap-1 truncate">
             <span>📍</span>
-            <span v-if="agent.agent_profile?.current_lat">{{ Number(agent.agent_profile.current_lat).toFixed(4) }}, {{ Number(agent.agent_profile.current_lng).toFixed(4) }}</span>
+            <span v-if="agent.agent_profile?.current_lat">{{ Number(agent.agent_profile.current_lat).toFixed(3) }}, {{ Number(agent.agent_profile.current_lng).toFixed(3) }}</span>
             <span v-else class="text-slate-500">No GPS locked</span>
           </div>
         </div>
-        <div class="mt-2.5">
+        <div class="mt-2 sm:mt-2.5">
           <button 
             @click="broadcastGps"
             :disabled="syncingGps"
-            class="w-full py-1.5 px-2.5 bg-cyan-600/30 hover:bg-cyan-600 text-cyan-200 hover:text-white rounded-lg text-[10px] font-bold transition flex items-center justify-center gap-1.5 border border-cyan-500/30 shadow active:scale-95"
+            class="w-full py-1.5 px-2 bg-cyan-600/30 hover:bg-cyan-600 text-cyan-200 hover:text-white rounded-lg text-[9px] sm:text-[10px] font-bold transition flex items-center justify-center gap-1 border border-cyan-500/30 shadow active:scale-95 min-h-[36px] cursor-pointer"
           >
             <span>{{ syncingGps ? '📡' : '🎯' }}</span>
-            <span>{{ syncingGps ? 'Acquiring GPS...' : 'Broadcast My Live GPS' }}</span>
+            <span class="truncate">{{ syncingGps ? 'Acquiring...' : 'Broadcast GPS' }}</span>
           </button>
         </div>
       </div>
 
       <div 
         :class="isOnline ? 'bg-slate-800/80 border-slate-700/80' : 'bg-amber-950/40 border-amber-800/60'"
-        class="rounded-2xl border p-5 shadow-lg flex flex-col justify-between"
+        class="rounded-2xl border p-3.5 sm:p-5 shadow-lg flex flex-col justify-between"
       >
         <div>
-          <div class="text-xs font-semibold text-slate-400 mb-1">OFFLINE CACHE QUEUE</div>
-          <div class="text-2xl font-black text-white">{{ offlineQueue.length }}</div>
+          <div class="text-[10px] sm:text-xs font-semibold text-slate-400 mb-1 truncate">OFFLINE QUEUE</div>
+          <div class="text-xl sm:text-2xl font-black text-white">{{ offlineQueue.length }}</div>
         </div>
-        <div class="flex items-center gap-2 mt-2">
+        <div class="flex items-center gap-1.5 sm:gap-2 mt-2">
           <button 
             @click="$emit('toggle-offline')" 
-            class="px-2.5 py-1 text-[11px] font-semibold rounded bg-slate-700 hover:bg-slate-600 text-slate-200"
+            class="px-2 py-1 text-[10px] sm:text-[11px] font-semibold rounded bg-slate-700 hover:bg-slate-600 text-slate-200 min-h-[36px] flex items-center justify-center flex-1 cursor-pointer"
           >
-            {{ isOnline ? 'Simulate Offline' : 'Reconnect' }}
+            {{ isOnline ? 'Offline' : 'Online' }}
           </button>
           <button 
             v-if="offlineQueue.length && isOnline"
             @click="$emit('sync-offline')"
-            class="px-2.5 py-1 text-[11px] font-semibold rounded bg-emerald-600 hover:bg-emerald-500 text-white"
+            class="px-2.5 py-1 text-[10px] sm:text-[11px] font-semibold rounded bg-emerald-600 hover:bg-emerald-500 text-white min-h-[36px] flex items-center justify-center cursor-pointer"
           >
-            Sync Now
+            Sync
           </button>
         </div>
       </div>
@@ -76,7 +76,7 @@
       />
 
       <!-- Measurement & Settlement Form -->
-      <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-6 shadow-xl space-y-4">
+      <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-4 sm:p-6 shadow-xl space-y-4">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2.5">
             <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center font-bold text-xs">
@@ -289,7 +289,7 @@
           <button 
             type="submit" 
             :disabled="!selectedReceiptId || settling"
-            class="w-full py-3 bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-bold text-xs rounded-xl shadow-lg transition disabled:opacity-50 flex items-center justify-center gap-2"
+            class="w-full py-3 bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-bold text-xs rounded-xl shadow-lg transition disabled:opacity-50 flex items-center justify-center gap-2 min-h-[48px] cursor-pointer"
           >
             <span v-if="settling">Settling & Issuing Certificate...</span>
             <span v-else>Approve & Settle Collection</span>

@@ -1,60 +1,60 @@
 <template>
-  <div class="space-y-6">
+  <div class="space-y-5 sm:space-y-6">
     <!-- Header Hero Stats -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
       <!-- Volume Sold -->
-      <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-5 shadow-lg relative overflow-hidden">
-        <div class="flex items-center justify-between text-slate-400 text-xs font-semibold mb-2">
+      <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-3.5 sm:p-5 shadow-lg relative overflow-hidden">
+        <div class="flex items-center justify-between text-slate-400 text-[10px] sm:text-xs font-semibold mb-1.5 sm:mb-2">
           <span>VOLUME SOLD</span>
-          <span class="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-400">🛢️</span>
+          <span class="p-1 sm:p-1.5 rounded-lg bg-emerald-500/10 text-emerald-400">🛢️</span>
         </div>
-        <div class="text-2xl font-black text-white tracking-tight">
-          {{ stats.total_volume_liters || 0 }} <span class="text-sm font-medium text-slate-400">Liters</span>
+        <div class="text-xl sm:text-2xl font-black text-white tracking-tight">
+          {{ stats.total_volume_liters || 0 }} <span class="text-xs sm:text-sm font-medium text-slate-400">L</span>
         </div>
-        <div class="text-[11px] text-emerald-400 mt-2 flex items-center gap-1 font-medium">
+        <div class="text-[10px] sm:text-[11px] text-emerald-400 mt-1.5 sm:mt-2 flex items-center gap-1 font-medium truncate">
           <span>✓ 100% RUCO Certified</span>
         </div>
       </div>
 
       <!-- Cumulative Earnings -->
-      <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-5 shadow-lg relative overflow-hidden">
-        <div class="flex items-center justify-between text-slate-400 text-xs font-semibold mb-2">
+      <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-3.5 sm:p-5 shadow-lg relative overflow-hidden">
+        <div class="flex items-center justify-between text-slate-400 text-[10px] sm:text-xs font-semibold mb-1.5 sm:mb-2">
           <span>CUMULATIVE EARNINGS</span>
-          <span class="p-1.5 rounded-lg bg-teal-500/10 text-teal-400">₹</span>
+          <span class="p-1 sm:p-1.5 rounded-lg bg-teal-500/10 text-teal-400 font-bold">₹</span>
         </div>
-        <div class="text-2xl font-black text-white tracking-tight">
+        <div class="text-xl sm:text-2xl font-black text-white tracking-tight truncate">
           ₹{{ formatNumber(stats.total_earnings_inr || 0) }}
         </div>
-        <div class="text-[11px] text-slate-400 mt-2">
+        <div class="text-[10px] sm:text-[11px] text-slate-400 mt-1.5 sm:mt-2 truncate">
           {{ stats.settled_count || 0 }} settled payouts
         </div>
       </div>
 
       <!-- CO2 Prevented -->
-      <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-5 shadow-lg relative overflow-hidden">
-        <div class="flex items-center justify-between text-slate-400 text-xs font-semibold mb-2">
+      <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-3.5 sm:p-5 shadow-lg relative overflow-hidden">
+        <div class="flex items-center justify-between text-slate-400 text-[10px] sm:text-xs font-semibold mb-1.5 sm:mb-2">
           <span>CO₂ PREVENTED</span>
-          <span class="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-400">🌱</span>
+          <span class="p-1 sm:p-1.5 rounded-lg bg-emerald-500/10 text-emerald-400">🌱</span>
         </div>
-        <div class="text-2xl font-black text-emerald-400 tracking-tight">
-          {{ stats.esg?.co2_prevented_tons || 0 }} <span class="text-sm font-medium text-slate-400">t</span>
+        <div class="text-xl sm:text-2xl font-black text-emerald-400 tracking-tight">
+          {{ stats.esg?.co2_prevented_tons || 0 }} <span class="text-xs sm:text-sm font-medium text-slate-400">t</span>
         </div>
-        <div class="text-[11px] text-slate-400 mt-2">
-          Emissions stopped from landfill/drain
+        <div class="text-[10px] sm:text-[11px] text-slate-400 mt-1.5 sm:mt-2 truncate">
+          Emissions stopped
         </div>
       </div>
 
       <!-- Water Saved -->
-      <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-5 shadow-lg relative overflow-hidden">
-        <div class="flex items-center justify-between text-slate-400 text-xs font-semibold mb-2">
+      <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-3.5 sm:p-5 shadow-lg relative overflow-hidden">
+        <div class="flex items-center justify-between text-slate-400 text-[10px] sm:text-xs font-semibold mb-1.5 sm:mb-2">
           <span>WATER PROTECTED</span>
-          <span class="p-1.5 rounded-lg bg-cyan-500/10 text-cyan-400">💧</span>
+          <span class="p-1 sm:p-1.5 rounded-lg bg-cyan-500/10 text-cyan-400">💧</span>
         </div>
-        <div class="text-2xl font-black text-cyan-300 tracking-tight">
-          {{ formatNumber(stats.esg?.water_saved_liters || 0) }} <span class="text-sm font-medium text-slate-400">L</span>
+        <div class="text-xl sm:text-2xl font-black text-cyan-300 tracking-tight truncate">
+          {{ formatNumber(stats.esg?.water_saved_liters || 0) }} <span class="text-xs sm:text-sm font-medium text-slate-400">L</span>
         </div>
-        <div class="text-[11px] text-slate-400 mt-2">
-          Clean drinking water shielded
+        <div class="text-[10px] sm:text-[11px] text-slate-400 mt-1.5 sm:mt-2 truncate">
+          Water shielded
         </div>
       </div>
     </div>
@@ -62,14 +62,14 @@
     <!-- Assigned Field Executive Contact Card -->
     <div 
       :class="assignedAgent ? 'bg-gradient-to-r from-slate-800/90 to-teal-950/40 border-teal-500/40' : 'bg-slate-800/60 border-slate-700/60'"
-      class="rounded-2xl border p-5 shadow-lg flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+      class="rounded-2xl border p-4 sm:p-5 shadow-lg flex flex-col sm:flex-row sm:items-center justify-between gap-4"
     >
-      <div class="flex items-start sm:items-center gap-3.5">
-        <div class="w-10 h-10 rounded-xl bg-teal-500/10 text-teal-400 border border-teal-500/20 flex items-center justify-center text-lg flex-shrink-0">
+      <div class="flex items-start sm:items-center gap-3.5 min-w-0">
+        <div class="w-10 h-10 rounded-xl bg-teal-500/10 text-teal-400 border border-teal-500/20 flex items-center justify-center text-lg shrink-0">
           🚚
         </div>
-        <div>
-          <div class="flex items-center gap-2">
+        <div class="min-w-0">
+          <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
             <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Assigned Collection Officer</span>
             <span 
               v-if="assignedAgent" 
@@ -81,32 +81,38 @@
               Pending Dispatch
             </span>
           </div>
-          <div v-if="assignedAgent" class="mt-0.5">
-            <h3 class="text-sm font-bold text-white">{{ assignedAgent.name }} &bull; <span class="font-mono text-cyan-300 text-xs">{{ assignedAgent.vehicle_no }}</span></h3>
-            <p class="text-xs text-slate-300">Direct Contact: <strong class="text-white">{{ assignedAgent.phone }}</strong> &bull; <span class="text-slate-400">{{ assignedAgent.email }}</span></p>
+          <div v-if="assignedAgent" class="mt-1">
+            <h3 class="text-sm font-bold text-white flex flex-wrap items-center gap-1.5">
+              <span>{{ assignedAgent.name }}</span>
+              <span class="font-mono text-cyan-300 text-xs">&bull; {{ assignedAgent.vehicle_no }}</span>
+            </h3>
+            <p class="text-xs text-slate-300 mt-0.5">
+              Direct Contact: <strong class="text-white">{{ assignedAgent.phone }}</strong>
+              <span class="text-slate-400 hidden sm:inline"> &bull; {{ assignedAgent.email }}</span>
+            </p>
           </div>
-          <div v-else class="mt-0.5 text-xs text-slate-400">
+          <div v-else class="mt-1 text-xs text-slate-400">
             Our logistics coordinator will assign an executive for your scheduled collection shortly.
           </div>
         </div>
       </div>
 
-      <div v-if="assignedAgent" class="flex items-center gap-2 flex-shrink-0">
+      <div v-if="assignedAgent" class="flex flex-wrap sm:flex-nowrap items-center gap-2 w-full sm:w-auto shrink-0">
         <button 
           @click="showAgentMap = !showAgentMap"
-          class="px-3.5 py-2 bg-bio/20 hover:bg-bio/30 text-bio border border-bio/30 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 cursor-pointer"
+          class="flex-1 sm:flex-none px-3.5 py-2.5 bg-bio/20 hover:bg-bio/30 text-bio border border-bio/30 rounded-xl text-xs font-semibold transition flex items-center justify-center gap-1.5 cursor-pointer min-h-[40px]"
         >
           <span>🗺️</span> {{ showAgentMap ? 'Hide Map' : 'Track on Map' }}
         </button>
         <a 
           :href="'tel:' + assignedAgent.phone"
-          class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition shadow-lg flex items-center gap-1.5"
+          class="flex-1 sm:flex-none px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition shadow-lg flex items-center justify-center gap-1.5 min-h-[40px]"
         >
           <span>📞</span> Call Officer
         </a>
         <a 
           :href="'mailto:' + assignedAgent.email"
-          class="px-3 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 hover:text-white rounded-xl text-xs font-semibold transition flex items-center gap-1.5 border border-slate-600"
+          class="flex-1 sm:flex-none px-3 py-2.5 bg-slate-700 hover:bg-slate-600 text-slate-200 hover:text-white rounded-xl text-xs font-semibold transition flex items-center justify-center gap-1.5 border border-slate-600 min-h-[40px]"
         >
           <span>✉</span> Email
         </a>
@@ -126,10 +132,10 @@
     <!-- Main Two Column Grid -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <!-- 1. Site Identity (Static QR Code) -->
-      <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-6 shadow-xl space-y-4">
+      <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-4 sm:p-6 shadow-xl space-y-4">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2.5">
-            <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center font-bold text-xs">
+            <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center font-bold text-xs shrink-0">
               QR
             </div>
             <div>
@@ -137,61 +143,61 @@
               <p class="text-xs text-slate-400">Scanned on-site by Approval Agent to authenticate FBO</p>
             </div>
           </div>
-          <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+          <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shrink-0">
             KYC Verified
           </span>
         </div>
 
-        <div class="p-5 bg-slate-900/90 rounded-xl border border-slate-700 flex flex-col sm:flex-row items-center gap-6">
-          <div class="p-3 bg-white rounded-xl shadow-lg flex-shrink-0 text-center">
-            <img :src="siteQr.data_url" alt="Site QR" class="w-36 h-36 object-contain" />
+        <div class="p-3.5 sm:p-5 bg-slate-900/90 rounded-xl border border-slate-700 flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
+          <div class="p-3 bg-white rounded-xl shadow-lg shrink-0 text-center">
+            <img :src="siteQr.data_url" alt="Site QR" class="w-32 h-32 sm:w-36 sm:h-36 object-contain" />
             <span class="text-[9px] text-slate-600 font-mono block mt-1">Live FBO Verification QR</span>
           </div>
-          <div class="space-y-2 text-xs text-slate-300 flex-1">
-            <div class="flex items-center justify-between">
-              <div>
+          <div class="space-y-2 text-xs text-slate-300 flex-1 min-w-0 w-full sm:w-auto">
+            <div class="flex items-center justify-between gap-2">
+              <div class="min-w-0">
                 <span class="text-slate-500 uppercase tracking-wider font-semibold text-[10px] block">Company / Kitchen Name</span>
-                <strong class="text-white text-sm">{{ seller.name }}</strong>
+                <strong class="text-white text-sm truncate block">{{ seller.name }}</strong>
               </div>
               <span 
                 :class="seller.status === 'approved' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-amber-500/10 text-amber-400 border-amber-500/20'"
-                class="px-2 py-0.5 rounded-full border text-[10px] font-bold uppercase tracking-wider"
+                class="px-2 py-0.5 rounded-full border text-[10px] font-bold uppercase tracking-wider shrink-0"
               >
                 {{ seller.status === 'approved' ? '✓ Verified FBO' : '⏳ KYC Under Review' }}
               </span>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 border-t border-slate-800">
-              <div>
+              <div class="min-w-0">
                 <span class="text-slate-500 uppercase tracking-wider font-semibold text-[10px] block">Primary Contact</span>
-                <span class="text-white">{{ seller.seller_profile?.contact_name || seller.name }}</span>
-                <span class="text-[11px] text-slate-400 block font-mono">{{ seller.phone || 'N/A' }}</span>
+                <span class="text-white truncate block">{{ seller.seller_profile?.contact_name || seller.name }}</span>
+                <span class="text-[11px] text-slate-400 block font-mono truncate">{{ seller.phone || 'N/A' }}</span>
               </div>
-              <div>
+              <div class="min-w-0">
                 <span class="text-slate-500 uppercase tracking-wider font-semibold text-[10px] block">Alternative Contact</span>
-                <span class="text-white">{{ seller.seller_profile?.alt_contact_name || 'Not specified' }}</span>
-                <span class="text-[11px] text-slate-400 block font-mono">{{ seller.seller_profile?.alt_phone || 'N/A' }}</span>
+                <span class="text-white truncate block">{{ seller.seller_profile?.alt_contact_name || 'Not specified' }}</span>
+                <span class="text-[11px] text-slate-400 block font-mono truncate">{{ seller.seller_profile?.alt_phone || 'N/A' }}</span>
               </div>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1 border-t border-slate-800 font-mono text-[11px]">
               <div>
                 <span class="text-slate-500 uppercase tracking-wider font-semibold text-[10px] block">FSSAI No.</span>
-                <span class="text-amber-400">{{ seller.seller_profile?.fssai_license_no || 'N/A' }}</span>
+                <span class="text-amber-400 break-all">{{ seller.seller_profile?.fssai_license_no || 'N/A' }}</span>
               </div>
               <div>
                 <span class="text-slate-500 uppercase tracking-wider font-semibold text-[10px] block">GST No.</span>
-                <span class="text-white">{{ seller.seller_profile?.gst_no || 'N/A' }}</span>
+                <span class="text-white break-all">{{ seller.seller_profile?.gst_no || 'N/A' }}</span>
               </div>
               <div>
                 <span class="text-slate-500 uppercase tracking-wider font-semibold text-[10px] block">MSME / UDYAM</span>
-                <span class="text-white">{{ seller.seller_profile?.msme_udyam_no || 'N/A' }}</span>
+                <span class="text-white break-all">{{ seller.seller_profile?.msme_udyam_no || 'N/A' }}</span>
               </div>
             </div>
 
             <div class="pt-1 border-t border-slate-800">
               <span class="text-slate-500 uppercase tracking-wider font-semibold text-[10px] block">Settlement Account (Cheque / UPI)</span>
-              <span class="text-cyan-400 font-mono text-xs">{{ seller.seller_profile?.bank_upi_or_cheque || 'N/A' }}</span>
+              <span class="text-cyan-400 font-mono text-xs break-all">{{ seller.seller_profile?.bank_upi_or_cheque || 'N/A' }}</span>
             </div>
 
             <div class="pt-1 border-t border-slate-800">
@@ -202,7 +208,7 @@
 
             <div>
               <span class="text-slate-500 uppercase tracking-wider font-semibold text-[10px] block">GPS Coordinates & Preference</span>
-              <div class="text-[11px] font-mono text-emerald-400 flex items-center gap-2">
+              <div class="text-[11px] font-mono text-emerald-400 flex items-center gap-2 flex-wrap">
                 <span v-if="seller.seller_profile?.latitude && seller.seller_profile?.longitude">📍 {{ seller.seller_profile.latitude }}, {{ seller.seller_profile.longitude }}</span>
                 <span v-else class="text-amber-400">📍 GPS Location Pending</span>
                 <a 
@@ -221,17 +227,17 @@
           </div>
         </div>
 
-        <div class="flex flex-wrap gap-2">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
           <button 
             @click="openEditLocation"
-            class="py-2 px-3 bg-teal-600 hover:bg-teal-500 text-white rounded-xl text-xs font-semibold transition flex items-center justify-center gap-2 shadow cursor-pointer"
+            class="py-2.5 px-3 bg-teal-600 hover:bg-teal-500 text-white rounded-xl text-xs font-semibold transition flex items-center justify-center gap-2 shadow cursor-pointer min-h-[44px]"
           >
             <span>📍</span>
-            <span>Update Pickup Spot & GPS</span>
+            <span>Update Pickup Spot</span>
           </button>
           <button 
             @click="$emit('preview-verification', seller.id, seller)"
-            class="py-2 px-3 bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-400 border border-emerald-500/30 rounded-xl text-xs font-semibold transition flex items-center justify-center gap-1.5 cursor-pointer"
+            class="py-2.5 px-3 bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-400 border border-emerald-500/30 rounded-xl text-xs font-semibold transition flex items-center justify-center gap-1.5 cursor-pointer min-h-[44px]"
             title="Inspect what anyone scanning your QR code sees"
           >
             <span>👁️</span>
@@ -239,26 +245,25 @@
           </button>
           <button 
             @click="copyVerificationUrl"
-            class="py-2 px-3 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-semibold transition flex items-center justify-center gap-1.5 cursor-pointer"
+            class="py-2.5 px-3 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-semibold transition flex items-center justify-center gap-1.5 cursor-pointer min-h-[44px]"
           >
             <span>🔗</span>
             <span>{{ copiedVerificationLink ? 'Link Copied!' : 'Copy Link' }}</span>
           </button>
           <button 
             @click="downloadSiteQr"
-            class="flex-1 py-2 px-3 bg-slate-700 hover:bg-slate-600 text-white rounded-xl text-xs font-semibold transition flex items-center justify-center gap-2 cursor-pointer"
+            class="py-2.5 px-3 bg-slate-700 hover:bg-slate-600 text-white rounded-xl text-xs font-semibold transition flex items-center justify-center gap-2 cursor-pointer min-h-[44px]"
           >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
             </svg>
-            Download Site QR Sticker
+            Download Site QR
           </button>
         </div>
       </div>
 
-
       <!-- 2. Create Collection Receipt -->
-      <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-6 shadow-xl space-y-4">
+      <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-4 sm:p-6 shadow-xl space-y-4">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2.5">
             <div class="w-8 h-8 rounded-lg bg-teal-500/10 text-teal-400 border border-teal-500/20 flex items-center justify-center font-bold text-xs">
@@ -323,7 +328,7 @@
     </div>
 
     <!-- Recent Collections & Compliance Hub -->
-    <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-6 shadow-xl space-y-4">
+    <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-4 sm:p-6 shadow-xl space-y-4">
       <div class="flex items-center justify-between">
         <div>
           <h2 class="text-sm font-bold text-white">Recent Collections & Compliance Hub</h2>
@@ -331,13 +336,71 @@
         </div>
         <button 
           @click="$emit('view-ledger')" 
-          class="text-xs text-emerald-400 hover:text-emerald-300 font-semibold"
+          class="text-xs text-emerald-400 hover:text-emerald-300 font-semibold cursor-pointer"
         >
           View Full Ledger →
         </button>
       </div>
 
-      <div class="overflow-x-auto">
+      <!-- Mobile Cards View for Small Screens -->
+      <div class="block md:hidden space-y-3">
+        <div v-if="!recentReceipts.length" class="p-6 text-center text-slate-500 text-xs">
+          No collection receipts recorded yet.
+        </div>
+        <div 
+          v-for="receipt in recentReceipts" 
+          :key="'mobile-' + receipt.id" 
+          class="p-3.5 bg-slate-900/90 border border-slate-700/70 rounded-xl space-y-2.5"
+        >
+          <div class="flex items-center justify-between">
+            <span class="font-mono font-bold text-white text-xs">{{ receipt.id }}</span>
+            <span 
+              :class="receipt.status === 'settled' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-amber-500/10 text-amber-400 border-amber-500/20'"
+              class="px-2 py-0.5 rounded-full text-[10px] uppercase font-semibold border"
+            >
+              {{ receipt.status }}
+            </span>
+          </div>
+
+          <div class="grid grid-cols-3 gap-2 text-center bg-slate-800/50 p-2 rounded-lg font-mono text-xs">
+            <div>
+              <span class="text-[9px] uppercase text-slate-400 block font-sans">Volume</span>
+              <span class="font-bold text-white">{{ receipt.settled_volume || receipt.measured_volume || receipt.requested_volume }} L</span>
+            </div>
+            <div>
+              <span class="text-[9px] uppercase text-slate-400 block font-sans">TPC %</span>
+              <span class="font-bold text-slate-300">{{ (receipt.tpc_reading != null || receipt.tpc_percentage != null) ? (receipt.tpc_reading ?? receipt.tpc_percentage) + '%' : (receipt.status === 'settled' ? '18%' : '-') }}</span>
+            </div>
+            <div>
+              <span class="text-[9px] uppercase text-slate-400 block font-sans">Payout</span>
+              <span class="font-bold text-emerald-400">{{ getReceiptAmount(receipt) ? '₹' + formatNumber(getReceiptAmount(receipt)) : 'Pending' }}</span>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between text-[11px] text-slate-400 pt-1">
+            <span>{{ formatDate(receipt.created_at) }}</span>
+            <div class="flex items-center gap-2">
+              <button 
+                v-if="receipt.qr_data_url || receipt.receipt_qr"
+                @click="viewReceiptQr(receipt)"
+                class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-lg text-xs font-semibold transition border border-slate-600 min-h-[36px] cursor-pointer"
+              >
+                <span>📱</span> QR
+              </button>
+              <button 
+                v-if="receipt.status === 'settled'"
+                @click="openCertificate(receipt)"
+                class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600/20 hover:bg-emerald-600 text-emerald-300 hover:text-white rounded-lg text-xs font-semibold transition border border-emerald-500/30 min-h-[36px] cursor-pointer"
+              >
+                PDF Cert
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Desktop Table View -->
+      <div class="hidden md:block overflow-x-auto">
         <table class="w-full text-left text-xs">
           <thead>
             <tr class="border-b border-slate-700 text-slate-400 text-[11px] uppercase tracking-wider">
@@ -397,8 +460,8 @@
     </div>
 
     <!-- Edit Location & Collection Preferences Modal -->
-    <div v-if="showLocationModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div class="bg-slate-900 border border-slate-700 rounded-3xl w-full max-w-lg p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+    <div v-if="showLocationModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4">
+      <div class="bg-slate-900 border border-slate-700 rounded-2xl sm:rounded-3xl w-full max-w-lg p-4 sm:p-6 shadow-2xl space-y-4 max-h-[92dvh] overflow-y-auto">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2">
             <span class="text-emerald-400 text-lg">📍</span>
