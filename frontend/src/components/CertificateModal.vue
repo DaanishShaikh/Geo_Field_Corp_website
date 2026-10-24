@@ -87,7 +87,7 @@
               <span>Volume Handled</span>
             </div>
             <div class="text-base sm:text-lg font-black text-slate-900">
-              {{ receipt.settled_volume || receipt.requested_volume || 320 }} Liters
+              {{ volume }} Liters
             </div>
           </div>
 
@@ -110,6 +110,40 @@
             </div>
             <div class="text-base sm:text-lg font-black text-emerald-600">
               ₹{{ formattedPayout }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Environmental Impact & ESG Offset Section -->
+        <div class="rounded-xl border border-emerald-300 bg-gradient-to-r from-emerald-50/90 to-teal-50/90 p-3.5 sm:p-4 space-y-2.5">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-900 flex items-center gap-1.5">
+              <span>🌱</span> Environmental ESG Offset & Sustainability
+            </span>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-600/10 text-emerald-800 font-bold border border-emerald-300">
+              Verified Green Offset
+            </span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <div class="bg-white/90 rounded-xl p-3 border border-emerald-200/90 shadow-2xs flex items-center gap-3">
+              <div class="w-9 h-9 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center text-base shrink-0 font-bold">
+                🌱
+              </div>
+              <div class="min-w-0">
+                <span class="text-[10px] uppercase font-bold text-slate-500 block">Carbon Dioxide (CO₂) Offset</span>
+                <span class="text-base sm:text-lg font-black text-emerald-700 font-mono block leading-tight">{{ co2OffsetFormatted }}</span>
+                <span class="text-[10px] text-slate-500 block truncate">Displaced vs fossil petroleum diesel</span>
+              </div>
+            </div>
+            <div class="bg-white/90 rounded-xl p-3 border border-cyan-200/90 shadow-2xs flex items-center gap-3">
+              <div class="w-9 h-9 rounded-lg bg-cyan-100 text-cyan-700 flex items-center justify-center text-base shrink-0 font-bold">
+                💧
+              </div>
+              <div class="min-w-0">
+                <span class="text-[10px] uppercase font-bold text-slate-500 block">Clean Water Shielded</span>
+                <span class="text-base sm:text-lg font-black text-cyan-700 font-mono block leading-tight">{{ waterOffsetFormatted }} Liters</span>
+                <span class="text-[10px] text-slate-500 block truncate">Protected from toxic oil drainage</span>
+              </div>
             </div>
           </div>
         </div>
@@ -205,9 +239,36 @@ const formattedDate = computed(() => {
   }
 });
 
+const volume = computed(() => {
+  const r = props.receipt;
+  return Number(r.settled_volume || r.measured_volume || r.requested_volume || 320);
+});
+
+const co2OffsetKg = computed(() => {
+  if (props.receipt.co2_offset_kg != null) return Number(props.receipt.co2_offset_kg);
+  return Number((volume.value * 2.8).toFixed(1));
+});
+
+const co2OffsetFormatted = computed(() => {
+  const kg = co2OffsetKg.value;
+  if (kg >= 1000) {
+    return `${(kg / 1000).toFixed(2)} Tons CO₂`;
+  }
+  return `${kg.toLocaleString('en-IN')} kg CO₂`;
+});
+
+const waterOffsetLiters = computed(() => {
+  if (props.receipt.water_offset_liters != null) return Number(props.receipt.water_offset_liters);
+  return Math.round(volume.value * 1000);
+});
+
+const waterOffsetFormatted = computed(() => {
+  return waterOffsetLiters.value.toLocaleString('en-IN');
+});
+
 const formattedPayout = computed(() => {
   const r = props.receipt;
-  const amount = Number(r.total_amount || (Number(r.settled_volume || r.requested_volume || 320) * 55));
+  const amount = Number(r.total_amount || (volume.value * 55));
   return amount.toLocaleString('en-IN');
 });
 
@@ -322,6 +383,49 @@ function handlePrint() {
             margin-bottom: 16px;
           }
           .vehicle-tag { font-family: 'JetBrains Mono', monospace; font-size: 11px; background: #f1f5f9; border: 1px solid #e2e8f0; padding: 2px 8px; border-radius: 6px; }
+          .esg-box {
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            border-radius: 12px;
+            padding: 12px 14px;
+            margin-bottom: 16px;
+          }
+          .esg-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 10px;
+            font-weight: 700;
+            color: #065f46;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+          }
+          .esg-badge {
+            background: #d1fae5;
+            border: 1px solid #6ee7b7;
+            color: #047857;
+            padding: 2px 8px;
+            border-radius: 9999px;
+            font-size: 9px;
+            font-weight: 700;
+          }
+          .esg-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+          }
+          .esg-card {
+            background: #ffffff;
+            border: 1px solid #d1fae5;
+            border-radius: 8px;
+            padding: 8px 12px;
+          }
+          .esg-label { font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 2px; }
+          .esg-val { font-size: 14px; font-weight: 800; font-family: 'JetBrains Mono', monospace; }
+          .esg-val.green { color: #047857; }
+          .esg-val.blue { color: #0284c7; }
+          .esg-sub { font-size: 9px; color: #64748b; margin-top: 2px; }
           .footer-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -381,6 +485,25 @@ function handlePrint() {
             <div class="metric-card">
               <div class="metric-label">✨ Payout Settled</div>
               <div class="metric-value metric-payout">₹${formattedPayout.value}</div>
+            </div>
+          </div>
+
+          <div class="esg-box">
+            <div class="esg-header">
+              <span>🌱 ENVIRONMENTAL ESG IMPACT & OFFSET</span>
+              <span class="esg-badge">VERIFIED GREEN OFFSET</span>
+            </div>
+            <div class="esg-grid">
+              <div class="esg-card">
+                <div class="esg-label">Carbon Dioxide (CO₂) Offset</div>
+                <div class="esg-val green">${co2OffsetFormatted.value}</div>
+                <div class="esg-sub">Emissions displaced vs fossil petroleum diesel</div>
+              </div>
+              <div class="esg-card">
+                <div class="esg-label">Clean Water Shielded</div>
+                <div class="esg-val blue">${waterOffsetFormatted.value} Liters</div>
+                <div class="esg-sub">Protected from toxic oil drainage & contamination</div>
+              </div>
             </div>
           </div>
 

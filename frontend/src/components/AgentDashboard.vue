@@ -286,6 +286,16 @@
             </div>
           </div>
 
+          <!-- Real-time ESG Offset Impact Preview -->
+          <div v-if="form.measured_volume > 0" class="flex flex-wrap items-center justify-between gap-2 p-2.5 bg-emerald-950/30 border border-emerald-800/40 rounded-xl text-xs font-mono">
+            <span class="text-emerald-400 flex items-center gap-1 font-semibold">
+              <span>🌱</span> CO₂ Offset: <strong>{{ (form.measured_volume * 2.8).toFixed(1) }} kg</strong>
+            </span>
+            <span class="text-cyan-300 flex items-center gap-1 font-semibold">
+              <span>💧</span> Water Shielded: <strong>{{ formatNumber(form.measured_volume * 1000) }} L</strong>
+            </span>
+          </div>
+
           <button 
             type="submit" 
             :disabled="!selectedReceiptId || settling"

@@ -86,6 +86,16 @@
           </div>
         </div>
 
+        <!-- Environmental ESG Offset (CO2 & Water) -->
+        <div class="flex items-center justify-between bg-emerald-950/30 border border-emerald-800/40 rounded-lg px-2.5 py-1.5 text-[11px] font-mono">
+          <span class="text-emerald-400 flex items-center gap-1 font-semibold" title="CO2 Emissions Displaced">
+            <span>🌱</span> {{ getCo2Offset(r) }}
+          </span>
+          <span class="text-cyan-300 flex items-center gap-1 font-semibold" title="Clean Water Protected">
+            <span>💧</span> {{ getWaterOffset(r) }}
+          </span>
+        </div>
+
         <!-- Actions -->
         <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-800">
           <span 
@@ -170,11 +180,19 @@
               <div class="text-[10px] text-slate-400 font-mono">FSSAI: {{ r.seller_fssai || 'N/A' }}</div>
             </td>
 
-            <!-- Volume -->
+            <!-- Volume & ESG Impact -->
             <td class="py-3 px-3">
               <span class="font-bold text-white font-mono">{{ r.settled_volume || r.measured_volume || r.requested_volume }} L</span>
               <div v-if="r.status === 'settled'" class="text-[10px] text-emerald-400 font-semibold">Settled</div>
               <div v-else class="text-[10px] text-amber-400 font-semibold">Requested</div>
+              <div class="mt-1 space-y-0.5 text-[10px] font-mono whitespace-nowrap">
+                <span class="text-emerald-400 flex items-center gap-1" title="CO2 Offset">
+                  🌱 {{ getCo2Offset(r) }}
+                </span>
+                <span class="text-cyan-300 flex items-center gap-1" title="Water Protected">
+                  💧 {{ getWaterOffset(r) }}
+                </span>
+              </div>
             </td>
 
             <!-- TPC % -->
@@ -319,6 +337,28 @@ function getReceiptAmount(r) {
     return Math.round(vol * rate);
   }
   return null;
+}
+
+function getReceiptVolume(r) {
+  return Number(r.settled_volume || r.measured_volume || r.requested_volume || 0);
+}
+
+function getCo2Offset(r) {
+  if (r.co2_offset_kg != null) {
+    const kg = Number(r.co2_offset_kg);
+    return kg >= 1000 ? `${(kg / 1000).toFixed(2)} t CO₂` : `${kg} kg CO₂`;
+  }
+  const vol = getReceiptVolume(r);
+  const kg = Number((vol * 2.8).toFixed(1));
+  return kg >= 1000 ? `${(kg / 1000).toFixed(2)} t CO₂` : `${kg} kg CO₂`;
+}
+
+function getWaterOffset(r) {
+  if (r.water_offset_liters != null) {
+    return `${Number(r.water_offset_liters).toLocaleString('en-IN')} L H₂O`;
+  }
+  const vol = getReceiptVolume(r);
+  return `${(vol * 1000).toLocaleString('en-IN')} L H₂O`;
 }
 
 function openCertificate(r) {

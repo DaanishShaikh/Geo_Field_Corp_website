@@ -297,6 +297,16 @@
               <span class="absolute right-4 top-3 text-xs font-semibold text-slate-500">Liters</span>
             </div>
             <p class="text-[11px] text-slate-400 mt-1">Field agent will measure exact volume & TPC % on collection.</p>
+            
+            <!-- Live ESG Offset Preview -->
+            <div v-if="requestedVolume > 0" class="mt-2.5 flex flex-wrap items-center gap-3 p-2.5 bg-emerald-950/40 border border-emerald-800/50 rounded-xl text-xs font-mono">
+              <span class="text-emerald-400 flex items-center gap-1 font-semibold">
+                <span>🌱</span> Est. CO₂ Offset: <strong>{{ (requestedVolume * 2.8).toFixed(1) }} kg</strong>
+              </span>
+              <span class="text-cyan-300 flex items-center gap-1 font-semibold">
+                <span>💧</span> Est. Water Protected: <strong>{{ formatNumber(requestedVolume * 1000) }} L</strong>
+              </span>
+            </div>
           </div>
 
           <button 
@@ -320,6 +330,9 @@
             <div class="text-xs text-slate-300 space-y-1">
               <div>Requested: <strong>{{ lastCreatedReceipt.requested_volume }} L</strong></div>
               <div>QR Code: <code class="text-[10px] text-emerald-400 font-mono">{{ lastCreatedReceipt.receipt_qr }}</code></div>
+              <div class="text-emerald-400 font-mono text-[11px] pt-0.5">
+                🌱 Est. CO₂ Offset: {{ (lastCreatedReceipt.requested_volume * 2.8).toFixed(1) }} kg &bull; 💧 Water Shielded: {{ formatNumber(lastCreatedReceipt.requested_volume * 1000) }} L
+              </div>
               <div class="text-slate-400 text-[11px]">Show this to GeoField collection agent.</div>
             </div>
           </div>
@@ -377,6 +390,16 @@
             </div>
           </div>
 
+          <!-- Environmental ESG Offset (CO2 & Water) -->
+          <div class="flex items-center justify-between bg-emerald-950/30 border border-emerald-800/40 rounded-lg px-2.5 py-1 text-[11px] font-mono">
+            <span class="text-emerald-400 flex items-center gap-1 font-semibold" title="CO2 Offset">
+              <span>🌱</span> {{ getCo2Offset(receipt) }}
+            </span>
+            <span class="text-cyan-300 flex items-center gap-1 font-semibold" title="Water Protected">
+              <span>💧</span> {{ getWaterOffset(receipt) }}
+            </span>
+          </div>
+
           <div class="flex items-center justify-between text-[11px] text-slate-400 pt-1">
             <span>{{ formatDate(receipt.created_at) }}</span>
             <div class="flex items-center gap-2">
@@ -417,7 +440,17 @@
             <tr v-for="receipt in recentReceipts" :key="receipt.id" class="hover:bg-slate-700/30 transition">
               <td class="py-3 px-3 font-mono font-bold text-white">{{ receipt.id }}</td>
               <td class="py-3 px-3 text-slate-300">{{ formatDate(receipt.created_at) }}</td>
-              <td class="py-3 px-3 text-slate-200 font-mono">{{ receipt.settled_volume || receipt.measured_volume || receipt.requested_volume }} L</td>
+              <td class="py-3 px-3 text-slate-200 font-mono">
+                <div>{{ receipt.settled_volume || receipt.measured_volume || receipt.requested_volume }} L</div>
+                <div class="mt-0.5 space-y-0.5 text-[10px] whitespace-nowrap">
+                  <span class="text-emerald-400 flex items-center gap-1" title="CO2 Offset">
+                    🌱 {{ getCo2Offset(receipt) }}
+                  </span>
+                  <span class="text-cyan-300 flex items-center gap-1" title="Water Protected">
+                    💧 {{ getWaterOffset(receipt) }}
+                  </span>
+                </div>
+              </td>
               <td class="py-3 px-3 text-slate-300 font-mono">{{ (receipt.tpc_reading != null || receipt.tpc_percentage != null) ? (receipt.tpc_reading ?? receipt.tpc_percentage) + '%' : (receipt.status === 'settled' ? '18%' : 'Pending') }}</td>
               <td class="py-3 px-3 font-semibold text-emerald-400 font-mono">
                 {{ getReceiptAmount(receipt) ? '₹' + formatNumber(getReceiptAmount(receipt)) : 'Pending' }}
@@ -823,6 +856,28 @@ function getReceiptAmount(r) {
     return Math.round(vol * rate);
   }
   return null;
+}
+
+function getReceiptVolume(r) {
+  return Number(r.settled_volume || r.measured_volume || r.requested_volume || 0);
+}
+
+function getCo2Offset(r) {
+  if (r.co2_offset_kg != null) {
+    const kg = Number(r.co2_offset_kg);
+    return kg >= 1000 ? `${(kg / 1000).toFixed(2)} t CO₂` : `${kg} kg CO₂`;
+  }
+  const vol = getReceiptVolume(r);
+  const kg = Number((vol * 2.8).toFixed(1));
+  return kg >= 1000 ? `${(kg / 1000).toFixed(2)} t CO₂` : `${kg} kg CO₂`;
+}
+
+function getWaterOffset(r) {
+  if (r.water_offset_liters != null) {
+    return `${Number(r.water_offset_liters).toLocaleString('en-IN')} L H₂O`;
+  }
+  const vol = getReceiptVolume(r);
+  return `${(vol * 1000).toLocaleString('en-IN')} L H₂O`;
 }
 
 function formatDate(isoStr) {
