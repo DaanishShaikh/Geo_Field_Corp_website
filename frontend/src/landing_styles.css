@@ -1,0 +1,608 @@
+
+    :root {
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    html {
+      scroll-padding-top: 5rem;
+    }
+
+    body {
+      background-color: #060A08;
+      color: #F3F5F4;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Ultra-smooth GPU-friendly dark studio background */
+    .bg-organic-dark {
+      background-color: #060A08;
+      background-image:
+        radial-gradient(circle at 78% 24%, rgba(34, 197, 94, 0.09) 0%, transparent 46%),
+        radial-gradient(circle at 16% 78%, rgba(34, 197, 94, 0.05) 0%, transparent 45%);
+    }
+
+    /* Warm Ivory / Cream Process Section */
+    .bg-process-ivory {
+      background-color: #F4F3EC;
+      color: #111814;
+    }
+
+    @media (min-width: 1280px) {
+      .max-w-7xl {
+        max-width: 1340px;
+      }
+    }
+    img {
+      image-rendering: -webkit-optimize-contrast;
+    }
+    svg {
+      shape-rendering: geometricPrecision;
+    }
+
+    /* ===================================================================== */
+    /* ULTRA-SHARP HIGH-CLARITY HERO HEADLINE                                */
+    /* "Stop the Toxic Cycle. Start the Green Revenue."                      */
+    /* ===================================================================== */
+    .hero-spatial-chamber {
+      position: relative;
+      padding: 0.25rem 0 0.5rem 0;
+    }
+    .hero-kinetic-stage {
+      position: relative;
+      z-index: 10;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: geometricPrecision;
+    }
+
+    .hero-pop-line {
+      display: block;
+      opacity: 0;
+      transform: translate3d(0, 26px, 0) scale(0.965);
+      filter: blur(8px);
+      will-change: transform, opacity, filter;
+    }
+    .hero-pop-line.is-popped {
+      animation: heroKineticPop 1.05s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      animation-delay: var(--line-delay, 0ms);
+    }
+    @keyframes heroKineticPop {
+      0% {
+        opacity: 0;
+        transform: translate3d(0, 26px, 0) scale(0.965);
+        filter: blur(8px);
+      }
+      65% {
+        opacity: 1;
+        transform: translate3d(0, -2px, 0) scale(1.008);
+        filter: blur(0px);
+      }
+      100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+        filter: blur(0px);
+      }
+    }
+
+    @keyframes heroChromaticSweep {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Razor-Sharp Ultra-High-Contrast Pure White Words (No Underline, No Shadow) */
+    .hero-solid-white {
+      display: inline-block;
+      color: #FFFFFF;
+      text-shadow: none;
+      filter: contrast(1.08);
+    }
+
+    /* High-Contrast Richly Saturated Amber-Orange Phrase ("Toxic Cycle." — Crisp & Aesthetic) */
+    .hero-toxic-highlight {
+      display: inline-block;
+      position: relative;
+      color: #FF9F0A;
+      background: linear-gradient(100deg, #FFF04D 0%, #FFB800 32%, #FF6B00 68%, #FFD60A 100%);
+      background-size: 220% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: none;
+      filter: saturate(1.38) contrast(1.14);
+      animation: heroChromaticSweep 6.5s ease-in-out infinite;
+    }
+
+    /* High-Contrast Richly Saturated Emerald-Lime Phrase ("Green Revenue." — Crisp & Aesthetic) */
+    .hero-green-highlight {
+      display: inline-block;
+      position: relative;
+      color: #00E676;
+      background: linear-gradient(100deg, #A3E635 0%, #22C55E 32%, #00E676 68%, #4ADE80 100%);
+      background-size: 220% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: none;
+      filter: saturate(1.42) contrast(1.14);
+      animation: heroChromaticSweep 6.5s ease-in-out infinite 0.8s;
+    }
+
+    /* Crisp Anti-Jitter Brand Logo */
+    .brand-logo-crisp {
+      image-rendering: -webkit-optimize-contrast;
+      transform: translateZ(0);
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+
+    /* Dedicated Disease Touch & Balanced Architectural Card Styling */
+    .disease-hazard-card {
+      position: relative;
+      background: linear-gradient(165deg, rgba(16, 24, 19, 0.96) 0%, rgba(9, 14, 11, 0.99) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.085);
+      box-shadow:
+        0 18px 38px -14px rgba(0, 0, 0, 0.85),
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.06);
+      transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.28s ease, box-shadow 0.28s ease;
+    }
+    .disease-hazard-card:hover {
+      transform: translate3d(0, -4px, 0);
+      border-color: rgba(239, 68, 68, 0.45);
+      box-shadow:
+        0 24px 48px -12px rgba(0, 0, 0, 0.92),
+        0 0 28px -8px rgba(239, 68, 68, 0.28),
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+    }
+    .disease-hazard-card:active {
+      transform: scale(0.98);
+      box-shadow: 0 0 24px rgba(239, 68, 68, 0.42);
+    }
+
+    /* Tablet Portrait & Mobile Orientation Optimizations */
+    @media (min-width: 768px) and (max-width: 1024px) {
+      .hero-spatial-chamber {
+        padding: 0.5rem 0 1.25rem 0;
+      }
+      .hero-kinetic-stage {
+        font-size: 3.45rem !important;
+        line-height: 1.08 !important;
+      }
+      .disease-hazard-card {
+        min-height: 190px !important;
+      }
+      .console-metric-box {
+        padding: 1.25rem !important;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .hero-kinetic-stage {
+        font-size: 2.35rem !important;
+        line-height: 1.1 !important;
+      }
+      .hero-pedestal-platform {
+        padding: 1rem !important;
+        margin-top: 1.25rem !important;
+      }
+      .disease-hazard-card {
+        min-height: auto !important;
+        padding: 1.25rem !important;
+      }
+    }
+
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ===================================================================== */
+    /* SECTION 01 CRISIS STAT CARDS (EXACT MATCH TO image_adb67c.jpg)        */
+    /* ===================================================================== */
+    .crisis-card-60 {
+      position: relative;
+      background: linear-gradient(165deg, rgba(16, 24, 19, 0.95) 0%, rgba(9, 14, 11, 0.99) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-left: 3.5px solid #EF4444;
+      box-shadow:
+        0 20px 42px -14px rgba(0, 0, 0, 0.85),
+        -6px 0 24px -10px rgba(239, 68, 68, 0.35),
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.06);
+      transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.28s ease, box-shadow 0.3s ease;
+    }
+    .crisis-card-60:hover {
+      transform: translate3d(0, -4px, 0);
+      border-color: rgba(239, 68, 68, 0.45);
+      border-left-color: #EF4444;
+      box-shadow:
+        0 26px 50px -12px rgba(0, 0, 0, 0.92),
+        -8px 0 30px -8px rgba(239, 68, 68, 0.48);
+    }
+
+    .crisis-card-25 {
+      position: relative;
+      background: linear-gradient(165deg, rgba(16, 24, 19, 0.95) 0%, rgba(9, 14, 11, 0.99) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-left: 3.5px solid #F59E0B;
+      box-shadow:
+        0 20px 42px -14px rgba(0, 0, 0, 0.85),
+        -6px 0 24px -10px rgba(245, 158, 11, 0.35),
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.06);
+      transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.28s ease, box-shadow 0.3s ease;
+    }
+    .crisis-card-25:hover {
+      transform: translate3d(0, -4px, 0);
+      border-color: rgba(245, 158, 11, 0.45);
+      border-left-color: #F59E0B;
+      box-shadow:
+        0 26px 50px -12px rgba(0, 0, 0, 0.92),
+        -8px 0 30px -8px rgba(245, 158, 11, 0.48);
+    }
+
+    /* Dedicated Spring Pop-Up Animation for the 60% and 25% Crisis Callout Cards */
+    @keyframes statCardSpringPop {
+      0% {
+        opacity: 0;
+        transform: translate3d(0, 26px, 0) scale(0.92);
+      }
+      70% {
+        opacity: 1;
+        transform: translate3d(0, -3px, 0) scale(1.015);
+      }
+      100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+      }
+    }
+    .stat-pop-card {
+      opacity: 0;
+      transform: translate3d(0, 26px, 0) scale(0.92);
+      will-change: transform, opacity;
+    }
+    .stat-pop-card.is-popped-stat {
+      animation: statCardSpringPop 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      animation-delay: var(--stat-delay, 0ms);
+    }
+
+    /* Premium Section 02 Process Pipeline Shimmer & 3D Step Cards */
+    @keyframes pipelineBeamFlow {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 200% 50%; }
+    }
+    .process-beam-animated {
+      background: linear-gradient(90deg, #16A34A 0%, #22C55E 35%, #86EFAC 50%, #22C55E 65%, #16A34A 100%);
+      background-size: 200% 100%;
+      animation: pipelineBeamFlow 3.2s linear infinite;
+      box-shadow: 0 0 16px rgba(34, 197, 94, 0.45);
+      transition: width 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    @keyframes nodeRadarPulse {
+      0% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.65; }
+      100% { transform: translate(-50%, -50%) scale(1.95); opacity: 0; }
+    }
+    .process-node-pulse {
+      animation: nodeRadarPulse 2.4s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+    }
+
+    /* Giant Outlined Stroke Watermark Text ("TOXIC", "SCAN & DONE", & "GREEN") */
+    .stroke-watermark-toxic {
+      -webkit-text-stroke: 1.8px rgba(239, 68, 68, 0.16);
+      color: transparent;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    .stroke-watermark-green {
+      -webkit-text-stroke: 1.8px rgba(34, 197, 94, 0.17);
+      color: transparent;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    /* Deliberate, Noticeable Directional Slide-In for Background Watermarks (1.9s Cinematic Glide) */
+    .bg-slide-from-right {
+      opacity: 0;
+      transform: translate3d(220px, 0, 0);
+      transition:
+        opacity 1.65s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 1.95s cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: transform, opacity;
+    }
+    .bg-slide-from-right.is-slid-in {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+
+    .bg-slide-from-left {
+      opacity: 0;
+      transform: translate3d(-220px, 0, 0);
+      transition:
+        opacity 1.65s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 1.95s cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: transform, opacity;
+    }
+    .bg-slide-from-left.is-slid-in {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+
+    /* Vertical Side Text ("WASTE -> ENERGY") */
+    .vertical-side-label {
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+    }
+
+    /* ===================================================================== */
+    /* HARDWARE-ACCELERATED ZERO-LAG REVEAL & POP ENGINE                     */
+    /* ===================================================================== */
+    @keyframes navDrop {
+      0% { opacity: 0; transform: translate3d(0, -16px, 0); }
+      100% { opacity: 1; transform: translate3d(0, 0, 0); }
+    }
+    .animate-nav-drop {
+      animation: navDrop 0.55s var(--ease-out-expo) forwards;
+    }
+
+    .reveal {
+      opacity: 0;
+      will-change: transform, opacity;
+      transition:
+        opacity 0.92s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 1.05s cubic-bezier(0.22, 1, 0.36, 1);
+      transition-delay: var(--delay, 0ms);
+    }
+
+    .reveal-up { transform: translate3d(0, 28px, 0); }
+    .reveal-pop { transform: translate3d(0, 24px, 0) scale(0.96); }
+    .reveal-left { transform: translate3d(-36px, 0, 0); }
+    .reveal-right { transform: translate3d(36px, 0, 0); }
+
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+    /* Once reveal animation completes, release transform & delay so card hover/active states work with zero lag */
+    .reveal.reveal-settled {
+      opacity: 1;
+      transition-delay: 0ms !important;
+      will-change: auto;
+    }
+
+    /* Elastic Number Scaling Pop Effect */
+    @keyframes numberScalePop {
+      0% { transform: scale(1); }
+      45% { transform: scale(1.08); }
+      100% { transform: scale(1); }
+    }
+    .number-pop-active {
+      display: inline-block;
+      animation: numberScalePop 0.38s var(--ease-spring);
+    }
+
+    /* Snappy Touch & Click Response */
+    .touch-reactive {
+      position: relative;
+      overflow: hidden;
+      transition:
+        transform 0.26s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.26s ease,
+        border-color 0.25s ease;
+    }
+    .touch-reactive:active {
+      transform: scale(0.98) !important;
+    }
+    .touch-ripple-circle {
+      position: absolute;
+      border-radius: 9999px;
+      transform: scale(0);
+      background: radial-gradient(circle, rgba(34, 197, 94, 0.25) 0%, rgba(34, 197, 94, 0) 70%);
+      pointer-events: none;
+      animation: touchRippleExpand 0.5s var(--ease-out-expo) forwards;
+      z-index: 20;
+    }
+    @keyframes touchRippleExpand {
+      to {
+        transform: scale(2.8);
+        opacity: 0;
+      }
+    }
+
+    /* Floating Glass Badges on Hero Photo Card */
+    .hero-floating-badge {
+      background: rgba(11, 19, 14, 0.92);
+      border: 1px solid rgba(34, 197, 94, 0.28);
+      box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.85), inset 0 1px 0 0 rgba(255, 255, 255, 0.12);
+      transition: transform 0.35s var(--ease-spring), border-color 0.25s ease;
+    }
+    .hero-floating-badge:hover {
+      transform: translate3d(0, -4px, 0) scale(1.03);
+      border-color: rgba(34, 197, 94, 0.6);
+    }
+
+    @keyframes floatSlow {
+      0%, 100% { transform: translate3d(0, 0, 0); }
+      50% { transform: translate3d(0, -6px, 0); }
+    }
+    .animate-float-slow {
+      animation: floatSlow 5.5s ease-in-out infinite;
+    }
+    .animate-float-delayed {
+      animation: floatSlow 6s ease-in-out 1.4s infinite;
+    }
+
+    /* Infinite Marquee Strip */
+    @keyframes marqueeSlide {
+      0% { transform: translate3d(0%, 0, 0); }
+      100% { transform: translate3d(-50%, 0, 0); }
+    }
+    .marquee-track {
+      display: flex;
+      width: max-content;
+      will-change: transform;
+      animation: marqueeSlide 34s linear infinite;
+    }
+    .marquee-track:hover {
+      animation-play-state: paused;
+    }
+
+    /* Dark Glass & Spotlight Cards */
+    .glass-nav {
+      background: rgba(6, 10, 8, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    .dark-threat-card {
+      background: linear-gradient(165deg, rgba(16, 23, 18, 0.94) 0%, rgba(9, 14, 11, 0.98) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 16px 34px -12px rgba(0, 0, 0, 0.78), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+      transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.28s ease, box-shadow 0.3s ease;
+    }
+    .dark-threat-card:hover {
+      transform: translate3d(0, -4px, 0);
+      border-color: rgba(239, 68, 68, 0.42);
+      box-shadow: 0 22px 42px -12px rgba(0, 0, 0, 0.88), 0 0 24px -8px rgba(239, 68, 68, 0.2);
+    }
+
+    /* Section 02 Ivory Process White Step Cards with Smooth Elevation */
+    .process-white-card {
+      background: linear-gradient(180deg, #FFFFFF 0%, #FAF9F5 100%);
+      border: 1.5px solid rgba(17, 24, 20, 0.08);
+      box-shadow: 0 20px 44px -14px rgba(17, 24, 20, 0.08), 0 4px 12px rgba(17, 24, 20, 0.03);
+      transition:
+        transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+        border-color 0.35s ease,
+        box-shadow 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .process-white-card:hover,
+    .process-white-card.active-process-card {
+      transform: translate3d(0, -10px, 0) scale(1.015);
+      border-color: rgba(22, 163, 74, 0.65);
+      box-shadow:
+        0 30px 60px -14px rgba(22, 163, 74, 0.22),
+        0 12px 24px -8px rgba(17, 24, 20, 0.08),
+        0 0 0 3px rgba(34, 197, 94, 0.12);
+    }
+
+    /* Section 03 GeoField Impact Console */
+    .impact-console-shell {
+      background: linear-gradient(155deg, rgba(16, 30, 22, 0.94) 0%, rgba(8, 15, 11, 0.98) 100%);
+      border: 1px solid rgba(34, 197, 94, 0.24);
+      box-shadow:
+        0 40px 80px -20px rgba(0, 0, 0, 0.9),
+        0 0 70px -15px rgba(34, 197, 94, 0.2),
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.12);
+      transition: transform 0.5s var(--ease-spring), border-color 0.4s ease, box-shadow 0.5s ease;
+    }
+    .impact-console-shell:hover {
+      border-color: rgba(34, 197, 94, 0.42);
+      box-shadow:
+        0 48px 95px -20px rgba(0, 0, 0, 0.95),
+        0 0 85px -10px rgba(34, 197, 94, 0.28),
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.18);
+    }
+
+    .console-metric-box {
+      background: rgba(7, 13, 10, 0.78);
+      border: 1px solid rgba(34, 197, 94, 0.14);
+      box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+      transition: transform 0.35s var(--ease-spring), border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.35s ease;
+    }
+    .console-metric-box:hover,
+    .console-metric-box.active-metric-box {
+      transform: translateY(-4px) scale(1.018);
+      background: rgba(14, 26, 19, 0.92);
+      border-color: rgba(34, 197, 94, 0.5);
+      box-shadow: 0 20px 38px -12px rgba(0, 0, 0, 0.8), 0 0 28px -6px rgba(34, 197, 94, 0.25);
+    }
+
+    /* Green CTA Button Glow & Shimmer */
+    .btn-green-pill {
+      position: relative;
+      overflow: hidden;
+      background-color: #22C55E;
+      color: #050B07;
+      box-shadow: 0 0 32px rgba(34, 197, 94, 0.35);
+      transition: transform 0.35s var(--ease-spring), background-color 0.25s ease, box-shadow 0.35s ease;
+    }
+    .btn-green-pill:hover {
+      background-color: #4ADE80;
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 0 46px rgba(34, 197, 94, 0.55);
+    }
+    .btn-green-pill:active {
+      transform: scale(0.97);
+    }
+
+    /* Range Slider Styling */
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      background: transparent;
+      cursor: pointer;
+    }
+    input[type="range"]::-webkit-slider-runnable-track {
+      height: 6px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #22C55E 0%, #A3E635 100%);
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      border: 3px solid #22C55E;
+      box-shadow: 0 0 14px rgba(34, 197, 94, 0.8);
+      margin-top: -7px;
+      transition: transform 0.2s var(--ease-spring);
+    }
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.22);
+    }
+
+    @keyframes qrScan {
+      0%, 100% { top: 8%; opacity: 0.85; }
+      50% { top: 88%; opacity: 1; }
+    }
+    .qr-scan-beam {
+      position: absolute;
+      left: 6%;
+      right: 6%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #22C55E, #A3E635, #22C55E, transparent);
+      box-shadow: 0 0 12px #22C55E;
+      animation: qrScan 2.4s ease-in-out infinite;
+    }
+
+    ::-webkit-scrollbar { width: 6px; height: 0px; }
+    ::-webkit-scrollbar-track { background: #060A08; }
+    ::-webkit-scrollbar-thumb { background: #182820; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #22C55E; }
+    .no-scrollbar::-webkit-scrollbar { display: none; width: 0; height: 0; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* Executive Telemetry Chart Cards & Interactive Nodes */
+    .telemetry-chart-shell {
+      background: linear-gradient(165deg, rgba(12, 22, 16, 0.92) 0%, rgba(6, 11, 8, 0.98) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow:
+        0 24px 52px -16px rgba(0, 0, 0, 0.88),
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.07);
+    }
+    .telemetry-chart-shell-buyer {
+      background: linear-gradient(165deg, rgba(10, 20, 28, 0.92) 0%, rgba(6, 11, 15, 0.98) 100%);
+      border: 1px solid rgba(56, 189, 248, 0.18);
+      box-shadow:
+        0 24px 52px -16px rgba(0, 0, 0, 0.88),
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.07);
+    }
+    .chart-data-node {
+      transition: r 0.2s cubic-bezier(0.22, 1, 0.36, 1), stroke-width 0.2s ease;
+    }
+    .chart-data-node:hover {
+      r: 6.5px;
+    }
+  

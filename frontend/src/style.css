@@ -1,3 +1,4 @@
+@import "./landing_styles.css";
 @import "tailwindcss";
 
 @theme {
@@ -10,6 +11,21 @@
   --color-hazard: #EF4444;
   --color-toxic: #F59E0B;
   --color-moss: #121A16;
+
+  --color-surface-950: #060A08;
+  --color-surface-900: #0A100D;
+  --color-surface-800: #101914;
+  --color-surface-700: #16231C;
+  --color-surface-ivory: #F4F3EC;
+
+  --color-brand-green: #22C55E;
+  --color-brand-emerald: #16A34A;
+  --color-brand-lime: #A3E635;
+  --color-brand-amber: #F59E0B;
+  --color-brand-gold: #F5B041;
+  --color-brand-red: #EF4444;
+  --color-brand-crimson: #F87171;
+
 
   --font-display: "Bricolage Grotesque", sans-serif;
   --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;

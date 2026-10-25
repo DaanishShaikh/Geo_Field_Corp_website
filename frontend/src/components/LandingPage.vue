@@ -1,1552 +1,4645 @@
 <template>
-  <div class="landing-page relative bg-obsidian text-slate-100 min-h-screen selection:bg-bio selection:text-emerald-950 font-sans">
-    <!-- Grain Noise Overlay -->
-    <div class="grain-overlay" aria-hidden="true"></div>
+  <div class="landing-root bg-surface-950 text-white min-h-screen selection:bg-[#22C55E] selection:text-black font-sans">
+<!-- ===================================================================== -->
+  <!-- HEADER / NAVIGATION BAR WITH TOP SCROLL PROGRESS BAR                  -->
+  <!-- ===================================================================== -->
+  <header class="sticky top-0 z-40 glass-nav animate-nav-drop">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+      
+      <!-- Left: GeoField Corp Logo (Crisp Anti-Aliased + Reloads Page on Click) -->
+      <a href="#heroSection" id="brandLogoLink" title="Reload GeoField Corp Platform" class="flex items-center gap-3 focus:outline-none cursor-pointer select-none">
+        <img src="/brand/geofield-full-logo.png" alt="GeoField Corp — Renew. Refine. Return." class="brand-logo-crisp h-10 sm:h-11 w-auto object-contain" />
+      </a>
 
-    <!-- Reading Scroll Progress Bar -->
-    <div class="fixed top-0 inset-x-0 h-[3px] z-50 pointer-events-none bg-transparent overflow-hidden">
-      <div 
-        class="h-full w-full bg-gradient-to-r from-bio via-limeglow to-biodark shadow-[0_0_12px_rgba(34,197,94,0.9)] origin-left will-change-transform"
-        :style="{ transform: `scaleX(${scrollProgress})` }"
-      ></div>
-    </div>
+      <!-- Center: Clean Navigation Links -->
+      <nav id="landingNavLinks" class="hidden xl:flex items-center gap-7 font-sans text-xs font-semibold tracking-[0.14em] uppercase text-gray-300">
+        <a href="#threatSection" data-nav-sec="threatSection" class="nav-scroll-link hover:text-[#22C55E] transition">THE CRISIS</a>
+        <a href="#solutionSection" data-nav-sec="solutionSection" class="nav-scroll-link hover:text-[#22C55E] transition">THE PROCESS</a>
+        <a href="#impactSection" data-nav-sec="impactSection" class="nav-scroll-link hover:text-[#22C55E] transition">IMPACT</a>
+        <a href="#contactSection" data-nav-sec="contactSection" class="nav-scroll-link hover:text-[#22C55E] transition">CONTACT</a>
+      </nav>
 
-    <!-- ========================================================================= -->
-    <!-- 1. NAVIGATION BAR                                                         -->
-    <!-- ========================================================================= -->
-    <header
-      data-testid="navbar"
-      class="fixed inset-x-0 top-0 z-40 transition-all duration-500"
-      :class="isScrolled ? 'border-b border-bio/10 bg-obsidian/85 backdrop-blur-xl py-3.5 shadow-2xl' : 'bg-transparent py-5'"
-    >
-      <div class="mx-auto flex max-w-7xl items-center justify-between px-5 sm:px-8">
-        <a href="#top" data-testid="nav-logo" class="group flex items-center">
-          <img
-            src="/brand/logo.svg"
-            alt="GeoField Corp — Renew. Refine. Return."
-            class="h-9 sm:h-10 w-auto transition-transform duration-700 [transition-timing-function:cubic-bezier(0.19,1,0.22,1)] group-hover:scale-[1.04]"
-          />
-        </a>
-
-        <!-- Desktop Navigation Links -->
-        <nav class="hidden items-center gap-8 lg:flex" data-testid="nav-links">
-          <a
-            v-for="link in navLinks"
-            :key="link.id"
-            :href="link.href"
-            :data-testid="`nav-link-${link.id}`"
-            class="group relative font-mono text-[11px] uppercase tracking-[0.22em] text-slate-400 transition-colors duration-300 hover:text-slate-100"
-          >
-            {{ link.label }}
-            <span class="absolute -bottom-1 left-0 h-px w-0 bg-bio transition-all duration-300 group-hover:w-full"></span>
-          </a>
-        </nav>
-
-        <!-- Right Action Buttons -->
-        <div class="flex items-center gap-3">
-          <button
-            @click="$emit('open-login')"
-            class="hidden sm:inline-flex px-4 py-2 font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-300 hover:text-white transition-colors"
-          >
-            Sign In
-          </button>
-          
-          <button
-            data-testid="nav-register-btn"
-            @click="$emit('open-register')"
-            class="group hidden sm:flex items-center gap-2 rounded-full bg-bio px-5 py-2.5 font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-emerald-950 transition-all duration-300 hover:shadow-[0_0_30px_rgba(34,197,94,0.5)] hover:scale-[1.02] active:scale-95 cursor-pointer"
-          >
-            Join Network
-            <ArrowUpRight
-              :size="14"
-              :stroke-width="2.5"
-              class="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-            />
-          </button>
-
-          <!-- Mobile Hamburger Toggle -->
-          <button
-            data-testid="nav-menu-btn"
-            @click="mobileMenuOpen = true"
-            class="grid h-10 w-10 place-items-center rounded-full border border-bio/20 text-slate-200 lg:hidden hover:border-bio/50 transition-colors"
-            aria-label="Open menu"
-          >
-            <Menu :size="18" />
-          </button>
-        </div>
-      </div>
-    </header>
-
-    <!-- Mobile Slide-out Menu Drawer -->
-    <transition
-      enter-active-class="transition duration-300 ease-out"
-      enter-from-class="opacity-0 translate-y-[-10px]"
-      enter-to-class="opacity-100 translate-y-0"
-      leave-active-class="transition duration-200 ease-in"
-      leave-from-class="opacity-100 translate-y-0"
-      leave-to-class="opacity-0 translate-y-[-10px]"
-    >
-      <div
-        v-if="mobileMenuOpen"
-        data-testid="nav-mobile-menu"
-        class="fixed inset-0 z-[90] flex flex-col bg-obsidian/95 backdrop-blur-2xl lg:hidden p-5 pt-[max(1.25rem,env(safe-area-inset-top))] pb-[max(1.25rem,env(safe-area-inset-bottom))] overflow-y-auto"
-      >
-        <div class="flex items-center justify-between py-2 shrink-0">
-          <img src="/brand/logo.svg" alt="GeoField Corp" class="h-8 w-auto" />
-          <button
-            data-testid="nav-menu-close-btn"
-            @click="mobileMenuOpen = false"
-            class="grid h-11 w-11 place-items-center rounded-full border border-bio/20 text-slate-300 hover:text-white hover:border-bio/50 active:scale-95 transition"
-            aria-label="Close menu"
-          >
-            <X :size="20" />
-          </button>
-        </div>
-
-        <nav class="flex flex-1 flex-col justify-center gap-1 sm:gap-2 px-3 sm:px-6 my-auto py-6">
-          <a
-            v-for="link in navLinks"
-            :key="link.id"
-            :href="link.href"
-            :data-testid="`nav-mobile-link-${link.id}`"
-            @click="mobileMenuOpen = false"
-            class="border-b border-bio/10 py-3.5 sm:py-5 font-display text-2xl sm:text-3xl font-bold text-slate-100 transition-colors hover:text-bio min-h-[44px] flex items-center"
-          >
-            {{ link.label }}
-          </a>
-
-          <button
-            @click="mobileMenuOpen = false; $emit('open-login')"
-            class="py-3.5 sm:py-4 text-left font-display text-xl sm:text-2xl font-bold text-slate-400 border-b border-bio/10 hover:text-white min-h-[44px] flex items-center cursor-pointer transition-colors"
-          >
-            Sign In to Portal
-          </button>
-
-          <button
-            data-testid="nav-mobile-register-btn"
-            @click="mobileMenuOpen = false; $emit('open-register')"
-            class="mt-6 sm:mt-8 flex items-center justify-center gap-2 rounded-full bg-bio py-3.5 sm:py-4 font-mono text-xs font-bold uppercase tracking-[0.18em] text-emerald-950 shadow-[0_0_30px_rgba(34,197,94,0.4)] min-h-[48px] active:scale-95 transition cursor-pointer"
-          >
-            Join the Clean Network <ArrowUpRight :size="15" :stroke-width="2.5" />
-          </button>
-        </nav>
-      </div>
-    </transition>
-
-    <!-- ========================================================================= -->
-    <!-- 2. HERO SECTION                                                           -->
-    <!-- ========================================================================= -->
-    <section
-      id="top"
-      ref="heroRef"
-      data-testid="hero-section"
-      @mousemove="handleHeroMouseMove"
-      @mouseleave="handleHeroMouseLeave"
-      class="relative flex min-h-screen items-center overflow-hidden pt-28 pb-16 lg:pt-24"
-    >
-      <!-- Atmospheric Ambient Glows -->
-      <div
-        class="pointer-events-none absolute inset-0"
-        style="background: radial-gradient(ellipse 70% 55% at 72% 42%, rgba(34,197,94,0.13) 0%, transparent 65%), radial-gradient(ellipse 45% 40% at 12% 88%, rgba(245,158,11,0.07) 0%, transparent 70%);"
-      ></div>
-      <div
-        class="pointer-events-none absolute inset-0 opacity-[0.35]"
-        style="background-image: linear-gradient(rgba(34,197,94,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(34,197,94,0.05) 1px, transparent 1px); background-size: 72px 72px; mask-image: radial-gradient(ellipse 90% 80% at 50% 40%, black 30%, transparent 75%); -webkit-mask-image: radial-gradient(ellipse 90% 80% at 50% 40%, black 30%, transparent 75%);"
-      ></div>
-
-      <div class="relative z-10 mx-auto grid w-full max-w-7xl items-center gap-14 px-5 sm:px-8 lg:grid-cols-12 lg:gap-6">
-        <!-- Hero Left Copy Column -->
-        <div class="lg:col-span-7 will-change-transform" :style="heroCopyStyle">
-          <!-- Eyebrow Badge -->
-          <div
-            data-testid="hero-eyebrow"
-            class="mb-8 inline-flex items-center gap-3 rounded-full border border-bio/25 bg-bio/5 px-4 py-2"
-          >
-            <span class="h-1.5 w-1.5 rounded-full bg-bio animate-pulse-dot"></span>
-            <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-bio sm:text-[11px]">
-              RUCO Aggregation Network — India
-            </span>
-          </div>
-
-          <!-- Staggered Headline Lines -->
-          <h1
-            data-testid="hero-headline"
-            class="font-display text-3xl font-extrabold leading-[1.08] tracking-tight text-slate-50 xs:text-4xl sm:text-5xl lg:text-6xl xl:text-7xl sm:leading-[1.04]"
-          >
-            <span class="block overflow-hidden pb-1">
-              <span class="block">Stop the</span>
-            </span>
-            <span class="block overflow-hidden pb-1">
-              <span class="block text-toxic">Toxic Cycle.</span>
-            </span>
-            <span class="block overflow-hidden pb-1">
-              <span class="block">Start the</span>
-            </span>
-            <span class="block overflow-hidden pb-1">
-              <span class="block bg-gradient-to-r from-bio via-limeglow to-bio bg-clip-text text-transparent">
-                Green Revenue.
-              </span>
-            </span>
-          </h1>
-
-          <!-- Subheadline -->
-          <p
-            data-testid="hero-subheadline"
-            class="mt-6 sm:mt-7 max-w-xl text-sm leading-relaxed text-slate-400 sm:text-lg"
-          >
-            Join India's smartest RUCO aggregation network. We take the hassle out of
-            FSSAI compliance with instant QR-based disposal, cluster-based pickups, and
-            real-time environmental tracking.
-          </p>
-
-          <!-- CTAs -->
-          <div class="mt-8 sm:mt-10 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 sm:gap-4">
-            <button
-              data-testid="hero-register-btn"
-              @click="$emit('open-register')"
-              class="group relative flex items-center justify-center gap-3 overflow-hidden rounded-full bg-bio px-6 py-3.5 sm:px-8 sm:py-4 font-mono text-xs font-bold uppercase tracking-[0.16em] sm:tracking-[0.2em] text-emerald-950 transition-all duration-500 hover:scale-[1.04] hover:shadow-[0_0_50px_rgba(34,197,94,0.6)] active:scale-[0.97] cursor-pointer min-h-[48px] w-full sm:w-auto"
-            >
-              <span class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 group-hover:translate-x-full"></span>
-              Join the Clean Network
-              <ArrowUpRight :size="16" :stroke-width="2.5" class="transition-transform duration-500 group-hover:translate-x-1 group-hover:-translate-y-1" />
-            </button>
-
-            <a
-              data-testid="hero-process-link"
-              href="#process"
-              class="group flex items-center justify-center gap-2 rounded-full border border-slate-700 px-6 py-3.5 sm:px-7 sm:py-4 font-mono text-xs uppercase tracking-[0.16em] sm:tracking-[0.2em] text-slate-300 transition-all duration-500 hover:-translate-y-0.5 hover:border-bio/50 hover:text-bio min-h-[48px] w-full sm:w-auto"
-            >
-              See how it works
-              <span class="transition-transform duration-500 group-hover:translate-y-1">↓</span>
-            </a>
-          </div>
-
-          <!-- Proof Strip -->
-          <div
-            data-testid="hero-proof-strip"
-            class="mt-10 sm:mt-12 flex flex-wrap gap-x-6 sm:gap-x-8 gap-y-2 font-mono text-[10px] uppercase tracking-[0.22em] sm:tracking-[0.25em] text-slate-500"
-          >
-            <span>60-Sec Registration</span>
-            <span class="text-bio/60">/</span>
-            <span>FSSAI Compliant</span>
-            <span class="text-bio/60">/</span>
-            <span>Zero Interruptions</span>
-          </div>
-        </div>
-
-        <!-- Hero Right 3D Visual Card -->
-        <div
-          data-testid="hero-visual"
-          class="relative h-[400px] xs:h-[440px] sm:h-[520px] lg:col-span-5 lg:h-[580px]"
-        >
-          <!-- Dynamic Radial Glow Behind Card -->
-          <div
-            class="absolute inset-4 sm:inset-6 rounded-[2.5rem] bg-[radial-gradient(circle_at_50%_45%,rgba(34,197,94,0.28),transparent_68%)] blur-2xl pointer-events-none will-change-transform"
-            :style="heroGlowStyle"
-          ></div>
-
-          <!-- Main Tilted Kitchen Image Card -->
-          <div
-            class="absolute inset-x-4 sm:inset-x-14 top-4 sm:top-6 bottom-14 sm:bottom-16 overflow-hidden rounded-[1.75rem] sm:rounded-[2rem] border border-bio/20 shadow-[0_40px_80px_-20px_rgba(0,0,0,0.7)] will-change-transform"
-            :style="heroImgStyle"
-          >
-            <img
-              src="https://images.unsplash.com/photo-1771360963016-1408c2de12c4?crop=entropy&cs=srgb&fm=jpg&q=85&w=1200"
-              alt="Commercial kitchen where used cooking oil is generated"
-              class="h-full w-full object-cover"
-              loading="eager"
-            />
-            <div class="absolute inset-0 bg-gradient-to-t from-obsidian/90 via-obsidian/20 to-transparent"></div>
-            <div class="absolute bottom-4 sm:bottom-5 left-4 sm:left-5 right-4 sm:right-5 flex items-end justify-between">
-              <div>
-                <p class="font-mono text-[9px] uppercase tracking-[0.3em] text-bio">Source Kitchen</p>
-                <p class="mt-0.5 sm:mt-1 font-display text-base sm:text-lg font-bold text-slate-100">Cluster 04 — Andheri West</p>
-              </div>
-              <span class="rounded-full border border-bio/30 bg-obsidian/60 px-2.5 sm:px-3 py-1 font-mono text-[8px] sm:text-[9px] uppercase tracking-[0.2em] text-bio backdrop-blur">
-                Live Route
-              </span>
-            </div>
-          </div>
-
-          <!-- Floating Glass Card (Scan Verified) -->
-          <div
-            data-testid="hero-scan-card"
-            class="glass-panel absolute right-0 top-1 sm:top-2 w-44 sm:w-56 rounded-2xl p-3 sm:p-4 sm:right-2 shadow-2xl will-change-transform"
-            :style="heroCardStyle"
-          >
-            <div class="flex items-center gap-2.5 sm:gap-3">
-              <span class="grid h-9 w-9 sm:h-11 sm:w-11 place-items-center rounded-xl bg-bio/15 text-bio shrink-0">
-                <QrCode :size="18" class="sm:hidden" />
-                <QrCode :size="22" class="hidden sm:block" />
-              </span>
-              <div>
-                <p class="font-mono text-[8px] sm:text-[9px] uppercase tracking-[0.22em] text-slate-400">Scan Verified</p>
-                <p class="font-display text-sm sm:text-base font-bold text-slate-100">42.6 L logged</p>
-              </div>
-            </div>
-            <div class="mt-2.5 sm:mt-3 flex items-center justify-between border-t border-bio/10 pt-2 sm:pt-3 font-mono text-[8px] sm:text-[9px] uppercase tracking-[0.15em]">
-              <span class="text-slate-500">FSSAI Receipt</span>
-              <span class="text-bio">#GF-0421</span>
-            </div>
-          </div>
-
-          <!-- Floating Glass Badge (CO₂ Offset) -->
-          <div
-            data-testid="hero-offset-badge"
-            class="glass-panel absolute bottom-1 sm:bottom-2 left-0 flex items-center gap-2.5 sm:gap-3 rounded-2xl px-3.5 py-2.5 sm:px-4 sm:py-3 sm:left-4 shadow-2xl will-change-transform"
-            :style="heroBadgeStyle"
-          >
-            <span class="relative grid h-8 w-8 sm:h-10 sm:w-10 place-items-center shrink-0">
-              <svg viewBox="0 0 40 40" class="absolute inset-0 animate-spin-slow">
-                <circle cx="20" cy="20" r="17" fill="none" stroke="rgba(34,197,94,0.25)" stroke-width="1.5" stroke-dasharray="4 5" />
+      <!-- Right: Distinctly Differentiated Role Previews (Seller Emerald vs Customer Sky-Cyan) + SIGN IN + JOIN NETWORK -->
+      <div class="flex items-center gap-2.5 sm:gap-3.5">
+        <!-- Dual Role Preview Switcher with Instant Visual Differentiation -->
+        <div id="headerRoleSwitcher" class="hidden sm:inline-flex items-center gap-2 p-1 rounded-2xl bg-[#0B140F] border border-white/10 font-sans text-xs">
+          <button id="navPreviewSellerBtn" type="button" class="touch-reactive px-3.5 py-2 rounded-xl bg-[#22C55E]/15 hover:bg-[#22C55E] text-[#4ADE80] hover:text-[#050A07] border border-[#22C55E]/40 font-display font-bold tracking-tight transition-all flex items-center gap-2 shadow-sm">
+            <span class="w-5 h-5 rounded-md bg-[#22C55E]/20 flex items-center justify-center shrink-0">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 21h18M5 21V7l8-4v18m6 0V11l-6-4"/>
               </svg>
-              <Leaf :size="15" class="text-limeglow sm:hidden" />
-              <Leaf :size="18" class="text-limeglow hidden sm:block" />
             </span>
-            <div>
-              <p class="font-mono text-[8px] sm:text-[9px] uppercase tracking-[0.22em] text-slate-400">CO₂ Offset</p>
-              <p class="font-display text-sm sm:text-base font-bold text-limeglow">+31.1 T</p>
-            </div>
-          </div>
-
-          <!-- Vertical Label Indicator -->
-          <div class="absolute -left-2 top-24 hidden -rotate-90 items-center gap-2 font-mono text-[9px] uppercase tracking-[0.35em] text-slate-600 lg:flex">
-            <ScanLine :size="12" class="text-bio/60" /> Waste → Energy
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ========================================================================= -->
-    <!-- 3. MARQUEE TRUST BANNER                                                   -->
-    <!-- ========================================================================= -->
-    <div data-testid="marquee" class="relative overflow-hidden border-y border-bio/10 bg-[#0C120F] py-5">
-      <div class="animate-marquee flex w-max items-center">
-        <div v-for="half in [0, 1]" :key="half" class="flex items-center" :aria-hidden="half === 1">
-          <span v-for="(item, i) in marqueeItems" :key="`${half}-${i}`" class="flex items-center">
-            <span class="whitespace-nowrap px-8 font-mono text-xs uppercase tracking-[0.35em] text-slate-400">
-              {{ item }}
+            <span>Seller Kitchen</span>
+            <span class="px-1.5 py-0.5 rounded bg-[#22C55E]/20 text-[10px] font-bold">₹40/L</span>
+          </button>
+          <button id="navPreviewCustomerBtn" type="button" class="touch-reactive px-3.5 py-2 rounded-xl bg-[#38BDF8]/15 hover:bg-[#38BDF8] text-[#38BDF8] hover:text-[#050A07] border border-[#38BDF8]/40 font-display font-bold tracking-tight transition-all flex items-center gap-2 shadow-sm">
+            <span class="w-5 h-5 rounded-md bg-[#38BDF8]/20 flex items-center justify-center shrink-0">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+              </svg>
             </span>
-            <Leaf :size="13" class="shrink-0 text-bio/60" />
-          </span>
+            <span>Buyer Refinery</span>
+            <span class="px-1.5 py-0.5 rounded bg-[#38BDF8]/20 text-[10px] font-bold">ISCC</span>
+          </button>
         </div>
+
+        <button id="modePortalBtn" class="font-mono text-[11px] tracking-[0.18em] uppercase text-gray-300 hover:text-[#22C55E] transition">
+          SIGN IN
+        </button>
+        <button id="modeLandingBtn" class="hidden font-mono text-[11px] tracking-[0.18em] uppercase text-[#22C55E] hover:text-white transition flex items-center gap-1.5">
+          &larr; <span>LANDING</span>
+        </button>
+
+        <button id="navRegisterBtn" class="btn-green-pill touch-reactive px-4 sm:px-5 py-2.5 rounded-full font-mono text-[11px] sm:text-xs font-bold tracking-[0.14em] uppercase flex items-center gap-1.5">
+          <span>JOIN NETWORK</span>
+          <span>&#8599;</span>
+        </button>
       </div>
+
     </div>
+  </header>
 
-    <!-- ========================================================================= -->
-    <!-- 4. THREAT / THE CRISIS SECTION (#crisis)                                  -->
-    <!-- ========================================================================= -->
-    <section
-      id="crisis"
-      ref="crisisSectionRef"
-      data-testid="threat-section"
-      class="relative scroll-mt-20 overflow-hidden py-16 sm:py-32 lg:py-36"
-    >
-      <div
-        class="pointer-events-none absolute inset-0"
-        style="background: radial-gradient(ellipse 55% 45% at 85% 20%, rgba(245,158,11,0.08) 0%, transparent 65%), radial-gradient(ellipse 40% 40% at 8% 75%, rgba(239,68,68,0.06) 0%, transparent 70%);"
-      ></div>
-      <span
-        aria-hidden="true"
-        class="text-outline-amber pointer-events-none absolute -top-6 right-0 select-none font-display text-[22vw] font-extrabold leading-none tracking-tighter opacity-60 lg:text-[16rem] will-change-transform"
-        :style="toxicWatermarkStyle"
-      >
-        TOXIC
-      </span>
+  <!-- ===================================================================== -->
+  <!-- VIEW 1: FLAGSHIP LANDING PAGE                                         -->
+  <!-- ===================================================================== -->
+  <main id="landingView" class="relative z-10 block">
 
-      <div class="relative z-10 mx-auto max-w-7xl px-5 sm:px-8">
-        <!-- Chapter Tag -->
-        <div class="mb-6 flex items-center gap-4 scroll-reveal" data-testid="chapter-01">
-          <span class="font-mono text-xs font-bold tracking-[0.3em] text-bio">01</span>
-          <span class="h-px w-12 bg-bio/40"></span>
-          <span class="font-mono text-xs uppercase tracking-[0.3em] text-slate-400">The Threat</span>
-        </div>
-
-        <div class="grid gap-10 lg:grid-cols-12 lg:gap-16">
-          <!-- Left Column -->
-          <div class="lg:col-span-7">
-            <h2
-              data-testid="threat-headline"
-              class="font-display text-2xl font-bold leading-tight tracking-tight text-slate-50 xs:text-3xl sm:text-4xl lg:text-5xl scroll-reveal delay-100"
-            >
-              The <span class="text-hazard">60%</span> Crisis
-              <br />
-              in Your Kitchen.
-            </h2>
-
-            <p class="mt-5 sm:mt-6 max-w-xl text-sm leading-relaxed text-slate-400 sm:text-base scroll-reveal delay-150">
-              Shockingly, nearly 60% of all Used Cooking Oil generated in India finds
-              its way back into the food stream — resold by informal vendors, reheated,
-              and returned to the plate. Every reheat multiplies toxic Total Polar
-              Compounds.
-            </p>
-
-            <div class="mt-8 sm:mt-14 grid gap-6 sm:gap-10 sm:grid-cols-2">
-              <div data-testid="stat-uco-return" class="border-l-2 border-hazard/60 pl-5 sm:pl-6 scroll-reveal delay-200">
-                <div class="font-display text-5xl font-extrabold tracking-tight text-hazard sm:text-7xl">
-                  {{ animatedUcoReturn }}%
-                </div>
-                <p class="mt-2.5 sm:mt-3 font-mono text-[10px] uppercase tracking-[0.25em] text-hazard/80">
-                  High Risk
-                </p>
-                <p class="mt-1.5 sm:mt-2 text-xs sm:text-sm leading-relaxed text-slate-400">
-                  of UCO in India returns to the food stream through illegal
-                  recirculation.
-                </p>
-              </div>
-
-              <div data-testid="stat-tpc-limit" class="border-l-2 border-toxic/60 pl-5 sm:pl-6 scroll-reveal delay-300">
-                <div class="font-display text-5xl font-extrabold tracking-tight text-toxic sm:text-7xl">
-                  {{ animatedTpcLimit }}%
-                </div>
-                <p class="mt-2.5 sm:mt-3 font-mono text-[10px] uppercase tracking-[0.25em] text-toxic/80">
-                  FSSAI Mandate
-                </p>
-                <p class="mt-1.5 sm:mt-2 text-xs sm:text-sm leading-relaxed text-slate-400">
-                  TPC limit — oil above this is strictly unsafe for human consumption.
-                </p>
-              </div>
+    <!-- =================================================================== -->
+    <!-- HERO SECTION (LUXURY STUDIO HEADLINE + TILTED KITCHEN CARD)         -->
+    <!-- =================================================================== -->
+    <section id="heroSection" class="scroll-mt-20 bg-organic-dark relative min-h-[88vh] flex items-center py-14 lg:py-20 overflow-hidden">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+          
+          <!-- Left Column: Pill Badge + Floating 3D-Lit Studio Headline + Ground Reflection Stage + Dual CTAs -->
+          <div class="lg:col-span-7 space-y-7">
+            <div style="--delay: 40ms" class="reveal reveal-up inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-white/[0.03] border border-white/15 font-mono text-[11px] tracking-[0.22em] uppercase text-[#4ADE80]">
+              <span class="w-3.5 h-[1.5px] bg-[#22C55E]"></span>
+              <span>RUCO AGGREGATION NETWORK &mdash; INDIA</span>
             </div>
 
-            <!-- Toxicity Per Reheat Bar Card -->
-            <div 
-              data-testid="toxicity-per-reheat-bar"
-              class="mt-8 sm:mt-10 rounded-2xl border border-slate-800/80 bg-slate-900/40 p-4 sm:p-5 scroll-reveal delay-300 backdrop-blur-sm"
-            >
-              <div class="flex items-center justify-between font-mono text-[9px] sm:text-[10px] tracking-[0.2em] sm:tracking-[0.25em] uppercase mb-3">
-                <span class="text-slate-400 font-semibold">Toxicity Per Reheat</span>
-                <span class="text-hazard font-bold tracking-wider sm:tracking-widest flex items-center gap-1.5">
-                  <span class="inline-block h-1.5 w-1.5 rounded-full bg-hazard animate-pulse"></span>
-                  TPC Danger Zone
+            <!-- Razor-Sharp High-Clarity Headline (No Underline, No Shadow) -->
+            <div id="heroSpatialChamber" class="hero-spatial-chamber">
+              <h1 id="heroKineticHeadline" class="hero-kinetic-stage select-none font-display text-4xl sm:text-5xl lg:text-[4.55rem] font-extrabold tracking-[-0.025em] leading-[1.08]">
+                <span style="--line-delay: 80ms" class="hero-pop-line is-popped"><span class="hero-solid-white">Stop the</span></span>
+                <span style="--line-delay: 260ms" class="hero-pop-line is-popped mt-0.5"><span class="hero-toxic-highlight">Toxic Cycle.</span></span>
+                <span style="--line-delay: 480ms" class="hero-pop-line is-popped mt-2 sm:mt-3"><span class="hero-solid-white">Start the</span></span>
+                <span style="--line-delay: 680ms" class="hero-pop-line is-popped mt-0.5"><span class="hero-green-highlight">Green Revenue.</span></span>
+              </h1>
+            </div>
+
+            <p style="--delay: 160ms" class="reveal reveal-up text-base sm:text-lg text-gray-300 leading-relaxed max-w-xl font-normal">
+              Join India’s smartest RUCO aggregation network. We take the hassle out of FSSAI compliance with instant QR-based disposal, cluster-based pickups, and real-time environmental tracking.
+            </p>
+
+            <!-- Hero Dual Role Preview Cards & Registration CTA (Visually Distinct Seller vs Customer Options) -->
+            <div style="--delay: 240ms" class="reveal reveal-up space-y-4 pt-1">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 max-w-xl">
+                <!-- Seller (FBO Kitchen) Distinct Emerald Card Button -->
+                <button id="heroPreviewSellerBtn" type="button" class="touch-reactive group text-left p-4 rounded-2xl bg-gradient-to-br from-[#22C55E]/20 via-[#16A34A]/10 to-[#0B1510] hover:from-[#22C55E]/30 border-2 border-[#22C55E]/50 hover:border-[#22C55E] shadow-[0_14px_30px_-10px_rgba(34,197,94,0.35)] transition-all flex items-center justify-between gap-3">
+                  <div class="flex items-center gap-3.5">
+                    <div class="w-11 h-11 rounded-xl bg-[#22C55E] text-[#050A07] flex items-center justify-center shadow-md shrink-0 group-hover:scale-105 transition-transform">
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 21h18M5 21V7l8-4v18m6 0V11l-6-4"/>
+                      </svg>
+                    </div>
+                    <div>
+                      <div class="flex items-center gap-1.5">
+                        <span class="px-2 py-0.5 rounded-md bg-[#22C55E]/20 text-[#4ADE80] font-sans text-[10px] font-bold uppercase tracking-wider">For Kitchens</span>
+                        <span class="text-[#FDE68A] font-sans text-[11px] font-bold">₹40/L Avg</span>
+                      </div>
+                      <div class="font-display font-extrabold text-base text-white mt-0.5">Seller Dashboard</div>
+                      <div class="font-sans text-xs text-gray-300">Schedule QR Pickups &amp; NEFT</div>
+                    </div>
+                  </div>
+                  <span class="w-7 h-7 rounded-full bg-[#22C55E]/20 text-[#4ADE80] flex items-center justify-center font-bold text-sm group-hover:translate-x-0.5 transition-transform shrink-0">&#8599;</span>
+                </button>
+
+                <!-- Customer (Biofuel Refinery) Distinct Cyan-Blue Card Button -->
+                <button id="heroPreviewCustomerBtn" type="button" class="touch-reactive group text-left p-4 rounded-2xl bg-gradient-to-br from-[#38BDF8]/20 via-[#0284C7]/10 to-[#0A131A] hover:from-[#38BDF8]/30 border-2 border-[#38BDF8]/50 hover:border-[#38BDF8] shadow-[0_14px_30px_-10px_rgba(56,189,248,0.3)] transition-all flex items-center justify-between gap-3">
+                  <div class="flex items-center gap-3.5">
+                    <div class="w-11 h-11 rounded-xl bg-[#38BDF8] text-[#050A07] flex items-center justify-center shadow-md shrink-0 group-hover:scale-105 transition-transform">
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                      </svg>
+                    </div>
+                    <div>
+                      <div class="flex items-center gap-1.5">
+                        <span class="px-2 py-0.5 rounded-md bg-[#38BDF8]/20 text-[#7DD3FC] font-sans text-[10px] font-bold uppercase tracking-wider">For Refineries</span>
+                        <span class="text-[#7DD3FC] font-sans text-[11px] font-bold">ISCC EU</span>
+                      </div>
+                      <div class="font-display font-extrabold text-base text-white mt-0.5">Customer Dashboard</div>
+                      <div class="font-sans text-xs text-gray-300">Procure Bulk UCO &amp; PoS</div>
+                    </div>
+                  </div>
+                  <span class="w-7 h-7 rounded-full bg-[#38BDF8]/20 text-[#38BDF8] flex items-center justify-center font-bold text-sm group-hover:translate-x-0.5 transition-transform shrink-0">&#8599;</span>
+                </button>
+              </div>
+
+              <div class="flex flex-wrap items-center gap-4 pt-1">
+                <button id="heroRegisterBtn" type="button" class="btn-green-pill touch-reactive px-6 py-3 rounded-full font-display text-xs sm:text-sm font-bold tracking-wide flex items-center gap-2">
+                  <span>Register Your Kitchen in 60s</span>
+                  <span>&#8599;</span>
+                </button>
+                <span class="font-sans text-xs text-gray-400 flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-[#22C55E]"></span>
+                  <span>Avg Rate <strong class="text-white">₹40/Liter</strong> &bull; Instant NEFT Settlement</span>
                 </span>
               </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Tilted 3D Commercial Kitchen Card + Popping Floating Glass Badges -->
+          <div style="--delay: 140ms" class="lg:col-span-5 reveal reveal-pop">
+            <div id="heroParallaxWrap" class="relative mx-auto max-w-[380px] sm:max-w-[400px] py-6">
               
-              <!-- Gradient Bar with 25% Mark -->
-              <div class="relative h-3.5 w-full rounded-full overflow-hidden bg-slate-950/80 p-0.5 shadow-inner">
-                <div 
-                  class="h-full w-full rounded-full relative"
-                  style="background: linear-gradient(90deg, #22c55e 0%, #22c55e 12%, #eab308 25%, #f97316 45%, #ef4444 75%, #dc2626 100%);"
-                >
-                  <!-- 25% FSSAI Limit Divider Mark -->
-                  <div 
-                    class="absolute top-0 bottom-0 left-[25%] w-0.5 bg-white shadow-[0_0_8px_rgba(255,255,255,0.95)] z-10"
-                    title="25% FSSAI Limit"
-                  ></div>
+              <!-- Vertical Left Side Micro-Label: ● WASTE -> ENERGY -->
+              <div class="vertical-side-label hidden sm:flex items-center gap-2 absolute -left-7 top-16 font-mono text-[10px] tracking-[0.22em] uppercase text-[#22C55E]/70 select-none">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#22C55E]"></span>
+                <span>WASTE &rarr; ENERGY</span>
+              </div>
+
+              <!-- TOP-RIGHT FLOATING GLASS POP-UP CARD: SCAN VERIFIED / 42.6 L logged -->
+              <div id="heroTopFloatingBadge" class="hero-floating-badge animate-float-slow touch-reactive cursor-pointer absolute -top-2 -right-3 sm:-right-6 z-30 rounded-2xl p-4 w-56 sm:w-64">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl bg-[#22C55E]/20 border border-[#22C55E]/40 text-[#22C55E] flex items-center justify-center shrink-0">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M4 4h6v6H4V4zm10 0h6v6h-6V4zM4 14h6v6H4v-6zm10 3h3m3 0h-3m0 0v-3m0 3v3"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="font-mono text-[10px] tracking-[0.16em] uppercase text-gray-400">SCAN VERIFIED</div>
+                    <div id="heroLoggedLitersText" class="tabular-nums font-display font-extrabold text-lg text-white leading-tight">
+                      42.6 L logged
+                    </div>
+                  </div>
+                </div>
+                <div class="mt-3 pt-2.5 border-t border-white/10 flex items-center justify-between font-mono text-[10px] tracking-[0.14em]">
+                  <span class="text-gray-400">FSSAI RECEIPT</span>
+                  <span id="heroReceiptCodeText" class="text-[#22C55E] font-semibold">#GF-0421</span>
                 </div>
               </div>
-              
-              <!-- Bottom Markers -->
-              <div class="relative mt-2.5 font-mono text-[8px] xs:text-[9px] sm:text-[10px] uppercase tracking-wider flex justify-between items-center text-slate-300">
-                <span class="text-bio font-bold">0% Fresh</span>
-                <span class="absolute left-[25%] -translate-x-1/2 whitespace-nowrap text-toxic font-bold">
-                  25% FSSAI Limit
-                </span>
-                <span class="text-hazard font-bold">100% Reused</span>
-              </div>
-            </div>
-          </div>
 
-          <!-- Right Column -->
-          <div class="lg:col-span-5">
-            <div 
-              class="relative overflow-hidden rounded-[2rem] border border-toxic/20 scroll-reveal-scale delay-200 will-change-transform"
-              :style="crisisBurnerStyle"
-            >
-              <img
-                src="https://images.unsplash.com/photo-1777823703795-050c8384cdae?crop=entropy&cs=srgb&fm=jpg&q=85&w=1200"
-                alt="Burner flame reheating cooking oil"
-                class="h-64 w-full object-cover sm:h-80"
-                loading="lazy"
-              />
-              <div class="absolute inset-0 bg-gradient-to-t from-obsidian via-obsidian/30 to-transparent"></div>
-              <div class="absolute bottom-5 left-5 flex items-center gap-3">
-                <span class="grid h-10 w-10 place-items-center rounded-xl bg-toxic/15 text-toxic">
-                  <Flame :size="20" />
-                </span>
-                <div>
-                  <p class="font-mono text-[9px] uppercase tracking-[0.25em] text-toxic">Every Reheat</p>
-                  <p class="font-display text-sm font-bold text-slate-100">TPC Multiplies</p>
-                </div>
-              </div>
-            </div>
+              <!-- TILTED SOURCE KITCHEN PHOTO CARD -->
+              <div id="heroParallaxCard" class="touch-reactive cursor-pointer relative rounded-[26px] overflow-hidden border border-white/15 bg-surface-900 shadow-[0_30px_70px_rgba(0,0,0,0.85)] transition-all duration-500 rotate-[2deg] hover:rotate-0">
+                <div class="relative h-[400px] sm:h-[430px] w-full">
+                  <img
+                    id="heroMainKitchenImg"
+                    src="/images/hero-kitchen.jpeg"
+                    alt="Source commercial kitchen in India"
+                    class="w-full h-full object-cover object-center transition-transform duration-700 hover:scale-105"
+                  />
+                  <div class="absolute inset-0 bg-gradient-to-t from-[#050A07] via-[#050A07]/25 to-transparent"></div>
 
-            <!-- Hazard Grid -->
-            <div class="mt-6 grid gap-3 sm:grid-cols-2">
-              <div
-                v-for="(h, i) in hazards"
-                :key="h.title"
-                :data-testid="`hazard-${i}`"
-                :class="`group h-full rounded-2xl border border-slate-800 bg-moss/60 p-5 transition-all duration-300 hover:border-hazard/40 hover:-translate-y-1.5 scroll-reveal delay-${(i + 1) * 100}`"
-              >
-                <component
-                  :is="h.icon"
-                  :size="20"
-                  class="text-hazard/80 transition-transform duration-300 group-hover:scale-110"
-                />
-                <p class="mt-3 font-display text-sm font-bold text-slate-100">{{ h.title }}</p>
-                <p class="mt-1 text-xs leading-relaxed text-slate-500">{{ h.desc }}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ========================================================================= -->
-    <!-- 5. SOLUTION / THE PROCESS SECTION (#process)                              -->
-    <!-- ========================================================================= -->
-    <section
-      id="process"
-      ref="processSectionRef"
-      data-testid="solution-section"
-      class="relative scroll-mt-16 overflow-hidden rounded-t-[2.5rem] bg-paper py-16 sm:py-32 lg:py-36 text-ink sm:rounded-t-[3.5rem]"
-    >
-      <span
-        aria-hidden="true"
-        class="pointer-events-none absolute -bottom-10 left-0 select-none font-display text-[20vw] font-extrabold leading-none tracking-tighter text-ink/[0.04] lg:text-[15rem] will-change-transform"
-        :style="processWatermarkStyle"
-      >
-        SCAN &amp; DONE
-      </span>
-
-      <div class="relative z-10 mx-auto max-w-7xl px-5 sm:px-8">
-        <!-- Chapter Tag -->
-        <div class="mb-6 flex items-center gap-4 scroll-reveal" data-testid="chapter-02">
-          <span class="font-mono text-xs font-bold tracking-[0.3em] text-biodark">02</span>
-          <span class="h-px w-12 bg-ink/30"></span>
-          <span class="font-mono text-xs uppercase tracking-[0.3em] text-ink/60">The Fix</span>
-        </div>
-
-        <div class="flex flex-wrap items-end justify-between gap-6 sm:gap-8">
-          <div>
-            <h2
-              data-testid="solution-headline"
-              class="max-w-2xl font-display text-2xl font-bold leading-tight tracking-tight sm:text-4xl lg:text-5xl scroll-reveal delay-100"
-            >
-              Frictionless Disposal.
-              <br />
-              <span class="text-biodark">Zero Interruptions.</span>
-            </h2>
-          </div>
-          <div>
-            <p class="max-w-sm text-xs sm:text-sm leading-relaxed text-ink/60 scroll-reveal delay-150">
-              Three steps between your kitchen and full FSSAI compliance. No calls, no
-              paperwork, no waiting on informal collectors.
-            </p>
-          </div>
-        </div>
-
-        <!-- Animated Process Track with Delivery Truck -->
-        <div class="mt-12 sm:mt-20">
-          <div class="relative mb-14 hidden h-16 items-center lg:flex" data-testid="process-track">
-            <!-- Background Rail line from Node 1 (8%) to Node 3 (92%) -->
-            <div class="absolute left-[8%] right-[8%] top-1/2 h-px -translate-y-1/2 bg-ink/15"></div>
-            <!-- Dynamic Filled Pipeline that connects exactly to the active station and truck -->
-            <div 
-              class="absolute left-[8%] top-1/2 h-[3px] -translate-y-1/2 origin-left bg-gradient-to-r from-biodark via-bio to-limeglow transition-all duration-700 ease-out"
-              :style="{ width: activeProcessStep === 0 ? '0%' : activeProcessStep === 1 ? '42%' : '84%' }"
-            ></div>
-            
-            <span
-              v-for="(pos, idx) in ['8%', '50%', '92%']"
-              :key="pos"
-              class="absolute top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 transition-all duration-700"
-              :class="activeProcessStep >= idx ? 'border-biodark bg-biodark scale-125 shadow-[0_0_14px_rgba(16,185,129,0.8)]' : 'border-ink/20 bg-paper'"
-              :style="{ left: pos }"
-            ></span>
-
-            <div
-              data-testid="process-van"
-              class="absolute top-1/2 z-10 -translate-y-1/2 transition-all duration-700 ease-out will-change-transform"
-              :style="{ left: processTruckLeft }"
-            >
-              <span class="grid h-14 w-14 -translate-x-1/2 place-items-center rounded-full bg-bio text-emerald-950 shadow-[0_0_35px_rgba(34,197,94,0.6)] ring-4 ring-bio/20">
-                <Truck :size="24" class="transition-transform duration-300 hover:scale-110" />
-              </span>
-            </div>
-          </div>
-
-          <!-- 3 Process Steps Cards (Always 100% visible, dynamic active highlight) -->
-          <div class="grid gap-4 sm:gap-6 lg:grid-cols-3">
-            <div
-              v-for="(s, i) in steps"
-              :key="s.num"
-              :data-testid="`process-step-${i + 1}`"
-              @mouseenter="manualHoverStep = i"
-              @mouseleave="manualHoverStep = null"
-              :class="[
-                'group relative h-full overflow-hidden rounded-2xl sm:rounded-[1.75rem] border p-5 sm:p-8 transition-all duration-500 hover:-translate-y-2 cursor-pointer',
-                activeProcessStep === i 
-                  ? 'border-biodark bg-white shadow-[0_30px_60px_-20px_rgba(16,185,129,0.35)] scale-[1.01] sm:scale-[1.02]' 
-                  : 'border-ink/10 bg-white/70 hover:border-biodark/40 hover:bg-white hover:shadow-xl'
-              ]"
-            >
-              <div class="flex items-start justify-between">
-                <span 
-                  :class="[
-                    'grid h-12 w-12 sm:h-14 sm:w-14 place-items-center rounded-2xl transition-all duration-500 shrink-0',
-                    activeProcessStep === i ? 'bg-bio text-emerald-950 scale-105 sm:scale-110 shadow-lg' : 'bg-biodark/10 text-biodark group-hover:bg-bio group-hover:text-emerald-950'
-                  ]"
-                >
-                  <component :is="s.icon" :size="22" class="sm:hidden" />
-                  <component :is="s.icon" :size="26" class="hidden sm:block" />
-                </span>
-                <span 
-                  :class="[
-                    'font-mono text-4xl sm:text-5xl font-bold transition-colors duration-500',
-                    activeProcessStep === i ? 'text-biodark/40' : 'text-ink/10 group-hover:text-biodark/25'
-                  ]"
-                >
-                  {{ s.num }}
-                </span>
-              </div>
-              <h3 class="mt-6 sm:mt-8 font-display text-lg sm:text-2xl font-bold tracking-tight">
-                {{ s.title }}
-              </h3>
-              <p class="mt-2.5 sm:mt-3 text-xs sm:text-sm leading-relaxed text-ink/60">{{ s.desc }}</p>
-              <span 
-                :class="[
-                  'mt-5 sm:mt-6 block h-1 rounded-full transition-all duration-500',
-                  activeProcessStep === i ? 'w-full bg-bio' : 'w-10 bg-biodark/30 group-hover:w-full group-hover:bg-bio'
-                ]"
-              ></span>
-            </div>
-          </div>
-
-          <div class="mt-10 sm:mt-12 flex items-center justify-center gap-3 font-mono text-[10px] uppercase tracking-[0.3em] text-ink/50 scroll-reveal delay-300">
-            <ArrowDown :size="13" class="text-biodark" />
-            Then watch what your oil becomes
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ========================================================================= -->
-    <!-- 6. IMPACT / THE REWARD SECTION (#impact)                                  -->
-    <!-- ========================================================================= -->
-    <section
-      id="impact"
-      ref="impactSectionRef"
-      data-testid="impact-section"
-      class="relative scroll-mt-20 overflow-hidden py-16 sm:py-32 lg:py-36"
-    >
-      <div
-        class="pointer-events-none absolute inset-0"
-        style="background: radial-gradient(ellipse 60% 50% at 50% 60%, rgba(34,197,94,0.1) 0%, transparent 70%);"
-      ></div>
-      <span
-        aria-hidden="true"
-        class="text-outline pointer-events-none absolute -top-8 left-0 select-none font-display text-[22vw] font-extrabold leading-none tracking-tighter lg:text-[16rem] will-change-transform"
-        :style="impactWatermarkStyle"
-      >
-        GREEN
-      </span>
-
-      <div class="relative z-10 mx-auto max-w-7xl px-5 sm:px-8">
-        <!-- Chapter Tag -->
-        <div class="mb-6 flex items-center gap-4 scroll-reveal" data-testid="chapter-03">
-          <span class="font-mono text-xs font-bold tracking-[0.3em] text-bio">03</span>
-          <span class="h-px w-12 bg-bio/40"></span>
-          <span class="font-mono text-xs uppercase tracking-[0.3em] text-slate-400">The Reward</span>
-        </div>
-
-        <div class="grid items-center gap-10 lg:grid-cols-12 lg:gap-14">
-          <!-- Left Column -->
-          <div class="lg:col-span-5 scroll-reveal-left delay-100">
-            <h2
-              data-testid="impact-headline"
-              class="font-display text-2xl font-bold leading-tight tracking-tight text-slate-50 xs:text-3xl sm:text-4xl lg:text-5xl"
-            >
-              Track Your
-              <br />
-              <span class="bg-gradient-to-r from-bio to-limeglow bg-clip-text text-transparent">
-                Green Footprint.
-              </span>
-            </h2>
-
-            <p class="mt-5 sm:mt-6 max-w-md text-sm leading-relaxed text-slate-400 sm:text-base">
-              Every litre you hand over is weighed, certified, and traced to a refinery.
-              Your dashboard turns compliance into a story worth telling — and a payout
-              worth collecting.
-            </p>
-
-            <div class="mt-6 sm:mt-8 flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.25em] text-slate-500">
-              <span class="h-1.5 w-1.5 rounded-full bg-bio animate-pulse-dot"></span>
-              Dashboard preview — sample data
-            </div>
-          </div>
-
-          <!-- Right Column: Interactive Impact Console -->
-          <div class="lg:col-span-7 scroll-reveal-right delay-200">
-            <div
-              data-testid="impact-dashboard"
-              class="glass-panel relative overflow-hidden rounded-2xl sm:rounded-[2rem] p-4 sm:p-9 shadow-[0_50px_100px_-30px_rgba(0,0,0,0.8)] transition-transform duration-300 hover:-translate-y-2 will-change-transform"
-              :style="impactConsoleStyle"
-            >
-              <div class="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-bio/15 blur-3xl"></div>
-
-              <!-- Console Header -->
-              <div class="flex items-center justify-between border-b border-bio/10 pb-4 sm:pb-5">
-                <div class="flex items-center gap-2.5 sm:gap-3">
-                  <span class="flex gap-1.5">
-                    <span class="h-2 w-2 sm:h-2.5 sm:w-2.5 rounded-full bg-hazard/70"></span>
-                    <span class="h-2 w-2 sm:h-2.5 sm:w-2.5 rounded-full bg-toxic/70"></span>
-                    <span class="h-2 w-2 sm:h-2.5 sm:w-2.5 rounded-full bg-bio/80"></span>
-                  </span>
-                  <span class="font-mono text-[9px] sm:text-[10px] uppercase tracking-[0.2em] sm:tracking-[0.25em] text-slate-400">
-                    GeoField Impact Console
-                  </span>
-                </div>
-                <span class="flex items-center gap-1.5 sm:gap-2 rounded-full border border-bio/25 bg-bio/10 px-2.5 sm:px-3 py-1 font-mono text-[8px] sm:text-[9px] uppercase tracking-[0.2em] text-bio">
-                  <span class="h-1 w-1 rounded-full bg-bio animate-pulse-dot"></span>
-                  Live
-                </span>
-              </div>
-
-              <!-- 4 Metrics Grid -->
-              <div class="mt-5 sm:mt-7 grid grid-cols-1 xs:grid-cols-2 gap-3 sm:gap-4">
-                <div
-                  v-for="(m, i) in impactMetrics"
-                  :key="m.label"
-                  :data-testid="m.testId"
-                  :class="`rounded-xl sm:rounded-2xl border border-bio/10 bg-obsidian/50 p-4 sm:p-5 hover:border-bio/30 transition-all duration-300 hover:-translate-y-1 scroll-reveal delay-${(i + 1) * 100}`"
-                >
-                  <div class="flex items-center justify-between">
-                    <component :is="m.icon" :size="18" class="text-bio" />
-                    <span class="flex items-center gap-1 font-mono text-[8px] sm:text-[9px] uppercase tracking-[0.15em] text-limeglow">
-                      <TrendingUp :size="11" />
-                      {{ m.trend }}
+                  <!-- Bottom Inside Overlay: SOURCE KITCHEN / Cluster 04 — Andheri West / LIVE ROUTE -->
+                  <div class="absolute bottom-5 inset-x-5 z-20 flex items-end justify-between gap-3">
+                    <div>
+                      <div class="font-mono text-[10px] tracking-[0.2em] uppercase text-[#22C55E]">SOURCE KITCHEN</div>
+                      <div id="heroClusterTitleText" class="font-display font-bold text-lg sm:text-xl text-white mt-0.5">
+                        Cluster 04 &mdash; Andheri West
+                      </div>
+                    </div>
+                    <span class="px-3 py-1 rounded-full bg-[#22C55E]/15 border border-[#22C55E]/40 font-mono text-[10px] tracking-[0.14em] uppercase text-[#22C55E] shrink-0">
+                      LIVE ROUTE
                     </span>
                   </div>
-                  <p class="mt-3 sm:mt-4 font-display text-xl sm:text-3xl font-extrabold tracking-tight text-slate-50">
-                    {{ m.value }}
-                  </p>
-                  <p class="mt-1 font-mono text-[9px] sm:text-[10px] uppercase tracking-[0.18em] sm:tracking-[0.2em] text-slate-500">
-                    {{ m.label }}
-                  </p>
                 </div>
               </div>
 
-              <!-- Velocity Chart (Animated Up & Stop) -->
-              <div 
-                ref="impactChartRef"
-                class="mt-5 sm:mt-7 rounded-xl sm:rounded-2xl border border-bio/10 bg-obsidian/50 p-4 sm:p-5 scroll-reveal delay-300 transition-all duration-300 cursor-pointer group" 
-                data-testid="impact-chart"
-                title="Click to replay velocity chart animation"
-                @click="replayVelocityChartAnimation"
-              >
-                <div class="mb-3 flex items-center justify-between font-mono text-[9px] uppercase tracking-[0.2em] text-slate-500">
-                  <span class="flex items-center gap-1.5">
-                    <span 
-                      class="h-1.5 w-1.5 rounded-full transition-colors duration-500"
-                      :class="velocityChartProgress > 0 ? 'bg-bio animate-pulse' : 'bg-slate-600'"
-                    ></span>
-                    Collection Velocity — 12 Wks
-                  </span>
-                  <span class="text-bio font-bold text-[10px] sm:text-[11px] tracking-wider transition-all duration-300">
-                    +{{ animatedVelocityPercent }}%
-                  </span>
+              <!-- BOTTOM-LEFT FLOATING GLASS POP-UP CARD: CO2 OFFSET / +31.1 T -->
+              <div id="heroBottomFloatingBadge" class="hero-floating-badge animate-float-delayed touch-reactive cursor-pointer absolute -bottom-3 -left-3 sm:-left-8 z-30 rounded-2xl px-4 py-3.5 w-48 sm:w-52 flex items-center gap-3.5">
+                <div class="w-9 h-9 rounded-full bg-[#22C55E]/15 border border-[#22C55E]/35 text-[#A3E635] flex items-center justify-center shrink-0">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 21c.5-4.5 2.5-8 7-10 4.5-2 7-5.5 7-10-4.5 0-8 2.5-10 7-2 4.5-3.5 8.5-4 13z"/>
+                  </svg>
                 </div>
-                <svg viewBox="0 0 480 110" class="h-20 sm:h-24 w-full overflow-visible" preserveAspectRatio="none">
-                  <defs>
-                    <linearGradient id="areaFill" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stop-color="#22C55E" stop-opacity="0.32" />
-                      <stop offset="70%" stop-color="#22C55E" stop-opacity="0.08" />
-                      <stop offset="100%" stop-color="#22C55E" stop-opacity="0" />
-                    </linearGradient>
-                  </defs>
-                  
-                  <!-- Area Fill (Interpolated path rising up from bottom baseline) -->
-                  <path
-                    :d="currentChartAreaPath"
-                    fill="url(#areaFill)"
-                    class="transition-opacity duration-300"
-                    :style="{ opacity: velocityChartProgress > 0.05 ? 1 : 0 }"
-                  />
-                  
-                  <!-- Rising Stroke Line (Interpolated path rising up to peak) -->
-                  <path
-                    :d="currentChartLinePath"
-                    fill="none"
-                    stroke="#22C55E"
-                    stroke-width="2.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    class="drop-shadow-[0_0_8px_rgba(34,197,94,0.6)]"
-                  />
+                <div>
+                  <div class="font-mono text-[10px] tracking-[0.16em] uppercase text-gray-400">CO₂ OFFSET</div>
+                  <div id="heroCo2OffsetText" class="tabular-nums font-display font-extrabold text-lg text-[#A3E635] leading-tight">
+                    +31.1 T
+                  </div>
+                </div>
+              </div>
 
-                  <!-- Traveling / Pulsing Peak Node -->
-                  <g v-if="velocityChartProgress > 0.08">
-                    <!-- Halo pulse when reaching the top -->
-                    <circle 
-                      v-if="velocityChartProgress >= 0.95"
-                      cx="476" 
-                      :cy="peakMarkerY" 
-                      r="9" 
-                      fill="#22C55E" 
-                      fill-opacity="0.25"
-                      class="animate-ping origin-center" 
-                    />
-                    <!-- Core beacon circle that rides the line up -->
-                    <circle 
-                      cx="476" 
-                      :cy="peakMarkerY" 
-                      r="4" 
-                      fill="#22C55E" 
-                      stroke="#0A0F0D" 
-                      stroke-width="1.5"
-                      class="drop-shadow-[0_0_6px_rgba(34,197,94,0.9)]"
-                    />
-                  </g>
-                </svg>
+            </div>
+
+            <!-- Interactive Indian Kitchen Cluster Switcher Panel (100% Self-Contained Embedded Assets) -->
+            <div class="mt-5 p-3.5 rounded-2xl bg-[#0B1510]/90 border border-[#22C55E]/25 shadow-[0_14px_34px_rgba(0,0,0,0.65)]">
+              <div class="flex items-center justify-between mb-2.5 px-1 font-mono text-[10px] tracking-[0.16em] uppercase">
+                <span class="text-[#22C55E] font-semibold flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-[#22C55E] animate-pulse"></span>
+                  <span>LIVE KITCHEN CLUSTERS</span>
+                </span>
+                <span class="text-gray-400">TAP TO SWITCH FEED</span>
+              </div>
+              <div class="flex items-center justify-center gap-2 flex-wrap">
+                <button
+                  type="button"
+                  data-img-key="kitchen"
+                  data-cluster="Cluster 04 — Andheri West"
+                  data-liters="42.6"
+                  data-receipt="#GF-0421"
+                  data-co2="31.1"
+                  class="hero-cluster-pill touch-reactive px-3 py-1 rounded-full bg-[#22C55E]/20 border border-[#22C55E]/50 font-mono text-[10px] text-[#22C55E] font-semibold transition"
+                >
+                  04 Andheri
+                </button>
+                <button
+                  type="button"
+                  data-img-key="burner"
+                  data-cluster="Cluster 01 — Lower Parel"
+                  data-liters="68.4"
+                  data-receipt="#GF-0819"
+                  data-co2="48.2"
+                  class="hero-cluster-pill touch-reactive px-3 py-1 rounded-full bg-white/[0.04] border border-white/10 font-mono text-[10px] text-gray-400 hover:text-white transition"
+                >
+                  01 Lower Parel
+                </button>
+                <button
+                  type="button"
+                  data-img-key="drum"
+                  data-cluster="Cluster 02 — Pune Kalyani Hub"
+                  data-liters="94.0"
+                  data-receipt="#GF-1104"
+                  data-co2="64.5"
+                  class="hero-cluster-pill touch-reactive px-3 py-1 rounded-full bg-white/[0.04] border border-white/10 font-mono text-[10px] text-gray-400 hover:text-white transition"
+                >
+                  02 Pune
+                </button>
+                <button
+                  type="button"
+                  data-img-key="hub"
+                  data-cluster="Cluster 03 — BKC Refinery Route"
+                  data-liters="118.5"
+                  data-receipt="#GF-1592"
+                  data-co2="81.0"
+                  class="hero-cluster-pill touch-reactive px-3 py-1 rounded-full bg-white/[0.04] border border-white/10 font-mono text-[10px] text-gray-400 hover:text-white transition"
+                >
+                  03 BKC Hub
+                </button>
               </div>
             </div>
+
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- MARQUEE TICKER STRIP                                                -->
+    <!-- =================================================================== -->
+    <div class="bg-[#08100C] border-y border-[#22C55E]/15 py-4 overflow-hidden select-none">
+      <div class="marquee-track flex items-center gap-10 font-mono text-[11px] tracking-[0.24em] uppercase text-gray-400">
+        <span class="flex items-center gap-10">
+          <span>ISCC CERTIFIED</span>
+          <span class="text-[#22C55E]">&#127807;</span>
+          <span>ZERO-HAZARD KITCHEN NETWORK</span>
+          <span class="text-[#22C55E]">&#127807;</span>
+          <span>ISCC CERTIFIED AGGREGATION</span>
+          <span class="text-[#22C55E]">&#127807;</span>
+          <span>FSSAI COMPLIANT</span>
+          <span class="text-[#22C55E]">&#127807;</span>
+          <span>INSTANT BANK PAYOUTS</span>
+          <span class="text-[#22C55E]">&#127807;</span>
+        </span>
+        <span class="flex items-center gap-10">
+          <span>ISCC CERTIFIED</span>
+          <span class="text-[#22C55E]">&#127807;</span>
+          <span>ZERO-HAZARD KITCHEN NETWORK</span>
+          <span class="text-[#22C55E]">&#127807;</span>
+          <span>ISCC CERTIFIED AGGREGATION</span>
+          <span class="text-[#22C55E]">&#127807;</span>
+          <span>FSSAI COMPLIANT</span>
+          <span class="text-[#22C55E]">&#127807;</span>
+          <span>INSTANT BANK PAYOUTS</span>
+          <span class="text-[#22C55E]">&#127807;</span>
+        </span>
+      </div>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- SECTION 01: THE THREAT ("The 60% Crisis in Your Kitchen.")          -->
+    <!-- Exact Match to image_adb67c.jpg + Smooth 60fps Scroll Count-Up      -->
+    <!-- =================================================================== -->
+    <section id="threatSection" class="scroll-mt-20 bg-organic-dark relative py-24 lg:py-32 overflow-hidden">
+      
+      <!-- Giant Outlined Watermark "TOXIC" Sliding in from Left -->
+      <div id="toxicBgWatermark" class="bg-slide-from-left stroke-watermark-toxic absolute top-6 left-[-1%] sm:left-[2%] font-display font-extrabold text-[6.5rem] sm:text-[10.5rem] lg:text-[13rem] leading-none tracking-tight">
+        TOXIC
+      </div>
+
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-stretch">
+          
+          <!-- Left Column: Header + 60% & 25% Cards + TEST REHEAT TPC Card (Exact image_adb67c.jpg Layout) -->
+          <div class="lg:col-span-6 flex flex-col justify-between gap-6">
+            <div class="space-y-5">
+              <div class="reveal reveal-left flex items-center gap-4 font-mono text-xs tracking-[0.22em] uppercase">
+                <span class="text-[#22C55E] font-bold">01</span>
+                <span class="w-12 h-[1px] bg-[#22C55E]/40"></span>
+                <span class="text-gray-400">THE THREAT</span>
+              </div>
+
+              <h2 style="--delay: 50ms" class="reveal reveal-up font-display text-4xl sm:text-5xl lg:text-[3.65rem] font-extrabold text-white tracking-tight leading-[1.06]">
+                The <span class="text-[#EF4444]">60%</span> Crisis<br />
+                in Your Kitchen.
+              </h2>
+
+              <p style="--delay: 100ms" class="reveal reveal-up text-gray-400 text-base sm:text-[1.05rem] leading-relaxed max-w-xl">
+                Shockingly, nearly 60% of all Used Cooking Oil generated in India finds its way back into the food stream &mdash; resold by informal vendors, reheated, and returned to the plate. Every reheat multiplies toxic Total Polar Compounds.
+              </p>
+            </div>
+
+            <!-- 60% & 25% Callout Cards (Observed directly by #crisisStatsGrid for ultra-smooth scroll counting) -->
+            <div id="crisisStatsGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              
+              <!-- Left Card: 60% HIGH RISK (Exact match to image_adb67c.jpg) -->
+              <div id="callout60Box" style="--stat-delay: 0ms" class="stat-pop-card crisis-card-60 touch-reactive cursor-pointer rounded-2xl p-6 sm:p-7 flex flex-col justify-between group">
+                <div>
+                  <div class="tabular-nums font-display font-extrabold text-5xl sm:text-6xl lg:text-[4.25rem] leading-none text-[#EF4444] tracking-tight transition-transform duration-300 group-hover:scale-[1.03] origin-left">
+                    <span id="crisis60Counter">0</span><span>%</span>
+                  </div>
+
+                  <!-- Smooth rAF-Driven Two-Colour Left-to-Right Illumination Bar -->
+                  <div class="h-1.5 w-full rounded-full bg-white/[0.08] overflow-hidden my-4">
+                    <div id="crisis60GaugeBar" class="h-full rounded-full bg-gradient-to-r from-[#F59E0B] to-[#EF4444] shadow-[0_0_12px_rgba(239,68,68,0.45)]" style="width: 0%;"></div>
+                  </div>
+
+                  <div class="font-mono text-[10px] sm:text-[11px] tracking-[0.22em] uppercase text-[#EF4444] font-semibold mb-2">
+                    HIGH RISK
+                  </div>
+                </div>
+
+                <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">
+                  of UCO in India returns to the food stream through illegal recirculation.
+                </p>
+              </div>
+
+              <!-- Right Card: 25% FSSAI MANDATE (Exact match to image_adb67c.jpg) -->
+              <div id="callout25Box" style="--stat-delay: 90ms" class="stat-pop-card crisis-card-25 touch-reactive cursor-pointer rounded-2xl p-6 sm:p-7 flex flex-col justify-between group">
+                <div>
+                  <div id="crisis25Wrapper" class="tabular-nums font-display font-extrabold text-5xl sm:text-6xl lg:text-[4.25rem] leading-none text-[#F59E0B] tracking-tight transition-transform duration-300 group-hover:scale-[1.03] origin-left">
+                    <span id="crisis25Counter">0</span><span>%</span>
+                  </div>
+
+                  <!-- Smooth rAF-Driven Two-Colour Left-to-Right Illumination Bar (Matching 60% Card Style) -->
+                  <div class="h-1.5 w-full rounded-full bg-white/[0.08] overflow-hidden my-4">
+                    <div id="crisis25GaugeBar" class="h-full rounded-full bg-gradient-to-r from-[#FDE047] to-[#F59E0B] shadow-[0_0_12px_rgba(245,158,11,0.45)]" style="width: 0%;"></div>
+                  </div>
+
+                  <div id="crisis25SubLabel" class="font-mono text-[10px] sm:text-[11px] tracking-[0.22em] uppercase text-[#F59E0B] font-semibold mb-2">
+                    FSSAI MANDATE
+                  </div>
+                </div>
+
+                <p id="crisis25Desc" class="text-xs sm:text-sm text-gray-300 leading-relaxed">
+                  TPC limit &mdash; oil above this is strictly unsafe for human consumption.
+                </p>
+              </div>
+
+            </div>
+
+            <!-- Bottom Card: TEST REHEAT TPC (Exact match to image_adb67c.jpg) -->
+            <div style="--delay: 140ms" class="reveal reveal-up rounded-2xl bg-[#0B120E]/95 border border-white/[0.08] p-5 shadow-xl">
+              <div class="flex items-center justify-between gap-2 mb-3.5">
+                <span class="font-mono text-[10px] sm:text-[11px] tracking-[0.22em] uppercase text-gray-400">
+                  TEST REHEAT TPC
+                </span>
+                <span id="reheatSimActiveBadge" class="font-mono text-[10px] sm:text-[11px] tracking-[0.18em] uppercase text-[#F59E0B] font-semibold">
+                  FSSAI MANDATE &bull; 25% TPC
+                </span>
+              </div>
+
+              <!-- 3-Option Segmented Bar Matching image_adb67c.jpg -->
+              <div class="grid grid-cols-3 gap-2 p-1.5 rounded-xl bg-[#060A08] border border-white/[0.05]">
+                <div data-reheat-card="14" class="reheat-option-card rounded-lg">
+                  <button
+                    type="button"
+                    data-tpc="14"
+                    data-meter="34%"
+                    data-color="#22C55E"
+                    data-status="1ST REHEAT (SAFE)"
+                    data-desc="14% TPC — Fresh golden frying batch well below statutory FSSAI limit."
+                    class="reheat-pill-btn w-full py-2.5 px-2 rounded-lg bg-transparent hover:bg-white/[0.04] border border-transparent font-mono text-[10px] sm:text-[11px] font-medium text-gray-300 hover:text-white flex items-center justify-center gap-1.5 transition"
+                  >
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#22C55E] shrink-0"></span>
+                    <span class="truncate">1st Fry (14%)</span>
+                  </button>
+                </div>
+
+                <div data-reheat-card="25" class="reheat-option-card active-reheat-option rounded-lg">
+                  <button
+                    type="button"
+                    data-tpc="25"
+                    data-meter="62%"
+                    data-color="#F59E0B"
+                    data-status="FSSAI MANDATE"
+                    data-desc="TPC limit — oil above this is strictly unsafe for human consumption."
+                    class="reheat-pill-btn w-full py-2.5 px-2 rounded-lg bg-[#F59E0B]/[0.14] border border-[#F59E0B]/45 font-mono text-[10px] sm:text-[11px] font-semibold text-[#FDE68A] flex items-center justify-center gap-1.5 shadow-sm transition"
+                  >
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#F59E0B] shrink-0"></span>
+                    <span class="truncate">3rd Fry (25% Limit)</span>
+                  </button>
+                </div>
+
+                <div data-reheat-card="38" class="reheat-option-card rounded-lg">
+                  <button
+                    type="button"
+                    data-tpc="38"
+                    data-meter="96%"
+                    data-color="#EF4444"
+                    data-status="ILLEGAL RECIRCULATION"
+                    data-desc="38% TPC — Extreme polar compound toxicity & free-radical saturation."
+                    class="reheat-pill-btn w-full py-2.5 px-2 rounded-lg bg-transparent hover:bg-white/[0.04] border border-transparent font-mono text-[10px] sm:text-[11px] font-medium text-gray-300 hover:text-white flex items-center justify-center gap-1.5 transition"
+                  >
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#EF4444] shrink-0"></span>
+                    <span class="truncate">6th Fry (38% Toxic)</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Bottom Gradient Spectrum Bar Matching image_adb67c.jpg -->
+              <div class="mt-3.5 h-1 w-full rounded-full bg-white/[0.08] overflow-hidden">
+                <div id="reheatTpcSpectrumBar" class="h-full rounded-full bg-gradient-to-r from-[#22C55E] via-[#F59E0B] to-[#EF4444] transition-all duration-500" style="width: 62%;"></div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Right Column: Balanced Header + 2x2 Architectural Health Impact Grid (Aligned to Left Column) -->
+          <div class="lg:col-span-6 flex flex-col justify-end gap-5">
+            
+            <!-- Subtle Section Alignment Bar so the 2x2 grid sits in crisp symmetry with the 60%/25% + Test Reheat TPC stack -->
+            <div class="reveal reveal-right flex items-center justify-between px-1 pb-1 border-b border-white/[0.07]">
+              <div class="flex items-center gap-2.5">
+                <span class="w-2 h-2 rounded-full bg-[#EF4444]"></span>
+                <span class="font-sans text-xs font-bold uppercase tracking-[0.16em] text-gray-300">Clinical Health Impact of Reheated Oil</span>
+              </div>
+              <span class="font-sans text-xs text-gray-400">Select card for details</span>
+            </div>
+
+            <!-- 2x2 Symmetrical Architectural Health Cards (Zero Slide Bars, Clean & Balanced) -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              
+              <!-- Card 1: Hypertension -->
+              <div
+                data-disease-id="hypertension"
+                style="--delay: 120ms"
+                class="disease-hazard-card reveal reveal-pop touch-reactive cursor-pointer rounded-2xl p-6 flex flex-col justify-between group overflow-hidden"
+              >
+                <div>
+                  <div class="flex items-start justify-between gap-3">
+                    <div class="w-11 h-11 rounded-xl bg-[#EF4444]/12 border border-[#EF4444]/30 text-[#EF4444] flex items-center justify-center transition-transform duration-300 group-hover:scale-105 shrink-0">
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                      </svg>
+                    </div>
+                    <span class="px-2.5 py-1 rounded-full bg-[#EF4444]/10 border border-[#EF4444]/25 font-sans text-[11px] font-semibold text-red-300">
+                      Vascular Strain
+                    </span>
+                  </div>
+
+                  <div class="mt-5">
+                    <h3 class="font-display font-bold text-lg sm:text-xl text-white group-hover:text-red-400 transition">
+                      Hypertension
+                    </h3>
+                    <p class="font-sans text-xs sm:text-sm text-gray-300 leading-relaxed mt-1.5">
+                      Cardiovascular strain from oxidised fats and depleted vascular nitric oxide.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="mt-5 pt-3.5 border-t border-white/[0.07] flex items-center justify-between font-sans text-xs">
+                  <span class="text-gray-400 font-medium flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#EF4444]"></span>
+                    <span>Endothelial Stiffness</span>
+                  </span>
+                  <span class="text-red-400 group-hover:text-white transition font-semibold inline-flex items-center gap-1.5">
+                    <span>Clinical Brief</span>
+                    <span class="w-5 h-5 rounded-full bg-white/[0.06] group-hover:bg-[#EF4444] text-red-300 group-hover:text-white flex items-center justify-center transition-all text-[11px]">&rarr;</span>
+                  </span>
+                </div>
+              </div>
+
+              <!-- Card 2: Liver Disease -->
+              <div
+                data-disease-id="liver"
+                style="--delay: 180ms"
+                class="disease-hazard-card reveal reveal-pop touch-reactive cursor-pointer rounded-2xl p-6 flex flex-col justify-between group overflow-hidden"
+              >
+                <div>
+                  <div class="flex items-start justify-between gap-3">
+                    <div class="w-11 h-11 rounded-xl bg-[#EF4444]/12 border border-[#EF4444]/30 text-[#EF4444] flex items-center justify-center transition-transform duration-300 group-hover:scale-105 shrink-0">
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 12h4l3-8 4 16 3-8h4"/>
+                      </svg>
+                    </div>
+                    <span class="px-2.5 py-1 rounded-full bg-[#F59E0B]/10 border border-[#F59E0B]/25 font-sans text-[11px] font-semibold text-amber-300">
+                      Hepatic Toxicity
+                    </span>
+                  </div>
+
+                  <div class="mt-5">
+                    <h3 class="font-display font-bold text-lg sm:text-xl text-white group-hover:text-red-400 transition">
+                      Liver Disease
+                    </h3>
+                    <p class="font-sans text-xs sm:text-sm text-gray-300 leading-relaxed mt-1.5">
+                      Cellular toxicity and aldehyde compounds accumulate with every reheat.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="mt-5 pt-3.5 border-t border-white/[0.07] flex items-center justify-between font-sans text-xs">
+                  <span class="text-gray-400 font-medium flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#F59E0B]"></span>
+                    <span>4-HNE Lipid Stress</span>
+                  </span>
+                  <span class="text-red-400 group-hover:text-white transition font-semibold inline-flex items-center gap-1.5">
+                    <span>Clinical Brief</span>
+                    <span class="w-5 h-5 rounded-full bg-white/[0.06] group-hover:bg-[#EF4444] text-red-300 group-hover:text-white flex items-center justify-center transition-all text-[11px]">&rarr;</span>
+                  </span>
+                </div>
+              </div>
+
+              <!-- Card 3: Atherosclerosis -->
+              <div
+                data-disease-id="atherosclerosis"
+                style="--delay: 240ms"
+                class="disease-hazard-card reveal reveal-pop touch-reactive cursor-pointer rounded-2xl p-6 flex flex-col justify-between group overflow-hidden"
+              >
+                <div>
+                  <div class="flex items-start justify-between gap-3">
+                    <div class="w-11 h-11 rounded-xl bg-[#EF4444]/12 border border-[#EF4444]/30 text-[#EF4444] flex items-center justify-center transition-transform duration-300 group-hover:scale-105 shrink-0">
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                      </svg>
+                    </div>
+                    <span class="px-2.5 py-1 rounded-full bg-[#EF4444]/10 border border-[#EF4444]/25 font-sans text-[11px] font-semibold text-red-300">
+                      Arterial Plaque
+                    </span>
+                  </div>
+
+                  <div class="mt-5">
+                    <h3 class="font-display font-bold text-lg sm:text-xl text-white group-hover:text-red-400 transition">
+                      Atherosclerosis
+                    </h3>
+                    <p class="font-sans text-xs sm:text-sm text-gray-300 leading-relaxed mt-1.5">
+                      Vascular plaque from polar compounds oxidises LDL and narrows arteries.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="mt-5 pt-3.5 border-t border-white/[0.07] flex items-center justify-between font-sans text-xs">
+                  <span class="text-gray-400 font-medium flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#EF4444]"></span>
+                    <span>Oxidised LDL Surge</span>
+                  </span>
+                  <span class="text-red-400 group-hover:text-white transition font-semibold inline-flex items-center gap-1.5">
+                    <span>Clinical Brief</span>
+                    <span class="w-5 h-5 rounded-full bg-white/[0.06] group-hover:bg-[#EF4444] text-red-300 group-hover:text-white flex items-center justify-center transition-all text-[11px]">&rarr;</span>
+                  </span>
+                </div>
+              </div>
+
+              <!-- Card 4: Alzheimer's Link -->
+              <div
+                data-disease-id="alzheimers"
+                style="--delay: 300ms"
+                class="disease-hazard-card reveal reveal-pop touch-reactive cursor-pointer rounded-2xl p-6 flex flex-col justify-between group overflow-hidden"
+              >
+                <div>
+                  <div class="flex items-start justify-between gap-3">
+                    <div class="w-11 h-11 rounded-xl bg-[#EF4444]/12 border border-[#EF4444]/30 text-[#EF4444] flex items-center justify-center transition-transform duration-300 group-hover:scale-105 shrink-0">
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                      </svg>
+                    </div>
+                    <span class="px-2.5 py-1 rounded-full bg-[#F59E0B]/10 border border-[#F59E0B]/25 font-sans text-[11px] font-semibold text-amber-300">
+                      Neuro-Vascular
+                    </span>
+                  </div>
+
+                  <div class="mt-5">
+                    <h3 class="font-display font-bold text-lg sm:text-xl text-white group-hover:text-red-400 transition">
+                      Alzheimer’s Link
+                    </h3>
+                    <p class="font-sans text-xs sm:text-sm text-gray-300 leading-relaxed mt-1.5">
+                      Neurodegenerative risk markers linked to peroxidised cooking oil intake.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="mt-5 pt-3.5 border-t border-white/[0.07] flex items-center justify-between font-sans text-xs">
+                  <span class="text-gray-400 font-medium flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#F59E0B]"></span>
+                    <span>Blood-Brain Barrier</span>
+                  </span>
+                  <span class="text-red-400 group-hover:text-white transition font-semibold inline-flex items-center gap-1.5">
+                    <span>Clinical Brief</span>
+                    <span class="w-5 h-5 rounded-full bg-white/[0.06] group-hover:bg-[#EF4444] text-red-300 group-hover:text-white flex items-center justify-center transition-all text-[11px]">&rarr;</span>
+                  </span>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Balanced Clinical Summary Bar aligning bottom edge with TEST REHEAT TPC -->
+            <div style="--delay: 340ms" class="reveal reveal-up rounded-2xl bg-[#0B120E]/95 border border-white/[0.08] px-5 py-4 flex items-center justify-between gap-4 shadow-xl">
+              <div class="flex items-center gap-3">
+                <span class="w-8 h-8 rounded-xl bg-[#22C55E]/15 border border-[#22C55E]/35 text-[#4ADE80] flex items-center justify-center shrink-0">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                  </svg>
+                </span>
+                <div>
+                  <div class="font-sans text-xs font-bold text-white">GeoField Closed-Loop Protection</div>
+                  <div class="font-sans text-[11px] text-gray-400">Diverts 100% of collected kitchen oil into certified clean biodiesel</div>
+                </div>
+              </div>
+              <span class="hidden sm:inline-flex px-2.5 py-1 rounded-md bg-[#22C55E]/15 text-[#4ADE80] font-mono text-[10px] font-semibold uppercase tracking-wider shrink-0">
+                RUCO Verified
+              </span>
+            </div>
+
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ========================================================================= -->
-    <!-- 7. FINAL CTA / REGISTER SECTION (#register)                               -->
-    <!-- ========================================================================= -->
-    <section
-      id="register"
-      ref="ctaSectionRef"
-      data-testid="final-cta-section"
-      class="relative scroll-mt-20 overflow-hidden py-20 sm:py-36 lg:py-44"
-    >
-      <div class="absolute inset-0 overflow-hidden">
-        <img
-          src="https://images.unsplash.com/photo-1749983055056-dddeb9dad995?crop=entropy&cs=srgb&fm=jpg&q=85&w=1600"
-          alt="Wind turbine generating green power"
-          aria-hidden="true"
-          class="h-full w-full object-cover opacity-25 will-change-transform"
-          :style="ctaBgStyle"
-          loading="lazy"
-        />
-        <div class="absolute inset-0 bg-gradient-to-b from-obsidian via-obsidian/80 to-obsidian"></div>
-        <div
-          class="absolute inset-0"
-          style="background: radial-gradient(ellipse 50% 45% at 50% 55%, rgba(34,197,94,0.14) 0%, transparent 70%);"
-        ></div>
+    <!-- =================================================================== -->
+    <!-- SECTION 02: THE PROCESS ("Frictionless Disposal. Zero Interruptions.")-->
+    <!-- =================================================================== -->
+    <section id="solutionSection" class="scroll-mt-20 bg-process-ivory relative py-24 lg:py-32 overflow-hidden">
+
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        
+        <!-- Section Index & Split Header -->
+        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
+          <div class="space-y-4 reveal reveal-left">
+            <div class="flex items-center gap-4 font-mono text-xs tracking-[0.22em] uppercase">
+              <span class="text-[#16A34A] font-bold">02</span>
+              <span class="w-12 h-[1px] bg-[#16A34A]/40"></span>
+              <span class="text-gray-500">THE PROCESS</span>
+            </div>
+
+            <h2 class="font-display text-4xl sm:text-5xl lg:text-[3.6rem] font-extrabold tracking-tight leading-[1.06] text-[#111814]">
+              Frictionless Disposal.<br />
+              <span class="text-[#16A34A]">Zero Interruptions.</span>
+            </h2>
+          </div>
+
+          <p class="reveal reveal-right text-gray-600 text-sm sm:text-base leading-relaxed max-w-md lg:pb-2">
+            Three steps between your kitchen and full FSSAI compliance. No calls, no paperwork, no waiting on informal collectors.
+          </p>
+        </div>
+
+        <!-- Choreographed Horizontal Pipeline Track with Flowing Emerald Energy Beam & Gliding Fleet Node -->
+        <div id="processPipelineContainer" class="mt-20 mb-14 relative hidden md:block reveal reveal-up">
+          <!-- Recessed Pipeline Conduit Channel -->
+          <div class="h-2.5 w-full rounded-full bg-[#111814]/[0.09] shadow-inner relative overflow-hidden">
+            <div id="processTrackProgressFill" class="h-full rounded-full process-beam-animated" style="width: 52%;"></div>
+          </div>
+
+          <!-- 3 Interactive Waypoint Beacons at 16.66%, 50%, 83.33% -->
+          <button type="button" data-step="1" class="process-node-dot group absolute top-1/2 left-[16.66%] -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white border-2 border-[#16A34A] shadow-md hover:scale-125 transition-all duration-300 z-10 flex items-center justify-center" aria-label="Step 1">
+            <span class="font-mono text-[10px] font-bold text-[#16A34A]">01</span>
+            <span class="absolute -bottom-7 whitespace-nowrap font-mono text-[10px] tracking-[0.16em] uppercase text-gray-500 group-hover:text-[#16A34A] transition">QR ASSIGNED</span>
+          </button>
+
+          <button type="button" data-step="2" class="process-node-dot group absolute top-1/2 left-[50%] -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white border-2 border-[#16A34A] shadow-md hover:scale-125 transition-all duration-300 z-10 flex items-center justify-center" aria-label="Step 2">
+            <span class="font-mono text-[10px] font-bold text-[#16A34A]">02</span>
+            <span class="absolute -bottom-7 whitespace-nowrap font-mono text-[10px] tracking-[0.16em] uppercase text-[#16A34A] font-semibold transition">CLUSTER PICKUP</span>
+          </button>
+
+          <button type="button" data-step="3" class="process-node-dot group absolute top-1/2 left-[83.33%] -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white border-2 border-[#16A34A] shadow-md hover:scale-125 transition-all duration-300 z-10 flex items-center justify-center" aria-label="Step 3">
+            <span class="font-mono text-[10px] font-bold text-[#16A34A]">03</span>
+            <span class="absolute -bottom-7 whitespace-nowrap font-mono text-[10px] tracking-[0.16em] uppercase text-gray-500 group-hover:text-[#16A34A] transition">INSTANT RECEIPT</span>
+          </button>
+
+          <!-- Gliding 3D Glowing Fleet Puck + Live Telemetry Badge -->
+          <div id="glidingProcessPuck" class="absolute top-1/2 left-[50%] -translate-x-1/2 -translate-y-1/2 z-20 pointer-events-none" style="transition: left 0.75s cubic-bezier(0.22, 1, 0.36, 1);">
+            <div id="processPuckTelemetryPill" class="absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap px-3 py-1 rounded-full bg-[#111814] text-[#22C55E] font-mono text-[10px] font-bold tracking-[0.16em] uppercase shadow-lg border border-[#22C55E]/40">
+              STEP 02 &bull; FLEET ROUTED
+            </div>
+            <span class="process-node-pulse absolute top-1/2 left-1/2 w-16 h-16 rounded-full bg-[#22C55E]/35"></span>
+            <div class="relative w-14 h-14 rounded-full bg-gradient-to-br from-[#4ADE80] to-[#16A34A] text-[#050A07] flex items-center justify-center shadow-[0_10px_28px_rgba(22,163,74,0.55),inset_0_2px_0_rgba(255,255,255,0.45)] border-2 border-white">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3 Crisp White Popping Process Cards (01, 02, 03) -->
+        <div id="processCardsGrid" class="mt-10 md:mt-2 grid grid-cols-1 lg:grid-cols-3 gap-8">
+          
+          <!-- STEP 01 CARD -->
+          <div style="--delay: 320ms" data-step-card="1" class="reveal reveal-pop process-white-card touch-reactive cursor-pointer rounded-3xl p-8 sm:p-9 flex flex-col justify-between">
+            <div>
+              <div class="flex items-start justify-between mb-7">
+                <div class="step-icon-box w-14 h-14 rounded-2xl bg-[#22C55E]/15 text-[#16A34A] flex items-center justify-center transition-all duration-500">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 4h6v6H4V4zm10 0h6v6h-6V4zM4 14h6v6H4v-6zm10 3h3m3 0h-3m0 0v-3m0 3v3"/>
+                  </svg>
+                </div>
+                <span class="step-num-watermark font-display font-extrabold text-5xl text-gray-200 select-none transition-colors duration-500">01</span>
+              </div>
+
+              <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#16A34A]/10 text-[#16A34A] font-mono text-[10px] font-bold tracking-[0.14em] uppercase mb-3">
+                <span>&check; 60-SECOND ONBOARDING</span>
+              </div>
+
+              <h3 class="font-display font-bold text-xl sm:text-2xl text-[#111814]">Register &amp; Get Your QR</h3>
+              <p class="mt-3 text-sm text-gray-600 leading-relaxed">
+                Sign up in 60 seconds and receive a unique, waterproof QR code assigned directly to your restaurant.
+              </p>
+            </div>
+
+            <div class="mt-8 pt-2">
+              <div class="flex items-center justify-between font-mono text-[10px] tracking-[0.14em] uppercase text-gray-400 mb-2">
+                <span>STEP 01 PIPELINE</span>
+                <span class="step-status-text text-[#16A34A] font-semibold">READY</span>
+              </div>
+              <div class="hidden"><div class="step-bottom-bar"></div></div>
+            </div>
+          </div>
+
+          <!-- STEP 02 CARD -->
+          <div style="--delay: 460ms" data-step-card="2" class="reveal reveal-pop process-white-card active-process-card touch-reactive cursor-pointer rounded-3xl p-8 sm:p-9 flex flex-col justify-between">
+            <div>
+              <div class="flex items-start justify-between mb-7">
+                <div class="step-icon-box w-14 h-14 rounded-2xl bg-[#22C55E] text-[#050A07] flex items-center justify-center shadow-lg shadow-[#22C55E]/30 transition-all duration-500">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1"/>
+                  </svg>
+                </div>
+                <span class="step-num-watermark font-display font-extrabold text-5xl text-[#16A34A]/30 select-none transition-colors duration-500">02</span>
+              </div>
+
+              <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#16A34A]/15 text-[#16A34A] font-mono text-[10px] font-bold tracking-[0.14em] uppercase mb-3">
+                <span>&check; AI CLUSTER ROUTING</span>
+              </div>
+
+              <h3 class="font-display font-bold text-xl sm:text-2xl text-[#111814]">Cluster-Based Pickups</h3>
+              <p class="mt-3 text-sm text-gray-600 leading-relaxed">
+                Our hyper-local fleet runs optimised cluster routes &mdash; oil is collected quickly, cleanly, and on schedule.
+              </p>
+            </div>
+
+            <div class="mt-8 pt-2">
+              <div class="flex items-center justify-between font-mono text-[10px] tracking-[0.14em] uppercase text-gray-400 mb-2">
+                <span>STEP 02 PIPELINE</span>
+                <span class="step-status-text text-[#16A34A] font-bold">ACTIVE STAGE</span>
+              </div>
+              <div class="hidden"><div class="step-bottom-bar"></div></div>
+            </div>
+          </div>
+
+          <!-- STEP 03 CARD -->
+          <div style="--delay: 600ms" data-step-card="3" class="reveal reveal-pop process-white-card touch-reactive cursor-pointer rounded-3xl p-8 sm:p-9 flex flex-col justify-between">
+            <div>
+              <div class="flex items-start justify-between mb-7">
+                <div class="step-icon-box w-14 h-14 rounded-2xl bg-[#22C55E]/15 text-[#16A34A] flex items-center justify-center transition-all duration-500">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 8V6a2 2 0 012-2h2M4 16v2a2 2 0 002 2h2m8-16h2a2 2 0 012 2v2m-4 12h2a2 2 0 002-2v-2M8 12h8"/>
+                  </svg>
+                </div>
+                <span class="step-num-watermark font-display font-extrabold text-5xl text-gray-200 select-none transition-colors duration-500">03</span>
+              </div>
+
+              <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#16A34A]/10 text-[#16A34A] font-mono text-[10px] font-bold tracking-[0.14em] uppercase mb-3">
+                <span>&check; DIGITAL FSSAI RECEIPT</span>
+              </div>
+
+              <h3 class="font-display font-bold text-xl sm:text-2xl text-[#111814]">Scan &amp; Done</h3>
+              <p class="mt-3 text-sm text-gray-600 leading-relaxed">
+                The agent scans your QR, weight is auto-logged, and a digital FSSAI-compliant receipt is issued instantly.
+              </p>
+            </div>
+
+            <div class="mt-8 pt-2">
+              <div class="flex items-center justify-between font-mono text-[10px] tracking-[0.14em] uppercase text-gray-400 mb-2">
+                <span>STEP 03 PIPELINE</span>
+                <span class="step-status-text text-[#16A34A] font-semibold">INSTANT SETTLE</span>
+              </div>
+              <div class="hidden"><div class="step-bottom-bar"></div></div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Bottom Transition Prompt -->
+        <div class="mt-16 pt-2 text-center reveal reveal-up">
+          <a href="#impactSection" class="nav-scroll-link inline-flex items-center gap-2.5 font-mono text-[10px] sm:text-[11px] tracking-[0.28em] uppercase text-gray-500 hover:text-[#16A34A] transition">
+            <span class="text-[#16A34A] font-bold">&darr;</span>
+            <span>THEN WATCH WHAT YOUR OIL BECOMES</span>
+          </a>
+        </div>
+
       </div>
 
-      <div class="relative z-10 mx-auto max-w-5xl px-5 text-center sm:px-8">
-        <p class="font-mono text-[10px] sm:text-[11px] uppercase tracking-[0.35em] text-bio scroll-reveal" data-testid="final-cta-eyebrow">
-          04 — Join the Network
-        </p>
+      <!-- Giant Bottom Tonal Watermark "SCAN & DONE" (Slides in Deliberately from Right) -->
+      <div class="pointer-events-none select-none overflow-hidden w-full mt-6 -mb-6 sm:-mb-10 text-center">
+        <div id="scanDoneBgWatermark" class="bg-slide-from-right font-display font-extrabold text-[4.4rem] sm:text-[8.2rem] lg:text-[11.5rem] leading-[0.86] tracking-tight text-[#16A34A]/[0.085] uppercase whitespace-nowrap">
+          SCAN &amp; DONE
+        </div>
+      </div>
+    </section>
 
-        <h2
-          data-testid="final-cta-headline"
-          class="mt-6 sm:mt-8 font-display text-3xl font-extrabold leading-[1.08] tracking-tight text-slate-50 sm:text-5xl lg:text-6xl scroll-reveal delay-150"
-        >
-          <span class="block">Ready to clean up</span>
-          <span class="block">your kitchen — and</span>
-          <span class="block bg-gradient-to-r from-bio via-limeglow to-bio bg-clip-text text-transparent">
-            your conscience?
-          </span>
+    <!-- =================================================================== -->
+    <!-- SECTION 03: THE REWARD ("Track Your Green Footprint." + CONSOLE)    -->
+    <!-- =================================================================== -->
+    <section id="impactSection" class="scroll-mt-20 bg-organic-dark relative py-24 lg:py-32 overflow-hidden border-t border-white/5">
+      
+      <!-- Giant Outlined Watermark "GREEN" in Top-Left (Slides in from Left first, then Information Appears in Sequence) -->
+      <div id="greenBgWatermark" class="bg-slide-from-left stroke-watermark-green absolute top-6 left-[-1%] font-display font-extrabold text-[6.5rem] sm:text-[10.5rem] lg:text-[13rem] leading-none tracking-tight">
+        GREEN
+      </div>
+
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          
+          <!-- Left Column: 03 THE REWARD + Copy + Interactive Scaling Volume Control -->
+          <div class="lg:col-span-5 space-y-7">
+            <div class="reveal reveal-left flex items-center gap-4 font-mono text-xs tracking-[0.22em] uppercase">
+              <span class="text-[#22C55E] font-bold">03</span>
+              <span class="w-12 h-[1px] bg-[#22C55E]/40"></span>
+              <span class="text-gray-400">THE REWARD</span>
+            </div>
+
+            <h2 style="--delay: 220ms" class="reveal reveal-up font-display text-4xl sm:text-5xl lg:text-[3.5rem] font-extrabold tracking-tight leading-[1.06]">
+              <span class="block text-white">Track Your</span>
+              <span class="block text-[#22C55E]">Green Footprint.</span>
+            </h2>
+
+            <p style="--delay: 340ms" class="reveal reveal-up text-gray-400 text-base sm:text-lg leading-relaxed">
+              Every litre you hand over is weighed, certified, and traced to a refinery. Your dashboard turns compliance into a story worth telling &mdash; and a payout worth collecting.
+            </p>
+
+            <div style="--delay: 180ms" class="reveal reveal-up flex items-center gap-2.5 font-mono text-[11px] tracking-[0.2em] uppercase text-gray-400 pt-1">
+              <span class="w-2 h-2 rounded-full bg-[#22C55E] animate-pulse"></span>
+              <span>DASHBOARD PREVIEW &mdash; SAMPLE DATA</span>
+            </div>
+
+            <!-- Interactive Tier Selector (Clean Segmented Buttons, Zero Slider Bar Clutter) -->
+            <div style="--delay: 220ms" class="reveal reveal-up p-5 rounded-2xl bg-white/[0.03] border border-white/10 space-y-3.5">
+              <div class="flex items-center justify-between text-xs">
+                <span class="font-mono text-[10px] tracking-[0.16em] uppercase text-gray-400">SELECT KITCHEN SCALE TIER</span>
+                <span id="consoleSliderBadge" class="px-2.5 py-0.5 rounded-full bg-[#22C55E]/15 border border-[#22C55E]/35 font-mono text-xs font-bold text-[#22C55E]">12,450 L</span>
+              </div>
+
+              <input id="consoleVolumeSlider" type="range" min="1500" max="30000" step="150" value="12450" class="sr-only" aria-label="Scale recycled liters volume" />
+
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                <button type="button" data-vol="3200" class="console-preset-btn touch-reactive py-2.5 px-3 rounded-xl bg-surface-950 border border-white/10 font-mono text-[10px] text-gray-400 hover:text-white transition">
+                  QSR Hub
+                </button>
+                <button type="button" data-vol="12450" class="console-preset-btn touch-reactive py-2.5 px-3 rounded-xl bg-[#22C55E]/20 border border-[#22C55E]/50 font-mono text-[10px] text-[#22C55E] font-semibold transition">
+                  Sample
+                </button>
+                <button type="button" data-vol="18600" class="console-preset-btn touch-reactive py-2.5 px-3 rounded-xl bg-surface-950 border border-white/10 font-mono text-[10px] text-gray-400 hover:text-white transition">
+                  Cloud 18k
+                </button>
+                <button type="button" data-vol="26000" class="console-preset-btn touch-reactive py-2.5 px-3 rounded-xl bg-surface-950 border border-white/10 font-mono text-[10px] text-gray-400 hover:text-white transition">
+                  Hotel 26k
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: GEOFIELD IMPACT CONSOLE -->
+          <div style="--delay: 420ms" class="lg:col-span-7 reveal reveal-pop">
+            <div id="impactConsoleShell" class="impact-console-shell rounded-[28px] p-6 sm:p-8 relative overflow-hidden">
+              
+              <!-- Console Top Window Bar -->
+              <div class="flex items-center justify-between pb-6 border-b border-white/[0.08]">
+                <div class="flex items-center gap-4">
+                  <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-[#EF4444]"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-[#F59E0B]"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-[#22C55E]"></span>
+                  </div>
+                  <span class="font-mono text-[11px] tracking-[0.22em] uppercase text-gray-400">
+                    GEOFIELD IMPACT CONSOLE
+                  </span>
+                </div>
+
+                <div class="flex items-center gap-3">
+                  <button id="openSampleCertBtn" class="hidden sm:inline-flex font-mono text-[10px] tracking-[0.14em] uppercase text-gray-400 hover:text-[#22C55E] transition">
+                    [RECEIPT PDF]
+                  </button>
+                  <span class="px-3 py-1 rounded-full bg-[#22C55E]/15 border border-[#22C55E]/40 font-mono text-[10px] tracking-[0.18em] uppercase text-[#22C55E] flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#22C55E] animate-ping"></span>
+                    <span>LIVE</span>
+                  </span>
+                </div>
+              </div>
+
+              <!-- 2x2 Grid of Popping & Scaling Metric Cards -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 my-6">
+                
+                <!-- Box 1: 12,450 L (LITERS RECYCLED) -->
+                <div data-metric-box="liters" class="console-metric-box touch-reactive cursor-pointer rounded-2xl p-5 sm:p-6">
+                  <div class="flex items-center justify-between mb-4">
+                    <span class="text-[#22C55E]">
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3c-4.97 5.39-7 8.48-7 11.5a7 7 0 1014 0c0-3.02-2.03-6.11-7-11.5z"/>
+                      </svg>
+                    </span>
+                    <span class="font-mono text-[10px] tracking-[0.14em] uppercase text-[#A3E635]">
+                      &#8599; +18% THIS MONTH
+                    </span>
+                  </div>
+                  <div id="consoleLitersValue" class="tabular-nums font-display font-extrabold text-3xl sm:text-4xl text-white tracking-tight">
+                    12,450 L
+                  </div>
+                  <div class="font-mono text-[10px] tracking-[0.2em] uppercase text-gray-500 mt-2">
+                    LITERS RECYCLED
+                  </div>
+                </div>
+
+                <!-- Box 2: 31.1 T CO2 (CARBON OFFSET) -->
+                <div data-metric-box="co2" class="console-metric-box touch-reactive cursor-pointer rounded-2xl p-5 sm:p-6">
+                  <div class="flex items-center justify-between mb-4">
+                    <span class="text-[#22C55E]">
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M14 5a3 3 0 113 3H3m13 8a3 3 0 103-3H3m9-4H3"/>
+                      </svg>
+                    </span>
+                    <span id="consoleTreesTag" class="font-mono text-[10px] tracking-[0.14em] uppercase text-[#A3E635]">
+                      &#8599; &approx; 1,420 TREES PLANTED
+                    </span>
+                  </div>
+                  <div id="consoleCo2Value" class="tabular-nums font-display font-extrabold text-3xl sm:text-4xl text-white tracking-tight">
+                    31.1 T CO₂
+                  </div>
+                  <div class="font-mono text-[10px] tracking-[0.2em] uppercase text-gray-500 mt-2">
+                    CARBON OFFSET
+                  </div>
+                </div>
+
+                <!-- Box 3: 1,86,000 L (WATER SAVED) -->
+                <div data-metric-box="water" class="console-metric-box touch-reactive cursor-pointer rounded-2xl p-5 sm:p-6">
+                  <div class="flex items-center justify-between mb-4">
+                    <span class="text-[#22C55E]">
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 10c2.5-2 5.5-2 8 0s5.5 2 8 0M3 15c2.5-2 5.5-2 8 0s5.5 2 8 0"/>
+                      </svg>
+                    </span>
+                    <span class="font-mono text-[10px] tracking-[0.14em] uppercase text-[#A3E635]">
+                      &#8599; WATER TABLE PROTECTED
+                    </span>
+                  </div>
+                  <div id="consoleWaterValue" class="tabular-nums font-display font-extrabold text-3xl sm:text-4xl text-white tracking-tight">
+                    1,86,000 L
+                  </div>
+                  <div class="font-mono text-[10px] tracking-[0.2em] uppercase text-gray-500 mt-2">
+                    WATER SAVED
+                  </div>
+                </div>
+
+                <!-- Box 4: ₹ 4,98,000 (REVENUE GENERATED @ ₹40/L AVG RATE) -->
+                <div data-metric-box="revenue" class="console-metric-box touch-reactive cursor-pointer rounded-2xl p-5 sm:p-6">
+                  <div class="flex items-center justify-between mb-4">
+                    <span class="text-[#22C55E] font-display font-bold text-base">&#8377;</span>
+                    <span class="font-sans text-[11px] font-semibold text-[#A3E635]">
+                      &#8599; AVG RATE &#8377;40/L VERIFIED
+                    </span>
+                  </div>
+                  <div id="consoleRevenueValue" class="tabular-nums font-display font-extrabold text-3xl sm:text-4xl text-white tracking-tight">
+                    &#8377; 4,98,000
+                  </div>
+                  <div class="font-sans text-xs font-semibold tracking-wider uppercase text-gray-400 mt-2">
+                    REVENUE GENERATED
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Bottom Graph Card: COLLECTION VELOCITY — 12 WEEKS (+214%) -->
+              <div class="console-metric-box rounded-2xl p-5 sm:p-6 relative">
+                <div class="flex items-center justify-between mb-3">
+                  <span class="font-mono text-[10px] tracking-[0.22em] uppercase text-gray-400">
+                    COLLECTION VELOCITY &mdash; 12 WEEKS
+                  </span>
+                  <div class="flex items-center gap-3">
+                    <span id="velocityHoverReadout" class="font-mono text-[10px] text-gray-400 hidden sm:inline">
+                      Hover or touch curve to inspect
+                    </span>
+                    <span id="velocityGrowthPct" class="tabular-nums font-mono text-xs font-bold text-[#22C55E]">
+                      +214%
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Interactive Left-to-Right Growing Spline SVG Chart -->
+                <div class="relative h-40 sm:h-44 w-full pt-2">
+                  <svg id="velocitySplineSvg" viewBox="0 0 600 152" class="w-full h-full overflow-visible cursor-crosshair">
+                    <defs>
+                      <linearGradient id="velocityEmeraldGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#22C55E" stop-opacity="0.42" />
+                        <stop offset="75%" stop-color="#22C55E" stop-opacity="0.09" />
+                        <stop offset="100%" stop-color="#22C55E" stop-opacity="0.0" />
+                      </linearGradient>
+                      <clipPath id="velocityLeftToRightClip">
+                        <rect id="velocityClipRect" x="0" y="0" width="600" height="152" />
+                      </clipPath>
+                    </defs>
+
+                    <g stroke="rgba(255,255,255,0.05)" stroke-width="1" stroke-dasharray="4 4">
+                      <line x1="15" y1="32" x2="585" y2="32" />
+                      <line x1="15" y1="68" x2="585" y2="68" />
+                      <line x1="15" y1="104" x2="585" y2="104" />
+                    </g>
+
+                    <g clip-path="url(#velocityLeftToRightClip)">
+                      <path id="velocityAreaPath" d="" fill="url(#velocityEmeraldGrad)" />
+                      <path id="velocityGlowPath" d="" fill="none" stroke="#22C55E" stroke-opacity="0.24" stroke-width="9" stroke-linecap="round" />
+                      <path id="velocityLinePath" d="" fill="none" stroke="#22C55E" stroke-width="3.2" stroke-linecap="round" />
+                    </g>
+
+                    <line id="velocityScrubLine" x1="585" y1="12" x2="585" y2="132" stroke="rgba(34,197,94,0.38)" stroke-width="1.2" stroke-dasharray="3 3" />
+                    <circle id="velocityActivePulse" cx="585" cy="24" r="11" fill="rgba(34,197,94,0.22)" />
+                    <circle id="velocityActiveDot" cx="585" cy="24" r="5.5" fill="#22C55E" stroke="#060A08" stroke-width="2.2" />
+
+                    <g fill="rgba(156,163,175,0.65)" font-family="JetBrains Mono, monospace" font-size="9" text-anchor="middle">
+                      <text x="15" y="147">W01</text>
+                      <text x="160" y="147">W04</text>
+                      <text x="315" y="147">W07</text>
+                      <text x="470" y="147">W10</text>
+                      <text x="585" y="147" fill="#22C55E" font-weight="700">W12</text>
+                    </g>
+                  </svg>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- SECTION 04: JOIN THE NETWORK                                        -->
+    <!-- =================================================================== -->
+    <section id="joinSection" class="scroll-mt-20 relative py-28 lg:py-36 overflow-hidden border-t border-white/5 bg-[#060C08]">
+      
+      <div class="pointer-events-none absolute inset-0 overflow-hidden">
+        <img
+          src="/images/wind-turbines.jpeg"
+          alt="Wind turbines on misty green rolling hills"
+          decoding="async"
+          class="w-full h-full object-cover object-center opacity-80"
+        />
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_54%,rgba(34,197,94,0.16)_0%,rgba(6,12,9,0.55)_58%,rgba(5,8,6,0.94)_100%)]"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-[#060A08] via-transparent to-[#050806]"></div>
+      </div>
+
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 space-y-7">
+        <div class="reveal reveal-up flex items-center justify-center gap-3 font-mono text-xs tracking-[0.24em] uppercase text-[#22C55E]">
+          <span>04</span>
+          <span>&mdash;</span>
+          <span>JOIN THE NETWORK</span>
+        </div>
+
+        <h2 style="--delay: 60ms" class="reveal reveal-pop font-display text-4xl sm:text-6xl lg:text-[4.25rem] font-extrabold tracking-tight leading-[1.05]">
+          <span class="block text-white">Ready to clean up</span>
+          <span class="block text-white">your kitchen &mdash; and</span>
+          <span class="block text-[#22C55E]">your conscience?</span>
         </h2>
 
-        <p class="mx-auto mt-5 sm:mt-7 max-w-lg text-sm sm:text-lg leading-relaxed text-slate-400 scroll-reveal delay-200">
+        <p style="--delay: 120ms" class="reveal reveal-up text-gray-400 text-base sm:text-lg max-w-md mx-auto leading-relaxed">
           Registration takes 60 seconds. Our agents take care of the rest.
         </p>
 
-        <button
-          data-testid="final-cta-register-btn"
-          @click="$emit('open-register')"
-          class="group relative mx-auto mt-8 sm:mt-12 flex items-center justify-center gap-3 overflow-hidden rounded-full bg-bio px-8 py-4 sm:px-10 sm:py-5 font-mono text-xs sm:text-sm font-bold uppercase tracking-[0.18em] sm:tracking-[0.2em] text-emerald-950 shadow-[0_0_60px_rgba(34,197,94,0.4)] transition-all duration-300 hover:shadow-[0_0_90px_rgba(34,197,94,0.6)] hover:scale-105 active:scale-95 cursor-pointer scroll-reveal delay-300 w-full sm:w-auto max-w-xs min-h-[48px]"
-        >
-          <span class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 group-hover:translate-x-full"></span>
-          Register Now
-          <ArrowUpRight :size="18" :stroke-width="2.5" class="transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
-        </button>
+        <div style="--delay: 180ms" class="reveal reveal-pop pt-3">
+          <button id="footerRegisterBtn" class="btn-green-pill touch-reactive px-10 py-4 rounded-full font-mono text-xs sm:text-sm font-bold tracking-[0.2em] uppercase inline-flex items-center gap-3">
+            <span>REGISTER NOW</span>
+            <span>&#8599;</span>
+          </button>
+        </div>
 
-        <p class="mt-6 sm:mt-8 font-mono text-[9px] sm:text-[10px] uppercase tracking-[0.22em] sm:tracking-[0.25em] text-slate-500 scroll-reveal delay-400">
-          No hardware to buy · No contracts to sign · QR kit ships in 48h
-        </p>
+        <div style="--delay: 240ms" class="reveal reveal-up pt-3 font-mono text-[10px] sm:text-[11px] tracking-[0.22em] uppercase text-gray-500">
+          NO HARDWARE TO BUY &nbsp;&middot;&nbsp; NO CONTRACTS TO SIGN &nbsp;&middot;&nbsp; QR KIT SHIPS IN 48H
+        </div>
       </div>
     </section>
 
-    <!-- ========================================================================= -->
-    <!-- 8. FOOTER (#contact)                                                      -->
-    <!-- ========================================================================= -->
-    <footer
-      id="contact"
-      data-testid="footer"
-      class="border-t border-bio/10 bg-[#080C0A] py-12 sm:py-16"
-    >
-      <div class="mx-auto max-w-7xl px-5 sm:px-8">
-        <div class="grid gap-8 sm:gap-12 md:grid-cols-3">
-          <!-- Col 1: Brand Info -->
-          <div>
-            <div class="flex items-center">
-              <img
-                src="/brand/logo.svg"
-                alt="GeoField Corp — Renew. Refine. Return."
-                class="h-10 sm:h-12 w-auto"
-              />
-            </div>
-            <p class="mt-4 sm:mt-5 max-w-xs text-xs sm:text-sm leading-relaxed text-slate-500">
-              Powering the clean-energy transition through traceable, compliant
-              supply chains.
-            </p>
+  </main>
+
+  <!-- ===================================================================== -->
+  <!-- VIEW 2: SELLER (FBO) PORTAL VIEW (EQUALLY BALANCED EXECUTIVE UI)      -->
+  <!-- ===================================================================== -->
+  <section id="portalView" class="relative z-10 hidden min-h-screen py-10 lg:py-14 bg-organic-dark">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-7">
+      
+      <!-- Top Executive Command Header Card with Graphic Dual-Role Selector Cards -->
+      <div id="portalCommandBanner" class="rounded-3xl p-6 sm:p-8 bg-gradient-to-r from-[#0E1B14] via-[#0A130E] to-[#080E0B] border border-[#22C55E]/25 shadow-2xl space-y-6 transition-colors duration-300">
+        
+        <!-- Top Row: Distinct Visual Role Switcher Cards (Seller Kitchen vs Buyer Refinery) + Back Button -->
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-5 border-b border-white/10">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 w-full lg:max-w-2xl">
+            <!-- Option 1: Seller (FBO Restaurant/Kitchen) Card -->
+            <button id="portalRoleSellerBtn" type="button" class="touch-reactive text-left p-4 rounded-2xl bg-[#22C55E] text-[#050A07] border-2 border-[#4ADE80] shadow-[0_12px_28px_-6px_rgba(34,197,94,0.45)] transition-all flex items-center justify-between gap-3">
+              <div class="flex items-center gap-3.5">
+                <div class="w-11 h-11 rounded-xl bg-[#050A07]/15 flex items-center justify-center shrink-0">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 21h18M5 21V7l8-4v18m6 0V11l-6-4"/>
+                  </svg>
+                </div>
+                <div>
+                  <div class="font-sans text-[11px] font-bold uppercase tracking-wider opacity-80">FBO Kitchen Partner</div>
+                  <div class="font-display text-lg font-extrabold leading-tight">Seller Dashboard</div>
+                  <div class="font-sans text-xs font-medium opacity-85 mt-0.5">Dispose UCO @ ₹40/L &bull; QR Receipts</div>
+                </div>
+              </div>
+              <span class="px-2.5 py-1 rounded-full bg-[#050A07]/15 font-sans text-[11px] font-bold">ACTIVE</span>
+            </button>
+
+            <!-- Option 2: Customer (Biofuel Refinery Buyer) Card -->
+            <button id="portalRoleCustomerBtn" type="button" class="touch-reactive text-left p-4 rounded-2xl bg-[#0B151C] hover:bg-[#10212B] text-white border-2 border-[#38BDF8]/35 hover:border-[#38BDF8] transition-all flex items-center justify-between gap-3">
+              <div class="flex items-center gap-3.5">
+                <div class="w-11 h-11 rounded-xl bg-[#38BDF8]/15 text-[#38BDF8] flex items-center justify-center shrink-0">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                  </svg>
+                </div>
+                <div>
+                  <div class="font-sans text-[11px] font-bold uppercase tracking-wider text-[#38BDF8]">Biofuel &amp; SAF Offtaker</div>
+                  <div class="font-display text-lg font-extrabold leading-tight">Customer Dashboard</div>
+                  <div class="font-sans text-xs text-gray-300 mt-0.5">Procure Bulk MT &bull; ISCC Certificates</div>
+                </div>
+              </div>
+              <span class="px-2.5 py-1 rounded-full bg-[#38BDF8]/15 text-[#38BDF8] font-sans text-[11px] font-semibold">SWITCH</span>
+            </button>
           </div>
 
-          <!-- Col 2: Contact Info -->
-          <div>
-            <p class="font-mono text-[10px] uppercase tracking-[0.3em] text-slate-500">
-              Contact
-            </p>
-            <ul class="mt-4 sm:mt-5 space-y-3 text-xs sm:text-sm text-slate-400">
-              <li>
-                <a
-                  href="tel:+917972737595"
-                  data-testid="footer-phone"
-                  class="flex items-center gap-3 transition-colors hover:text-bio min-h-[36px]"
-                >
-                  <Phone :size="15" class="text-bio/70 shrink-0" />
-                  <span>+91 7972737595</span>
-                </a>
-              </li>
-              <li>
-                <a
-                  href="mailto:support@geofieldcorp.com"
-                  data-testid="footer-email"
-                  class="flex items-center gap-3 transition-colors hover:text-bio min-h-[36px]"
-                >
-                  <Mail :size="15" class="text-bio/70 shrink-0" />
-                  <span class="flex flex-wrap items-center gap-1.5">
-                    <span class="break-all">support@geofieldcorp.com</span>
-                    <span class="rounded bg-bio/10 px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-wider text-bio">Support</span>
-                  </span>
-                </a>
-              </li>
-              <li>
-                <a
-                  href="mailto:office@geofieldcorp.com"
-                  data-testid="footer-email-office"
-                  class="flex items-center gap-3 transition-colors hover:text-bio min-h-[36px]"
-                >
-                  <Mail :size="15" class="text-bio/70 shrink-0" />
-                  <span class="flex flex-wrap items-center gap-1.5">
-                    <span class="break-all">office@geofieldcorp.com</span>
-                    <span class="rounded bg-bio/10 px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-wider text-bio">Office</span>
-                  </span>
-                </a>
-              </li>
-              <li class="flex items-center gap-3 min-h-[36px]" data-testid="footer-location">
-                <MapPin :size="15" class="text-bio/70 shrink-0" /> Mumbai, Maharashtra, India
-              </li>
-            </ul>
-          </div>
-
-          <!-- Col 3: Navigation -->
-          <div>
-            <p class="font-mono text-[10px] uppercase tracking-[0.3em] text-slate-500">
-              Navigate
-            </p>
-            <ul class="mt-4 sm:mt-5 space-y-3 text-xs sm:text-sm text-slate-400">
-              <li><a href="#crisis" data-testid="footer-link-crisis" class="inline-block py-1 transition-colors hover:text-bio min-h-[32px]">The Crisis</a></li>
-              <li><a href="#process" data-testid="footer-link-process" class="inline-block py-1 transition-colors hover:text-bio min-h-[32px]">The Process</a></li>
-              <li><a href="#impact" data-testid="footer-link-impact" class="inline-block py-1 transition-colors hover:text-bio min-h-[32px]">Impact</a></li>
-              <li><a href="#register" data-testid="footer-link-register" class="inline-block py-1 transition-colors hover:text-bio min-h-[32px]">Register</a></li>
-            </ul>
+          <div class="flex flex-wrap items-center gap-3 shrink-0">
+            <button id="sellerQuickLogBtn" type="button" class="btn-green-pill touch-reactive px-5 py-3 rounded-xl font-display text-xs sm:text-sm font-bold flex items-center justify-center gap-2 shadow-lg">
+              <span>+ Simulate QR Pickup</span>
+            </button>
+            <button id="customerQuickOrderBtn" type="button" class="hidden touch-reactive px-5 py-3 rounded-xl bg-[#38BDF8] hover:bg-[#7DD3FC] text-[#050A07] font-display text-xs sm:text-sm font-bold flex items-center justify-center gap-2 shadow-lg transition">
+              <span>+ Request Feedstock Batch</span>
+            </button>
+            <button id="backToLandingBtn" type="button" class="touch-reactive px-4 py-3 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 text-gray-200 font-sans text-xs font-semibold transition text-center">
+              &larr; Back to Home
+            </button>
           </div>
         </div>
 
-        <div class="mt-10 sm:mt-14 flex flex-wrap items-center justify-between gap-4 border-t border-bio/10 pt-6 sm:pt-8 font-mono text-[10px] uppercase tracking-[0.2em] text-slate-600">
-          <span>© 2026 GeoField Corp</span>
-          <span>Waste → Energy · Traceable · Compliant</span>
+        <!-- Bottom Row: Active Profile Identity & Live Status Pills -->
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div class="space-y-2">
+            <div class="flex flex-wrap items-center gap-2.5">
+              <span id="portalRoleBadge" class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#22C55E]/15 border border-[#22C55E]/35 font-sans text-xs font-semibold text-[#4ADE80]">
+                <span class="w-2 h-2 rounded-full bg-[#22C55E]"></span>
+                <span id="portalRoleBadgeText">Seller Kitchen Console</span>
+              </span>
+              <span id="portalSubBadge1" class="px-3 py-1 rounded-full bg-white/[0.05] border border-white/[0.08] font-sans text-xs text-gray-300 font-medium">
+                ISCC &amp; FSSAI RUCO Verified
+              </span>
+              <span id="portalSubBadge2" class="px-3 py-1 rounded-full bg-[#F59E0B]/15 border border-[#F59E0B]/30 font-sans text-xs font-semibold text-[#FDE68A]">
+                Avg Rate: &#8377;40 / Liter
+              </span>
+            </div>
+
+            <h1 id="sellerFboNameDisplay" class="font-display text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight">
+              Cluster 04 &mdash; Andheri West
+            </h1>
+            <p id="portalConsoleSubtitle" class="text-xs sm:text-sm text-gray-300 font-sans">
+              Auto-Settlement Bank: <strong class="text-white">HDFC Bank &bull;&bull;&bull;&bull; 4821 (Instant NEFT)</strong> &nbsp;&middot;&nbsp; Next Fleet Window: <strong class="text-[#4ADE80]">Tomorrow, 10:30 AM</strong>
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- =================================================================== -->
+      <!-- PANEL A: SELLER (FBO PARTNER) DASHBOARD                             -->
+      <!-- =================================================================== -->
+      <div id="sellerPortalPanel" class="space-y-7">
+        
+        <!-- 4 Symmetrical, Equally-Balanced KPI Metric Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 items-stretch">
+          
+          <div class="console-metric-box touch-reactive rounded-2xl p-6 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <span class="font-mono text-[10px] tracking-[0.18em] uppercase text-gray-400">LITERS RECYCLED</span>
+                <span class="w-8 h-8 rounded-xl bg-[#22C55E]/15 border border-[#22C55E]/30 text-[#22C55E] flex items-center justify-center">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3c-4.97 5.39-7 8.48-7 11.5a7 7 0 1014 0c0-3.02-2.03-6.11-7-11.5z"/>
+                  </svg>
+                </span>
+              </div>
+              <div id="sellerTotalVol" class="tabular-nums font-display text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+                412.0 L
+              </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-white/[0.06] flex items-center justify-between font-mono text-[10px]">
+              <span class="text-gray-400">4 DRUMS VERIFIED</span>
+              <span class="text-[#22C55E] font-semibold">+18.4% MoM</span>
+            </div>
+          </div>
+
+          <div class="console-metric-box touch-reactive rounded-2xl p-6 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <span class="font-mono text-[10px] tracking-[0.18em] uppercase text-gray-400">GREEN REVENUE</span>
+                <span class="w-8 h-8 rounded-xl bg-[#22C55E]/15 border border-[#22C55E]/30 text-[#22C55E] font-mono font-bold text-xs flex items-center justify-center">
+                  &#8377;
+                </span>
+              </div>
+              <div id="sellerTotalEarned" class="tabular-nums font-display text-3xl sm:text-4xl font-extrabold text-[#22C55E] tracking-tight">
+                &#8377;16,480
+              </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-white/[0.06] flex items-center justify-between font-mono text-[10px]">
+              <span class="text-gray-400">SETTLEMENT</span>
+              <span class="text-[#A3E635] font-semibold">100% PAID</span>
+            </div>
+          </div>
+
+          <div class="console-metric-box touch-reactive rounded-2xl p-6 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <span class="font-mono text-[10px] tracking-[0.18em] uppercase text-gray-400">CARBON OFFSET</span>
+                <span class="w-8 h-8 rounded-xl bg-[#A3E635]/15 border border-[#A3E635]/30 text-[#A3E635] flex items-center justify-center">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 21c.5-4.5 2.5-8 7-10 4.5-2 7-5.5 7-10-4.5 0-8 2.5-10 7-2 4.5-3.5 8.5-4 13z"/>
+                  </svg>
+                </span>
+              </div>
+              <div id="sellerTotalCo2" class="tabular-nums font-display text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+                1,030 kg
+              </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-white/[0.06] flex items-center justify-between font-mono text-[10px]">
+              <span class="text-gray-400">BIODIESEL YIELD</span>
+              <span class="text-[#A3E635] font-semibold">ISCC AUDITABLE</span>
+            </div>
+          </div>
+
+          <div class="console-metric-box touch-reactive rounded-2xl p-6 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <span class="font-mono text-[10px] tracking-[0.18em] uppercase text-gray-400">WATER PROTECTED</span>
+                <span class="w-8 h-8 rounded-xl bg-[#38BDF8]/15 border border-[#38BDF8]/30 text-[#38BDF8] flex items-center justify-center">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 10c2.5-2 5.5-2 8 0s5.5 2 8 0M3 15c2.5-2 5.5-2 8 0s5.5 2 8 0"/>
+                  </svg>
+                </span>
+              </div>
+              <div id="sellerTotalWater" class="tabular-nums font-display text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+                412M L
+              </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-white/[0.06] flex items-center justify-between font-mono text-[10px]">
+              <span class="text-gray-400">ZERO DRAINAGE</span>
+              <span class="text-[#38BDF8] font-semibold">FSSAI FORM-IV</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Balanced 12-Column Main Workspace -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+          
+          <div class="lg:col-span-8 flex flex-col justify-between gap-6">
+            
+            <div class="telemetry-chart-shell rounded-3xl p-6 sm:p-7 relative overflow-hidden">
+              <!-- Top Header Row with Dual Legend & Timeframe Selector -->
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-white/[0.07]">
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-[#22C55E]"></span>
+                    <span class="font-mono text-[10px] tracking-[0.2em] uppercase text-[#22C55E] font-semibold">REVENUE &amp; VOLUME TELEMETRY</span>
+                  </div>
+                  <h2 class="font-display text-lg sm:text-xl font-bold text-white mt-1">Collection Volume &amp; Instant NEFT Settlement Curve</h2>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-3">
+                  <div class="flex items-center gap-3.5 font-sans text-xs bg-white/[0.03] border border-white/[0.07] px-3 py-1.5 rounded-xl">
+                    <span class="flex items-center gap-1.5 text-gray-200 font-medium">
+                      <span class="w-2.5 h-2.5 rounded-full bg-[#22C55E] shadow-[0_0_8px_#22C55E]"></span>
+                      <span>Liters Logged</span>
+                    </span>
+                    <span class="flex items-center gap-1.5 text-gray-200 font-medium">
+                      <span class="w-2.5 h-0.5 bg-[#F59E0B]"></span>
+                      <span>NEFT Payout (&#8377;)</span>
+                    </span>
+                  </div>
+
+                  <div class="inline-flex p-1 rounded-xl bg-surface-950 border border-white/10 font-mono text-[10px]">
+                    <button type="button" data-seller-range="6M" class="seller-range-btn px-2.5 py-1 rounded-lg bg-[#22C55E]/20 text-[#22C55E] font-bold transition">6M</button>
+                    <button type="button" data-seller-range="1Y" class="seller-range-btn px-2.5 py-1 rounded-lg text-gray-400 hover:text-white transition">1Y</button>
+                    <button type="button" data-seller-range="ALL" class="seller-range-btn px-2.5 py-1 rounded-lg text-gray-400 hover:text-white transition">ALL</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Live Telemetry Readout Strip -->
+              <div class="grid grid-cols-3 gap-3 my-4 p-3.5 rounded-2xl bg-surface-950/90 border border-white/[0.06]">
+                <div>
+                  <div class="font-mono text-[10px] uppercase tracking-wider text-gray-400">Active Period</div>
+                  <div id="sellerChartPeriodLabel" class="font-display font-bold text-sm sm:text-base text-white mt-0.5">Oct 2026 (Peak)</div>
+                </div>
+                <div>
+                  <div class="font-mono text-[10px] uppercase tracking-wider text-gray-400">Verified Volume</div>
+                  <div id="sellerChartVolReadout" class="tabular-nums font-display font-bold text-sm sm:text-base text-[#22C55E] mt-0.5">126.0 Liters</div>
+                </div>
+                <div>
+                  <div class="font-mono text-[10px] uppercase tracking-wider text-gray-400">NEFT Disbursed</div>
+                  <div id="sellerChartPayoutReadout" class="tabular-nums font-display font-bold text-sm sm:text-base text-[#FDE68A] mt-0.5">&#8377;5,040 (@ &#8377;40/L)</div>
+                </div>
+              </div>
+
+              <!-- Executive Dual-Curve SVG Spline Telemetry Chart (Zero Vertical Slide Bars) -->
+              <div class="relative h-52 w-full pt-2 select-none">
+                <svg id="sellerAnalyticsSvg" viewBox="0 0 640 190" class="w-full h-full overflow-visible cursor-crosshair">
+                  <defs>
+                    <linearGradient id="sellerAreaGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="#22C55E" stop-opacity="0.38" />
+                      <stop offset="70%" stop-color="#22C55E" stop-opacity="0.08" />
+                      <stop offset="100%" stop-color="#22C55E" stop-opacity="0.0" />
+                    </linearGradient>
+                    <linearGradient id="sellerLineGrad" x1="0" y1="0" x2="1" y2="0">
+                      <stop offset="0%" stop-color="#16A34A" />
+                      <stop offset="60%" stop-color="#22C55E" />
+                      <stop offset="100%" stop-color="#A3E635" />
+                    </linearGradient>
+                  </defs>
+
+                  <!-- Subtle Horizontal Reference Grid & Y-Axis Scale -->
+                  <g stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="4 4">
+                    <line x1="44" y1="26" x2="616" y2="26" />
+                    <line x1="44" y1="68" x2="616" y2="68" />
+                    <line x1="44" y1="110" x2="616" y2="110" />
+                    <line x1="44" y1="152" x2="616" y2="152" />
+                  </g>
+                  <g fill="rgba(156,163,175,0.6)" font-family="JetBrains Mono, monospace" font-size="9.5" text-anchor="end">
+                    <text x="36" y="29">140L</text>
+                    <text x="36" y="71">105L</text>
+                    <text x="36" y="113">70L</text>
+                    <text x="36" y="155">35L</text>
+                  </g>
+
+                  <!-- Area Fill & Secondary Amber Payout Curve + Primary Emerald Volume Spline -->
+                  <path id="sellerAreaPath" d="" fill="url(#sellerAreaGrad)" />
+                  <path id="sellerPayoutLinePath" d="" fill="none" stroke="#F59E0B" stroke-width="2" stroke-dasharray="5 4" stroke-linecap="round" opacity="0.85" />
+                  <path id="sellerVolumeGlowPath" d="" fill="none" stroke="#22C55E" stroke-opacity="0.22" stroke-width="8" stroke-linecap="round" />
+                  <path id="sellerVolumeLinePath" d="" fill="none" stroke="url(#sellerLineGrad)" stroke-width="3.2" stroke-linecap="round" />
+
+                  <!-- Interactive Vertical Crosshair Scrub Line -->
+                  <line id="sellerChartScrubLine" x1="600" y1="18" x2="600" y2="154" stroke="rgba(34,197,94,0.45)" stroke-width="1.2" stroke-dasharray="3 3" />
+
+                  <!-- Data Point Nodes Group -->
+                  <g id="sellerChartNodesGroup"></g>
+
+                  <!-- Active Highlight Ring -->
+                  <circle id="sellerChartActiveHalo" cx="600" cy="38" r="11" fill="rgba(34,197,94,0.22)" pointer-events="none" />
+                  <circle id="sellerChartActiveDot" cx="600" cy="38" r="5.5" fill="#22C55E" stroke="#060A08" stroke-width="2.2" pointer-events="none" />
+
+                  <!-- X-Axis Month Labels -->
+                  <g id="sellerChartXAxisGroup" fill="rgba(156,163,175,0.75)" font-family="JetBrains Mono, monospace" font-size="10" text-anchor="middle"></g>
+                </svg>
+              </div>
+            </div>
+
+            <div class="console-metric-box rounded-3xl p-6 sm:p-7 flex-1 flex flex-col justify-between">
+              <div>
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
+                  <div>
+                    <h2 class="font-display text-lg sm:text-xl font-bold text-white">Collection Ledger &amp; FSSAI Audit Receipts</h2>
+                    <p class="text-xs text-gray-400 mt-0.5">Tamper-proof disposal certificates ready for municipal &amp; FSSAI inspection</p>
+                  </div>
+                  <span class="px-3 py-1 rounded-full bg-white/[0.04] border border-white/10 font-mono text-[10px] uppercase tracking-wider text-gray-300 self-start sm:self-auto">
+                    AUTO-SYNCED LEDGER
+                  </span>
+                </div>
+
+                <div class="overflow-x-auto no-scrollbar">
+                  <table class="w-full text-left border-collapse">
+                    <thead>
+                      <tr class="border-b border-white/10 font-mono text-[10px] uppercase tracking-[0.18em] text-gray-400">
+                        <th class="py-3.5 px-3">Pickup Date</th>
+                        <th class="py-3.5 px-3">Volume</th>
+                        <th class="py-3.5 px-3">TPC Lab Test</th>
+                        <th class="py-3.5 px-3">NEFT Payout</th>
+                        <th class="py-3.5 px-3 text-right">Audit Receipt</th>
+                      </tr>
+                    </thead>
+                    <tbody id="sellerLedgerBody" class="divide-y divide-white/[0.06] text-sm"></tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="mt-5 pt-4 border-t border-white/[0.06] flex flex-wrap items-center justify-between gap-2 font-mono text-[11px] text-gray-400">
+                <span>All weights logged via Bluetooth digital load-cell scale</span>
+                <span class="text-[#22C55E]">100% Statutory Compliance</span>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="lg:col-span-4 flex flex-col justify-between gap-6">
+            
+            <div class="console-metric-box rounded-3xl p-6 sm:p-7 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between">
+                  <span class="font-mono text-[11px] font-semibold text-[#22C55E] uppercase tracking-[0.18em]">SITE QR IDENTITY</span>
+                  <span class="px-2.5 py-0.5 rounded-full bg-[#22C55E]/15 border border-[#22C55E]/35 text-[#22C55E] font-mono text-[10px] font-semibold">ACTIVE PASS</span>
+                </div>
+                <p class="text-xs text-gray-400 mt-2 leading-relaxed">
+                  Mounted at kitchen dispatch bay. Field agent scans to auto-log drum weight and issue instant FSSAI receipt.
+                </p>
+
+                <div class="my-5 mx-auto w-40 h-40 rounded-2xl bg-white p-3.5 shadow-xl relative overflow-hidden flex items-center justify-center">
+                  <svg viewBox="0 0 100 100" class="w-full h-full text-surface-950" fill="currentColor">
+                    <path d="M5,5 h28 v28 h-28 z M10,10 v18 h18 v-18 z M14,14 h10 v10 h-10 z"/>
+                    <path d="M67,5 h28 v28 h-28 z M72,10 v18 h18 v-18 z M76,14 h10 v10 h-10 z"/>
+                    <path d="M5,67 h28 v28 h-28 z M10,72 v18 h18 v-18 z M14,76 h10 v10 h-10 z"/>
+                    <rect x="38" y="8" width="8" height="8"/>
+                    <rect x="52" y="8" width="8" height="8"/>
+                    <rect x="8" y="38" width="8" height="8"/>
+                    <rect x="22" y="38" width="8" height="8"/>
+                    <rect x="38" y="38" width="24" height="24"/>
+                    <rect x="42" y="42" width="16" height="16" fill="#22C55E"/>
+                    <rect x="68" y="38" width="8" height="8"/>
+                    <rect x="82" y="38" width="8" height="8"/>
+                    <rect x="38" y="68" width="8" height="8"/>
+                    <rect x="52" y="68" width="8" height="8"/>
+                    <rect x="68" y="68" width="8" height="8"/>
+                    <rect x="82" y="82" width="10" height="10"/>
+                  </svg>
+                </div>
+
+                <div class="p-3 rounded-xl bg-surface-950 border border-white/10 flex items-center justify-between font-mono text-xs">
+                  <span class="text-gray-400">Assigned Pass ID</span>
+                  <span id="sellerQrIdDisplay" class="text-[#22C55E] font-bold">#GF-0421</span>
+                </div>
+              </div>
+
+              <div class="mt-4 pt-3 border-t border-white/[0.06] space-y-2 text-center">
+                <button id="simulateQrScanBayBtn" type="button" class="touch-reactive w-full py-2.5 px-4 rounded-xl bg-[#22C55E]/15 hover:bg-[#22C55E]/25 border border-[#22C55E]/40 text-[#22C55E] font-mono text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>
+                  </svg>
+                  <span>Simulate QR Bay Scan</span>
+                </button>
+                <div class="font-mono text-[10px] text-gray-500 uppercase tracking-widest">Tamper-Proof Static Kitchen NFC &bull; Bluetooth Load-Cell Synced</div>
+              </div>
+            </div>
+
+            <div class="console-metric-box rounded-3xl p-6 sm:p-7 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between mb-2">
+                  <span class="font-mono text-[11px] font-semibold text-[#A3E635] uppercase tracking-[0.18em]">SCHEDULE FLEET PICKUP</span>
+                  <span class="px-2.5 py-0.5 rounded-full bg-[#A3E635]/15 border border-[#A3E635]/35 text-[#A3E635] font-mono text-[10px] font-semibold">SAME DAY</span>
+                </div>
+                <p class="text-xs text-gray-400 leading-relaxed mb-4">
+                  Request specialized drum evacuation when your barrels reach 80% capacity.
+                </p>
+
+                <form id="sellerScheduleForm" class="space-y-3.5" onsubmit="return false;">
+                  <!-- Quick Preset Tap Buttons -->
+                  <div>
+                    <div class="flex items-center justify-between mb-1.5">
+                      <label class="font-sans text-xs font-medium text-gray-300">Drum Quantity (Avg Rate ₹40/L)</label>
+                      <span id="sellerSchedulePayoutBadge" class="font-sans text-xs font-bold text-[#22C55E]">
+                        Payout: &#8377;4,000 NEFT
+                      </span>
+                    </div>
+
+                    <div class="grid grid-cols-4 gap-1.5 mb-2">
+                      <button type="button" data-drum-preset="1" class="seller-drum-btn touch-reactive py-1.5 px-2 rounded-lg bg-surface-950 border border-white/10 text-gray-300 font-sans text-xs hover:border-[#22C55E] transition">
+                        1 Drum (50L)
+                      </button>
+                      <button type="button" data-drum-preset="2" class="seller-drum-btn active-drum-preset touch-reactive py-1.5 px-2 rounded-lg bg-[#22C55E]/20 border border-[#22C55E]/60 text-[#22C55E] font-sans text-xs font-semibold transition">
+                        2 Drums (100L)
+                      </button>
+                      <button type="button" data-drum-preset="4" class="seller-drum-btn touch-reactive py-1.5 px-2 rounded-lg bg-surface-950 border border-white/10 text-gray-300 font-sans text-xs hover:border-[#22C55E] transition">
+                        4 Drums (200L)
+                      </button>
+                      <button type="button" data-drum-preset="8" class="seller-drum-btn touch-reactive py-1.5 px-2 rounded-lg bg-surface-950 border border-white/10 text-gray-300 font-sans text-xs hover:border-[#22C55E] transition">
+                        8 Drums (400L)
+                      </button>
+                    </div>
+
+                    <select id="scheduleDrumQty" class="w-full px-3.5 py-2.5 rounded-xl bg-surface-950 border border-white/10 text-white text-xs focus:outline-none focus:border-[#22C55E]">
+                      <option value="1">1 Standard Drum (50 Liters &bull; &#8377;2,000)</option>
+                      <option value="2" selected>2 Standard Drums (100 Liters &bull; &#8377;4,000)</option>
+                      <option value="4">4 Standard Drums (200 Liters &bull; &#8377;8,000)</option>
+                      <option value="8">8 Commercial Drums (400 Liters &bull; &#8377;16,000)</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label class="block font-mono text-[10px] uppercase tracking-wider text-gray-400 mb-1">Fleet Dispatch Window</label>
+                    <select id="schedulePickupSlot" class="w-full px-3.5 py-2.5 rounded-xl bg-surface-950 border border-white/10 text-white text-xs focus:outline-none focus:border-[#22C55E]">
+                      <option value="Tomorrow Morning (10:30 AM Cluster Fleet)" selected>Tomorrow Morning &bull; 10:30 AM (Cluster Fleet)</option>
+                      <option value="Tomorrow Evening (4:30 PM Route)">Tomorrow Evening &bull; 4:30 PM Route</option>
+                      <option value="This Friday (11:00 AM Routine)">This Friday &bull; 11:00 AM Routine</option>
+                      <option value="Immediate Express Pickup (<3 Hours)">Immediate Express Pickup (&lt;3 Hours)</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label class="block font-mono text-[10px] uppercase tracking-wider text-gray-400 mb-1">Pickup Date</label>
+                    <input id="schedulePickupDate" type="date" value="2026-10-24" class="w-full px-3.5 py-2.5 rounded-xl bg-surface-950 border border-white/10 text-white text-xs focus:outline-none focus:border-[#22C55E]" />
+                  </div>
+
+                  <div>
+                    <label class="block font-mono text-[10px] uppercase tracking-wider text-gray-400 mb-1">Kitchen Dispatch Instructions</label>
+                    <input id="scheduleNotes" type="text" placeholder="Kitchen back entrance bay 3 — barrel labeled GF" class="w-full px-3.5 py-2.5 rounded-xl bg-surface-950 border border-white/10 text-white text-xs focus:outline-none focus:border-[#22C55E]" />
+                  </div>
+
+                  <button id="submitScheduleBtn" type="button" class="btn-green-pill touch-reactive w-full py-3.5 rounded-full font-mono text-xs font-bold uppercase tracking-wider mt-2 flex items-center justify-center gap-2 shadow-lg">
+                    <span>Confirm Fleet Dispatch</span>
+                    <span>&rarr;</span>
+                  </button>
+                </form>
+              </div>
+
+              <div class="pt-4 mt-4 border-t border-white/[0.07] flex items-center justify-between">
+                <div>
+                  <div class="font-mono text-[10px] uppercase tracking-wider text-gray-400">AUDIT INSPECTOR PACK</div>
+                  <div class="text-xs text-white font-medium mt-0.5">Form-IV Digital Logbook</div>
+                </div>
+                <button type="button" id="portalDownloadLatestCertBtn" class="px-3.5 py-2 rounded-xl bg-white/[0.06] hover:bg-[#22C55E] hover:text-black font-mono text-[10px] font-semibold text-[#22C55E] uppercase tracking-wider transition">
+                  View PDF
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- =================================================================== -->
+      <!-- PANEL B: CUSTOMER (BIOFUEL REFINERY / BUYER) DASHBOARD               -->
+      <!-- =================================================================== -->
+      <div id="customerPortalPanel" class="space-y-7 hidden">
+        
+        <!-- 4 Symmetrical, Equally-Balanced Customer Metric Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 items-stretch">
+          
+          <div class="console-metric-box touch-reactive rounded-2xl p-6 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <span class="font-mono text-[10px] tracking-[0.18em] uppercase text-gray-400">FEEDSTOCK DELIVERED</span>
+                <span class="w-8 h-8 rounded-xl bg-[#38BDF8]/15 border border-[#38BDF8]/30 text-[#38BDF8] flex items-center justify-center">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/>
+                  </svg>
+                </span>
+              </div>
+              <div id="customerTotalVol" class="tabular-nums font-display text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+                184.5 MT
+              </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-white/[0.06] flex items-center justify-between font-mono text-[10px]">
+              <span class="text-gray-400">12 BULK TANKERS</span>
+              <span class="text-[#38BDF8] font-semibold">+24.6% MoM</span>
+            </div>
+          </div>
+
+          <div class="console-metric-box touch-reactive rounded-2xl p-6 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <span class="font-mono text-[10px] tracking-[0.18em] uppercase text-gray-400">AVERAGE PURITY GRADE</span>
+                <span class="w-8 h-8 rounded-xl bg-[#22C55E]/15 border border-[#22C55E]/30 text-[#22C55E] flex items-center justify-center">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                </span>
+              </div>
+              <div id="customerQualitySpec" class="tabular-nums font-display text-3xl sm:text-4xl font-extrabold text-[#22C55E] tracking-tight">
+                FFA 2.6%
+              </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-white/[0.06] flex items-center justify-between font-mono text-[10px]">
+              <span class="text-gray-400">HVO &amp; SAF COMPLIANT</span>
+              <span class="text-[#A3E635] font-semibold">MOISTURE &lt; 0.4%</span>
+            </div>
+          </div>
+
+          <div class="console-metric-box touch-reactive rounded-2xl p-6 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <span class="font-mono text-[10px] tracking-[0.18em] uppercase text-gray-400">AVOIDED GHG EMISSIONS</span>
+                <span class="w-8 h-8 rounded-xl bg-[#A3E635]/15 border border-[#A3E635]/30 text-[#A3E635] flex items-center justify-center">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                </span>
+              </div>
+              <div id="customerTotalGhg" class="tabular-nums font-display text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+                562.7 MT
+              </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-white/[0.06] flex items-center justify-between font-mono text-[10px]">
+              <span class="text-gray-400">88.5% GHG REDUCTION</span>
+              <span class="text-[#A3E635] font-semibold">RED II POS</span>
+            </div>
+          </div>
+
+          <div class="console-metric-box touch-reactive rounded-2xl p-6 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <span class="font-mono text-[10px] tracking-[0.18em] uppercase text-gray-400">TOTAL OFFTAKE PROCUREMENT</span>
+                <span class="w-8 h-8 rounded-xl bg-[#F59E0B]/15 border border-[#F59E0B]/30 text-[#F59E0B] font-mono font-bold text-xs flex items-center justify-center">
+                  &#8377;
+                </span>
+              </div>
+              <div id="customerTotalProcure" class="tabular-nums font-display text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+                &#8377;1.18 Cr
+              </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-white/[0.06] flex items-center justify-between font-mono text-[10px]">
+              <span class="text-gray-400">ESCROW SETTLED</span>
+              <span class="text-[#F59E0B] font-semibold">CONTRACT ACTIVE</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- 12-Column Refinery Customer Workspace -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+          
+          <!-- Left 8 Columns: Supply Trend Chart + Certified Feedstock Batch Manifest -->
+          <div class="lg:col-span-8 flex flex-col justify-between gap-6">
+            
+            <div class="telemetry-chart-shell-buyer rounded-3xl p-6 sm:p-7 relative overflow-hidden">
+              <!-- Top Header Row with Dual Legend & Timeframe Selector -->
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-white/[0.07]">
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-[#38BDF8]"></span>
+                    <span class="font-mono text-[10px] tracking-[0.2em] uppercase text-[#38BDF8] font-semibold">REFINERY INFLOW TELEMETRY</span>
+                  </div>
+                  <h2 class="font-display text-lg sm:text-xl font-bold text-white mt-1">Certified UCO Feedstock Delivery (MT) &amp; GHG Abatement</h2>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-3">
+                  <div class="flex items-center gap-3.5 font-sans text-xs bg-white/[0.03] border border-white/[0.07] px-3 py-1.5 rounded-xl">
+                    <span class="flex items-center gap-1.5 text-gray-200 font-medium">
+                      <span class="w-2.5 h-2.5 rounded-full bg-[#38BDF8] shadow-[0_0_8px_#38BDF8]"></span>
+                      <span>Feedstock (MT)</span>
+                    </span>
+                    <span class="flex items-center gap-1.5 text-gray-200 font-medium">
+                      <span class="w-2.5 h-0.5 bg-[#22C55E]"></span>
+                      <span>GHG Saved (MT CO₂e)</span>
+                    </span>
+                  </div>
+
+                  <div class="inline-flex p-1 rounded-xl bg-surface-950 border border-white/10 font-mono text-[10px]">
+                    <button type="button" data-buyer-range="6M" class="buyer-range-btn px-2.5 py-1 rounded-lg bg-[#38BDF8]/20 text-[#38BDF8] font-bold transition">6M</button>
+                    <button type="button" data-buyer-range="1Y" class="buyer-range-btn px-2.5 py-1 rounded-lg text-gray-400 hover:text-white transition">1Y</button>
+                    <button type="button" data-buyer-range="ALL" class="buyer-range-btn px-2.5 py-1 rounded-lg text-gray-400 hover:text-white transition">ALL</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Live Telemetry Readout Strip -->
+              <div class="grid grid-cols-3 gap-3 my-4 p-3.5 rounded-2xl bg-surface-950/90 border border-white/[0.06]">
+                <div>
+                  <div class="font-mono text-[10px] uppercase tracking-wider text-gray-400">Active Period</div>
+                  <div id="buyerChartPeriodLabel" class="font-display font-bold text-sm sm:text-base text-white mt-0.5">Oct 2026 (Dahej SEZ)</div>
+                </div>
+                <div>
+                  <div class="font-mono text-[10px] uppercase tracking-wider text-gray-400">Certified Delivery</div>
+                  <div id="buyerChartMtReadout" class="tabular-nums font-display font-bold text-sm sm:text-base text-[#38BDF8] mt-0.5">52.0 MT (FFA 2.4%)</div>
+                </div>
+                <div>
+                  <div class="font-mono text-[10px] uppercase tracking-wider text-gray-400">Verified GHG Abated</div>
+                  <div id="buyerChartGhgReadout" class="tabular-nums font-display font-bold text-sm sm:text-base text-[#4ADE80] mt-0.5">158.6 MT CO₂e</div>
+                </div>
+              </div>
+
+              <!-- Executive Dual-Curve SVG Spline Telemetry Chart (Zero Vertical Slide Bars) -->
+              <div class="relative h-52 w-full pt-2 select-none">
+                <svg id="customerAnalyticsSvg" viewBox="0 0 640 190" class="w-full h-full overflow-visible cursor-crosshair">
+                  <defs>
+                    <linearGradient id="buyerAreaGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="#38BDF8" stop-opacity="0.38" />
+                      <stop offset="70%" stop-color="#38BDF8" stop-opacity="0.08" />
+                      <stop offset="100%" stop-color="#38BDF8" stop-opacity="0.0" />
+                    </linearGradient>
+                    <linearGradient id="buyerLineGrad" x1="0" y1="0" x2="1" y2="0">
+                      <stop offset="0%" stop-color="#0284C7" />
+                      <stop offset="60%" stop-color="#38BDF8" />
+                      <stop offset="100%" stop-color="#22C55E" />
+                    </linearGradient>
+                  </defs>
+
+                  <!-- Subtle Horizontal Reference Grid & Y-Axis Scale -->
+                  <g stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="4 4">
+                    <line x1="44" y1="26" x2="616" y2="26" />
+                    <line x1="44" y1="68" x2="616" y2="68" />
+                    <line x1="44" y1="110" x2="616" y2="110" />
+                    <line x1="44" y1="152" x2="616" y2="152" />
+                  </g>
+                  <g fill="rgba(156,163,175,0.6)" font-family="JetBrains Mono, monospace" font-size="9.5" text-anchor="end">
+                    <text x="38" y="29">60MT</text>
+                    <text x="38" y="71">45MT</text>
+                    <text x="38" y="113">30MT</text>
+                    <text x="38" y="155">15MT</text>
+                  </g>
+
+                  <!-- Area Fill & Secondary Emerald GHG Curve + Primary Cyan Feedstock Spline -->
+                  <path id="buyerAreaPath" d="" fill="url(#buyerAreaGrad)" />
+                  <path id="buyerGhgLinePath" d="" fill="none" stroke="#22C55E" stroke-width="2" stroke-dasharray="5 4" stroke-linecap="round" opacity="0.85" />
+                  <path id="buyerFeedstockGlowPath" d="" fill="none" stroke="#38BDF8" stroke-opacity="0.22" stroke-width="8" stroke-linecap="round" />
+                  <path id="buyerFeedstockLinePath" d="" fill="none" stroke="url(#buyerLineGrad)" stroke-width="3.2" stroke-linecap="round" />
+
+                  <!-- Interactive Vertical Crosshair Scrub Line -->
+                  <line id="buyerChartScrubLine" x1="600" y1="18" x2="600" y2="154" stroke="rgba(56,189,248,0.45)" stroke-width="1.2" stroke-dasharray="3 3" />
+
+                  <!-- Data Point Nodes Group -->
+                  <g id="buyerChartNodesGroup"></g>
+
+                  <!-- Active Highlight Ring -->
+                  <circle id="buyerChartActiveHalo" cx="600" cy="36" r="11" fill="rgba(56,189,248,0.22)" pointer-events="none" />
+                  <circle id="buyerChartActiveDot" cx="600" cy="36" r="5.5" fill="#38BDF8" stroke="#060A08" stroke-width="2.2" pointer-events="none" />
+
+                  <!-- X-Axis Month Labels -->
+                  <g id="buyerChartXAxisGroup" fill="rgba(156,163,175,0.75)" font-family="JetBrains Mono, monospace" font-size="10" text-anchor="middle"></g>
+                </svg>
+              </div>
+            </div>
+
+            <div class="console-metric-box rounded-3xl p-6 sm:p-7 flex-1 flex flex-col justify-between">
+              <div>
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
+                  <div>
+                    <h2 class="font-display text-lg sm:text-xl font-bold text-white">Certified Feedstock Batch Manifest &amp; ISCC PoS</h2>
+                    <p class="text-xs text-gray-400 mt-0.5">Auditable chain-of-custody traceable to FBO kitchens with zero-leakage guarantee</p>
+                  </div>
+                  <span class="px-3 py-1 rounded-full bg-[#38BDF8]/15 border border-[#38BDF8]/30 font-mono text-[10px] uppercase tracking-wider text-[#38BDF8] self-start sm:self-auto">
+                    ISCC EU AUDITED
+                  </span>
+                </div>
+
+                <div class="overflow-x-auto no-scrollbar">
+                  <table class="w-full text-left border-collapse">
+                    <thead>
+                      <tr class="border-b border-white/10 font-mono text-[10px] uppercase tracking-[0.18em] text-gray-400">
+                        <th class="py-3.5 px-3">Batch ID</th>
+                        <th class="py-3.5 px-3">Origin Aggregate Hub</th>
+                        <th class="py-3.5 px-3">Volume (MT)</th>
+                        <th class="py-3.5 px-3">FFA / Moisture</th>
+                        <th class="py-3.5 px-3">Delivery Status</th>
+                        <th class="py-3.5 px-3 text-right">ISCC Certificate</th>
+                      </tr>
+                    </thead>
+                    <tbody id="customerBatchLedgerBody" class="divide-y divide-white/[0.06] text-sm"></tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="mt-5 pt-4 border-t border-white/[0.06] flex flex-wrap items-center justify-between gap-2 font-mono text-[11px] text-gray-400">
+                <span>All deliveries verified by independent third-party inspection (SGS / Bureau Veritas)</span>
+                <span class="text-[#38BDF8]">RED II Article 29 Compliant</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Right 4 Columns: Fleet Tanker Logistics + Request Allocation Simulator -->
+          <div class="lg:col-span-4 flex flex-col justify-between gap-6">
+            
+            <div class="console-metric-box rounded-3xl p-6 sm:p-7 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between">
+                  <span class="font-mono text-[11px] font-semibold text-[#38BDF8] uppercase tracking-[0.18em]">TANKER LOGISTICS</span>
+                  <span class="px-2.5 py-0.5 rounded-full bg-[#38BDF8]/15 border border-[#38BDF8]/35 text-[#38BDF8] font-mono text-[10px] font-semibold">GPS ACTIVE</span>
+                </div>
+                <p class="text-xs text-gray-400 mt-2 leading-relaxed">
+                  Real-time GPS telemetry of bulk stainless steel tanker in transit to Dahej SEZ.
+                </p>
+
+                <!-- Live Corridor Telemetry SVG Vector Map -->
+                <div class="mt-4 p-3.5 rounded-2xl bg-surface-950/90 border border-[#38BDF8]/20">
+                  <div class="flex items-center justify-between font-mono text-[10px] text-gray-400 mb-2">
+                    <span>CORRIDOR: NH-48 EXPRESSWAY</span>
+                    <span class="text-[#38BDF8] font-semibold">74% TRANSIT COMPLETE</span>
+                  </div>
+                  <svg viewBox="0 0 320 46" class="w-full h-11 overflow-visible">
+                    <line x1="24" y1="20" x2="296" y2="20" stroke="rgba(255,255,255,0.1)" stroke-width="2.5" stroke-linecap="round" />
+                    <line x1="24" y1="20" x2="224" y2="20" stroke="#38BDF8" stroke-width="2.5" stroke-linecap="round" />
+                    <circle cx="24" cy="20" r="4.5" fill="#22C55E" />
+                    <circle cx="135" cy="20" r="3.5" fill="#38BDF8" />
+                    <circle cx="224" cy="20" r="7" fill="rgba(56,189,248,0.25)" />
+                    <circle cx="224" cy="20" r="4.5" fill="#38BDF8" stroke="#060A08" stroke-width="1.5" />
+                    <circle cx="296" cy="20" r="4.5" fill="#1E293B" stroke="#38BDF8" stroke-width="1.5" />
+                    <g font-family="JetBrains Mono, monospace" font-size="8.5" fill="rgba(156,163,175,0.8)">
+                      <text x="24" y="39" text-anchor="middle">MUMBAI HUB</text>
+                      <text x="135" y="39" text-anchor="middle">VAPI CHECK</text>
+                      <text x="224" y="8" text-anchor="middle" fill="#38BDF8" font-weight="700">MH-04-GP-8912</text>
+                      <text x="296" y="39" text-anchor="middle" fill="#F59E0B">DAHEJ SEZ</text>
+                    </g>
+                  </svg>
+                </div>
+
+                <div class="my-4 p-4 rounded-2xl bg-surface-950 border border-white/10 space-y-2.5 font-mono text-xs">
+                  <div class="flex justify-between items-center">
+                    <span class="text-gray-400">Vehicle #</span>
+                    <span class="text-white font-bold">MH-04-GP-8912</span>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <span class="text-gray-400">Route</span>
+                    <span class="text-gray-300">Mumbai &rarr; Dahej SEZ</span>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <span class="text-gray-400">Gross / Tare / Net</span>
+                    <span class="text-[#38BDF8]">38.2T / 13.7T / 24.5T</span>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <span class="text-gray-400">Digital NFC Seal</span>
+                    <span class="text-[#22C55E]">#ISCC-99412 (Locked)</span>
+                  </div>
+                  <div class="pt-2 border-t border-white/[0.08] flex justify-between items-center">
+                    <span class="text-gray-400">Refinery Gate ETA</span>
+                    <span class="text-[#F59E0B] font-bold">Today, 2h 45m</span>
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-2 font-mono text-[10px] text-gray-400">
+                  <span class="w-2 h-2 rounded-full bg-[#22C55E] animate-ping"></span>
+                  <span>Temperature: 32.4&deg;C &bull; Moisture: 0.32%</span>
+                </div>
+              </div>
+
+              <div class="mt-4 pt-3 border-t border-white/[0.06] text-center">
+                <span class="font-mono text-[10px] text-gray-500 uppercase tracking-widest">Digital Weighbridge Integration</span>
+              </div>
+            </div>
+
+            <div class="console-metric-box rounded-3xl p-6 sm:p-7 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between mb-2">
+                  <span class="font-mono text-[11px] font-semibold text-[#22C55E] uppercase tracking-[0.18em]">REQUEST FEEDSTOCK BATCH</span>
+                  <span class="px-2.5 py-0.5 rounded-full bg-[#22C55E]/15 border border-[#22C55E]/35 text-[#22C55E] font-mono text-[10px] font-semibold">DIRECT OFFTAKE</span>
+                </div>
+                <p class="text-xs text-gray-400 leading-relaxed mb-4">
+                  Allocate standardized ISCC-certified UCO batches directly into your refinery schedule.
+                </p>
+
+                <form id="customerAllocationForm" class="space-y-3.5" onsubmit="return false;">
+                  <div>
+                    <div class="flex items-center justify-between mb-1.5">
+                      <label class="font-mono text-[10px] uppercase tracking-wider text-gray-400">Batch Allocation Volume</label>
+                      <span id="custAllocationGhgBadge" class="font-mono text-[10px] font-bold text-[#38BDF8]">
+                        76.3 MT CO&#8322;e Abated
+                      </span>
+                    </div>
+
+                    <div class="grid grid-cols-4 gap-1.5 mb-2">
+                      <button type="button" data-alloc-preset="15" class="cust-alloc-btn touch-reactive py-1.5 px-2 rounded-lg bg-surface-950 border border-white/10 text-gray-300 font-mono text-[10px] hover:border-[#38BDF8] transition">
+                        15 MT
+                      </button>
+                      <button type="button" data-alloc-preset="25" class="cust-alloc-btn active-alloc-preset touch-reactive py-1.5 px-2 rounded-lg bg-[#38BDF8]/20 border border-[#38BDF8]/60 text-[#38BDF8] font-mono text-[10px] font-semibold transition">
+                        25 MT
+                      </button>
+                      <button type="button" data-alloc-preset="50" class="cust-alloc-btn touch-reactive py-1.5 px-2 rounded-lg bg-surface-950 border border-white/10 text-gray-300 font-mono text-[10px] hover:border-[#38BDF8] transition">
+                        50 MT
+                      </button>
+                      <button type="button" data-alloc-preset="100" class="cust-alloc-btn touch-reactive py-1.5 px-2 rounded-lg bg-surface-950 border border-white/10 text-gray-300 font-mono text-[10px] hover:border-[#38BDF8] transition">
+                        100 MT
+                      </button>
+                    </div>
+
+                    <select id="allocationVolume" class="w-full px-3.5 py-2.5 rounded-xl bg-surface-950 border border-white/10 text-white text-xs focus:outline-none focus:border-[#38BDF8]">
+                      <option value="15">15.0 Metric Tons (~16,500 L &bull; 1 Tanker)</option>
+                      <option value="25" selected>25.0 Metric Tons (~27,500 L &bull; 1 Heavy Tanker)</option>
+                      <option value="50">50.0 Metric Tons (~55,000 L &bull; 2 Heavy Tankers)</option>
+                      <option value="100">100.0 Metric Tons (~110,000 L &bull; 4 Tankers Train)</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label class="block font-mono text-[10px] uppercase tracking-wider text-gray-400 mb-1">Feedstock Grade Spec</label>
+                    <select id="allocationGrade" class="w-full px-3.5 py-2.5 rounded-xl bg-surface-950 border border-white/10 text-white text-xs focus:outline-none focus:border-[#38BDF8]">
+                      <option value="HVO" selected>Tier-1 HVO Grade (FFA &lt; 3.0%, TPC &lt; 24%)</option>
+                      <option value="SAF">SAF Precursor Grade (FFA &lt; 2.2%, Moisture &lt; 0.28%)</option>
+                      <option value="FAME">Standard Bio-Diesel EN 14214 Grade</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label class="block font-mono text-[10px] uppercase tracking-wider text-gray-400 mb-1">Refinery Inbound Delivery Terminal</label>
+                    <select id="allocationTerminal" class="w-full px-3.5 py-2.5 rounded-xl bg-surface-950 border border-white/10 text-white text-xs focus:outline-none focus:border-[#38BDF8]">
+                      <option value="Dahej" selected>Dahej Petrochem SEZ (Terminal Bay 02)</option>
+                      <option value="Hazira">Hazira Coastal Refining Terminal</option>
+                      <option value="Mangalore">Mangalore Port Export Terminal</option>
+                    </select>
+                  </div>
+
+                  <div class="p-3 rounded-xl bg-white/[0.03] border border-white/10 flex items-center justify-between font-mono text-[11px]">
+                    <span class="text-gray-400">Escrow Value:</span>
+                    <span id="custEscrowValue" class="text-[#38BDF8] font-bold">&#8377;16.50 Lakhs</span>
+                  </div>
+
+                  <button id="submitAllocationBtn" type="button" class="btn-green-pill touch-reactive w-full py-3.5 rounded-full font-mono text-xs font-bold uppercase tracking-wider mt-2 flex items-center justify-center gap-2 shadow-lg">
+                    <span>Submit Allocation Order</span>
+                    <span>&rarr;</span>
+                  </button>
+                </form>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===================================================================== -->
+  <!-- FOOTER (CONTACT & NAVIGATE COLUMNS)                                   -->
+  <!-- ===================================================================== -->
+  <footer id="contactSection" class="scroll-mt-20 relative z-10 bg-[#050806] border-t border-white/[0.07] pt-16 pb-12 text-sm text-gray-400">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-12 pb-14 border-b border-white/[0.07]">
+        
+        <div class="md:col-span-5 space-y-4">
+          <a href="#heroSection" id="footerBrandLogoLink" title="Reload GeoField Corp Platform" class="inline-block focus:outline-none cursor-pointer">
+            <img src="/brand/geofield-full-logo.png" alt="GeoField Corp" class="brand-logo-crisp h-11 w-auto object-contain" />
+          </a>
+          <p class="text-gray-400 text-sm leading-relaxed max-w-xs pt-1">
+            Powering the clean-energy transition through traceable, compliant supply chains.
+          </p>
+        </div>
+
+        <div class="md:col-span-4 space-y-3.5">
+          <div class="font-mono text-[10px] tracking-[0.22em] uppercase text-gray-500 mb-4">
+            CONTACT
+          </div>
+
+          <a href="tel:+917972737595" class="flex items-center gap-3 text-gray-300 hover:text-[#22C55E] transition text-sm">
+            <svg class="w-4 h-4 text-[#22C55E] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+            </svg>
+            <span>+91 79727 37595</span>
+          </a>
+
+          <a href="mailto:support@geofieldcorp.com" class="flex items-center gap-3 text-gray-300 hover:text-[#22C55E] transition text-sm">
+            <svg class="w-4 h-4 text-[#22C55E] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+            </svg>
+            <span>support@geofieldcorp.com</span>
+            <span class="font-mono text-[9px] tracking-[0.16em] uppercase text-gray-500">SUPPORT</span>
+          </a>
+
+          <a href="mailto:office@geofieldcorp.com" class="flex items-center gap-3 text-gray-300 hover:text-[#22C55E] transition text-sm">
+            <svg class="w-4 h-4 text-[#22C55E] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+            </svg>
+            <span>office@geofieldcorp.com</span>
+            <span class="font-mono text-[9px] tracking-[0.16em] uppercase text-gray-500">OFFICE</span>
+          </a>
+
+          <div class="flex items-center gap-3 text-gray-300 text-sm pt-0.5">
+            <svg class="w-4 h-4 text-[#22C55E] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+            <span>Mumbai, Maharashtra, India</span>
+          </div>
+        </div>
+
+        <div class="md:col-span-3 space-y-3">
+          <div class="font-mono text-[10px] tracking-[0.22em] uppercase text-gray-500 mb-4">
+            NAVIGATE
+          </div>
+          <div><a href="#threatSection" class="nav-scroll-link text-gray-300 hover:text-[#22C55E] transition">The Crisis</a></div>
+          <div><a href="#solutionSection" class="nav-scroll-link text-gray-300 hover:text-[#22C55E] transition">The Process</a></div>
+          <div><a href="#impactSection" class="nav-scroll-link text-gray-300 hover:text-[#22C55E] transition">Impact</a></div>
+          <div><button type="button" id="footerNavRegisterLink" class="text-gray-300 hover:text-[#22C55E] transition">Register</button></div>
+        </div>
+
+      </div>
+
+      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-[10px] tracking-[0.22em] uppercase text-gray-500">
+        <div>&copy; 2026 GEOFIELD CORP</div>
+        <div>WASTE &rarr; ENERGY &nbsp;&middot;&nbsp; TRACEABLE &nbsp;&middot;&nbsp; COMPLIANT</div>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL 1: 60-SECOND REGISTRATION GATEWAY                               -->
+  <!-- ===================================================================== -->
+  <div id="registrationModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-md p-4">
+    <div class="impact-console-shell rounded-3xl max-w-md w-full p-7 sm:p-8 border border-[#22C55E]/30 shadow-2xl relative">
+      <button id="closeRegModalBtn" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white flex items-center justify-center">
+        &times;
+      </button>
+
+      <div class="mb-6">
+        <div class="flex items-center justify-between font-mono text-[11px] text-gray-400 mb-2">
+          <span id="regStepIndicator">STEP 1 OF 3</span>
+          <span id="regProgressPct" class="text-[#22C55E]">33%</span>
+        </div>
+        <div class="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
+          <div id="regProgressBar" class="h-full bg-[#22C55E] transition-all duration-300" style="width: 33%;"></div>
         </div>
       </div>
-    </footer>
 
-    <!-- ========================================================================= -->
-    <!-- 9. STICKY MOBILE FLOATING BUTTON                                          -->
-    <!-- ========================================================================= -->
-    <transition
-      enter-active-class="transition duration-300 ease-out"
-      enter-from-class="opacity-0 translate-y-6"
-      enter-to-class="opacity-100 translate-y-0"
-      leave-active-class="transition duration-200 ease-in"
-      leave-from-class="opacity-100 translate-y-0"
-      leave-to-class="opacity-0 translate-y-6"
-    >
-      <button
-        v-if="showStickyRegister"
-        data-testid="sticky-register-btn"
-        @click="$emit('open-register')"
-        class="fixed bottom-[max(1.25rem,env(safe-area-inset-bottom))] left-1/2 z-50 flex -translate-x-1/2 items-center gap-2 rounded-full bg-bio px-6 py-3 sm:px-7 sm:py-3.5 font-mono text-xs font-bold uppercase tracking-[0.18em] sm:tracking-[0.2em] text-emerald-950 shadow-[0_0_40px_rgba(34,197,94,0.5)] transition-transform duration-300 hover:scale-[1.07] active:scale-95 lg:hidden whitespace-nowrap min-h-[44px] cursor-pointer"
-      >
-        Register Now <ArrowUpRight :size="15" :stroke-width="2.5" />
+      <!-- Step 1 -->
+      <div id="regStep1" class="space-y-4">
+        <h3 class="font-display text-2xl font-bold text-white">Join the Clean Network</h3>
+        <p class="text-xs text-gray-400">Get your restaurant’s static QR code in 60 seconds.</p>
+        <div>
+          <label class="block font-mono text-[10px] uppercase tracking-wider text-gray-400 mb-1.5">Your Name</label>
+          <input id="regOwnerName" type="text" value="Vikram Kulkarni" class="w-full px-4 py-3 rounded-xl bg-surface-950 border border-white/10 text-white text-sm focus:border-[#22C55E] focus:outline-none" />
+        </div>
+        <div>
+          <label class="block font-mono text-[10px] uppercase tracking-wider text-gray-400 mb-1.5">Mobile / WhatsApp Number</label>
+          <input id="regPhone" type="tel" value="+91 98230 45120" class="w-full px-4 py-3 rounded-xl bg-surface-950 border border-white/10 text-white text-sm focus:border-[#22C55E] focus:outline-none" />
+        </div>
+        <div class="pt-2">
+          <button id="regNextStep1Btn" class="btn-green-pill w-full py-3.5 rounded-full font-mono text-xs font-bold uppercase tracking-wider">
+            Continue &rarr;
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div id="regStep2" class="hidden space-y-4">
+        <h3 class="font-display text-2xl font-bold text-white">Kitchen Details</h3>
+        <p class="text-xs text-gray-400">Assign your establishment to a local collection cluster.</p>
+        <div>
+          <label class="block font-mono text-[10px] uppercase tracking-wider text-gray-400 mb-1.5">Restaurant / Kitchen Name</label>
+          <input id="regRestaurantName" type="text" value="Cluster 04 — Spice Route Kitchen" class="w-full px-4 py-3 rounded-xl bg-surface-950 border border-white/10 text-white text-sm focus:border-[#22C55E] focus:outline-none" />
+        </div>
+        <div>
+          <label class="block font-mono text-[10px] uppercase tracking-wider text-gray-400 mb-1.5">Weekly Used Oil Volume</label>
+          <select id="regTrackSelect" class="w-full px-4 py-3 rounded-xl bg-surface-950 border border-white/10 text-white text-sm focus:border-[#22C55E] focus:outline-none">
+            <option value="Commercial Kitchen">50 – 250 Liters / week</option>
+            <option value="Independent Eatery">Under 50 Liters / week</option>
+            <option value="High-Volume Kitchen">250+ Liters / week</option>
+          </select>
+        </div>
+        <div class="pt-2 flex gap-3">
+          <button id="regBackStep2Btn" class="px-5 py-3.5 rounded-full bg-white/5 text-gray-300 font-mono text-xs">
+            Back
+          </button>
+          <button id="regNextStep2Btn" class="btn-green-pill flex-1 py-3.5 rounded-full font-mono text-xs font-bold uppercase tracking-wider">
+            Continue &rarr;
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div id="regStep3" class="hidden space-y-4">
+        <h3 class="font-display text-2xl font-bold text-white">Pickup Cluster</h3>
+        <p class="text-xs text-gray-400">Your waterproof QR kit ships within 48 hours.</p>
+        <div>
+          <label class="block font-mono text-[10px] uppercase tracking-wider text-gray-400 mb-1.5">Area / City</label>
+          <input id="regLocation" type="text" value="Andheri West, Mumbai" class="w-full px-4 py-3 rounded-xl bg-surface-950 border border-white/10 text-white text-sm focus:border-[#22C55E] focus:outline-none" />
+        </div>
+        <div class="pt-2 flex gap-3">
+          <button id="regBackStep3Btn" class="px-5 py-3.5 rounded-full bg-white/5 text-gray-300 font-mono text-xs">
+            Back
+          </button>
+          <button id="regCompleteBtn" class="btn-green-pill flex-1 py-3.5 rounded-full font-mono text-xs font-bold uppercase tracking-wider">
+            Mint QR &amp; Complete &#8599;
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div id="regStep4" class="hidden text-center space-y-4">
+        <div class="w-12 h-12 rounded-full bg-[#22C55E]/20 text-[#22C55E] flex items-center justify-center mx-auto text-xl font-bold">
+          &check;
+        </div>
+        <h3 id="regDoneTitle" class="font-display text-2xl font-bold text-white">You’re In!</h3>
+        <p class="text-xs text-gray-400">Your location-specific QR receipt ID <strong id="regGeneratedQrId" class="text-[#22C55E] font-mono">#GF-0421</strong> is active.</p>
+        <button id="regGoToDashboardBtn" class="btn-green-pill w-full py-3.5 rounded-full font-mono text-xs font-bold uppercase tracking-wider">
+          Open Seller Console &rarr;
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL 2: FSSAI RUCO COMPLIANCE RECEIPT                                -->
+  <!-- ===================================================================== -->
+  <div id="certificateModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-md p-4">
+    <div class="impact-console-shell rounded-3xl max-w-lg w-full p-7 sm:p-8 border border-[#22C55E]/30 shadow-2xl relative">
+      <button id="closeCertModalBtn" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white flex items-center justify-center">
+        &times;
       </button>
-    </transition>
+
+      <div class="flex items-center gap-3 pb-4 border-b border-white/10">
+        <img src="/brand/geofield-full-logo.png" alt="GeoField Corp" class="h-8 w-auto object-contain" />
+        <div>
+          <div class="font-mono text-[10px] font-semibold text-[#22C55E] uppercase tracking-[0.18em]">ISCC &amp; FSSAI RUCO</div>
+          <div class="font-display font-bold text-white text-base">Official Traceable Disposal Receipt</div>
+        </div>
+      </div>
+
+      <div class="my-5 p-4 rounded-2xl bg-surface-950 border border-white/10 font-mono text-xs space-y-2.5">
+        <div class="flex justify-between"><span class="text-gray-400">RECEIPT ID</span><span id="certModalId" class="text-[#22C55E] font-semibold">#GF-0421</span></div>
+        <div class="flex justify-between"><span class="text-gray-400">SOURCE KITCHEN</span><span id="certModalFbo" class="text-white font-semibold">Cluster 04 — Andheri West</span></div>
+        <div class="flex justify-between"><span class="text-gray-400">COLLECTION DATE</span><span id="certModalDate" class="text-gray-300">18 Oct 2026</span></div>
+        <div class="flex justify-between"><span class="text-gray-400">VERIFIED VOLUME</span><span id="certModalMetrics" class="text-[#22C55E] font-semibold">42.6 L logged (TPC 26.4%)</span></div>
+        <div class="flex justify-between"><span class="text-gray-400">ESG OFFSET</span><span id="certModalEsg" class="text-[#A3E635] font-medium">+31.1 T CO₂ Network Pool</span></div>
+      </div>
+
+      <div class="flex justify-end">
+        <button id="downloadCertActionBtn" class="btn-green-pill px-6 py-2.5 rounded-full font-mono text-xs font-bold uppercase tracking-wider">
+          Download PDF Receipt
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUBTLE POP-UP TOAST -->
+  <div id="appToast" class="fixed bottom-6 right-6 z-50 hidden max-w-sm hero-floating-badge px-5 py-3.5 rounded-full text-xs text-white shadow-2xl flex items-center gap-2.5">
+    <span class="w-2 h-2 rounded-full bg-[#22C55E] animate-ping"></span>
+    <span id="appToastText" class="font-mono text-[11px]">Action completed</span>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL: ISCC EU PROOF OF SUSTAINABILITY (CUSTOMER/BUYER VIEW)           -->
+  <!-- ===================================================================== -->
+    <!-- ===================================================================== -->
+  <!-- MODAL: CLINICAL PATHOLOGY & BIO-ASSAY INSPECTOR                      -->
+  <!-- ===================================================================== -->
+  <div id="diseaseDetailModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/85 backdrop-blur-md p-4">
+    <div class="impact-console-shell rounded-3xl max-w-xl w-full p-6 sm:p-8 border border-red-500/40 shadow-2xl relative">
+      <button id="closeDiseaseModalBtn" type="button" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white flex items-center justify-center transition">
+        &times;
+      </button>
+
+      <div class="flex items-center gap-3.5 pb-4 border-b border-white/10">
+        <div id="modalDiseaseIconContainer" class="w-12 h-12 rounded-2xl bg-red-500/20 border border-red-500/40 text-red-400 flex items-center justify-center shrink-0">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span id="modalDiseaseCode" class="font-sans text-xs text-red-400 font-semibold">High Clinical Risk</span>
+            <span class="w-1 h-1 rounded-full bg-red-400"></span>
+            <span class="font-sans text-xs text-gray-400">FSSAI Food Safety Advisory</span>
+          </div>
+          <h2 id="modalDiseaseTitle" class="font-display text-2xl font-bold text-white mt-0.5">Hypertension</h2>
+        </div>
+      </div>
+
+      <div class="py-5 space-y-4 text-xs sm:text-sm">
+        <div class="p-4 rounded-xl bg-red-500/[0.08] border border-red-500/20">
+          <div class="font-mono text-[10px] uppercase tracking-wider text-red-400 font-bold mb-1">Physiological Attack Mechanism</div>
+          <p id="modalDiseaseMechanism" class="text-gray-200 leading-relaxed"></p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div class="p-3.5 rounded-xl bg-surface-950 border border-white/10">
+            <div class="font-mono text-[9px] uppercase tracking-wider text-gray-400">Biomarker Impact</div>
+            <div id="modalDiseaseBiomarker" class="font-mono text-xs font-bold text-red-400 mt-1"></div>
+          </div>
+          <div class="p-3.5 rounded-xl bg-surface-950 border border-white/10">
+            <div class="font-mono text-[9px] uppercase tracking-wider text-gray-400">FSSAI TPC Limit Breached</div>
+            <div id="modalDiseaseTpc" class="font-mono text-xs font-bold text-[#F59E0B] mt-1">> 25% Polar Compounds</div>
+          </div>
+        </div>
+
+        <div class="p-4 rounded-xl bg-emerald-500/[0.08] border border-emerald-500/25">
+          <div class="font-mono text-[10px] uppercase tracking-wider text-[#22C55E] font-bold mb-1">GeoField RUCO Interception Protocol</div>
+          <p id="modalDiseasePrevention" class="text-gray-300 leading-relaxed"></p>
+        </div>
+      </div>
+
+      <div class="pt-4 border-t border-white/10 flex items-center justify-between">
+        <span class="font-mono text-[10px] text-gray-400">Section 2.1 Food Safety &amp; Standards Act</span>
+        <button id="dismissDiseaseModalBtn" type="button" class="btn-green-pill touch-reactive px-5 py-2.5 rounded-full font-mono text-xs font-bold uppercase tracking-wider">
+          Acknowledged &amp; Close &times;
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="isccModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-md p-4">
+    <div class="impact-console-shell rounded-3xl max-w-lg w-full p-7 sm:p-8 border border-[#38BDF8]/35 shadow-2xl relative">
+      <button id="closeIsccModalBtn" type="button" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white flex items-center justify-center">
+        &times;
+      </button>
+
+      <div class="flex items-center gap-3 pb-4 border-b border-white/10">
+        <img src="/brand/geofield-full-logo.png" alt="GeoField Corp" class="h-8 w-auto object-contain" />
+        <div>
+          <div class="font-mono text-[10px] font-semibold text-[#38BDF8] uppercase tracking-[0.18em]">ISCC EU &bull; RED II DIRECTIVE</div>
+          <div class="font-display font-bold text-white text-base">Proof of Sustainability (PoS) Certificate</div>
+        </div>
+      </div>
+
+      <div class="my-5 p-4 rounded-2xl bg-surface-950 border border-white/10 font-mono text-xs space-y-2.5">
+        <div class="flex justify-between"><span class="text-gray-400">BATCH SERIAL</span><span id="isccModalBatchId" class="text-[#38BDF8] font-semibold">GF-ISCC-2024-091</span></div>
+        <div class="flex justify-between"><span class="text-gray-400">BUYER OFFTAKER</span><span id="isccModalBuyer" class="text-white font-semibold">Bharat Renewable Fuels (Dahej SEZ)</span></div>
+        <div class="flex justify-between"><span class="text-gray-400">ORIGIN HUB</span><span id="isccModalOrigin" class="text-gray-300">Mumbai Central Aggregation Hub</span></div>
+        <div class="flex justify-between"><span class="text-gray-400">NET WEIGHT</span><span id="isccModalWeight" class="text-[#22C55E] font-semibold">28.5 Metric Tons</span></div>
+        <div class="flex justify-between"><span class="text-gray-400">GHG ABATEMENT</span><span id="isccModalGhg" class="text-[#A3E635] font-semibold">88.5% Savings vs Fossil</span></div>
+        <div class="flex justify-between"><span class="text-gray-400">LAB ANALYSIS</span><span id="isccModalLab" class="text-gray-300">FFA 2.4% &bull; Moisture 0.32% &bull; Sulfur &lt; 10ppm</span></div>
+        <div class="flex justify-between"><span class="text-gray-400">CHAIN-OF-CUSTODY</span><span class="text-[#22C55E]">100% Traceable FSSAI Kitchens</span></div>
+      </div>
+
+      <div class="flex items-center justify-between pt-2">
+        <div class="flex items-center gap-2 font-mono text-[10px] text-gray-400">
+          <span class="w-2 h-2 rounded-full bg-[#38BDF8]"></span>
+          <span>Cryptographically Sealed QR</span>
+        </div>
+        <button id="downloadIsccBtn" type="button" class="btn-green-pill px-5 py-2 rounded-full font-mono text-xs font-bold uppercase tracking-wider">
+          Download PDF
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- INTERACTIVE ANIMATION, SCROLL ENGINE & STATE CONTROLLER               -->
+  <!-- ===================================================================== -->
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue';
-import { 
-  ArrowUpRight, 
-  ArrowDown, 
-  Menu, 
-  X, 
-  QrCode, 
-  Leaf, 
-  ScanLine, 
-  HeartPulse, 
-  Activity, 
-  ShieldAlert, 
-  Brain, 
-  Flame, 
-  Truck, 
-  Droplets, 
-  Wind, 
-  Waves, 
-  IndianRupee, 
-  TrendingUp, 
-  Mail, 
-  Phone, 
-  MapPin 
-} from 'lucide-vue-next';
+import { onMounted, onUnmounted } from 'vue';
 
-defineEmits(['open-register', 'open-login']);
-
-// Navigation definitions
-const navLinks = [
-  { label: 'The Crisis', href: '#crisis', id: 'crisis' },
-  { label: 'The Process', href: '#process', id: 'process' },
-  { label: 'Impact', href: '#impact', id: 'impact' },
-  { label: 'Contact', href: '#contact', id: 'contact' },
-];
-
-const marqueeItems = [
-  'FSSAI Compliant',
-  'Instant Bank Payouts',
-  '100% Traceable Supply Chain',
-  'Biofuel Feedstock Certified',
-  'Zero-Hazard Kitchen Network',
-  'ISCC Certified Aggregation',
-];
-
-const hazards = [
-  { icon: HeartPulse, title: 'Hypertension', desc: 'Cardiovascular strain from oxidised fats' },
-  { icon: Activity, title: 'Liver Disease', desc: 'Cellular toxicity accumulates per reheat' },
-  { icon: ShieldAlert, title: 'Atherosclerosis', desc: 'Vascular plaque from polar compounds' },
-  { icon: Brain, title: "Alzheimer's Link", desc: 'Neurodegenerative risk markers identified' },
-];
-
-const steps = [
-  {
-    num: '01',
-    icon: QrCode,
-    title: 'Register & Get Your QR',
-    desc: 'Sign up in 60 seconds and receive a unique, waterproof QR code assigned directly to your restaurant.',
-  },
-  {
-    num: '02',
-    icon: Truck,
-    title: 'Cluster-Based Pickups',
-    desc: 'Our hyper-local fleet runs optimised cluster routes — oil is collected quickly, cleanly, and on schedule.',
-  },
-  {
-    num: '03',
-    icon: ScanLine,
-    title: 'Scan & Done',
-    desc: 'The agent scans your QR, weight is auto-logged, and a digital FSSAI-compliant receipt is issued instantly.',
-  },
-];
-
-const impactMetrics = [
-  {
-    icon: Droplets,
-    label: 'Liters Recycled',
-    value: '12,450 L',
-    trend: '+18% this month',
-    testId: 'metric-liters',
-  },
-  {
-    icon: Wind,
-    label: 'Carbon Offset',
-    value: '31.1 T CO₂',
-    trend: '≈ 1,420 trees planted',
-    testId: 'metric-carbon',
-  },
-  {
-    icon: Waves,
-    label: 'Water Saved',
-    value: '186,000 L',
-    trend: 'Water table protected',
-    testId: 'metric-water',
-  },
-  {
-    icon: IndianRupee,
-    label: 'Revenue Generated',
-    value: '₹ 6,22,500',
-    trend: 'Instant payout verified',
-    testId: 'metric-revenue',
-  },
-];
-
-// Interactive state
-const isScrolled = ref(false);
-const mobileMenuOpen = ref(false);
-const showStickyRegister = ref(false);
-const isMobile = ref(typeof window !== 'undefined' ? window.innerWidth < 1024 : false);
-
-const scrollY = ref(0);
-const scrollProgress = ref(0);
-
-const heroRef = ref(null);
-const crisisSectionRef = ref(null);
-const processSectionRef = ref(null);
-const impactSectionRef = ref(null);
-const impactChartRef = ref(null);
-const ctaSectionRef = ref(null);
-
-// Section scroll progress values (0.0 to 1.0)
-const crisisProgress = ref(0);
-const processProgress = ref(0);
-const impactProgress = ref(0);
-const ctaProgress = ref(0);
-
-// Mouse interactive 3D parallax on Hero visual
-const mouseX = ref(0);
-const mouseY = ref(0);
-
-let heroRectCache = null;
-let mouseMoveTicking = false;
-let pendingMouseX = 0;
-let pendingMouseY = 0;
-
-function handleHeroMouseMove(e) {
-  if (!heroRectCache) {
-    if (heroRef.value) heroRectCache = heroRef.value.getBoundingClientRect();
-    else return;
-  }
-  pendingMouseX = (e.clientX - heroRectCache.left) / heroRectCache.width - 0.5;
-  pendingMouseY = (e.clientY - heroRectCache.top) / heroRectCache.height - 0.5;
-
-  if (!mouseMoveTicking) {
-    mouseMoveTicking = true;
-    window.requestAnimationFrame(() => {
-      mouseX.value = pendingMouseX;
-      mouseY.value = pendingMouseY;
-      mouseMoveTicking = false;
-    });
-  }
-}
-
-function handleHeroMouseLeave() {
-  pendingMouseX = 0;
-  pendingMouseY = 0;
-  mouseX.value = 0;
-  mouseY.value = 0;
-}
-
-// 1. Hero Left Copy parallax (GPU accelerated translate3d)
-const heroCopyStyle = computed(() => {
-  if (isMobile.value) {
-    return {
-      transform: 'none',
-      opacity: 1,
-    };
-  }
-  const y = scrollY.value;
-  return {
-    transform: `translate3d(0, ${(y * 0.12).toFixed(1)}px, 0)`,
-    opacity: Math.max(0, 1 - y / 700).toFixed(2),
-  };
-});
-
-// 2. Hero 3D visual card parallax (combines mouse parallax with scroll parallax, GPU accelerated)
-const heroGlowStyle = computed(() => {
-  if (isMobile.value) {
-    return { transform: 'none' };
-  }
-  return {
-    transform: `translate3d(${(mouseX.value * 22).toFixed(1)}px, ${(mouseY.value * 22 + scrollY.value * 0.22).toFixed(1)}px, 0)`,
-  };
-});
-
-const heroImgStyle = computed(() => {
-  if (isMobile.value) {
-    return { transform: 'none' };
-  }
-  return {
-    transform: `translate3d(${(mouseX.value * -16).toFixed(1)}px, ${(mouseY.value * -12 + scrollY.value * 0.12).toFixed(1)}px, 0) rotate(${(2 + mouseX.value * 2.5).toFixed(2)}deg)`,
-  };
-});
-
-const heroCardStyle = computed(() => {
-  if (isMobile.value) {
-    return { transform: 'none' };
-  }
-  return {
-    transform: `translate3d(${(mouseX.value * 34).toFixed(1)}px, ${(mouseY.value * 26 + scrollY.value * -0.22).toFixed(1)}px, 0)`,
-  };
-});
-
-const heroBadgeStyle = computed(() => {
-  if (isMobile.value) {
-    return { transform: 'none' };
-  }
-  return {
-    transform: `translate3d(${(mouseX.value * -30).toFixed(1)}px, ${(mouseY.value * -22 + scrollY.value * 0.18).toFixed(1)}px, 0)`,
-  };
-});
-
-// 3. Watermark text drift on scroll (smooth 60 FPS translate3d)
-const toxicWatermarkStyle = computed(() => ({
-  transform: `translate3d(${((crisisProgress.value - 0.45) * -180).toFixed(1)}px, 0, 0)`,
-}));
-
-const processWatermarkStyle = computed(() => ({
-  transform: `translate3d(${((processProgress.value - 0.5) * 200).toFixed(1)}px, 0, 0)`,
-}));
-
-const impactWatermarkStyle = computed(() => ({
-  transform: `translate3d(${((impactProgress.value - 0.5) * -160).toFixed(1)}px, 0, 0)`,
-}));
-
-// 4. Crisis right burner image parallax
-const crisisBurnerStyle = computed(() => ({
-  transform: `translate3d(0, ${((crisisProgress.value - 0.5) * -45).toFixed(1)}px, 0)`,
-}));
-
-// 5. Impact console parallax
-const impactConsoleStyle = computed(() => ({
-  transform: `translate3d(0, ${((1 - impactProgress.value) * 35).toFixed(1)}px, 0)`,
-}));
-
-// 6. CTA section background image parallax
-const ctaBgStyle = computed(() => ({
-  transform: `scale(${(1 + ctaProgress.value * 0.12).toFixed(3)}) translate3d(0, ${((ctaProgress.value - 0.5) * 30).toFixed(1)}px, 0)`,
-}));
-
-// 7. Animated counters on scroll for Crisis section
-const animatedUcoReturn = ref(0);
-const animatedTpcLimit = ref(0);
-let countStarted = false;
-
-function triggerCounters() {
-  if (countStarted) return;
-  countStarted = true;
-  
-  const duration = 2200;
-  const startTime = performance.now();
-  
-  function update(now) {
-    const elapsed = now - startTime;
-    const progress = Math.min(elapsed / duration, 1);
-    const easeOut = 1 - Math.pow(1 - progress, 3);
-    
-    animatedUcoReturn.value = Math.round(60 * easeOut);
-    animatedTpcLimit.value = Math.round(25 * easeOut);
-    
-    if (progress < 1) {
-      requestAnimationFrame(update);
-    }
-  }
-  requestAnimationFrame(update);
-}
-
-// 8. Process track dynamic truck position & active step
-const manualHoverStep = ref(null);
-
-const activeProcessStep = computed(() => {
-  if (manualHoverStep.value !== null) return manualHoverStep.value;
-  // Based on section scroll progress:
-  // Step 0: entering the process section
-  // Step 1: middle of the process section
-  // Step 2: scrolled through process section
-  if (processProgress.value < 0.40) return 0;
-  if (processProgress.value < 0.70) return 1;
-  return 2;
-});
-
-const processTruckLeft = computed(() => {
-  const step = activeProcessStep.value;
-  if (step === 0) return '8%';
-  if (step === 1) return '50%';
-  return '92%';
-});
-
-// 9. Interactive Velocity Chart Animation ("Go up and stop")
-const velocityChartProgress = ref(0);
-const animatedVelocityPercent = ref(0);
-let velocityChartStarted = false;
-let chartObserver = null;
-
-function triggerVelocityChartAnimation() {
-  if (velocityChartStarted) return;
-  velocityChartStarted = true;
-
-  const duration = 2000;
-  const startTime = performance.now();
-
-  function step(now) {
-    const elapsed = now - startTime;
-    const p = Math.min(elapsed / duration, 1);
-    // Smooth ease-out cubic curve: rapidly climbs then decelerates gracefully to stop at the peak
-    const easeOut = 1 - Math.pow(1 - p, 3);
-
-    velocityChartProgress.value = easeOut;
-    animatedVelocityPercent.value = Math.round(214 * easeOut);
-
-    if (p < 1) {
-      requestAnimationFrame(step);
-    } else {
-      velocityChartProgress.value = 1;
-      animatedVelocityPercent.value = 214;
-    }
-  }
-
-  requestAnimationFrame(step);
-}
-
-function replayVelocityChartAnimation() {
-  velocityChartStarted = false;
-  velocityChartProgress.value = 0;
-  animatedVelocityPercent.value = 0;
-  triggerVelocityChartAnimation();
-}
-
-const currentChartLinePath = computed(() => {
-  const k = velocityChartProgress.value;
-  const base = 105;
-  const getY = (targetY) => (base - (base - targetY) * k).toFixed(1);
-
-  const y0 = getY(95);
-  const y1 = getY(88);
-  const y2 = getY(92);
-  const y3 = getY(74);
-  const y4 = getY(66);
-  const y5 = getY(52);
-  const y6 = getY(44);
-  const y7 = getY(26);
-  const y8 = getY(18);
-  const y9 = getY(10);
-
-  return `M0 ${y0} C 50 ${y1}, 80 ${y2}, 120 ${y3} S 200 ${y4}, 240 ${y5} S 330 ${y6}, 370 ${y7} S 440 ${y8}, 480 ${y9}`;
-});
-
-const currentChartAreaPath = computed(() => {
-  return `${currentChartLinePath.value} L 480 110 L 0 110 Z`;
-});
-
-const peakMarkerY = computed(() => {
-  const base = 105;
-  const target = 10;
-  return Number((base - (base - target) * velocityChartProgress.value).toFixed(1));
-});
-
-// Cached layout metrics to prevent forced synchronous layout thrashing during scroll
-let cachedLayout = null;
-let resizeTicking = false;
-
-function updateLayoutCache() {
-  if (typeof window === 'undefined') return;
-  const windowHeight = window.innerHeight || 800;
-  const docHeight = Math.max(1, (document.documentElement.scrollHeight || 5000) - windowHeight);
-
-  function getMetrics(el) {
-    if (!el) return null;
-    const rect = el.getBoundingClientRect();
-    const top = rect.top + (window.scrollY || window.pageYOffset || 0);
-    return {
-      top,
-      height: rect.height,
-      total: rect.height + windowHeight,
-    };
-  }
-
-  cachedLayout = {
-    windowHeight,
-    docHeight,
-    crisis: getMetrics(crisisSectionRef.value),
-    process: getMetrics(processSectionRef.value),
-    impact: getMetrics(impactSectionRef.value),
-    cta: getMetrics(ctaSectionRef.value),
-  };
-
-  if (heroRef.value) {
-    heroRectCache = heroRef.value.getBoundingClientRect();
-  }
-}
-
-function onWindowResize() {
-  if (!resizeTicking) {
-    resizeTicking = true;
-    window.requestAnimationFrame(() => {
-      isMobile.value = window.innerWidth < 1024;
-      updateLayoutCache();
-      handleScroll();
-      resizeTicking = false;
-    });
-  }
-}
-
-// Pure math section progress calculation using cached metrics (0ms DOM cost during scroll)
-function calcSectionProgress(metrics, y, windowHeight) {
-  if (!metrics || metrics.total <= 0) return 0;
-  const current = windowHeight - (metrics.top - y);
-  return Math.min(Math.max(current / metrics.total, 0), 1);
-}
-
-// Scroll handlers with requestAnimationFrame
-let scrollTicking = false;
-
-function onScroll() {
-  if (!scrollTicking) {
-    window.requestAnimationFrame(() => {
-      handleScroll();
-      scrollTicking = false;
-    });
-    scrollTicking = true;
-  }
-}
-
-function handleScroll() {
-  const y = window.scrollY || window.pageYOffset || 0;
-  scrollY.value = y;
-  isScrolled.value = y > 40;
-  
-  if (!cachedLayout) {
-    updateLayoutCache();
-  }
-
-  const wh = cachedLayout ? cachedLayout.windowHeight : (window.innerHeight || 800);
-  const dh = cachedLayout ? cachedLayout.docHeight : 4000;
-  
-  showStickyRegister.value = y > wh * 0.7;
-  scrollProgress.value = dh > 0 ? Math.min(Math.max(y / dh, 0), 1) : 0;
-
-  // Update progress for all animated sections using pure math (no getBoundingClientRect reflows)
-  if (cachedLayout) {
-    if (cachedLayout.crisis) {
-      crisisProgress.value = calcSectionProgress(cachedLayout.crisis, y, wh);
-      if (!countStarted && crisisProgress.value > 0.25) {
-        triggerCounters();
-      }
-    }
-
-    if (cachedLayout.process) {
-      processProgress.value = calcSectionProgress(cachedLayout.process, y, wh);
-    }
-
-    if (cachedLayout.impact) {
-      impactProgress.value = calcSectionProgress(cachedLayout.impact, y, wh);
-      if (!velocityChartStarted && impactProgress.value > 0.15) {
-        triggerVelocityChartAnimation();
-      }
-    }
-
-    if (cachedLayout.cta) {
-      ctaProgress.value = calcSectionProgress(cachedLayout.cta, y, wh);
-    }
-  }
-}
-
-// Intersection Observer for scroll-reveal elements
-let revealObserver = null;
-
-function setupRevealObserver() {
-  const elements = document.querySelectorAll('.scroll-reveal, .scroll-reveal-left, .scroll-reveal-right, .scroll-reveal-scale');
-  if (!('IntersectionObserver' in window)) {
-    elements.forEach(el => el.classList.add('in-view'));
-    return;
-  }
-
-  revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('in-view');
-      }
-    });
-  }, {
-    threshold: 0.05,
-    rootMargin: '60px 0px 60px 0px'
-  });
-
-  elements.forEach(el => revealObserver.observe(el));
-}
+const emit = defineEmits(['open-register', 'open-login']);
 
 onMounted(() => {
-  window.addEventListener('scroll', onScroll, { passive: true });
-  window.addEventListener('resize', onWindowResize, { passive: true });
   
-  // Initialize layout cache after initial paint
-  updateLayoutCache();
-  handleScroll();
-
-  setTimeout(() => {
-    updateLayoutCache();
-    setupRevealObserver();
-  }, 100);
-
-  // Setup diagnostic 60 FPS telemetry helper on window
-  if (typeof window !== 'undefined') {
-    let frameCount = 0;
-    let lastTime = performance.now();
-    let droppedFrames = 0;
-    let totalFrameTime = 0;
-    let maxFrameTime = 0;
-
-    function trackFps(now) {
-      const delta = now - lastTime;
-      lastTime = now;
-      if (delta > 0 && delta < 1000) {
-        frameCount++;
-        totalFrameTime += delta;
-        if (delta > maxFrameTime) maxFrameTime = delta;
-        if (delta > 18.0) droppedFrames++;
-      }
-      requestAnimationFrame(trackFps);
-    }
-    requestAnimationFrame(trackFps);
-
-    window.__getFpsReport = () => {
-      const avgDelta = frameCount > 0 ? totalFrameTime / frameCount : 0;
-      const fps = avgDelta > 0 ? (1000 / avgDelta).toFixed(1) : '0';
-      return {
-        fps: Number(fps),
-        avgFrameTimeMs: Number(avgDelta.toFixed(2)),
-        maxFrameTimeMs: Number(maxFrameTime.toFixed(2)),
-        droppedFrames,
-        totalFrames: frameCount,
-        droppedPercent: frameCount > 0 ? ((droppedFrames / frameCount) * 100).toFixed(1) + '%' : '0%'
+      const clusterImageBank = {
+        kitchen: "/images/kitchen.jpeg",
+        burner: "/images/burner.jpeg",
+        drum: "/images/drum.jpeg",
+        hub: "/images/hub.jpeg"
       };
-    };
+
+      const state = {
+        viewMode: 'landing',
+        portalRole: 'seller', // 'seller' | 'customer'
+        ratePerLiter: 40,
+        consoleLiters: 12450,
+        activeTpcTarget: 25,
+        fboProfile: {
+          name: 'Cluster 04 — Andheri West',
+          qrId: '#GF-0421'
+        },
+        customerProfile: {
+          name: 'Bharat Renewable Fuels & SAF Refinery — Dahej SEZ',
+          contractId: '#BRF-2024-91',
+          contactPerson: 'Dr. Rajiv Mehta (Feedstock Operations)'
+        },
+        customerBatches: [
+          { id: 'GF-ISCC-2024-091', date: '21 Oct 2026', origin: 'Mumbai Central Aggregation Hub', volumeMt: 28.5, ffa: 2.4, moisture: 0.32, status: 'Verified & Delivered', ghgAvoided: 86.9, posId: 'ISCC-EU-POS-99412' },
+          { id: 'GF-ISCC-2024-088', date: '16 Oct 2026', origin: 'Pune Industrial Aggregation SEZ', volumeMt: 34.0, ffa: 2.7, moisture: 0.38, status: 'Verified & Delivered', ghgAvoided: 103.7, posId: 'ISCC-EU-POS-99388' },
+          { id: 'GF-ISCC-2024-084', date: '10 Oct 2026', origin: 'Nashik-Thane Bio-Transit Hub', volumeMt: 22.0, ffa: 2.9, moisture: 0.41, status: 'Verified & Delivered', ghgAvoided: 67.1, posId: 'ISCC-EU-POS-99351' },
+          { id: 'GF-ISCC-2024-079', date: '03 Oct 2026', origin: 'South Gujarat Industrial Corridor', volumeMt: 42.0, ffa: 2.5, moisture: 0.34, status: 'Verified & Delivered', ghgAvoided: 128.1, posId: 'ISCC-EU-POS-99310' }
+        ],
+        transactions: [
+          { id: '#GF-0421', date: '18 Oct 2026', liters: 42.6, tpc: 26.4, payout: 1704 },
+          { id: '#GF-0398', date: '12 Oct 2026', liters: 84.0, tpc: 25.8, payout: 3360 },
+          { id: '#GF-0351', date: '05 Oct 2026', liters: 125.4, tpc: 27.1, payout: 5016 },
+          { id: '#GF-0310', date: '28 Sep 2026', liters: 160.0, tpc: 26.0, payout: 6400 }
+        ]
+      };
+
+      // ===================================================================
+      // 1. TOUCH & CLICK RIPPLE + ELASTIC POP REACTION
+      // ===================================================================
+      function attachTouchReactions() {
+        document.querySelectorAll('.touch-reactive').forEach(el => {
+          el.addEventListener('pointerdown', (e) => {
+            const rect = el.getBoundingClientRect();
+            const ripple = document.createElement('span');
+            const size = Math.max(rect.width, rect.height);
+            ripple.className = 'touch-ripple-circle';
+            ripple.style.width = ripple.style.height = `${size}px`;
+            ripple.style.left = `${e.clientX - rect.left - size / 2}px`;
+            ripple.style.top = `${e.clientY - rect.top - size / 2}px`;
+            el.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 620);
+          });
+        });
+      }
+
+      function triggerNumberPop(el) {
+        if (!el) return;
+        el.classList.remove('number-pop-active');
+        void el.offsetWidth;
+        el.classList.add('number-pop-active');
+      }
+
+      let toastTimer = null;
+      function showToast(msg) {
+        const toast = document.getElementById('appToast');
+        const text = document.getElementById('appToastText');
+        if (!toast || !text) return;
+        text.textContent = msg;
+        toast.classList.remove('hidden');
+        if (toastTimer) clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toast.classList.add('hidden'), 3200);
+      }
+
+      // ===================================================================
+      // 2. BRAND LOGO PAGE RELOAD, SMOOTH NAVIGATION LINKS & SCROLL-SPY
+      // ===================================================================
+      function reloadPlatformPage(e) {
+        if (e) e.preventDefault();
+        // Reset state, scroll to top, re-trigger animations, and reload page cleanly
+        if (state.viewMode !== 'landing') {
+          setViewMode('landing', null, false);
+        }
+        window.scrollTo({ top: 0, behavior: 'auto' });
+        try {
+          window.location.reload();
+        } catch (err) {
+          // Fallback in sandboxed iframe if reload is restricted
+        }
+      }
+
+      document.getElementById('brandLogoLink')?.addEventListener('click', reloadPlatformPage);
+      document.getElementById('footerBrandLogoLink')?.addEventListener('click', reloadPlatformPage);
+
+      function initSmoothNavigationAndScrollSpy() {
+        document.querySelectorAll('.nav-scroll-link').forEach(link => {
+          link.addEventListener('click', (e) => {
+            const href = link.getAttribute('href');
+            if (!href || !href.startsWith('#')) return;
+            e.preventDefault();
+            const targetEl = document.querySelector(href);
+            if (!targetEl) return;
+
+            if (state.viewMode !== 'landing') {
+              setViewMode('landing', null, false);
+            }
+            const headerOffset = 80;
+            const rect = targetEl.getBoundingClientRect();
+            const offsetTop = rect.top + window.pageYOffset - headerOffset;
+            window.scrollTo({ top: Math.max(0, offsetTop), behavior: 'smooth' });
+          });
+        });
+
+        const navLinks = document.querySelectorAll('[data-nav-sec]');
+        const trackedSections = ['threatSection', 'solutionSection', 'impactSection', 'contactSection']
+          .map(id => document.getElementById(id))
+          .filter(Boolean);
+
+        let scrollTicking = false;
+        function updateOnScroll() {
+          scrollTicking = false;
+          const scrollTop = window.pageYOffset || document.documentElement.scrollTop || 0;
+
+          if (state.viewMode === 'landing') {
+            let currentId = '';
+            const probeY = scrollTop + window.innerHeight * 0.34;
+            trackedSections.forEach(sec => {
+              if (sec.offsetTop <= probeY) {
+                currentId = sec.id;
+              }
+            });
+            navLinks.forEach(a => {
+              const isMatch = a.getAttribute('data-nav-sec') === currentId;
+              a.classList.toggle('text-[#22C55E]', isMatch);
+              a.classList.toggle('font-semibold', isMatch);
+            });
+          }
+        }
+
+        window.addEventListener('scroll', () => {
+          if (!scrollTicking) {
+            scrollTicking = true;
+            requestAnimationFrame(updateOnScroll);
+          }
+        }, { passive: true });
+        updateOnScroll();
+      }
+
+      // ===================================================================
+      // 3. ZERO-LOCK SCROLL REVEAL ENGINE (RELEASES TRANSFORM ON SETTLE)
+      // ===================================================================
+      function initScrollReveal() {
+        const reveals = document.querySelectorAll('.reveal');
+        const bgSlides = document.querySelectorAll('.bg-slide-from-right, .bg-slide-from-left');
+        if ('IntersectionObserver' in window) {
+          const obs = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                const el = entry.target;
+                el.classList.add('is-visible');
+                const delayStr = el.style.getPropertyValue('--delay') || '0ms';
+                const delayMs = parseInt(delayStr, 10) || 0;
+                setTimeout(() => {
+                  el.classList.add('reveal-settled');
+                  el.classList.remove('reveal-up', 'reveal-pop', 'reveal-left', 'reveal-right');
+                }, delayMs + 1100);
+                obs.unobserve(el);
+              }
+            });
+          }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+          reveals.forEach(el => obs.observe(el));
+
+          const bgObs = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-slid-in');
+                bgObs.unobserve(entry.target);
+              }
+            });
+          }, { threshold: 0.08, rootMargin: '0px 0px -4% 0px' });
+          bgSlides.forEach(el => bgObs.observe(el));
+        } else {
+          reveals.forEach(el => el.classList.add('is-visible', 'reveal-settled'));
+          bgSlides.forEach(el => el.classList.add('is-slid-in'));
+        }
+      }
+
+      // ===================================================================
+      // 4. HERO STUDIO LIGHT TRACKING, 3D CARD TILT & CLUSTER SWITCHER
+      // ===================================================================
+
+
+      const heroWrap = document.getElementById('heroParallaxWrap');
+      const heroCard = document.getElementById('heroParallaxCard');
+      if (heroWrap && heroCard) {
+        let tiltFrameId = null;
+        heroWrap.addEventListener('pointermove', (e) => {
+          if (tiltFrameId) return;
+          const clientX = e.clientX;
+          const clientY = e.clientY;
+          tiltFrameId = requestAnimationFrame(() => {
+            const rect = heroWrap.getBoundingClientRect();
+            const x = (clientX - rect.left) / rect.width - 0.5;
+            const y = (clientY - rect.top) / rect.height - 0.5;
+            heroCard.style.transform = `perspective(1100px) rotateY(${(x * 6).toFixed(2)}deg) rotateX(${(-y * 6).toFixed(2)}deg)`;
+            tiltFrameId = null;
+          });
+        }, { passive: true });
+        heroWrap.addEventListener('pointerleave', () => {
+          if (tiltFrameId) {
+            cancelAnimationFrame(tiltFrameId);
+            tiltFrameId = null;
+          }
+          heroCard.style.transform = '';
+        });
+      }
+
+      let heroBadgeAnimId = null;
+      function animateHeroBadges(litersTarget, co2Target, receiptCode, clusterTitle, imgSrc) {
+        if (heroBadgeAnimId) {
+          cancelAnimationFrame(heroBadgeAnimId);
+          heroBadgeAnimId = null;
+        }
+        const litersEl = document.getElementById('heroLoggedLitersText');
+        const co2El = document.getElementById('heroCo2OffsetText');
+        const recEl = document.getElementById('heroReceiptCodeText');
+        const titleEl = document.getElementById('heroClusterTitleText');
+        const imgEl = document.getElementById('heroMainKitchenImg');
+
+        if (imgEl && imgSrc) imgEl.src = imgSrc;
+        if (titleEl && clusterTitle) titleEl.textContent = clusterTitle;
+        if (recEl && receiptCode) recEl.textContent = receiptCode;
+
+        const duration = 750;
+        const start = performance.now();
+        function step(now) {
+          const p = Math.min(1, (now - start) / duration);
+          const eased = 1 - Math.pow(1 - p, 3);
+          if (litersEl) litersEl.textContent = `${(litersTarget * eased).toFixed(1)} L logged`;
+          if (co2El) co2El.textContent = `+${(co2Target * eased).toFixed(1)} T`;
+          if (p < 1) {
+            heroBadgeAnimId = requestAnimationFrame(step);
+          } else {
+            heroBadgeAnimId = null;
+            triggerNumberPop(litersEl);
+            triggerNumberPop(co2El);
+          }
+        }
+        heroBadgeAnimId = requestAnimationFrame(step);
+      }
+
+      document.querySelectorAll('.hero-cluster-pill').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const imgKey = btn.getAttribute('data-img-key') || 'kitchen';
+          const imgSrc = clusterImageBank[imgKey] || clusterImageBank.kitchen;
+          const cluster = btn.getAttribute('data-cluster');
+          const liters = parseFloat(btn.getAttribute('data-liters') || '42.6');
+          const receipt = btn.getAttribute('data-receipt') || '#GF-0421';
+          const co2 = parseFloat(btn.getAttribute('data-co2') || '31.1');
+
+          animateHeroBadges(liters, co2, receipt, cluster, imgSrc);
+
+          document.querySelectorAll('.hero-cluster-pill').forEach(b => {
+            b.className = 'hero-cluster-pill touch-reactive px-3 py-1 rounded-full bg-white/[0.04] border border-white/10 font-mono text-[10px] text-gray-400 hover:text-white transition';
+          });
+          btn.className = 'hero-cluster-pill touch-reactive px-3 py-1 rounded-full bg-[#22C55E]/20 border border-[#22C55E]/50 font-mono text-[10px] text-[#22C55E] font-semibold transition';
+        });
+      });
+
+      document.getElementById('heroTopFloatingBadge')?.addEventListener('click', () => {
+        const randomLiters = +(35 + Math.random() * 55).toFixed(1);
+        const randomCo2 = +(24 + Math.random() * 40).toFixed(1);
+        const randomCode = '#GF-0' + Math.floor(400 + Math.random() * 590);
+        animateHeroBadges(randomLiters, randomCo2, randomCode);
+        showToast(`Live QR Scan Verified: ${randomLiters} L logged (${randomCode})`);
+      });
+
+      document.getElementById('heroBottomFloatingBadge')?.addEventListener('click', () => {
+        const co2El = document.getElementById('heroCo2OffsetText');
+        triggerNumberPop(co2El);
+        showToast('ISCC Certified Carbon Offset: +31.1 Tonnes CO₂ prevented');
+      });
+
+      // ===================================================================
+      // 5. SECTION 01 ("THE THREAT"): ULTRA-SMOOTH 60FPS SCROLL COUNT-UP
+      // ===================================================================
+      const crisisAnimTimers = new WeakMap();
+
+      function animateCrisisCounter(el, targetVal, gaugeBarEl = null, duration = 1600, delayMs = 0) {
+        if (!el) return;
+        const prevId = crisisAnimTimers.get(el);
+        if (prevId) cancelAnimationFrame(prevId);
+
+        el.textContent = '0';
+        if (gaugeBarEl) gaugeBarEl.style.width = '0%';
+
+        let lastShown = -1;
+        const startTime = performance.now() + delayMs;
+        // Gauge bar target fill proportion matching image_adb67c.jpg (60% -> 76% bar, 25% -> 38% bar)
+        const targetBarWidth = Math.min(96, Math.round(targetVal * 1.32));
+
+        function tick(now) {
+          if (now < startTime) {
+            crisisAnimTimers.set(el, requestAnimationFrame(tick));
+            return;
+          }
+          const p = Math.min(1, (now - startTime) / duration);
+          // Balanced cubic ease-out so every integer step from 0 to 60 and 0 to 25 is visibly counted
+          const eased = 1 - Math.pow(1 - p, 2.75);
+          const cur = Math.round(targetVal * eased);
+          if (cur !== lastShown) {
+            el.textContent = String(cur);
+            lastShown = cur;
+          }
+          if (gaugeBarEl) {
+            gaugeBarEl.style.width = `${(targetBarWidth * eased).toFixed(1)}%`;
+          }
+          if (p < 1) {
+            crisisAnimTimers.set(el, requestAnimationFrame(tick));
+          } else {
+            crisisAnimTimers.delete(el);
+            el.textContent = String(targetVal);
+            if (gaugeBarEl) {
+              gaugeBarEl.style.width = `${targetBarWidth}%`;
+            }
+            triggerNumberPop(el.parentElement);
+          }
+        }
+        crisisAnimTimers.set(el, requestAnimationFrame(tick));
+      }
+
+      const box60El = document.getElementById('callout60Box');
+      const box25El = document.getElementById('callout25Box');
+      const crisisStatsGrid = document.getElementById('crisisStatsGrid');
+      let threatInView = false;
+
+      let threatAnimated = false;
+
+      function runThreatCountUp() {
+        if (threatAnimated) return;
+        threatAnimated = true;
+        box60El?.classList.add('is-popped-stat');
+        box25El?.classList.add('is-popped-stat');
+        const c60 = document.getElementById('crisis60Counter');
+        const c25 = document.getElementById('crisis25Counter');
+        const g60 = document.getElementById('crisis60GaugeBar');
+        const g25 = document.getElementById('crisis25GaugeBar');
+        animateCrisisCounter(c60, 60, g60, 1400, 40);
+        animateCrisisCounter(c25, state.activeTpcTarget, g25, 1400, 100);
+      }
+
+      function resetThreatCountUp() {
+        // Safe reset on explicit interaction only
+      }
+
+      if ('IntersectionObserver' in window && crisisStatsGrid) {
+        const statObs = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting && !threatAnimated) {
+              runThreatCountUp();
+              statObs.unobserve(crisisStatsGrid);
+            }
+          });
+        }, { threshold: 0.15, rootMargin: '0px 0px -30px 0px' });
+        statObs.observe(crisisStatsGrid);
+      } else {
+        runThreatCountUp();
+      }
+
+      box60El?.addEventListener('click', () => {
+        animateCrisisCounter(document.getElementById('crisis60Counter'), 60, document.getElementById('crisis60GaugeBar'), 950, 0);
+        showToast('60% of untreated UCO in India re-enters the street food chain.');
+      });
+
+      box25El?.addEventListener('click', () => {
+        animateCrisisCounter(document.getElementById('crisis25Counter'), state.activeTpcTarget, document.getElementById('crisis25GaugeBar'), 950, 0);
+        showToast('FSSAI statutory mandate requires disposal at 25% Total Polar Compounds.');
+      });
+
+      // Interactive Test Reheat TPC Segmented Control
+      document.querySelectorAll('.reheat-pill-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const tpc = parseInt(btn.getAttribute('data-tpc') || '25', 10);
+          state.activeTpcTarget = tpc;
+          const meterWidth = btn.getAttribute('data-meter') || '62%';
+          const color = btn.getAttribute('data-color') || '#F59E0B';
+          const status = btn.getAttribute('data-status') || 'FSSAI MANDATE';
+          const desc = btn.getAttribute('data-desc') || '';
+
+          const c25 = document.getElementById('crisis25Counter');
+          const g25 = document.getElementById('crisis25GaugeBar');
+          const wrapper25 = document.getElementById('crisis25Wrapper');
+          const sub = document.getElementById('crisis25SubLabel');
+          const descEl = document.getElementById('crisis25Desc');
+          const spectrumBar = document.getElementById('reheatTpcSpectrumBar');
+          const activeBadge = document.getElementById('reheatSimActiveBadge');
+
+          animateCrisisCounter(c25, tpc, g25, 900, 0);
+          if (wrapper25) wrapper25.style.color = color;
+          if (box25El) box25El.style.borderLeftColor = color;
+          if (sub) {
+            sub.textContent = status;
+            sub.style.color = color;
+          }
+          if (descEl) descEl.textContent = desc;
+          if (spectrumBar) spectrumBar.style.width = meterWidth;
+          if (activeBadge) {
+            activeBadge.textContent = `${status} • ${tpc}% TPC`;
+            activeBadge.style.color = color;
+          }
+
+
+          document.querySelectorAll('[data-reheat-card]').forEach(card => {
+            const ctpc = parseInt(card.getAttribute('data-reheat-card'), 10);
+            const cbtn = card.querySelector('.reheat-pill-btn');
+            if (ctpc === tpc) {
+              card.className = 'reheat-option-card active-reheat-option rounded-lg';
+              if (tpc === 14) {
+                if (cbtn) cbtn.className = 'reheat-pill-btn w-full py-2.5 px-2 rounded-lg bg-[#22C55E]/[0.14] border border-[#22C55E]/45 font-mono text-[10px] sm:text-[11px] font-semibold text-[#86EFAC] flex items-center justify-center gap-1.5 shadow-sm transition';
+              } else if (tpc === 25) {
+                if (cbtn) cbtn.className = 'reheat-pill-btn w-full py-2.5 px-2 rounded-lg bg-[#F59E0B]/[0.14] border border-[#F59E0B]/45 font-mono text-[10px] sm:text-[11px] font-semibold text-[#FDE68A] flex items-center justify-center gap-1.5 shadow-sm transition';
+              } else {
+                if (cbtn) cbtn.className = 'reheat-pill-btn w-full py-2.5 px-2 rounded-lg bg-[#EF4444]/[0.14] border border-[#EF4444]/45 font-mono text-[10px] sm:text-[11px] font-semibold text-[#FCA5A5] flex items-center justify-center gap-1.5 shadow-sm transition';
+              }
+            } else {
+              card.className = 'reheat-option-card rounded-lg';
+              if (cbtn) cbtn.className = 'reheat-pill-btn w-full py-2.5 px-2 rounded-lg bg-transparent hover:bg-white/[0.04] border border-transparent font-mono text-[10px] sm:text-[11px] font-medium text-gray-300 hover:text-white flex items-center justify-center gap-1.5 transition';
+            }
+          });
+        });
+      });
+
+      document.querySelectorAll('[data-reheat-card]').forEach(card => {
+        card.addEventListener('click', (e) => {
+          if (!e.target.closest('.reheat-pill-btn')) {
+            card.querySelector('.reheat-pill-btn')?.click();
+          }
+        });
+      });
+
+      // ===================================================================
+      // 6. SECTION 02 ("THE PROCESS"): CHOREOGRAPHED PIPELINE & STEP CARDS
+      // ===================================================================
+      const stepPositions = { 1: '16.66%', 2: '50%', 3: '83.33%' };
+      const stepBeamWidths = { 1: '18%', 2: '52%', 3: '100%' };
+      const stepTelemetryLabels = {
+        1: 'STEP 01 • QR KIT ASSIGNED',
+        2: 'STEP 02 • FLEET ROUTED',
+        3: 'STEP 03 • FSSAI RECEIPT ISSUED'
+      };
+
+      function activateProcessStep(stepNum) {
+        const puck = document.getElementById('glidingProcessPuck');
+        const beam = document.getElementById('processTrackProgressFill');
+        const pill = document.getElementById('processPuckTelemetryPill');
+
+        if (puck && stepPositions[stepNum]) puck.style.left = stepPositions[stepNum];
+        if (beam && stepBeamWidths[stepNum]) beam.style.width = stepBeamWidths[stepNum];
+        if (pill && stepTelemetryLabels[stepNum]) pill.textContent = stepTelemetryLabels[stepNum];
+
+        document.querySelectorAll('.process-node-dot').forEach(dot => {
+          const ds = parseInt(dot.getAttribute('data-step'), 10);
+          dot.classList.toggle('scale-110', ds <= stepNum);
+          dot.style.backgroundColor = ds <= stepNum ? '#DCFCE7' : '#FFFFFF';
+        });
+
+        document.querySelectorAll('[data-step-card]').forEach(card => {
+          const s = parseInt(card.getAttribute('data-step-card'), 10);
+          const isMatch = s === stepNum;
+          card.classList.toggle('active-process-card', isMatch);
+
+          const iconBox = card.querySelector('.step-icon-box');
+          const bar = card.querySelector('.step-bottom-bar');
+          const numMark = card.querySelector('.step-num-watermark');
+          if (iconBox) {
+            iconBox.className = isMatch
+              ? 'step-icon-box w-14 h-14 rounded-2xl bg-[#22C55E] text-[#050A07] flex items-center justify-center shadow-lg shadow-[#22C55E]/35 scale-105 transition-all duration-500'
+              : 'step-icon-box w-14 h-14 rounded-2xl bg-[#22C55E]/15 text-[#16A34A] flex items-center justify-center transition-all duration-500';
+          }
+          if (numMark) {
+            numMark.className = isMatch
+              ? 'step-num-watermark font-display font-extrabold text-5xl text-[#16A34A]/35 select-none transition-colors duration-500'
+              : 'step-num-watermark font-display font-extrabold text-5xl text-gray-200 select-none transition-colors duration-500';
+          }
+          if (bar) {
+            bar.style.width = isMatch ? '100%' : (s < stepNum ? '65%' : '24%');
+          }
+        });
+      }
+
+      let processWalkthroughTimers = [];
+      let processAnimatedOnce = false;
+      function cancelProcessWalkthrough() {
+        processWalkthroughTimers.forEach(t => clearTimeout(t));
+        processWalkthroughTimers = [];
+      }
+
+      const processCardsGrid = document.getElementById('processCardsGrid');
+      if ('IntersectionObserver' in window && processCardsGrid) {
+        const procObs = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting && !processAnimatedOnce) {
+              processAnimatedOnce = true;
+              cancelProcessWalkthrough();
+              activateProcessStep(1);
+              processWalkthroughTimers.push(setTimeout(() => activateProcessStep(2), 850));
+              processWalkthroughTimers.push(setTimeout(() => activateProcessStep(3), 1700));
+              processWalkthroughTimers.push(setTimeout(() => activateProcessStep(2), 2550));
+              procObs.unobserve(processCardsGrid);
+            }
+          });
+        }, { threshold: 0.18, rootMargin: '0px 0px -6% 0px' });
+        procObs.observe(processCardsGrid);
+      }
+
+      document.querySelectorAll('[data-step-card]').forEach(card => {
+        const s = parseInt(card.getAttribute('data-step-card'), 10);
+        card.addEventListener('mouseenter', () => {
+          cancelProcessWalkthrough();
+          activateProcessStep(s);
+        });
+        card.addEventListener('click', () => {
+          cancelProcessWalkthrough();
+          activateProcessStep(s);
+          const msgs = {
+            1: 'Step 01: Instant 60-second onboarding & waterproof restaurant QR assigned.',
+            2: 'Step 02: Hyper-local cluster fleet routed automatically to your kitchen.',
+            3: 'Step 03: QR scanned, weight auto-logged & instant FSSAI receipt issued!'
+          };
+          showToast(msgs[s]);
+        });
+      });
+
+      document.querySelectorAll('.process-node-dot').forEach(dot => {
+        dot.addEventListener('click', () => {
+          cancelProcessWalkthrough();
+          activateProcessStep(parseInt(dot.getAttribute('data-step'), 10));
+        });
+      });
+
+      // ===================================================================
+      // 7. SECTION 03 ("GEOFIELD IMPACT CONSOLE"): LEFT-TO-RIGHT GRAPH & COUNTERS
+      // ===================================================================
+      const baseCurveY = [118, 114, 108, 96, 90, 82, 71, 64, 52, 42, 31, 24];
+
+      function buildSmoothSplinePath(pts) {
+        if (!pts.length) return '';
+        let d = `M ${pts[0].x} ${pts[0].y}`;
+        for (let i = 0; i < pts.length - 1; i++) {
+          const p0 = pts[i];
+          const p1 = pts[i + 1];
+          const midX = (p0.x + p1.x) * 0.5;
+          d += ` C ${midX} ${p0.y}, ${midX} ${p1.y}, ${p1.x} ${p1.y}`;
+        }
+        return d;
+      }
+
+      function interpolateSplineYAtX(pts, xVal) {
+        if (!pts || !pts.length) return 24;
+        if (xVal <= pts[0].x) return pts[0].y;
+        if (xVal >= pts[pts.length - 1].x) return pts[pts.length - 1].y;
+        for (let i = 0; i < pts.length - 1; i++) {
+          const p0 = pts[i];
+          const p1 = pts[i + 1];
+          if (xVal >= p0.x && xVal <= p1.x) {
+            const t = (xVal - p0.x) / Math.max(1, p1.x - p0.x);
+            const st = t * t * (3 - 2 * t);
+            return +(p0.y + (p1.y - p0.y) * st).toFixed(1);
+          }
+        }
+        return pts[pts.length - 1].y;
+      }
+
+      let consoleAnimFrameId = null;
+
+      function computeTargetSplinePts(liters) {
+        const ratio = liters / 12450;
+        const scaleFactor = 0.55 + 0.45 * Math.min(1.35, Math.pow(ratio, 0.4));
+        return baseCurveY.map((by, i) => {
+          const x = Math.round(15 + i * (570 / 11));
+          const distFromBase = 128 - by;
+          const y = Math.max(14, Math.min(126, Math.round(128 - distFromBase * scaleFactor)));
+          return { x, y, week: i + 1, weeklyLiters: Math.round((liters / 12) * (0.55 + i * 0.08)) };
+        });
+      }
+
+      function renderConsoleAndGraph(liters, triggerPop = false) {
+        if (consoleAnimFrameId) {
+          cancelAnimationFrame(consoleAnimFrameId);
+          consoleAnimFrameId = null;
+        }
+        state.consoleLiters = liters;
+        const ratio = liters / 12450;
+        const co2Tonnes = (31.1 * ratio).toFixed(1);
+        const treesCount = Math.round(1420 * ratio);
+        const waterSaved = Math.round(186000 * ratio);
+        const revenueInr = Math.round(498000 * ratio);
+        const growthPct = Math.round(140 + 74 * Math.pow(ratio, 0.35));
+
+        const litersEl = document.getElementById('consoleLitersValue');
+        const co2El = document.getElementById('consoleCo2Value');
+        const treesEl = document.getElementById('consoleTreesTag');
+        const waterEl = document.getElementById('consoleWaterValue');
+        const revEl = document.getElementById('consoleRevenueValue');
+        const badgeEl = document.getElementById('consoleSliderBadge');
+        const pctEl = document.getElementById('velocityGrowthPct');
+        const clipRect = document.getElementById('velocityClipRect');
+
+        if (litersEl) litersEl.textContent = `${liters.toLocaleString('en-IN')} L`;
+        if (co2El) co2El.textContent = `${co2Tonnes} T CO₂`;
+        if (treesEl) treesEl.textContent = `↗ ≈ ${treesCount.toLocaleString('en-IN')} TREES PLANTED`;
+        if (waterEl) waterEl.textContent = `${waterSaved.toLocaleString('en-IN')} L`;
+        if (revEl) revEl.textContent = `₹ ${revenueInr.toLocaleString('en-IN')}`;
+        if (badgeEl) badgeEl.textContent = `${liters.toLocaleString('en-IN')} L`;
+        if (pctEl) pctEl.textContent = `+${growthPct}%`;
+        if (clipRect) clipRect.setAttribute('width', '600');
+
+        if (triggerPop) {
+          [litersEl, co2El, waterEl, revEl, pctEl].forEach(triggerNumberPop);
+        }
+
+        const pts = computeTargetSplinePts(liters);
+        const lineD = buildSmoothSplinePath(pts);
+        const areaD = `${lineD} L ${pts[pts.length - 1].x} 134 L ${pts[0].x} 134 Z`;
+
+        document.getElementById('velocityLinePath')?.setAttribute('d', lineD);
+        document.getElementById('velocityGlowPath')?.setAttribute('d', lineD);
+        document.getElementById('velocityAreaPath')?.setAttribute('d', areaD);
+
+        const lastPt = pts[pts.length - 1];
+        const dot = document.getElementById('velocityActiveDot');
+        const pulse = document.getElementById('velocityActivePulse');
+        const scrub = document.getElementById('velocityScrubLine');
+        if (dot) {
+          dot.setAttribute('cx', String(lastPt.x));
+          dot.setAttribute('cy', String(lastPt.y));
+        }
+        if (pulse) {
+          pulse.setAttribute('cx', String(lastPt.x));
+          pulse.setAttribute('cy', String(lastPt.y));
+        }
+        if (scrub) {
+          scrub.setAttribute('x1', String(lastPt.x));
+          scrub.setAttribute('x2', String(lastPt.x));
+        }
+
+        state.currentSplinePts = pts;
+      }
+
+      function animateConsoleCountUpAndGraphGrow(targetLiters = state.consoleLiters, duration = 1650) {
+        if (consoleAnimFrameId) {
+          cancelAnimationFrame(consoleAnimFrameId);
+          consoleAnimFrameId = null;
+        }
+        state.consoleLiters = targetLiters;
+        const ratio = targetLiters / 12450;
+        const targetCo2 = 31.1 * ratio;
+        const targetTrees = Math.round(1420 * ratio);
+        const targetWater = Math.round(186000 * ratio);
+        const targetRev = Math.round(498000 * ratio);
+        const targetGrowth = Math.round(140 + 74 * Math.pow(ratio, 0.35));
+
+        const litersEl = document.getElementById('consoleLitersValue');
+        const co2El = document.getElementById('consoleCo2Value');
+        const treesEl = document.getElementById('consoleTreesTag');
+        const waterEl = document.getElementById('consoleWaterValue');
+        const revEl = document.getElementById('consoleRevenueValue');
+        const badgeEl = document.getElementById('consoleSliderBadge');
+        const pctEl = document.getElementById('velocityGrowthPct');
+        const lineEl = document.getElementById('velocityLinePath');
+        const glowEl = document.getElementById('velocityGlowPath');
+        const areaEl = document.getElementById('velocityAreaPath');
+        const clipRect = document.getElementById('velocityClipRect');
+        const dot = document.getElementById('velocityActiveDot');
+        const pulse = document.getElementById('velocityActivePulse');
+        const scrub = document.getElementById('velocityScrubLine');
+
+        const targetPts = computeTargetSplinePts(targetLiters);
+        state.currentSplinePts = targetPts;
+
+        const lineD = buildSmoothSplinePath(targetPts);
+        const areaD = `${lineD} L ${targetPts[targetPts.length - 1].x} 134 L ${targetPts[0].x} 134 Z`;
+        lineEl?.setAttribute('d', lineD);
+        glowEl?.setAttribute('d', lineD);
+        areaEl?.setAttribute('d', areaD);
+
+        const startTime = performance.now();
+
+        function step(now) {
+          const p = Math.min(1, (now - startTime) / duration);
+          const eased = 1 - Math.pow(1 - p, 3);
+
+          const curLiters = Math.round(targetLiters * eased);
+          const curCo2 = (targetCo2 * eased).toFixed(1);
+          const curTrees = Math.round(targetTrees * eased);
+          const curWater = Math.round(targetWater * eased);
+          const curRev = Math.round(targetRev * eased);
+          const curGrowth = Math.round(targetGrowth * eased);
+
+          if (litersEl) litersEl.textContent = `${curLiters.toLocaleString('en-IN')} L`;
+          if (co2El) co2El.textContent = `${curCo2} T CO₂`;
+          if (treesEl) treesEl.textContent = `↗ ≈ ${curTrees.toLocaleString('en-IN')} TREES PLANTED`;
+          if (waterEl) waterEl.textContent = `${curWater.toLocaleString('en-IN')} L`;
+          if (revEl) revEl.textContent = `₹ ${curRev.toLocaleString('en-IN')}`;
+          if (badgeEl) badgeEl.textContent = `${curLiters.toLocaleString('en-IN')} L`;
+          if (pctEl) pctEl.textContent = `+${curGrowth}%`;
+
+          const curX = +(15 + 570 * eased).toFixed(1);
+          const curY = interpolateSplineYAtX(targetPts, curX);
+
+          if (clipRect) clipRect.setAttribute('width', String(curX + 6));
+          if (dot) {
+            dot.setAttribute('cx', String(curX));
+            dot.setAttribute('cy', String(curY));
+          }
+          if (pulse) {
+            pulse.setAttribute('cx', String(curX));
+            pulse.setAttribute('cy', String(curY));
+          }
+          if (scrub) {
+            scrub.setAttribute('x1', String(curX));
+            scrub.setAttribute('x2', String(curX));
+          }
+
+          if (p < 1) {
+            consoleAnimFrameId = requestAnimationFrame(step);
+          } else {
+            consoleAnimFrameId = null;
+            renderConsoleAndGraph(targetLiters, true);
+          }
+        }
+
+        consoleAnimFrameId = requestAnimationFrame(step);
+      }
+
+      const svgEl = document.getElementById('velocitySplineSvg');
+      if (svgEl) {
+        let scrubRafId = null;
+        svgEl.addEventListener('pointermove', (e) => {
+          if (!state.currentSplinePts || scrubRafId) return;
+          const clientX = e.clientX;
+          scrubRafId = requestAnimationFrame(() => {
+            const rect = svgEl.getBoundingClientRect();
+            const relX = ((clientX - rect.left) / rect.width) * 600;
+            let closest = state.currentSplinePts[0];
+            let minDiff = Infinity;
+            state.currentSplinePts.forEach(pt => {
+              const diff = Math.abs(pt.x - relX);
+              if (diff < minDiff) {
+                minDiff = diff;
+                closest = pt;
+              }
+            });
+            const dot = document.getElementById('velocityActiveDot');
+            const pulse = document.getElementById('velocityActivePulse');
+            const scrub = document.getElementById('velocityScrubLine');
+            const readout = document.getElementById('velocityHoverReadout');
+            if (dot) {
+              dot.setAttribute('cx', String(closest.x));
+              dot.setAttribute('cy', String(closest.y));
+            }
+            if (pulse) {
+              pulse.setAttribute('cx', String(closest.x));
+              pulse.setAttribute('cy', String(closest.y));
+            }
+            if (scrub) {
+              scrub.setAttribute('x1', String(closest.x));
+              scrub.setAttribute('x2', String(closest.x));
+            }
+            if (readout) {
+              readout.textContent = `Week ${closest.week}: ${closest.weeklyLiters.toLocaleString('en-IN')} L • ₹${(closest.weeklyLiters * 40).toLocaleString('en-IN')}`;
+              readout.classList.remove('hidden');
+            }
+            scrubRafId = null;
+          });
+        }, { passive: true });
+      }
+
+      document.getElementById('consoleVolumeSlider')?.addEventListener('input', (e) => {
+        renderConsoleAndGraph(parseInt(e.target.value, 10), false);
+      });
+
+      document.querySelectorAll('.console-preset-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const vol = parseInt(btn.getAttribute('data-vol') || '12450', 10);
+          const slider = document.getElementById('consoleVolumeSlider');
+          if (slider) slider.value = String(vol);
+          animateConsoleCountUpAndGraphGrow(vol, 1100);
+
+          document.querySelectorAll('.console-preset-btn').forEach(b => {
+            b.className = 'console-preset-btn touch-reactive py-1.5 px-2 rounded-lg bg-surface-950 border border-white/10 font-mono text-[10px] text-gray-400 hover:text-white transition';
+          });
+          btn.className = 'console-preset-btn touch-reactive py-1.5 px-2 rounded-lg bg-[#22C55E]/20 border border-[#22C55E]/50 font-mono text-[10px] text-[#22C55E] font-semibold transition';
+        });
+      });
+
+      document.querySelectorAll('[data-metric-box]').forEach(box => {
+        box.addEventListener('click', () => {
+          document.querySelectorAll('[data-metric-box]').forEach(b => b.classList.remove('active-metric-box'));
+          box.classList.add('active-metric-box');
+          triggerNumberPop(box.querySelector('.tabular-nums'));
+        });
+      });
+
+      // Observe #impactConsoleShell directly and run the initial count-up & graph animation ONLY ONCE per page session
+      const impactConsoleShell = document.getElementById('impactConsoleShell');
+      let impactAnimatedOnce = false;
+      if ('IntersectionObserver' in window && impactConsoleShell) {
+        const impactObs = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting && !impactAnimatedOnce) {
+              impactAnimatedOnce = true;
+              animateConsoleCountUpAndGraphGrow(state.consoleLiters, 1850);
+              impactObs.unobserve(impactConsoleShell);
+            }
+          });
+        }, { threshold: 0.18, rootMargin: '0px 0px -6% 0px' });
+        impactObs.observe(impactConsoleShell);
+      }
+
+      // ===================================================================
+      // 8. VIEW SWITCHER, SELLER PORTAL & SCROLL-SAFE MODALS
+      // ===================================================================
+      function setPortalRole(role) {
+        state.portalRole = role;
+        const sellerPanel = document.getElementById('sellerPortalPanel');
+        const customerPanel = document.getElementById('customerPortalPanel');
+        const sellerTabBtn = document.getElementById('portalRoleSellerBtn');
+        const customerTabBtn = document.getElementById('portalRoleCustomerBtn');
+        const sellerQuickBtn = document.getElementById('sellerQuickLogBtn');
+        const customerQuickBtn = document.getElementById('customerQuickOrderBtn');
+        const bannerEl = document.getElementById('portalCommandBanner');
+        const roleBadge = document.getElementById('portalRoleBadge');
+        const roleBadgeText = document.getElementById('portalRoleBadgeText');
+        const subBadge1 = document.getElementById('portalSubBadge1');
+        const subBadge2 = document.getElementById('portalSubBadge2');
+        const titleEl = document.getElementById('sellerFboNameDisplay');
+        const subtitleEl = document.getElementById('portalConsoleSubtitle');
+
+        if (role === 'customer') {
+          sellerPanel?.classList.add('hidden');
+          customerPanel?.classList.remove('hidden');
+          sellerQuickBtn?.classList.add('hidden');
+          customerQuickBtn?.classList.remove('hidden');
+
+          if (bannerEl) {
+            bannerEl.className = 'rounded-3xl p-6 sm:p-8 bg-gradient-to-r from-[#0A1822] via-[#08121A] to-[#060C11] border border-[#38BDF8]/30 shadow-2xl space-y-6 transition-colors duration-300';
+          }
+          if (sellerTabBtn) {
+            sellerTabBtn.className = 'touch-reactive text-left p-4 rounded-2xl bg-[#0B1510] hover:bg-[#112018] text-white border-2 border-[#22C55E]/35 hover:border-[#22C55E] transition-all flex items-center justify-between gap-3';
+            sellerTabBtn.innerHTML = `
+              <div class="flex items-center gap-3.5">
+                <div class="w-11 h-11 rounded-xl bg-[#22C55E]/15 text-[#4ADE80] flex items-center justify-center shrink-0">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 21h18M5 21V7l8-4v18m6 0V11l-6-4"/>
+                  </svg>
+                </div>
+                <div>
+                  <div class="font-sans text-[11px] font-bold uppercase tracking-wider text-[#4ADE80]">FBO Kitchen Partner</div>
+                  <div class="font-display text-lg font-extrabold leading-tight">Seller Dashboard</div>
+                  <div class="font-sans text-xs text-gray-300 mt-0.5">Dispose UCO @ ₹40/L &bull; QR Receipts</div>
+                </div>
+              </div>
+              <span class="px-2.5 py-1 rounded-full bg-[#22C55E]/15 text-[#4ADE80] font-sans text-[11px] font-semibold">SWITCH</span>
+            `;
+          }
+          if (customerTabBtn) {
+            customerTabBtn.className = 'touch-reactive text-left p-4 rounded-2xl bg-[#38BDF8] text-[#050A07] border-2 border-[#7DD3FC] shadow-[0_12px_28px_-6px_rgba(56,189,248,0.45)] transition-all flex items-center justify-between gap-3';
+            customerTabBtn.innerHTML = `
+              <div class="flex items-center gap-3.5">
+                <div class="w-11 h-11 rounded-xl bg-[#050A07]/15 flex items-center justify-center shrink-0">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                  </svg>
+                </div>
+                <div>
+                  <div class="font-sans text-[11px] font-bold uppercase tracking-wider opacity-80">Biofuel &amp; SAF Offtaker</div>
+                  <div class="font-display text-lg font-extrabold leading-tight">Customer Dashboard</div>
+                  <div class="font-sans text-xs font-medium opacity-85 mt-0.5">Procure Bulk MT &bull; ISCC Certificates</div>
+                </div>
+              </div>
+              <span class="px-2.5 py-1 rounded-full bg-[#050A07]/15 font-sans text-[11px] font-bold">ACTIVE</span>
+            `;
+          }
+
+          if (roleBadge) {
+            roleBadge.className = 'inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#38BDF8]/15 border border-[#38BDF8]/35 font-sans text-xs font-semibold text-[#38BDF8]';
+          }
+          if (roleBadgeText) roleBadgeText.textContent = 'Refinery Offtaker Console';
+          if (subBadge1) subBadge1.textContent = 'ISCC EU & RED II Certified';
+          if (subBadge2) {
+            subBadge2.className = 'px-3 py-1 rounded-full bg-[#38BDF8]/15 border border-[#38BDF8]/30 font-sans text-xs font-semibold text-[#BAE6FD]';
+            subBadge2.textContent = 'Spec: Tier-1 Low-FFA UCO';
+          }
+          if (titleEl) titleEl.textContent = state.customerProfile.name;
+          if (subtitleEl) {
+            subtitleEl.innerHTML = 'Offtake Contract: <strong class="text-white">#BRF-2024-91 (Escrow Verified)</strong> &nbsp;&middot;&nbsp; Next Inbound Tanker: <strong class="text-[#38BDF8]">Today, 2h 45m</strong>';
+          }
+          renderCustomerPortal();
+          showToast('Switched to Customer Dashboard (Biofuel Refinery View)');
+        } else {
+          customerPanel?.classList.add('hidden');
+          sellerPanel?.classList.remove('hidden');
+          customerQuickBtn?.classList.add('hidden');
+          sellerQuickBtn?.classList.remove('hidden');
+
+          if (bannerEl) {
+            bannerEl.className = 'rounded-3xl p-6 sm:p-8 bg-gradient-to-r from-[#0E1B14] via-[#0A130E] to-[#080E0B] border border-[#22C55E]/25 shadow-2xl space-y-6 transition-colors duration-300';
+          }
+          if (sellerTabBtn) {
+            sellerTabBtn.className = 'touch-reactive text-left p-4 rounded-2xl bg-[#22C55E] text-[#050A07] border-2 border-[#4ADE80] shadow-[0_12px_28px_-6px_rgba(34,197,94,0.45)] transition-all flex items-center justify-between gap-3';
+            sellerTabBtn.innerHTML = `
+              <div class="flex items-center gap-3.5">
+                <div class="w-11 h-11 rounded-xl bg-[#050A07]/15 flex items-center justify-center shrink-0">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 21h18M5 21V7l8-4v18m6 0V11l-6-4"/>
+                  </svg>
+                </div>
+                <div>
+                  <div class="font-sans text-[11px] font-bold uppercase tracking-wider opacity-80">FBO Kitchen Partner</div>
+                  <div class="font-display text-lg font-extrabold leading-tight">Seller Dashboard</div>
+                  <div class="font-sans text-xs font-medium opacity-85 mt-0.5">Dispose UCO @ ₹40/L &bull; QR Receipts</div>
+                </div>
+              </div>
+              <span class="px-2.5 py-1 rounded-full bg-[#050A07]/15 font-sans text-[11px] font-bold">ACTIVE</span>
+            `;
+          }
+          if (customerTabBtn) {
+            customerTabBtn.className = 'touch-reactive text-left p-4 rounded-2xl bg-[#0B151C] hover:bg-[#10212B] text-white border-2 border-[#38BDF8]/35 hover:border-[#38BDF8] transition-all flex items-center justify-between gap-3';
+            customerTabBtn.innerHTML = `
+              <div class="flex items-center gap-3.5">
+                <div class="w-11 h-11 rounded-xl bg-[#38BDF8]/15 text-[#38BDF8] flex items-center justify-center shrink-0">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                  </svg>
+                </div>
+                <div>
+                  <div class="font-sans text-[11px] font-bold uppercase tracking-wider text-[#38BDF8]">Biofuel &amp; SAF Offtaker</div>
+                  <div class="font-display text-lg font-extrabold leading-tight">Customer Dashboard</div>
+                  <div class="font-sans text-xs text-gray-300 mt-0.5">Procure Bulk MT &bull; ISCC Certificates</div>
+                </div>
+              </div>
+              <span class="px-2.5 py-1 rounded-full bg-[#38BDF8]/15 text-[#38BDF8] font-sans text-[11px] font-semibold">SWITCH</span>
+            `;
+          }
+
+          if (roleBadge) {
+            roleBadge.className = 'inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#22C55E]/15 border border-[#22C55E]/35 font-sans text-xs font-semibold text-[#4ADE80]';
+          }
+          if (roleBadgeText) roleBadgeText.textContent = 'Seller Kitchen Console';
+          if (subBadge1) subBadge1.textContent = 'ISCC & FSSAI RUCO Verified';
+          if (subBadge2) {
+            subBadge2.className = 'px-3 py-1 rounded-full bg-[#F59E0B]/15 border border-[#F59E0B]/30 font-sans text-xs font-semibold text-[#FDE68A]';
+            subBadge2.textContent = 'Avg Rate: ₹40 / Liter';
+          }
+          if (titleEl) titleEl.textContent = state.fboProfile.name;
+          if (subtitleEl) {
+            subtitleEl.innerHTML = 'Auto-Settlement Bank: <strong class="text-white">HDFC Bank •••• 4821 (Instant NEFT)</strong> &nbsp;&middot;&nbsp; Next Fleet Window: <strong class="text-[#4ADE80]">Tomorrow, 10:30 AM</strong>';
+          }
+          renderSellerPortal();
+          showToast('Switched to Seller Dashboard (FBO Partner View)');
+        }
+      }
+
+      function setViewMode(mode, role = null, scrollTop = true) {
+        state.viewMode = mode;
+        const landingView = document.getElementById('landingView');
+        const portalView = document.getElementById('portalView');
+        const landingNavLinks = document.getElementById('landingNavLinks');
+        const headerRoleSwitcher = document.getElementById('headerRoleSwitcher');
+        const modeLandingBtn = document.getElementById('modeLandingBtn');
+        const modePortalBtn = document.getElementById('modePortalBtn');
+
+        if (mode === 'portal') {
+          landingView.classList.add('hidden');
+          portalView.classList.remove('hidden');
+          if (landingNavLinks) landingNavLinks.classList.add('md:hidden');
+          headerRoleSwitcher?.classList.add('hidden');
+          modePortalBtn?.classList.add('hidden');
+          modeLandingBtn?.classList.remove('hidden');
+          if (role === 'customer' || role === 'seller') {
+            setPortalRole(role);
+          } else {
+            setPortalRole(state.portalRole || 'seller');
+          }
+          if (scrollTop) window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+          portalView.classList.add('hidden');
+          landingView.classList.remove('hidden');
+          if (landingNavLinks) landingNavLinks.classList.remove('md:hidden');
+          headerRoleSwitcher?.classList.remove('hidden');
+          modeLandingBtn?.classList.add('hidden');
+          modePortalBtn?.classList.remove('hidden');
+          if (scrollTop) window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      }
+
+      function renderCustomerPortal() {
+        let totalMt = 0;
+        let totalGhg = 0;
+        state.customerBatches.forEach(b => {
+          totalMt += b.volumeMt;
+          totalGhg += b.ghgAvoided;
+        });
+
+        const totalVolEl = document.getElementById('customerTotalVol');
+        const totalGhgEl = document.getElementById('customerTotalGhg');
+        const totalProcureEl = document.getElementById('customerTotalProcure');
+        if (totalVolEl) totalVolEl.textContent = `${totalMt.toFixed(1)} MT`;
+        if (totalGhgEl) totalGhgEl.textContent = `${totalGhg.toFixed(1)} MT`;
+        if (totalProcureEl) {
+          totalProcureEl.textContent = `₹${(totalMt * 0.0064).toFixed(2)} Cr`;
+        }
+
+        if (typeof renderBuyerAnalyticsChart === 'function') renderBuyerAnalyticsChart();
+        const tbody = document.getElementById('customerBatchLedgerBody');
+        if (tbody) {
+          tbody.innerHTML = '';
+          state.customerBatches.forEach(b => {
+            const tr = document.createElement('tr');
+            tr.className = 'hover:bg-white/[0.02] transition font-mono';
+            tr.innerHTML = `
+              <td class="py-3 px-3 text-white font-semibold">${b.id}</td>
+              <td class="py-3 px-3 text-gray-300 text-xs">${b.origin}</td>
+              <td class="py-3 px-3 text-white font-bold">${b.volumeMt.toFixed(1)} MT</td>
+              <td class="py-3 px-3 text-[#38BDF8] text-xs">FFA ${b.ffa}% &bull; ${b.moisture}%</td>
+              <td class="py-3 px-3">
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#22C55E]/10 border border-[#22C55E]/30 text-[#22C55E] text-[10px] font-medium">
+                  <span class="w-1.5 h-1.5 rounded-full bg-[#22C55E]"></span>
+                  ${b.status}
+                </span>
+              </td>
+              <td class="py-3 px-3 text-right">
+                <button type="button" data-iscc-id="${b.id}" class="view-iscc-btn px-3 py-1.5 rounded-lg bg-white/[0.05] hover:bg-[#38BDF8] hover:text-black text-gray-300 hover:font-bold text-xs transition">
+                  Proof of Sustainability &rarr;
+                </button>
+              </td>
+            `;
+            tbody.appendChild(tr);
+          });
+
+          tbody.querySelectorAll('.view-iscc-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+              const bId = btn.getAttribute('data-iscc-id');
+              const batch = state.customerBatches.find(x => x.id === bId) || state.customerBatches[0];
+              openIsccModal(batch);
+            });
+          });
+        }
+      }
+
+      function openIsccModal(batch) {
+        const modal = document.getElementById('isccModal');
+        if (!modal) return;
+        document.getElementById('isccModalBatchId').textContent = batch.id;
+        document.getElementById('isccModalOrigin').textContent = batch.origin;
+        document.getElementById('isccModalWeight').textContent = `${batch.volumeMt.toFixed(1)} Metric Tons (~${Math.round(batch.volumeMt * 1100)} Liters)`;
+        document.getElementById('isccModalGhg').textContent = `88.5% Savings (${batch.ghgAvoided.toFixed(1)} MT CO₂e avoided)`;
+        document.getElementById('isccModalLab').textContent = `FFA ${batch.ffa}% • Moisture ${batch.moisture}% • Sulfur < 10ppm`;
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        syncModalBodyScrollLock();
+      }
+
+      function closeIsccModal() {
+        const modal = document.getElementById('isccModal');
+        if (!modal) return;
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        syncModalBodyScrollLock();
+      }
+
+      function renderSellerPortal() {
+        let totalVol = 0;
+        let totalEarn = 0;
+        state.transactions.forEach(t => {
+          totalVol += t.liters;
+          totalEarn += t.payout;
+        });
+        document.getElementById('sellerTotalVol').textContent = `${totalVol.toFixed(1)} L`;
+        document.getElementById('sellerTotalEarned').textContent = `₹${totalEarn.toLocaleString('en-IN')}`;
+        document.getElementById('sellerTotalCo2').textContent = `${Math.round(totalVol * 2.5).toLocaleString('en-IN')} kg`;
+        document.getElementById('sellerTotalWater').textContent = `${Math.round(totalVol).toLocaleString('en-IN')}M L`;
+
+        document.getElementById('sellerFboNameDisplay').textContent = state.fboProfile.name;
+        document.getElementById('sellerQrIdDisplay').textContent = state.fboProfile.qrId;
+        if (typeof renderSellerAnalyticsChart === 'function') renderSellerAnalyticsChart();
+
+        const tbody = document.getElementById('sellerLedgerBody');
+        if (!tbody) return;
+        tbody.innerHTML = state.transactions.map(tx => `
+          <tr class="hover:bg-white/[0.02] transition">
+            <td class="py-4 px-3 font-medium text-white">${tx.date}</td>
+            <td class="py-4 px-3 text-gray-300 font-mono">${tx.liters.toFixed(1)} L</td>
+            <td class="py-4 px-3 text-gray-400 font-mono">${tx.tpc}% TPC</td>
+            <td class="py-4 px-3 font-semibold text-[#22C55E] font-mono">₹${tx.payout.toLocaleString('en-IN')}</td>
+            <td class="py-4 px-3 text-right">
+              <button data-cert-tx="${tx.id}" class="view-tx-cert-btn px-3.5 py-1.5 rounded-full bg-[#22C55E]/15 hover:bg-[#22C55E] hover:text-black font-mono text-[11px] font-semibold text-[#22C55E] transition">
+                ${tx.id}
+              </button>
+            </td>
+          </tr>
+        `).join('');
+
+        tbody.querySelectorAll('.view-tx-cert-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const tx = state.transactions.find(t => t.id === btn.getAttribute('data-cert-tx')) || state.transactions[0];
+            openCertificateModal(tx);
+          });
+        });
+      }
+
+      document.getElementById('sellerQuickLogBtn')?.addEventListener('click', () => {
+        const liters = 42.6;
+        const payout = Math.round(liters * state.ratePerLiter);
+        const newId = '#GF-0' + Math.floor(430 + Math.random() * 500);
+        state.transactions.unshift({
+          id: newId,
+          date: 'Today, Just Now',
+          liters,
+          tpc: 26.4,
+          payout
+        });
+        renderSellerPortal();
+        showToast(`QR Scan Verified: ${liters} L logged & ₹${payout.toLocaleString('en-IN')} settled (${newId})`);
+      });
+
+      const certModal = document.getElementById('certificateModal');
+      const regModal = document.getElementById('registrationModal');
+
+      function syncModalBodyScrollLock() {
+        const cert = document.getElementById('certificateModal');
+        const reg = document.getElementById('registrationModal');
+        const iscc = document.getElementById('isccModal');
+        const disease = document.getElementById('diseaseDetailModal');
+        const isAnyOpen =
+          (cert && !cert.classList.contains('hidden')) ||
+          (reg && !reg.classList.contains('hidden')) ||
+          (iscc && !iscc.classList.contains('hidden')) ||
+          (disease && !disease.classList.contains('hidden'));
+        document.body.style.overflow = isAnyOpen ? 'hidden' : '';
+      }
+
+      function openCertificateModal(tx) {
+        if (!certModal) return;
+        document.getElementById('certModalId').textContent = tx.id;
+        document.getElementById('certModalFbo').textContent = state.fboProfile.name;
+        document.getElementById('certModalDate').textContent = tx.date;
+        document.getElementById('certModalMetrics').textContent = `${tx.liters.toFixed(1)} L logged (TPC ${tx.tpc}%)`;
+        certModal.classList.remove('hidden');
+        certModal.classList.add('flex');
+        syncModalBodyScrollLock();
+      }
+
+      function closeCertificateModal() {
+        if (!certModal) return;
+        certModal.classList.add('hidden');
+        certModal.classList.remove('flex');
+        syncModalBodyScrollLock();
+      }
+
+      document.getElementById('openSampleCertBtn')?.addEventListener('click', () => openCertificateModal(state.transactions[0]));
+      document.getElementById('portalDownloadLatestCertBtn')?.addEventListener('click', () => openCertificateModal(state.transactions[0]));
+      document.getElementById('closeCertModalBtn')?.addEventListener('click', closeCertificateModal);
+      certModal?.addEventListener('click', (e) => {
+        if (e.target === certModal) closeCertificateModal();
+      });
+      document.getElementById('downloadCertActionBtn')?.addEventListener('click', () => {
+        closeCertificateModal();
+        showToast('Official FSSAI RUCO Receipt PDF downloaded.');
+      });
+
+      function showRegStep(step) {
+        [1, 2, 3, 4].forEach(n => {
+          document.getElementById('regStep' + n)?.classList.toggle('hidden', n !== step);
+        });
+        const map = {
+          1: ['STEP 1 OF 3', '33%'],
+          2: ['STEP 2 OF 3', '66%'],
+          3: ['STEP 3 OF 3', '95%'],
+          4: ['COMPLETE', '100%']
+        };
+        if (map[step]) {
+          document.getElementById('regStepIndicator').textContent = map[step][0];
+          document.getElementById('regProgressPct').textContent = map[step][1];
+          document.getElementById('regProgressBar').style.width = map[step][1];
+        }
+      }
+
+      function openRegModal() {
+        showRegStep(1);
+        regModal.classList.remove('hidden');
+        regModal.classList.add('flex');
+        syncModalBodyScrollLock();
+      }
+
+      function closeRegModal() {
+        regModal.classList.add('hidden');
+        regModal.classList.remove('flex');
+        syncModalBodyScrollLock();
+      }
+
+      ['navRegisterBtn', 'heroRegisterBtn', 'footerRegisterBtn', 'footerNavRegisterLink'].forEach(id => {
+        document.getElementById(id)?.addEventListener('click', openRegModal);
+      });
+      document.getElementById('closeRegModalBtn')?.addEventListener('click', closeRegModal);
+      regModal?.addEventListener('click', (e) => {
+        if (e.target === regModal) closeRegModal();
+      });
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          closeRegModal();
+          closeCertificateModal();
+          closeIsccModal();
+        }
+      });
+
+      document.getElementById('regNextStep1Btn')?.addEventListener('click', () => showRegStep(2));
+      document.getElementById('regBackStep2Btn')?.addEventListener('click', () => showRegStep(1));
+      document.getElementById('regNextStep2Btn')?.addEventListener('click', () => showRegStep(3));
+      document.getElementById('regBackStep3Btn')?.addEventListener('click', () => showRegStep(2));
+
+      document.getElementById('regCompleteBtn')?.addEventListener('click', () => {
+        const restName = document.getElementById('regRestaurantName')?.value || 'Cluster 04 — Andheri West';
+        const newQr = '#GF-0' + Math.floor(420 + Math.random() * 550);
+        state.fboProfile.name = restName;
+        state.fboProfile.qrId = newQr;
+        document.getElementById('regDoneTitle').textContent = `Welcome, ${restName}!`;
+        document.getElementById('regGeneratedQrId').textContent = newQr;
+        renderSellerPortal();
+        showRegStep(4);
+      });
+
+      document.getElementById('regGoToDashboardBtn')?.addEventListener('click', () => {
+        closeRegModal();
+        setViewMode('portal', 'seller', true);
+      });
+
+      // --- Navigation & Hero Preview Dashboard Triggers ---
+      document.getElementById('navPreviewSellerBtn')?.addEventListener('click', () => {
+        setViewMode('portal', 'seller', true);
+      });
+      document.getElementById('navPreviewCustomerBtn')?.addEventListener('click', () => {
+        setViewMode('portal', 'customer', true);
+      });
+      document.getElementById('heroPreviewSellerBtn')?.addEventListener('click', () => {
+        setViewMode('portal', 'seller', true);
+      });
+      document.getElementById('heroPreviewCustomerBtn')?.addEventListener('click', () => {
+        setViewMode('portal', 'customer', true);
+      });
+
+      // --- In-Portal Role Switcher Buttons ---
+      document.getElementById('portalRoleSellerBtn')?.addEventListener('click', () => {
+        setPortalRole('seller');
+      });
+      document.getElementById('portalRoleCustomerBtn')?.addEventListener('click', () => {
+        setPortalRole('customer');
+      });
+
+      // --- Disease Clinical Pathology Data & Interactive Modal ---
+      const diseaseData = {
+        hypertension: {
+          code: 'Cardiovascular Impact',
+          title: 'Hypertension (Vascular Strain)',
+          icon: '<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>',
+          mechanism: 'Repeated heating of cooking oil above 180°C generates lipid hydroperoxides and polar polymers. Regular ingestion depletes endothelial nitric oxide, causing persistent blood vessel constriction, arterial stiffening, and chronic high blood pressure.',
+          biomarker: '+42% Arterial Stiffness & Endothelial Strain',
+          tpc: 'Breaches 25% FSSAI Limit at 3rd Fry',
+          prevention: 'GeoField collects degraded frying oil at 25% TPC via QR-tagged drums, stopping toxic recirculated oils from re-entering restaurants and street food stalls.'
+        },
+        liver: {
+          code: 'Hepatic Impact',
+          title: 'Liver Disease (Cellular Toxicity)',
+          icon: '<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>',
+          mechanism: 'Toxic aldehydes (such as 4-HNE) formed in reheated oils accumulate in liver cells, damaging cellular mitochondria, accelerating lipid peroxidation, and driving fatty liver inflammation and tissue scarring.',
+          biomarker: 'Elevated Liver Enzymes & Oxidative Stress',
+          tpc: 'Breaches 25% FSSAI Limit at 3rd Fry',
+          prevention: '100% traceable aggregation redirects spent cooking oil from kitchens directly into certified biorefineries for clean biodiesel production.'
+        },
+        atherosclerosis: {
+          code: 'Arterial Impact',
+          title: 'Atherosclerosis (Arterial Plaque)',
+          icon: '<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>',
+          mechanism: 'Polymeric polar compounds rapidly oxidize LDL cholesterol in the bloodstream. Immune cells absorb oxidized LDL and lodge inside coronary artery walls, building dense plaque that restricts blood flow.',
+          biomarker: '+280% Oxidized LDL & Plaque Accumulation',
+          tpc: 'Breaches 25% FSSAI Limit at 3rd Fry',
+          prevention: 'GeoField pays kitchens an average rate of ₹40/L via instant NEFT, removing any incentive for vendors to reuse or resell spent oil.'
+        },
+        alzheimers: {
+          code: 'Neurological Impact',
+          title: 'Alzheimer’s Link (Neurodegenerative Pathology)',
+          icon: '<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>',
+          mechanism: 'Peer-reviewed studies by the American Society for Biochemistry and Molecular Biology demonstrate that long-term consumption of reheated oils destabilizes the gut-brain vascular axis. Circulating lipid hydroperoxides compromise the blood-brain barrier, triggering neuro-inflammation and accelerating beta-amyloid and hyperphosphorylated tau plaque aggregation.',
+          biomarker: 'Blood-Brain Barrier Breakdown & Tau Aggregation',
+          tpc: 'Breaches 25% FSSAI Limit at 3rd Fry',
+          prevention: 'Certified closed-loop collection prevents spent commercial oil from ever returning to human nutrition, protecting public neurovascular health.'
+        }
+      };
+
+      const diseaseModal = document.getElementById('diseaseDetailModal');
+      function openDiseaseModal(diseaseId) {
+        const data = diseaseData[diseaseId];
+        if (!data || !diseaseModal) return;
+        document.getElementById('modalDiseaseCode').textContent = data.code;
+        document.getElementById('modalDiseaseTitle').textContent = data.title;
+        document.getElementById('modalDiseaseIconContainer').innerHTML = data.icon;
+        document.getElementById('modalDiseaseMechanism').textContent = data.mechanism;
+        document.getElementById('modalDiseaseBiomarker').textContent = data.biomarker;
+        document.getElementById('modalDiseaseTpc').textContent = data.tpc;
+        document.getElementById('modalDiseasePrevention').textContent = data.prevention;
+        diseaseModal.classList.remove('hidden');
+        diseaseModal.classList.add('flex');
+        syncModalBodyScrollLock();
+      }
+
+      function closeDiseaseModal() {
+        if (!diseaseModal) return;
+        diseaseModal.classList.add('hidden');
+        diseaseModal.classList.remove('flex');
+        syncModalBodyScrollLock();
+      }
+
+      document.querySelectorAll('.disease-hazard-card').forEach(card => {
+        card.addEventListener('click', () => {
+          const diseaseId = card.getAttribute('data-disease-id');
+          if (diseaseId) openDiseaseModal(diseaseId);
+        });
+      });
+
+      document.getElementById('closeDiseaseModalBtn')?.addEventListener('click', closeDiseaseModal);
+      document.getElementById('dismissDiseaseModalBtn')?.addEventListener('click', closeDiseaseModal);
+      diseaseModal?.addEventListener('click', (e) => {
+        if (e.target === diseaseModal) closeDiseaseModal();
+      });
+
+      // --- Interactive Drum Preset Buttons (Seller Portal) ---
+      document.querySelectorAll('[data-drum-preset]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const drums = parseInt(btn.getAttribute('data-drum-preset') || '2', 10);
+          const sel = document.getElementById('scheduleDrumQty');
+          if (sel) sel.value = String(drums);
+          document.querySelectorAll('[data-drum-preset]').forEach(b => {
+            b.classList.remove('bg-[#22C55E]/20', 'border-[#22C55E]/60', 'text-[#22C55E]', 'font-semibold');
+            b.classList.add('bg-surface-950', 'border-white/10', 'text-gray-300');
+          });
+          btn.classList.add('bg-[#22C55E]/20', 'border-[#22C55E]/60', 'text-[#22C55E]', 'font-semibold');
+          btn.classList.remove('bg-surface-950', 'border-white/10', 'text-gray-300');
+          const liters = drums * 50;
+          const payout = Math.round(liters * state.ratePerLiter);
+          const badge = document.getElementById('sellerSchedulePayoutBadge');
+          if (badge) badge.textContent = `Payout: ₹${payout.toLocaleString('en-IN')} NEFT`;
+        });
+      });
+
+      document.getElementById('scheduleDrumQty')?.addEventListener('change', (e) => {
+        const drums = parseInt(e.target.value || '2', 10);
+        const liters = drums * 50;
+        const payout = Math.round(liters * state.ratePerLiter);
+        const badge = document.getElementById('sellerSchedulePayoutBadge');
+        if (badge) badge.textContent = `Payout: ₹${payout.toLocaleString('en-IN')} NEFT`;
+      });
+
+      // --- Interactive Allocation Volume Presets (Customer Portal) ---
+      document.querySelectorAll('[data-alloc-preset]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const vol = parseFloat(btn.getAttribute('data-alloc-preset') || '25');
+          const sel = document.getElementById('allocationVolume');
+          if (sel) sel.value = String(vol);
+          document.querySelectorAll('[data-alloc-preset]').forEach(b => {
+            b.classList.remove('bg-[#38BDF8]/20', 'border-[#38BDF8]/60', 'text-[#38BDF8]', 'font-semibold');
+            b.classList.add('bg-surface-950', 'border-white/10', 'text-gray-300');
+          });
+          btn.classList.add('bg-[#38BDF8]/20', 'border-[#38BDF8]/60', 'text-[#38BDF8]', 'font-semibold');
+          btn.classList.remove('bg-surface-950', 'border-white/10', 'text-gray-300');
+          const ghg = (vol * 3.05).toFixed(1);
+          const ghgBadge = document.getElementById('custAllocationGhgBadge');
+          if (ghgBadge) ghgBadge.textContent = `${ghg} MT CO₂e Abated`;
+          const escrowVal = document.getElementById('custEscrowValue');
+          if (escrowVal) escrowVal.textContent = `₹${(vol * 0.66).toFixed(2)} Lakhs`;
+        });
+      });
+
+      document.getElementById('allocationVolume')?.addEventListener('change', (e) => {
+        const vol = parseFloat(e.target.value || '25');
+        const ghg = (vol * 3.05).toFixed(1);
+        const ghgBadge = document.getElementById('custAllocationGhgBadge');
+        if (ghgBadge) ghgBadge.textContent = `${ghg} MT CO₂e Abated`;
+        const escrowVal = document.getElementById('custEscrowValue');
+        if (escrowVal) escrowVal.textContent = `₹${(vol * 0.66).toFixed(2)} Lakhs`;
+      });
+
+      // --- Simulate QR Bay Scan Button ---
+      document.getElementById('simulateQrScanBayBtn')?.addEventListener('click', () => {
+        const liters = 50.0;
+        const payout = Math.round(liters * state.ratePerLiter);
+        const newId = '#GF-0' + Math.floor(450 + Math.random() * 450);
+        state.transactions.unshift({
+          id: newId,
+          date: 'Today, Bay Scanner',
+          liters,
+          tpc: 22.4,
+          payout
+        });
+        renderSellerPortal();
+        showToast(`QR Bay Scan Complete: ${liters}L logged via Bluetooth scale. Instant NEFT payout: ₹${payout} (${newId})`);
+      });
+
+      // --- View Mode Header & Navigation Controls ---
+      document.getElementById('modeLandingBtn')?.addEventListener('click', () => setViewMode('landing', null, true));
+      document.getElementById('modePortalBtn')?.addEventListener('click', () => setViewMode('portal', state.portalRole || 'seller', true));
+      document.getElementById('backToLandingBtn')?.addEventListener('click', () => setViewMode('landing', null, true));
+
+      // --- Portal Interactive Forms & Quick Actions ---
+      document.getElementById('customerQuickOrderBtn')?.addEventListener('click', () => {
+        const allocForm = document.getElementById('customerAllocationForm');
+        if (allocForm) allocForm.scrollIntoView({ behavior: 'smooth' });
+      });
+
+      document.getElementById('submitScheduleBtn')?.addEventListener('click', () => {
+        const drums = parseInt(document.getElementById('scheduleDrumQty')?.value || '2', 10);
+        const dateVal = document.getElementById('schedulePickupDate')?.value || 'Tomorrow';
+        const liters = drums * 50;
+        const payout = Math.round(liters * state.ratePerLiter);
+        const newId = '#GF-0' + Math.floor(450 + Math.random() * 500);
+        state.transactions.unshift({
+          id: newId,
+          date: dateVal,
+          liters,
+          tpc: 24.8,
+          payout
+        });
+        renderSellerPortal();
+        showToast(`Fleet Dispatch Scheduled: ${drums} drums (${liters} L) confirmed for ${dateVal}. Payout: ₹${payout.toLocaleString('en-IN')}`);
+      });
+
+      document.getElementById('submitAllocationBtn')?.addEventListener('click', () => {
+        const grade = document.getElementById('allocationGrade')?.value || 'HVO';
+        const vol = parseFloat(document.getElementById('allocationVolume')?.value || '25');
+        const terminal = document.getElementById('allocationTerminal')?.value || 'Dahej';
+        const newBatchId = 'GF-ISCC-2024-' + String(Math.floor(100 + Math.random() * 900));
+        state.customerBatches.unshift({
+          id: newBatchId,
+          origin: `${terminal} Aggregate Terminal`,
+          volumeMt: vol,
+          ffa: grade === 'SAF' ? 2.1 : (grade === 'HVO' ? 2.6 : 3.4),
+          moisture: grade === 'SAF' ? 0.28 : 0.35,
+          status: 'In Transit',
+          ghgAvoided: Math.round(vol * 3.05 * 10) / 10
+        });
+        renderCustomerPortal();
+        showToast(`Batch Allocated: ${vol} MT (${grade} Grade) scheduled to ${terminal} Terminal (${newBatchId})`);
+      });
+
+      // --- ISCC PoS Modal Listeners ---
+      document.getElementById('closeIsccModalBtn')?.addEventListener('click', closeIsccModal);
+      document.getElementById('isccModal')?.addEventListener('click', (e) => {
+        if (e.target === document.getElementById('isccModal')) closeIsccModal();
+      });
+      document.getElementById('downloadIsccBtn')?.addEventListener('click', () => {
+        closeIsccModal();
+        showToast('Official ISCC EU Proof of Sustainability PDF downloaded.');
+      });
+
+      // ===================================================================
+      // 9. EXECUTIVE SVG SPLINE TELEMETRY CHARTS FOR SELLER & BUYER VIEWS
+      // ===================================================================
+      const sellerChartDatasets = {
+        '6M': [
+          { month: 'MAY', full: 'May 2026', liters: 62.0, payout: 2480 },
+          { month: 'JUN', full: 'Jun 2026', liters: 78.0, payout: 3120 },
+          { month: 'JUL', full: 'Jul 2026', liters: 86.0, payout: 3440 },
+          { month: 'AUG', full: 'Aug 2026', liters: 94.0, payout: 3760 },
+          { month: 'SEP', full: 'Sep 2026', liters: 112.0, payout: 4480 },
+          { month: 'OCT', full: 'Oct 2026 (Current)', liters: 126.0, payout: 5040 }
+        ],
+        '1Y': [
+          { month: 'NOV', full: 'Nov 2025', liters: 44.0, payout: 1760 },
+          { month: 'JAN', full: 'Jan 2026', liters: 58.0, payout: 2320 },
+          { month: 'MAR', full: 'Mar 2026', liters: 72.0, payout: 2880 },
+          { month: 'MAY', full: 'May 2026', liters: 85.0, payout: 3400 },
+          { month: 'JUL', full: 'Jul 2026', liters: 104.0, payout: 4160 },
+          { month: 'OCT', full: 'Oct 2026 (Current)', liters: 126.0, payout: 5040 }
+        ],
+        'ALL': [
+          { month: '2024 Q3', full: 'Q3 2024', liters: 38.0, payout: 1520 },
+          { month: '2024 Q4', full: 'Q4 2024', liters: 54.0, payout: 2160 },
+          { month: '2025 Q1', full: 'Q1 2025', liters: 76.0, payout: 3040 },
+          { month: '2025 Q3', full: 'Q3 2025', liters: 96.0, payout: 3840 },
+          { month: '2026 Q1', full: 'Q1 2026', liters: 114.0, payout: 4560 },
+          { month: '2026 Q4', full: 'Q4 2026 (Live)', liters: 126.0, payout: 5040 }
+        ]
+      };
+
+      const buyerChartDatasets = {
+        '6M': [
+          { month: 'MAY', full: 'May 2026 (Dahej SEZ)', mt: 18.0, ghg: 54.9, ffa: '2.7%' },
+          { month: 'JUN', full: 'Jun 2026 (Dahej SEZ)', mt: 24.0, ghg: 73.2, ffa: '2.6%' },
+          { month: 'JUL', full: 'Jul 2026 (Dahej SEZ)', mt: 30.0, ghg: 91.5, ffa: '2.6%' },
+          { month: 'AUG', full: 'Aug 2026 (Dahej SEZ)', mt: 36.0, ghg: 109.8, ffa: '2.5%' },
+          { month: 'SEP', full: 'Sep 2026 (Dahej SEZ)', mt: 44.0, ghg: 134.2, ffa: '2.5%' },
+          { month: 'OCT', full: 'Oct 2026 (Dahej SEZ)', mt: 52.0, ghg: 158.6, ffa: '2.4%' }
+        ],
+        '1Y': [
+          { month: 'NOV', full: 'Nov 2025', mt: 12.0, ghg: 36.6, ffa: '2.8%' },
+          { month: 'JAN', full: 'Jan 2026', mt: 19.5, ghg: 59.5, ffa: '2.7%' },
+          { month: 'MAR', full: 'Mar 2026', mt: 26.0, ghg: 79.3, ffa: '2.6%' },
+          { month: 'MAY', full: 'May 2026', mt: 33.5, ghg: 102.2, ffa: '2.5%' },
+          { month: 'JUL', full: 'Jul 2026', mt: 43.0, ghg: 131.2, ffa: '2.5%' },
+          { month: 'OCT', full: 'Oct 2026 (Peak)', mt: 52.0, ghg: 158.6, ffa: '2.4%' }
+        ],
+        'ALL': [
+          { month: '2024 Q3', full: 'Q3 2024', mt: 10.0, ghg: 30.5, ffa: '2.9%' },
+          { month: '2024 Q4', full: 'Q4 2024', mt: 18.0, ghg: 54.9, ffa: '2.8%' },
+          { month: '2025 Q1', full: 'Q1 2025', mt: 27.5, ghg: 83.9, ffa: '2.7%' },
+          { month: '2025 Q3', full: 'Q3 2025', mt: 35.0, ghg: 106.8, ffa: '2.6%' },
+          { month: '2026 Q1', full: 'Q1 2026', mt: 44.5, ghg: 135.7, ffa: '2.5%' },
+          { month: '2026 Q4', full: 'Q4 2026 (Live)', mt: 52.0, ghg: 158.6, ffa: '2.4%' }
+        ]
+      };
+
+      state.sellerChartRange = '6M';
+      state.buyerChartRange = '6M';
+      state.sellerComputedPts = [];
+      state.buyerComputedPts = [];
+
+      function selectSellerNode(pt) {
+        if (!pt) return;
+        const dot = document.getElementById('sellerChartActiveDot');
+        const halo = document.getElementById('sellerChartActiveHalo');
+        const scrub = document.getElementById('sellerChartScrubLine');
+        const periodEl = document.getElementById('sellerChartPeriodLabel');
+        const volEl = document.getElementById('sellerChartVolReadout');
+        const payEl = document.getElementById('sellerChartPayoutReadout');
+        if (dot) { dot.setAttribute('cx', String(pt.x)); dot.setAttribute('cy', String(pt.y)); }
+        if (halo) { halo.setAttribute('cx', String(pt.x)); halo.setAttribute('cy', String(pt.y)); }
+        if (scrub) { scrub.setAttribute('x1', String(pt.x)); scrub.setAttribute('x2', String(pt.x)); }
+        if (periodEl) periodEl.textContent = pt.full;
+        if (volEl) volEl.textContent = `${pt.liters.toFixed(1)} Liters`;
+        if (payEl) payEl.textContent = `₹${pt.payout.toLocaleString('en-IN')} (@ ₹40/L)`;
+      }
+
+      function renderSellerAnalyticsChart() {
+        const series = sellerChartDatasets[state.sellerChartRange] || sellerChartDatasets['6M'];
+        // Sync latest October node with newly added transactions beyond initial 412L
+        let totalVol = 0;
+        state.transactions.forEach(t => { totalVol += t.liters; });
+        const extraLiters = Math.max(0, totalVol - 412.0);
+        const maxVal = Math.max(145, ...series.map((d, idx) => idx === series.length - 1 ? d.liters + extraLiters : d.liters)) * 1.06;
+
+        const pts = series.map((d, idx) => {
+          const x = Math.round(64 + idx * (536 / (series.length - 1)));
+          const val = idx === series.length - 1 ? +(d.liters + extraLiters).toFixed(1) : d.liters;
+          const pay = Math.round(val * state.ratePerLiter);
+          const y = Math.round(152 - ((val / maxVal) * 124));
+          const payY = Math.round(152 - ((val / maxVal) * 108));
+          return { x, y, payY, month: d.month, full: d.full, liters: val, payout: pay };
+        });
+        state.sellerComputedPts = pts;
+
+        const lineD = buildSmoothSplinePath(pts);
+        const areaD = `${lineD} L ${pts[pts.length - 1].x} 154 L ${pts[0].x} 154 Z`;
+        const payD = buildSmoothSplinePath(pts.map(p => ({ x: p.x, y: p.payY })));
+
+        document.getElementById('sellerVolumeLinePath')?.setAttribute('d', lineD);
+        document.getElementById('sellerVolumeGlowPath')?.setAttribute('d', lineD);
+        document.getElementById('sellerAreaPath')?.setAttribute('d', areaD);
+        document.getElementById('sellerPayoutLinePath')?.setAttribute('d', payD);
+
+        const nodesGroup = document.getElementById('sellerChartNodesGroup');
+        const xAxisGroup = document.getElementById('sellerChartXAxisGroup');
+        if (nodesGroup) {
+          nodesGroup.innerHTML = pts.map((p, idx) => `
+            <g class="cursor-pointer" data-seller-pt-idx="${idx}">
+              <circle cx="${p.x}" cy="${p.payY}" r="3" fill="#F59E0B" opacity="0.85" />
+              <circle class="chart-data-node" cx="${p.x}" cy="${p.y}" r="4.5" fill="#060A08" stroke="#22C55E" stroke-width="2.5" />
+              <text x="${p.x}" y="${p.y - 11}" text-anchor="middle" fill="${idx === pts.length - 1 ? '#4ADE80' : 'rgba(229,231,235,0.85)'}" font-family="JetBrains Mono, monospace" font-size="9.5" font-weight="600">${Math.round(p.liters)}L</text>
+            </g>
+          `).join('');
+          nodesGroup.querySelectorAll('[data-seller-pt-idx]').forEach(g => {
+            g.addEventListener('click', () => {
+              const i = parseInt(g.getAttribute('data-seller-pt-idx'), 10);
+              selectSellerNode(state.sellerComputedPts[i]);
+            });
+          });
+        }
+        if (xAxisGroup) {
+          xAxisGroup.innerHTML = pts.map((p, idx) => `
+            <text x="${p.x}" y="176" fill="${idx === pts.length - 1 ? '#22C55E' : 'rgba(156,163,175,0.75)'}" font-weight="${idx === pts.length - 1 ? '700' : '500'}">${p.month}</text>
+          `).join('');
+        }
+        selectSellerNode(pts[pts.length - 1]);
+      }
+
+      function selectBuyerNode(pt) {
+        if (!pt) return;
+        const dot = document.getElementById('buyerChartActiveDot');
+        const halo = document.getElementById('buyerChartActiveHalo');
+        const scrub = document.getElementById('buyerChartScrubLine');
+        const periodEl = document.getElementById('buyerChartPeriodLabel');
+        const mtEl = document.getElementById('buyerChartMtReadout');
+        const ghgEl = document.getElementById('buyerChartGhgReadout');
+        if (dot) { dot.setAttribute('cx', String(pt.x)); dot.setAttribute('cy', String(pt.y)); }
+        if (halo) { halo.setAttribute('cx', String(pt.x)); halo.setAttribute('cy', String(pt.y)); }
+        if (scrub) { scrub.setAttribute('x1', String(pt.x)); scrub.setAttribute('x2', String(pt.x)); }
+        if (periodEl) periodEl.textContent = pt.full;
+        if (mtEl) mtEl.textContent = `${pt.mt.toFixed(1)} MT (FFA ${pt.ffa})`;
+        if (ghgEl) ghgEl.textContent = `${pt.ghg.toFixed(1)} MT CO₂e`;
+      }
+
+      function renderBuyerAnalyticsChart() {
+        const series = buyerChartDatasets[state.buyerChartRange] || buyerChartDatasets['6M'];
+        let totalMt = 0;
+        state.customerBatches.forEach(b => { totalMt += b.volumeMt; });
+        const extraMt = Math.max(0, totalMt - 126.5);
+        const maxVal = Math.max(60, ...series.map((d, idx) => idx === series.length - 1 ? d.mt + extraMt : d.mt)) * 1.08;
+
+        const pts = series.map((d, idx) => {
+          const x = Math.round(64 + idx * (536 / (series.length - 1)));
+          const val = idx === series.length - 1 ? +(d.mt + extraMt).toFixed(1) : d.mt;
+          const ghg = +(val * 3.05).toFixed(1);
+          const y = Math.round(152 - ((val / maxVal) * 124));
+          const ghgY = Math.round(152 - ((val / maxVal) * 108));
+          return { x, y, ghgY, month: d.month, full: d.full, mt: val, ghg, ffa: d.ffa };
+        });
+        state.buyerComputedPts = pts;
+
+        const lineD = buildSmoothSplinePath(pts);
+        const areaD = `${lineD} L ${pts[pts.length - 1].x} 154 L ${pts[0].x} 154 Z`;
+        const ghgD = buildSmoothSplinePath(pts.map(p => ({ x: p.x, y: p.ghgY })));
+
+        document.getElementById('buyerFeedstockLinePath')?.setAttribute('d', lineD);
+        document.getElementById('buyerFeedstockGlowPath')?.setAttribute('d', lineD);
+        document.getElementById('buyerAreaPath')?.setAttribute('d', areaD);
+        document.getElementById('buyerGhgLinePath')?.setAttribute('d', ghgD);
+
+        const nodesGroup = document.getElementById('buyerChartNodesGroup');
+        const xAxisGroup = document.getElementById('buyerChartXAxisGroup');
+        if (nodesGroup) {
+          nodesGroup.innerHTML = pts.map((p, idx) => `
+            <g class="cursor-pointer" data-buyer-pt-idx="${idx}">
+              <circle cx="${p.x}" cy="${p.ghgY}" r="3" fill="#22C55E" opacity="0.85" />
+              <circle class="chart-data-node" cx="${p.x}" cy="${p.y}" r="4.5" fill="#060A08" stroke="#38BDF8" stroke-width="2.5" />
+              <text x="${p.x}" y="${p.y - 11}" text-anchor="middle" fill="${idx === pts.length - 1 ? '#7DD3FC' : 'rgba(229,231,235,0.85)'}" font-family="JetBrains Mono, monospace" font-size="9.5" font-weight="600">${Math.round(p.mt)}MT</text>
+            </g>
+          `).join('');
+          nodesGroup.querySelectorAll('[data-buyer-pt-idx]').forEach(g => {
+            g.addEventListener('click', () => {
+              const i = parseInt(g.getAttribute('data-buyer-pt-idx'), 10);
+              selectBuyerNode(state.buyerComputedPts[i]);
+            });
+          });
+        }
+        if (xAxisGroup) {
+          xAxisGroup.innerHTML = pts.map((p, idx) => `
+            <text x="${p.x}" y="176" fill="${idx === pts.length - 1 ? '#38BDF8' : 'rgba(156,163,175,0.75)'}" font-weight="${idx === pts.length - 1 ? '700' : '500'}">${p.month}</text>
+          `).join('');
+        }
+        selectBuyerNode(pts[pts.length - 1]);
+      }
+
+      // Pointer scrub on Seller & Buyer SVG Charts
+      const sellerSvgEl = document.getElementById('sellerAnalyticsSvg');
+      if (sellerSvgEl) {
+        sellerSvgEl.addEventListener('pointermove', (e) => {
+          if (!state.sellerComputedPts.length) return;
+          const rect = sellerSvgEl.getBoundingClientRect();
+          const relX = ((e.clientX - rect.left) / rect.width) * 640;
+          let closest = state.sellerComputedPts[0];
+          let minDiff = Infinity;
+          state.sellerComputedPts.forEach(p => {
+            const d = Math.abs(p.x - relX);
+            if (d < minDiff) { minDiff = d; closest = p; }
+          });
+          selectSellerNode(closest);
+        }, { passive: true });
+      }
+
+      const buyerSvgEl = document.getElementById('customerAnalyticsSvg');
+      if (buyerSvgEl) {
+        buyerSvgEl.addEventListener('pointermove', (e) => {
+          if (!state.buyerComputedPts.length) return;
+          const rect = buyerSvgEl.getBoundingClientRect();
+          const relX = ((e.clientX - rect.left) / rect.width) * 640;
+          let closest = state.buyerComputedPts[0];
+          let minDiff = Infinity;
+          state.buyerComputedPts.forEach(p => {
+            const d = Math.abs(p.x - relX);
+            if (d < minDiff) { minDiff = d; closest = p; }
+          });
+          selectBuyerNode(closest);
+        }, { passive: true });
+      }
+
+      document.querySelectorAll('.seller-range-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          state.sellerChartRange = btn.getAttribute('data-seller-range') || '6M';
+          document.querySelectorAll('.seller-range-btn').forEach(b => {
+            b.className = 'seller-range-btn px-2.5 py-1 rounded-lg text-gray-400 hover:text-white transition';
+          });
+          btn.className = 'seller-range-btn px-2.5 py-1 rounded-lg bg-[#22C55E]/20 text-[#22C55E] font-bold transition';
+          renderSellerAnalyticsChart();
+        });
+      });
+
+      document.querySelectorAll('.buyer-range-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          state.buyerChartRange = btn.getAttribute('data-buyer-range') || '6M';
+          document.querySelectorAll('.buyer-range-btn').forEach(b => {
+            b.className = 'buyer-range-btn px-2.5 py-1 rounded-lg text-gray-400 hover:text-white transition';
+          });
+          btn.className = 'buyer-range-btn px-2.5 py-1 rounded-lg bg-[#38BDF8]/20 text-[#38BDF8] font-bold transition';
+          renderBuyerAnalyticsChart();
+        });
+      });
+
+      initScrollReveal();
+      initSmoothNavigationAndScrollSpy();
+      attachTouchReactions();
+      renderConsoleAndGraph(12450, false);
+      renderSellerPortal();
+      renderCustomerPortal();
+      renderSellerAnalyticsChart();
+      renderBuyerAnalyticsChart();
+    
+
+  // Connect Sign In and Register buttons to App-level Auth modal
+  const modePortalBtn = document.getElementById('modePortalBtn');
+  if (modePortalBtn) {
+    modePortalBtn.addEventListener('click', (e) => {
+      // Allow user to log in directly to platform
+      // if altKey or shiftKey is pressed or double clicked, emit open-login
+    });
   }
 
-  if (impactChartRef.value && 'IntersectionObserver' in window) {
-    chartObserver = new IntersectionObserver((entries) => {
-      if (entries[0] && entries[0].isIntersecting) {
-        triggerVelocityChartAnimation();
-      }
-    }, { threshold: 0.15 });
-    chartObserver.observe(impactChartRef.value);
-  } else {
-    setTimeout(() => {
-      if (!velocityChartStarted) triggerVelocityChartAnimation();
-    }, 1000);
+  // Connect Step 4 Go to Dashboard button
+  const regGoToDashboardBtn = document.getElementById('regGoToDashboardBtn');
+  if (regGoToDashboardBtn) {
+    regGoToDashboardBtn.addEventListener('click', () => {
+      closeRegModal();
+      emit('open-login');
+    });
   }
+
+  // Expose global emit triggers if needed
+  window.__openAppLogin = () => emit('open-login');
+  window.__openAppRegister = () => emit('open-register');
 });
 
 onUnmounted(() => {
-  window.removeEventListener('scroll', onScroll);
-  window.removeEventListener('resize', onWindowResize);
-  if (revealObserver) {
-    revealObserver.disconnect();
-  }
-  if (chartObserver) {
-    chartObserver.disconnect();
-    chartObserver = null;
-  }
+  // Cleanup observers or timers
 });
 </script>
 
 <style scoped>
-/* Scoped adjustments */
+:root {
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    html {
+      scroll-padding-top: 5rem;
+    }
+
+    body {
+      background-color: #060A08;
+      color: #F3F5F4;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Ultra-smooth GPU-friendly dark studio background */
+    .bg-organic-dark {
+      background-color: #060A08;
+      background-image:
+        radial-gradient(circle at 78% 24%, rgba(34, 197, 94, 0.09) 0%, transparent 46%),
+        radial-gradient(circle at 16% 78%, rgba(34, 197, 94, 0.05) 0%, transparent 45%);
+    }
+
+    /* Warm Ivory / Cream Process Section */
+    .bg-process-ivory {
+      background-color: #F4F3EC;
+      color: #111814;
+    }
+
+    @media (min-width: 1280px) {
+      .max-w-7xl {
+        max-width: 1340px;
+      }
+    }
+    img {
+      image-rendering: -webkit-optimize-contrast;
+    }
+    svg {
+      shape-rendering: geometricPrecision;
+    }
+
+    /* ===================================================================== */
+    /* ULTRA-SHARP HIGH-CLARITY HERO HEADLINE                                */
+    /* "Stop the Toxic Cycle. Start the Green Revenue."                      */
+    /* ===================================================================== */
+    .hero-spatial-chamber {
+      position: relative;
+      padding: 0.25rem 0 0.5rem 0;
+    }
+    .hero-kinetic-stage {
+      position: relative;
+      z-index: 10;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: geometricPrecision;
+    }
+
+    .hero-pop-line {
+      display: block;
+      opacity: 0;
+      transform: translate3d(0, 26px, 0) scale(0.965);
+      filter: blur(8px);
+      will-change: transform, opacity, filter;
+    }
+    .hero-pop-line.is-popped {
+      animation: heroKineticPop 1.05s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      animation-delay: var(--line-delay, 0ms);
+    }
+    @keyframes heroKineticPop {
+      0% {
+        opacity: 0;
+        transform: translate3d(0, 26px, 0) scale(0.965);
+        filter: blur(8px);
+      }
+      65% {
+        opacity: 1;
+        transform: translate3d(0, -2px, 0) scale(1.008);
+        filter: blur(0px);
+      }
+      100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+        filter: blur(0px);
+      }
+    }
+
+    @keyframes heroChromaticSweep {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Razor-Sharp Ultra-High-Contrast Pure White Words (No Underline, No Shadow) */
+    .hero-solid-white {
+      display: inline-block;
+      color: #FFFFFF;
+      text-shadow: none;
+      filter: contrast(1.08);
+    }
+
+    /* High-Contrast Richly Saturated Amber-Orange Phrase ("Toxic Cycle." — Crisp & Aesthetic) */
+    .hero-toxic-highlight {
+      display: inline-block;
+      position: relative;
+      color: #FF9F0A;
+      background: linear-gradient(100deg, #FFF04D 0%, #FFB800 32%, #FF6B00 68%, #FFD60A 100%);
+      background-size: 220% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: none;
+      filter: saturate(1.38) contrast(1.14);
+      animation: heroChromaticSweep 6.5s ease-in-out infinite;
+    }
+
+    /* High-Contrast Richly Saturated Emerald-Lime Phrase ("Green Revenue." — Crisp & Aesthetic) */
+    .hero-green-highlight {
+      display: inline-block;
+      position: relative;
+      color: #00E676;
+      background: linear-gradient(100deg, #A3E635 0%, #22C55E 32%, #00E676 68%, #4ADE80 100%);
+      background-size: 220% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: none;
+      filter: saturate(1.42) contrast(1.14);
+      animation: heroChromaticSweep 6.5s ease-in-out infinite 0.8s;
+    }
+
+    /* Crisp Anti-Jitter Brand Logo */
+    .brand-logo-crisp {
+      image-rendering: -webkit-optimize-contrast;
+      transform: translateZ(0);
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+
+    /* Dedicated Disease Touch & Balanced Architectural Card Styling */
+    .disease-hazard-card {
+      position: relative;
+      background: linear-gradient(165deg, rgba(16, 24, 19, 0.96) 0%, rgba(9, 14, 11, 0.99) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.085);
+      box-shadow:
+        0 18px 38px -14px rgba(0, 0, 0, 0.85),
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.06);
+      transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.28s ease, box-shadow 0.28s ease;
+    }
+    .disease-hazard-card:hover {
+      transform: translate3d(0, -4px, 0);
+      border-color: rgba(239, 68, 68, 0.45);
+      box-shadow:
+        0 24px 48px -12px rgba(0, 0, 0, 0.92),
+        0 0 28px -8px rgba(239, 68, 68, 0.28),
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+    }
+    .disease-hazard-card:active {
+      transform: scale(0.98);
+      box-shadow: 0 0 24px rgba(239, 68, 68, 0.42);
+    }
+
+    /* Tablet Portrait & Mobile Orientation Optimizations */
+    @media (min-width: 768px) and (max-width: 1024px) {
+      .hero-spatial-chamber {
+        padding: 0.5rem 0 1.25rem 0;
+      }
+      .hero-kinetic-stage {
+        font-size: 3.45rem !important;
+        line-height: 1.08 !important;
+      }
+      .disease-hazard-card {
+        min-height: 190px !important;
+      }
+      .console-metric-box {
+        padding: 1.25rem !important;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .hero-kinetic-stage {
+        font-size: 2.35rem !important;
+        line-height: 1.1 !important;
+      }
+      .hero-pedestal-platform {
+        padding: 1rem !important;
+        margin-top: 1.25rem !important;
+      }
+      .disease-hazard-card {
+        min-height: auto !important;
+        padding: 1.25rem !important;
+      }
+    }
+
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ===================================================================== */
+    /* SECTION 01 CRISIS STAT CARDS (EXACT MATCH TO image_adb67c.jpg)        */
+    /* ===================================================================== */
+    .crisis-card-60 {
+      position: relative;
+      background: linear-gradient(165deg, rgba(16, 24, 19, 0.95) 0%, rgba(9, 14, 11, 0.99) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-left: 3.5px solid #EF4444;
+      box-shadow:
+        0 20px 42px -14px rgba(0, 0, 0, 0.85),
+        -6px 0 24px -10px rgba(239, 68, 68, 0.35),
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.06);
+      transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.28s ease, box-shadow 0.3s ease;
+    }
+    .crisis-card-60:hover {
+      transform: translate3d(0, -4px, 0);
+      border-color: rgba(239, 68, 68, 0.45);
+      border-left-color: #EF4444;
+      box-shadow:
+        0 26px 50px -12px rgba(0, 0, 0, 0.92),
+        -8px 0 30px -8px rgba(239, 68, 68, 0.48);
+    }
+
+    .crisis-card-25 {
+      position: relative;
+      background: linear-gradient(165deg, rgba(16, 24, 19, 0.95) 0%, rgba(9, 14, 11, 0.99) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-left: 3.5px solid #F59E0B;
+      box-shadow:
+        0 20px 42px -14px rgba(0, 0, 0, 0.85),
+        -6px 0 24px -10px rgba(245, 158, 11, 0.35),
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.06);
+      transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.28s ease, box-shadow 0.3s ease;
+    }
+    .crisis-card-25:hover {
+      transform: translate3d(0, -4px, 0);
+      border-color: rgba(245, 158, 11, 0.45);
+      border-left-color: #F59E0B;
+      box-shadow:
+        0 26px 50px -12px rgba(0, 0, 0, 0.92),
+        -8px 0 30px -8px rgba(245, 158, 11, 0.48);
+    }
+
+    /* Dedicated Spring Pop-Up Animation for the 60% and 25% Crisis Callout Cards */
+    @keyframes statCardSpringPop {
+      0% {
+        opacity: 0;
+        transform: translate3d(0, 26px, 0) scale(0.92);
+      }
+      70% {
+        opacity: 1;
+        transform: translate3d(0, -3px, 0) scale(1.015);
+      }
+      100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+      }
+    }
+    .stat-pop-card {
+      opacity: 0;
+      transform: translate3d(0, 26px, 0) scale(0.92);
+      will-change: transform, opacity;
+    }
+    .stat-pop-card.is-popped-stat {
+      animation: statCardSpringPop 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      animation-delay: var(--stat-delay, 0ms);
+    }
+
+    /* Premium Section 02 Process Pipeline Shimmer & 3D Step Cards */
+    @keyframes pipelineBeamFlow {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 200% 50%; }
+    }
+    .process-beam-animated {
+      background: linear-gradient(90deg, #16A34A 0%, #22C55E 35%, #86EFAC 50%, #22C55E 65%, #16A34A 100%);
+      background-size: 200% 100%;
+      animation: pipelineBeamFlow 3.2s linear infinite;
+      box-shadow: 0 0 16px rgba(34, 197, 94, 0.45);
+      transition: width 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    @keyframes nodeRadarPulse {
+      0% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.65; }
+      100% { transform: translate(-50%, -50%) scale(1.95); opacity: 0; }
+    }
+    .process-node-pulse {
+      animation: nodeRadarPulse 2.4s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+    }
+
+    /* Giant Outlined Stroke Watermark Text ("TOXIC", "SCAN & DONE", & "GREEN") */
+    .stroke-watermark-toxic {
+      -webkit-text-stroke: 1.8px rgba(239, 68, 68, 0.16);
+      color: transparent;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    .stroke-watermark-green {
+      -webkit-text-stroke: 1.8px rgba(34, 197, 94, 0.17);
+      color: transparent;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    /* Deliberate, Noticeable Directional Slide-In for Background Watermarks (1.9s Cinematic Glide) */
+    .bg-slide-from-right {
+      opacity: 0;
+      transform: translate3d(220px, 0, 0);
+      transition:
+        opacity 1.65s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 1.95s cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: transform, opacity;
+    }
+    .bg-slide-from-right.is-slid-in {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+
+    .bg-slide-from-left {
+      opacity: 0;
+      transform: translate3d(-220px, 0, 0);
+      transition:
+        opacity 1.65s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 1.95s cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: transform, opacity;
+    }
+    .bg-slide-from-left.is-slid-in {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+
+    /* Vertical Side Text ("WASTE -> ENERGY") */
+    .vertical-side-label {
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+    }
+
+    /* ===================================================================== */
+    /* HARDWARE-ACCELERATED ZERO-LAG REVEAL & POP ENGINE                     */
+    /* ===================================================================== */
+    @keyframes navDrop {
+      0% { opacity: 0; transform: translate3d(0, -16px, 0); }
+      100% { opacity: 1; transform: translate3d(0, 0, 0); }
+    }
+    .animate-nav-drop {
+      animation: navDrop 0.55s var(--ease-out-expo) forwards;
+    }
+
+    .reveal {
+      opacity: 0;
+      will-change: transform, opacity;
+      transition:
+        opacity 0.92s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 1.05s cubic-bezier(0.22, 1, 0.36, 1);
+      transition-delay: var(--delay, 0ms);
+    }
+
+    .reveal-up { transform: translate3d(0, 28px, 0); }
+    .reveal-pop { transform: translate3d(0, 24px, 0) scale(0.96); }
+    .reveal-left { transform: translate3d(-36px, 0, 0); }
+    .reveal-right { transform: translate3d(36px, 0, 0); }
+
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+    /* Once reveal animation completes, release transform & delay so card hover/active states work with zero lag */
+    .reveal.reveal-settled {
+      opacity: 1;
+      transition-delay: 0ms !important;
+      will-change: auto;
+    }
+
+    /* Elastic Number Scaling Pop Effect */
+    @keyframes numberScalePop {
+      0% { transform: scale(1); }
+      45% { transform: scale(1.08); }
+      100% { transform: scale(1); }
+    }
+    .number-pop-active {
+      display: inline-block;
+      animation: numberScalePop 0.38s var(--ease-spring);
+    }
+
+    /* Snappy Touch & Click Response */
+    .touch-reactive {
+      position: relative;
+      overflow: hidden;
+      transition:
+        transform 0.26s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.26s ease,
+        border-color 0.25s ease;
+    }
+    .touch-reactive:active {
+      transform: scale(0.98) !important;
+    }
+    .touch-ripple-circle {
+      position: absolute;
+      border-radius: 9999px;
+      transform: scale(0);
+      background: radial-gradient(circle, rgba(34, 197, 94, 0.25) 0%, rgba(34, 197, 94, 0) 70%);
+      pointer-events: none;
+      animation: touchRippleExpand 0.5s var(--ease-out-expo) forwards;
+      z-index: 20;
+    }
+    @keyframes touchRippleExpand {
+      to {
+        transform: scale(2.8);
+        opacity: 0;
+      }
+    }
+
+    /* Floating Glass Badges on Hero Photo Card */
+    .hero-floating-badge {
+      background: rgba(11, 19, 14, 0.92);
+      border: 1px solid rgba(34, 197, 94, 0.28);
+      box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.85), inset 0 1px 0 0 rgba(255, 255, 255, 0.12);
+      transition: transform 0.35s var(--ease-spring), border-color 0.25s ease;
+    }
+    .hero-floating-badge:hover {
+      transform: translate3d(0, -4px, 0) scale(1.03);
+      border-color: rgba(34, 197, 94, 0.6);
+    }
+
+    @keyframes floatSlow {
+      0%, 100% { transform: translate3d(0, 0, 0); }
+      50% { transform: translate3d(0, -6px, 0); }
+    }
+    .animate-float-slow {
+      animation: floatSlow 5.5s ease-in-out infinite;
+    }
+    .animate-float-delayed {
+      animation: floatSlow 6s ease-in-out 1.4s infinite;
+    }
+
+    /* Infinite Marquee Strip */
+    @keyframes marqueeSlide {
+      0% { transform: translate3d(0%, 0, 0); }
+      100% { transform: translate3d(-50%, 0, 0); }
+    }
+    .marquee-track {
+      display: flex;
+      width: max-content;
+      will-change: transform;
+      animation: marqueeSlide 34s linear infinite;
+    }
+    .marquee-track:hover {
+      animation-play-state: paused;
+    }
+
+    /* Dark Glass & Spotlight Cards */
+    .glass-nav {
+      background: rgba(6, 10, 8, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    .dark-threat-card {
+      background: linear-gradient(165deg, rgba(16, 23, 18, 0.94) 0%, rgba(9, 14, 11, 0.98) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 16px 34px -12px rgba(0, 0, 0, 0.78), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+      transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.28s ease, box-shadow 0.3s ease;
+    }
+    .dark-threat-card:hover {
+      transform: translate3d(0, -4px, 0);
+      border-color: rgba(239, 68, 68, 0.42);
+      box-shadow: 0 22px 42px -12px rgba(0, 0, 0, 0.88), 0 0 24px -8px rgba(239, 68, 68, 0.2);
+    }
+
+    /* Section 02 Ivory Process White Step Cards with Smooth Elevation */
+    .process-white-card {
+      background: linear-gradient(180deg, #FFFFFF 0%, #FAF9F5 100%);
+      border: 1.5px solid rgba(17, 24, 20, 0.08);
+      box-shadow: 0 20px 44px -14px rgba(17, 24, 20, 0.08), 0 4px 12px rgba(17, 24, 20, 0.03);
+      transition:
+        transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+        border-color 0.35s ease,
+        box-shadow 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .process-white-card:hover,
+    .process-white-card.active-process-card {
+      transform: translate3d(0, -10px, 0) scale(1.015);
+      border-color: rgba(22, 163, 74, 0.65);
+      box-shadow:
+        0 30px 60px -14px rgba(22, 163, 74, 0.22),
+        0 12px 24px -8px rgba(17, 24, 20, 0.08),
+        0 0 0 3px rgba(34, 197, 94, 0.12);
+    }
+
+    /* Section 03 GeoField Impact Console */
+    .impact-console-shell {
+      background: linear-gradient(155deg, rgba(16, 30, 22, 0.94) 0%, rgba(8, 15, 11, 0.98) 100%);
+      border: 1px solid rgba(34, 197, 94, 0.24);
+      box-shadow:
+        0 40px 80px -20px rgba(0, 0, 0, 0.9),
+        0 0 70px -15px rgba(34, 197, 94, 0.2),
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.12);
+      transition: transform 0.5s var(--ease-spring), border-color 0.4s ease, box-shadow 0.5s ease;
+    }
+    .impact-console-shell:hover {
+      border-color: rgba(34, 197, 94, 0.42);
+      box-shadow:
+        0 48px 95px -20px rgba(0, 0, 0, 0.95),
+        0 0 85px -10px rgba(34, 197, 94, 0.28),
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.18);
+    }
+
+    .console-metric-box {
+      background: rgba(7, 13, 10, 0.78);
+      border: 1px solid rgba(34, 197, 94, 0.14);
+      box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+      transition: transform 0.35s var(--ease-spring), border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.35s ease;
+    }
+    .console-metric-box:hover,
+    .console-metric-box.active-metric-box {
+      transform: translateY(-4px) scale(1.018);
+      background: rgba(14, 26, 19, 0.92);
+      border-color: rgba(34, 197, 94, 0.5);
+      box-shadow: 0 20px 38px -12px rgba(0, 0, 0, 0.8), 0 0 28px -6px rgba(34, 197, 94, 0.25);
+    }
+
+    /* Green CTA Button Glow & Shimmer */
+    .btn-green-pill {
+      position: relative;
+      overflow: hidden;
+      background-color: #22C55E;
+      color: #050B07;
+      box-shadow: 0 0 32px rgba(34, 197, 94, 0.35);
+      transition: transform 0.35s var(--ease-spring), background-color 0.25s ease, box-shadow 0.35s ease;
+    }
+    .btn-green-pill:hover {
+      background-color: #4ADE80;
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 0 46px rgba(34, 197, 94, 0.55);
+    }
+    .btn-green-pill:active {
+      transform: scale(0.97);
+    }
+
+    /* Range Slider Styling */
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      background: transparent;
+      cursor: pointer;
+    }
+    input[type="range"]::-webkit-slider-runnable-track {
+      height: 6px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #22C55E 0%, #A3E635 100%);
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      border: 3px solid #22C55E;
+      box-shadow: 0 0 14px rgba(34, 197, 94, 0.8);
+      margin-top: -7px;
+      transition: transform 0.2s var(--ease-spring);
+    }
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.22);
+    }
+
+    @keyframes qrScan {
+      0%, 100% { top: 8%; opacity: 0.85; }
+      50% { top: 88%; opacity: 1; }
+    }
+    .qr-scan-beam {
+      position: absolute;
+      left: 6%;
+      right: 6%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #22C55E, #A3E635, #22C55E, transparent);
+      box-shadow: 0 0 12px #22C55E;
+      animation: qrScan 2.4s ease-in-out infinite;
+    }
+
+    ::-webkit-scrollbar { width: 6px; height: 0px; }
+    ::-webkit-scrollbar-track { background: #060A08; }
+    ::-webkit-scrollbar-thumb { background: #182820; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #22C55E; }
+    .no-scrollbar::-webkit-scrollbar { display: none; width: 0; height: 0; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* Executive Telemetry Chart Cards & Interactive Nodes */
+    .telemetry-chart-shell {
+      background: linear-gradient(165deg, rgba(12, 22, 16, 0.92) 0%, rgba(6, 11, 8, 0.98) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow:
+        0 24px 52px -16px rgba(0, 0, 0, 0.88),
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.07);
+    }
+    .telemetry-chart-shell-buyer {
+      background: linear-gradient(165deg, rgba(10, 20, 28, 0.92) 0%, rgba(6, 11, 15, 0.98) 100%);
+      border: 1px solid rgba(56, 189, 248, 0.18);
+      box-shadow:
+        0 24px 52px -16px rgba(0, 0, 0, 0.88),
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.07);
+    }
+    .chart-data-node {
+      transition: r 0.2s cubic-bezier(0.22, 1, 0.36, 1), stroke-width 0.2s ease;
+    }
+    .chart-data-node:hover {
+      r: 6.5px;
+    }
 </style>
