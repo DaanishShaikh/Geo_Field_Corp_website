@@ -43,14 +43,14 @@
           </button>
         </div>
 
-        <button id="modePortalBtn" class="font-mono text-[11px] tracking-[0.18em] uppercase text-gray-300 hover:text-[#22C55E] transition">
+        <button id="modePortalBtn" type="button" @click="$emit('open-login')" class="font-mono text-[11px] tracking-[0.18em] uppercase text-gray-300 hover:text-[#22C55E] transition cursor-pointer">
           SIGN IN
         </button>
         <button id="modeLandingBtn" class="hidden font-mono text-[11px] tracking-[0.18em] uppercase text-[#22C55E] hover:text-white transition flex items-center gap-1.5">
           &larr; <span>LANDING</span>
         </button>
 
-        <button id="navRegisterBtn" class="btn-green-pill touch-reactive px-4 sm:px-5 py-2.5 rounded-full font-mono text-[11px] sm:text-xs font-bold tracking-[0.14em] uppercase flex items-center gap-1.5">
+        <button id="navRegisterBtn" type="button" @click="$emit('open-register')" class="btn-green-pill touch-reactive px-4 sm:px-5 py-2.5 rounded-full font-mono text-[11px] sm:text-xs font-bold tracking-[0.14em] uppercase flex items-center gap-1.5 cursor-pointer">
           <span>JOIN NETWORK</span>
           <span>&#8599;</span>
         </button>
@@ -137,7 +137,7 @@
               </div>
 
               <div class="flex flex-wrap items-center gap-4 pt-1">
-                <button id="heroRegisterBtn" type="button" class="btn-green-pill touch-reactive px-6 py-3 rounded-full font-display text-xs sm:text-sm font-bold tracking-wide flex items-center gap-2">
+                <button id="heroRegisterBtn" type="button" @click="$emit('open-register')" class="btn-green-pill touch-reactive px-6 py-3 rounded-full font-display text-xs sm:text-sm font-bold tracking-wide flex items-center gap-2 cursor-pointer">
                   <span>Register Your Kitchen in 60s</span>
                   <span>&#8599;</span>
                 </button>
@@ -1117,7 +1117,7 @@
         </p>
 
         <div style="--delay: 180ms" class="reveal reveal-pop pt-3">
-          <button id="footerRegisterBtn" class="btn-green-pill touch-reactive px-10 py-4 rounded-full font-mono text-xs sm:text-sm font-bold tracking-[0.2em] uppercase inline-flex items-center gap-3">
+          <button id="footerRegisterBtn" type="button" @click="$emit('open-register')" class="btn-green-pill touch-reactive px-10 py-4 rounded-full font-mono text-xs sm:text-sm font-bold tracking-[0.2em] uppercase inline-flex items-center gap-3 cursor-pointer">
             <span>REGISTER NOW</span>
             <span>&#8599;</span>
           </button>
@@ -1185,8 +1185,11 @@
             <button id="customerQuickOrderBtn" type="button" class="hidden touch-reactive px-5 py-3 rounded-xl bg-[#38BDF8] hover:bg-[#7DD3FC] text-[#050A07] font-display text-xs sm:text-sm font-bold flex items-center justify-center gap-2 shadow-lg transition">
               <span>+ Request Feedstock Batch</span>
             </button>
-            <button id="backToLandingBtn" type="button" class="touch-reactive px-4 py-3 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 text-gray-200 font-sans text-xs font-semibold transition text-center">
+            <button id="backToLandingBtn" type="button" class="touch-reactive px-4 py-3 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 text-gray-200 font-sans text-xs font-semibold transition text-center cursor-pointer">
               &larr; Back to Home
+            </button>
+            <button type="button" @click="$emit('open-login')" class="touch-reactive px-4 py-3 rounded-xl bg-[#22C55E]/15 hover:bg-[#22C55E]/25 border border-[#22C55E]/40 text-[#22C55E] hover:text-white font-sans text-xs font-semibold transition text-center cursor-pointer flex items-center justify-center gap-1.5">
+              <span>Sign In to Platform</span> &rarr;
             </button>
           </div>
         </div>
@@ -2025,7 +2028,8 @@
           <div><a href="#threatSection" class="nav-scroll-link text-gray-300 hover:text-[#22C55E] transition">The Crisis</a></div>
           <div><a href="#solutionSection" class="nav-scroll-link text-gray-300 hover:text-[#22C55E] transition">The Process</a></div>
           <div><a href="#impactSection" class="nav-scroll-link text-gray-300 hover:text-[#22C55E] transition">Impact</a></div>
-          <div><button type="button" id="footerNavRegisterLink" class="text-gray-300 hover:text-[#22C55E] transition">Register</button></div>
+          <div><button type="button" id="footerNavRegisterLink" @click="$emit('open-register')" class="text-gray-300 hover:text-[#22C55E] transition cursor-pointer">Register</button></div>
+          <div><button type="button" @click="$emit('open-login')" class="text-gray-300 hover:text-[#22C55E] transition cursor-pointer">Sign In</button></div>
         </div>
 
       </div>
@@ -2040,102 +2044,6 @@
 
   <!-- ===================================================================== -->
   <!-- MODAL 1: 60-SECOND REGISTRATION GATEWAY                               -->
-  <!-- ===================================================================== -->
-  <div id="registrationModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-md p-4">
-    <div class="impact-console-shell rounded-3xl max-w-md w-full p-7 sm:p-8 border border-[#22C55E]/30 shadow-2xl relative">
-      <button id="closeRegModalBtn" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white flex items-center justify-center">
-        &times;
-      </button>
-
-      <div class="mb-6">
-        <div class="flex items-center justify-between font-mono text-[11px] text-gray-400 mb-2">
-          <span id="regStepIndicator">STEP 1 OF 3</span>
-          <span id="regProgressPct" class="text-[#22C55E]">33%</span>
-        </div>
-        <div class="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
-          <div id="regProgressBar" class="h-full bg-[#22C55E] transition-all duration-300" style="width: 33%;"></div>
-        </div>
-      </div>
-
-      <!-- Step 1 -->
-      <div id="regStep1" class="space-y-4">
-        <h3 class="font-display text-2xl font-bold text-white">Join the Clean Network</h3>
-        <p class="text-xs text-gray-400">Get your restaurant’s static QR code in 60 seconds.</p>
-        <div>
-          <label class="block font-mono text-[10px] uppercase tracking-wider text-gray-400 mb-1.5">Your Name</label>
-          <input id="regOwnerName" type="text" value="Vikram Kulkarni" class="w-full px-4 py-3 rounded-xl bg-surface-950 border border-white/10 text-white text-sm focus:border-[#22C55E] focus:outline-none" />
-        </div>
-        <div>
-          <label class="block font-mono text-[10px] uppercase tracking-wider text-gray-400 mb-1.5">Mobile / WhatsApp Number</label>
-          <input id="regPhone" type="tel" value="+91 98230 45120" class="w-full px-4 py-3 rounded-xl bg-surface-950 border border-white/10 text-white text-sm focus:border-[#22C55E] focus:outline-none" />
-        </div>
-        <div class="pt-2">
-          <button id="regNextStep1Btn" class="btn-green-pill w-full py-3.5 rounded-full font-mono text-xs font-bold uppercase tracking-wider">
-            Continue &rarr;
-          </button>
-        </div>
-      </div>
-
-      <!-- Step 2 -->
-      <div id="regStep2" class="hidden space-y-4">
-        <h3 class="font-display text-2xl font-bold text-white">Kitchen Details</h3>
-        <p class="text-xs text-gray-400">Assign your establishment to a local collection cluster.</p>
-        <div>
-          <label class="block font-mono text-[10px] uppercase tracking-wider text-gray-400 mb-1.5">Restaurant / Kitchen Name</label>
-          <input id="regRestaurantName" type="text" value="Cluster 04 — Spice Route Kitchen" class="w-full px-4 py-3 rounded-xl bg-surface-950 border border-white/10 text-white text-sm focus:border-[#22C55E] focus:outline-none" />
-        </div>
-        <div>
-          <label class="block font-mono text-[10px] uppercase tracking-wider text-gray-400 mb-1.5">Weekly Used Oil Volume</label>
-          <select id="regTrackSelect" class="w-full px-4 py-3 rounded-xl bg-surface-950 border border-white/10 text-white text-sm focus:border-[#22C55E] focus:outline-none">
-            <option value="Commercial Kitchen">50 – 250 Liters / week</option>
-            <option value="Independent Eatery">Under 50 Liters / week</option>
-            <option value="High-Volume Kitchen">250+ Liters / week</option>
-          </select>
-        </div>
-        <div class="pt-2 flex gap-3">
-          <button id="regBackStep2Btn" class="px-5 py-3.5 rounded-full bg-white/5 text-gray-300 font-mono text-xs">
-            Back
-          </button>
-          <button id="regNextStep2Btn" class="btn-green-pill flex-1 py-3.5 rounded-full font-mono text-xs font-bold uppercase tracking-wider">
-            Continue &rarr;
-          </button>
-        </div>
-      </div>
-
-      <!-- Step 3 -->
-      <div id="regStep3" class="hidden space-y-4">
-        <h3 class="font-display text-2xl font-bold text-white">Pickup Cluster</h3>
-        <p class="text-xs text-gray-400">Your waterproof QR kit ships within 48 hours.</p>
-        <div>
-          <label class="block font-mono text-[10px] uppercase tracking-wider text-gray-400 mb-1.5">Area / City</label>
-          <input id="regLocation" type="text" value="Andheri West, Mumbai" class="w-full px-4 py-3 rounded-xl bg-surface-950 border border-white/10 text-white text-sm focus:border-[#22C55E] focus:outline-none" />
-        </div>
-        <div class="pt-2 flex gap-3">
-          <button id="regBackStep3Btn" class="px-5 py-3.5 rounded-full bg-white/5 text-gray-300 font-mono text-xs">
-            Back
-          </button>
-          <button id="regCompleteBtn" class="btn-green-pill flex-1 py-3.5 rounded-full font-mono text-xs font-bold uppercase tracking-wider">
-            Mint QR &amp; Complete &#8599;
-          </button>
-        </div>
-      </div>
-
-      <!-- Step 4 -->
-      <div id="regStep4" class="hidden text-center space-y-4">
-        <div class="w-12 h-12 rounded-full bg-[#22C55E]/20 text-[#22C55E] flex items-center justify-center mx-auto text-xl font-bold">
-          &check;
-        </div>
-        <h3 id="regDoneTitle" class="font-display text-2xl font-bold text-white">You’re In!</h3>
-        <p class="text-xs text-gray-400">Your location-specific QR receipt ID <strong id="regGeneratedQrId" class="text-[#22C55E] font-mono">#GF-0421</strong> is active.</p>
-        <button id="regGoToDashboardBtn" class="btn-green-pill w-full py-3.5 rounded-full font-mono text-xs font-bold uppercase tracking-wider">
-          Open Seller Console &rarr;
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ===================================================================== -->
-  <!-- MODAL 2: FSSAI RUCO COMPLIANCE RECEIPT                                -->
   <!-- ===================================================================== -->
   <div id="certificateModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-md p-4">
     <div class="impact-console-shell rounded-3xl max-w-lg w-full p-7 sm:p-8 border border-[#22C55E]/30 shadow-2xl relative">
@@ -3409,17 +3317,14 @@ onMounted(() => {
       });
 
       const certModal = document.getElementById('certificateModal');
-      const regModal = document.getElementById('registrationModal');
-
+      
       function syncModalBodyScrollLock() {
         const cert = document.getElementById('certificateModal');
-        const reg = document.getElementById('registrationModal');
-        const iscc = document.getElementById('isccModal');
+                const iscc = document.getElementById('isccModal');
         const disease = document.getElementById('diseaseDetailModal');
         const isAnyOpen =
           (cert && !cert.classList.contains('hidden')) ||
-          (reg && !reg.classList.contains('hidden')) ||
-          (iscc && !iscc.classList.contains('hidden')) ||
+                    (iscc && !iscc.classList.contains('hidden')) ||
           (disease && !disease.classList.contains('hidden'));
         document.body.style.overflow = isAnyOpen ? 'hidden' : '';
       }
@@ -3453,70 +3358,17 @@ onMounted(() => {
         showToast('Official FSSAI RUCO Receipt PDF downloaded.');
       });
 
-      function showRegStep(step) {
-        [1, 2, 3, 4].forEach(n => {
-          document.getElementById('regStep' + n)?.classList.toggle('hidden', n !== step);
-        });
-        const map = {
-          1: ['STEP 1 OF 3', '33%'],
-          2: ['STEP 2 OF 3', '66%'],
-          3: ['STEP 3 OF 3', '95%'],
-          4: ['COMPLETE', '100%']
-        };
-        if (map[step]) {
-          document.getElementById('regStepIndicator').textContent = map[step][0];
-          document.getElementById('regProgressPct').textContent = map[step][1];
-          document.getElementById('regProgressBar').style.width = map[step][1];
-        }
-      }
-
-      function openRegModal() {
-        showRegStep(1);
-        regModal.classList.remove('hidden');
-        regModal.classList.add('flex');
-        syncModalBodyScrollLock();
-      }
-
-      function closeRegModal() {
-        regModal.classList.add('hidden');
-        regModal.classList.remove('flex');
-        syncModalBodyScrollLock();
-      }
-
+      // Platform Real Authentication & Onboarding triggers
+      document.getElementById('modePortalBtn')?.addEventListener('click', () => emit('open-login'));
       ['navRegisterBtn', 'heroRegisterBtn', 'footerRegisterBtn', 'footerNavRegisterLink'].forEach(id => {
-        document.getElementById(id)?.addEventListener('click', openRegModal);
-      });
-      document.getElementById('closeRegModalBtn')?.addEventListener('click', closeRegModal);
-      regModal?.addEventListener('click', (e) => {
-        if (e.target === regModal) closeRegModal();
+        document.getElementById(id)?.addEventListener('click', () => emit('open-register'));
       });
       window.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
-          closeRegModal();
           closeCertificateModal();
           closeIsccModal();
+          if (typeof closeDiseaseModal === 'function') closeDiseaseModal();
         }
-      });
-
-      document.getElementById('regNextStep1Btn')?.addEventListener('click', () => showRegStep(2));
-      document.getElementById('regBackStep2Btn')?.addEventListener('click', () => showRegStep(1));
-      document.getElementById('regNextStep2Btn')?.addEventListener('click', () => showRegStep(3));
-      document.getElementById('regBackStep3Btn')?.addEventListener('click', () => showRegStep(2));
-
-      document.getElementById('regCompleteBtn')?.addEventListener('click', () => {
-        const restName = document.getElementById('regRestaurantName')?.value || 'Cluster 04 — Andheri West';
-        const newQr = '#GF-0' + Math.floor(420 + Math.random() * 550);
-        state.fboProfile.name = restName;
-        state.fboProfile.qrId = newQr;
-        document.getElementById('regDoneTitle').textContent = `Welcome, ${restName}!`;
-        document.getElementById('regGeneratedQrId').textContent = newQr;
-        renderSellerPortal();
-        showRegStep(4);
-      });
-
-      document.getElementById('regGoToDashboardBtn')?.addEventListener('click', () => {
-        closeRegModal();
-        setViewMode('portal', 'seller', true);
       });
 
       // --- Navigation & Hero Preview Dashboard Triggers ---
@@ -3691,7 +3543,7 @@ onMounted(() => {
 
       // --- View Mode Header & Navigation Controls ---
       document.getElementById('modeLandingBtn')?.addEventListener('click', () => setViewMode('landing', null, true));
-      document.getElementById('modePortalBtn')?.addEventListener('click', () => setViewMode('portal', state.portalRole || 'seller', true));
+      
       document.getElementById('backToLandingBtn')?.addEventListener('click', () => setViewMode('landing', null, true));
 
       // --- Portal Interactive Forms & Quick Actions ---
@@ -4017,14 +3869,6 @@ onMounted(() => {
   }
 
   // Connect Step 4 Go to Dashboard button
-  const regGoToDashboardBtn = document.getElementById('regGoToDashboardBtn');
-  if (regGoToDashboardBtn) {
-    regGoToDashboardBtn.addEventListener('click', () => {
-      closeRegModal();
-      emit('open-login');
-    });
-  }
-
   // Expose global emit triggers if needed
   window.__openAppLogin = () => emit('open-login');
   window.__openAppRegister = () => emit('open-register');
