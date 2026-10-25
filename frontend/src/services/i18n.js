@@ -1,6 +1,6 @@
 import { ref, computed } from 'vue';
-import { en } from '../locales/en';
-import { hi } from '../locales/hi';
+import { en } from '../locales/en.js';
+import { hi } from '../locales/hi.js';
 
 const dictionaries = { en, hi };
 
@@ -32,7 +32,7 @@ export function t(key, params = {}) {
   const lang = currentLang.value;
   const dict = dictionaries[lang] || dictionaries.en;
   
-  // Resolve dot path
+  // Resolve dot path in active dictionary
   const keys = key.split('.');
   let val = keys.reduce((obj, k) => (obj && obj[k] !== undefined ? obj[k] : undefined), dict);
   
@@ -40,14 +40,26 @@ export function t(key, params = {}) {
   if (val === undefined && lang !== 'en') {
     val = keys.reduce((obj, k) => (obj && obj[k] !== undefined ? obj[k] : undefined), dictionaries.en);
   }
-  
-  if (val === undefined) return key;
+
+  // Graceful fallback and dev warning
+  if (val === undefined) {
+    if (typeof console !== 'undefined' && console.warn) {
+      console.warn(`[i18n] Missing translation for key: "${key}" (lang: ${lang})`);
+    }
+    // Return humanized string instead of raw dotted key
+    const lastPart = keys[keys.length - 1];
+    return lastPart
+      .replace(/([A-Z])/g, ' $1')
+      .replace(/^./, str => str.toUpperCase())
+      .trim();
+  }
+
   if (typeof val !== 'string') return val;
   
-  // Replace parameters like {count}, {name}
+  // Replace parameters like {step}, {name}, {count}
   if (params && Object.keys(params).length > 0) {
     Object.keys(params).forEach(p => {
-      val = val.replace(new RegExp(`\\\\{${p}\\\\}`, 'g'), params[p]);
+      val = val.replace(new RegExp(`\\{\\s*${p}\\s*\\}`, 'g'), String(params[p]));
     });
   }
   
