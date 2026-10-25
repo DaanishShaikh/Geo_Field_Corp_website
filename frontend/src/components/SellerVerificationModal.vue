@@ -1,17 +1,17 @@
 <template>
   <div 
-    class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 overflow-y-auto flex justify-center items-start p-2.5 sm:p-5"
+    class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 overflow-y-auto flex justify-center items-start p-2.5 sm:p-5"
     @click.self="$emit('close')"
   >
-    <div class="relative w-full max-w-lg bg-[#0C120F] border border-bio/30 rounded-2xl sm:rounded-3xl shadow-2xl text-slate-100 my-3 sm:my-6 overflow-hidden">
+    <div class="relative w-full max-w-lg bg-[#0A130E] border border-[#22C55E]/30 rounded-2xl sm:rounded-3xl shadow-2xl text-[#F3F5F4] my-3 sm:my-6 overflow-hidden">
       
       <!-- Top Bar: Logo & Verification Status -->
-      <div class="flex items-center justify-between px-4 sm:px-6 py-3.5 border-b border-white/10 bg-slate-900/60">
+      <div class="flex items-center justify-between px-4 sm:px-6 py-3.5 border-b border-white/10 bg-[#060A08]/90">
         <div class="flex items-center gap-2.5">
-          <img src="/brand/logo.svg" alt="GeoField Corp" class="h-6 sm:h-7 w-auto" />
+          <img src="/brand/geofield-full-logo.png" alt="GeoField Corp" class="h-6 sm:h-7 w-auto" />
           <div class="border-l border-white/15 pl-2.5">
             <span class="block font-mono text-[9px] uppercase tracking-wider text-bio font-bold">FSSAI RUCO</span>
-            <span class="block text-[10px] text-slate-400 -mt-0.5">Verified FBO</span>
+            <span class="block text-[10px] text-gray-400 -mt-0.5">Verified FBO</span>
           </div>
         </div>
 
@@ -22,7 +22,7 @@
           </span>
           <button 
             @click="$emit('close')"
-            class="w-7 h-7 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition cursor-pointer text-sm font-bold"
+            class="w-7 h-7 rounded-full bg-slate-800 hover:bg-slate-700 text-gray-400 hover:text-white flex items-center justify-center transition cursor-pointer text-sm font-bold"
             title="Close"
           >
             ✕
@@ -33,18 +33,18 @@
       <!-- Loading State -->
       <div v-if="loading && !seller.name" class="py-16 text-center space-y-3">
         <div class="w-8 h-8 border-2 border-bio/20 border-t-bio rounded-full animate-spin mx-auto"></div>
-        <p class="font-mono text-[11px] text-slate-400 tracking-wider">RETRIEVING VERIFIED SELLER DOSSIER...</p>
+        <p class="font-mono text-[11px] text-gray-400 tracking-wider">RETRIEVING VERIFIED SELLER DOSSIER...</p>
       </div>
 
       <!-- Main Seller Dossier Content -->
       <div v-else class="p-4 sm:p-6 space-y-3.5">
 
         <!-- Company / Kitchen Main Hero -->
-        <div class="bg-gradient-to-r from-slate-900 to-[#121c17] border border-white/10 rounded-xl sm:rounded-2xl p-4 relative overflow-hidden">
+        <div class="bg-gradient-to-r from-[#0E1B14] to-[#0A130E] border border-white/10 rounded-xl sm:rounded-2xl p-4 relative overflow-hidden">
           <div class="absolute -right-6 -bottom-6 w-28 h-28 bg-bio/10 rounded-full blur-xl pointer-events-none"></div>
           
           <div class="relative z-10 space-y-1.5">
-            <span class="font-mono text-[9px] uppercase tracking-[0.2em] text-slate-400 block">
+            <span class="font-mono text-[9px] uppercase tracking-[0.2em] text-gray-400 block">
               Food Business Operator / Commercial Facility
             </span>
             <h1 class="text-lg sm:text-xl font-bold font-display text-white tracking-tight">
@@ -55,7 +55,7 @@
               <span class="font-mono text-bio bg-bio/10 border border-bio/20 px-2 py-0.5 rounded text-[10px] font-bold">
                 {{ seller.site_id || 'RUCO-SITE-ID' }}
               </span>
-              <span class="text-slate-500">•</span>
+              <span class="text-gray-500">•</span>
               <span class="text-amber-400 font-mono text-[10px] font-semibold">
                 🛡️ RUCO Grade Certified
               </span>
@@ -64,7 +64,7 @@
         </div>
 
         <!-- 1. Key Contacts Card -->
-        <div class="bg-slate-900/60 border border-white/10 rounded-xl sm:rounded-2xl p-3.5 sm:p-4 space-y-3">
+        <div class="bg-[#060A08]/90 border border-white/10 rounded-xl sm:rounded-2xl p-3.5 sm:p-4 space-y-3">
           <div class="flex items-center gap-1.5 text-bio font-mono text-[10px] font-bold uppercase tracking-wider">
             <span>👤</span> Key Contacts
           </div>
@@ -72,7 +72,7 @@
           <!-- Primary Contact -->
           <div class="flex items-center justify-between gap-3 text-xs">
             <div>
-              <span class="font-mono text-[9px] uppercase tracking-wider text-slate-400 block">Primary Contact</span>
+              <span class="font-mono text-[9px] uppercase tracking-wider text-gray-400 block">Primary Contact</span>
               <span class="text-white font-medium block mt-0.5">
                 {{ primaryRepresentativeName }}
               </span>
@@ -84,14 +84,14 @@
             >
               <span>📞</span> {{ seller.phone }}
             </a>
-            <span v-else class="text-slate-500 font-mono text-xs">No phone</span>
+            <span v-else class="text-gray-500 font-mono text-xs">No phone</span>
           </div>
 
           <!-- Alternative Contact (if provided) -->
           <div v-if="hasAltContact" class="pt-2 border-t border-white/5 flex items-center justify-between gap-3 text-xs">
             <div>
-              <span class="font-mono text-[9px] uppercase tracking-wider text-slate-400 block">Alternative Contact</span>
-              <span class="text-slate-300 font-medium block mt-0.5">
+              <span class="font-mono text-[9px] uppercase tracking-wider text-gray-400 block">Alternative Contact</span>
+              <span class="text-gray-300 font-medium block mt-0.5">
                 {{ altRepresentativeName }}
               </span>
             </div>
@@ -106,20 +106,20 @@
 
           <!-- Email -->
           <div class="pt-2 border-t border-white/5 flex items-center justify-between gap-3 text-xs">
-            <span class="font-mono text-[9px] uppercase tracking-wider text-slate-400">Official Email</span>
+            <span class="font-mono text-[9px] uppercase tracking-wider text-gray-400">Official Email</span>
             <a 
               v-if="seller.email" 
               :href="'mailto:' + seller.email" 
-              class="text-slate-300 hover:text-bio font-mono text-xs truncate max-w-[200px]"
+              class="text-gray-300 hover:text-bio font-mono text-xs truncate max-w-[200px]"
             >
               ✉️ {{ seller.email }}
             </a>
-            <span v-else class="text-slate-500 text-xs">Not specified</span>
+            <span v-else class="text-gray-500 text-xs">Not specified</span>
           </div>
         </div>
 
         <!-- 2. Facility Location Card -->
-        <div class="bg-slate-900/60 border border-white/10 rounded-xl sm:rounded-2xl p-3.5 sm:p-4 space-y-2.5">
+        <div class="bg-[#060A08]/90 border border-white/10 rounded-xl sm:rounded-2xl p-3.5 sm:p-4 space-y-2.5">
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-1.5 text-bio font-mono text-[10px] font-bold uppercase tracking-wider">
               <span>📍</span> Facility Location
@@ -138,13 +138,13 @@
             <p class="text-white text-xs leading-relaxed font-medium">
               {{ profile.address || 'Registered Facility Address' }}
             </p>
-            <p class="text-[11px] text-slate-400 font-mono mt-0.5">
+            <p class="text-[11px] text-gray-400 font-mono mt-0.5">
               {{ profile.city || 'Mumbai' }}{{ profile.pincode ? ' - ' + profile.pincode : '' }}
             </p>
           </div>
 
           <div class="pt-2 border-t border-white/5 flex items-center justify-between text-xs">
-            <span class="font-mono text-[9px] uppercase tracking-wider text-slate-400">Pickup Window</span>
+            <span class="font-mono text-[9px] uppercase tracking-wider text-gray-400">Pickup Window</span>
             <span class="font-medium text-slate-200 text-xs">
               {{ profile.pickup_preference || 'Morning (9 AM - 12 PM)' }}
             </span>
@@ -152,14 +152,14 @@
         </div>
 
         <!-- 3. Legal & Licences Card -->
-        <div class="bg-slate-900/60 border border-white/10 rounded-xl sm:rounded-2xl p-3.5 sm:p-4 space-y-2 text-xs">
+        <div class="bg-[#060A08]/90 border border-white/10 rounded-xl sm:rounded-2xl p-3.5 sm:p-4 space-y-2 text-xs">
           <div class="flex items-center gap-1.5 text-bio font-mono text-[10px] font-bold uppercase tracking-wider mb-1">
             <span>📋</span> Regulatory & Compliance Identifiers
           </div>
 
           <!-- FSSAI Licence -->
           <div class="flex items-center justify-between py-1 border-b border-white/5">
-            <span class="font-mono text-[10px] text-slate-400">FSSAI Licence No:</span>
+            <span class="font-mono text-[10px] text-gray-400">FSSAI Licence No:</span>
             <div class="flex items-center gap-2">
               <strong class="font-mono text-amber-400 text-xs tracking-wider">
                 {{ profile.fssai_license_no || 'Verified RUCO' }}
@@ -167,7 +167,7 @@
               <button 
                 v-if="profile.fssai_license_no" 
                 @click="copy(profile.fssai_license_no)" 
-                class="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[10px] font-mono transition cursor-pointer"
+                class="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-gray-300 rounded text-[10px] font-mono transition cursor-pointer"
                 title="Copy FSSAI"
               >
                 {{ copiedText === profile.fssai_license_no ? '✓ Copied' : 'Copy' }}
@@ -177,7 +177,7 @@
 
           <!-- GSTIN -->
           <div class="flex items-center justify-between py-1 border-b border-white/5">
-            <span class="font-mono text-[10px] text-slate-400">GSTIN / Tax ID:</span>
+            <span class="font-mono text-[10px] text-gray-400">GSTIN / Tax ID:</span>
             <div class="flex items-center gap-2">
               <span class="font-mono text-slate-200 text-xs">
                 {{ profile.gst_no || 'On File' }}
@@ -185,7 +185,7 @@
               <button 
                 v-if="profile.gst_no" 
                 @click="copy(profile.gst_no)" 
-                class="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[10px] font-mono transition cursor-pointer"
+                class="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-gray-300 rounded text-[10px] font-mono transition cursor-pointer"
               >
                 {{ copiedText === profile.gst_no ? '✓ Copied' : 'Copy' }}
               </button>
@@ -194,7 +194,7 @@
 
           <!-- MSME / Udyam -->
           <div class="flex items-center justify-between py-1">
-            <span class="font-mono text-[10px] text-slate-400">MSME / Udyam Reg:</span>
+            <span class="font-mono text-[10px] text-gray-400">MSME / Udyam Reg:</span>
             <span class="font-mono text-slate-200 text-xs">
               {{ profile.msme_udyam_no || 'N/A' }}
             </span>
@@ -205,7 +205,7 @@
         <div class="grid grid-cols-2 gap-2 text-xs">
           <!-- Settlement UPI -->
           <div class="bg-slate-900/40 border border-white/5 rounded-xl p-3">
-            <span class="font-mono text-[9px] uppercase tracking-wider text-slate-400 block">Payout Mode</span>
+            <span class="font-mono text-[9px] uppercase tracking-wider text-gray-400 block">Payout Mode</span>
             <strong class="font-mono text-cyan-400 text-xs block truncate mt-1">
               {{ profile.bank_upi_or_cheque || 'Escrow Verified' }}
             </strong>
@@ -213,7 +213,7 @@
 
           <!-- ESG Volume -->
           <div class="bg-slate-900/40 border border-white/5 rounded-xl p-3">
-            <span class="font-mono text-[9px] uppercase tracking-wider text-slate-400 block">RUCO Biofuel Diverted</span>
+            <span class="font-mono text-[9px] uppercase tracking-wider text-gray-400 block">RUCO Biofuel Diverted</span>
             <strong class="font-mono text-bio text-xs block mt-1">
               {{ stats.total_volume || 0 }} Liters
             </strong>
@@ -243,7 +243,7 @@
 
         <button 
           @click="copyVerificationUrl"
-          class="py-2.5 px-3 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-xl text-xs font-semibold transition cursor-pointer"
+          class="py-2.5 px-3 bg-slate-800 hover:bg-slate-700 text-gray-300 hover:text-white rounded-xl text-xs font-semibold transition cursor-pointer"
           title="Share Link"
         >
           <span>🔗</span> {{ copiedLink ? '✓' : 'Share' }}

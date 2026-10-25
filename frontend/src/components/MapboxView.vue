@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-3.5 sm:p-5 shadow-xl space-y-4">
+  <div class="rounded-2xl border border-white/10 bg-[#0A130E] p-3.5 sm:p-5 shadow-xl space-y-4">
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-3">
       <div class="flex items-center gap-2.5">
         <div class="w-8 h-8 rounded-lg bg-teal-500/10 text-teal-400 border border-teal-500/20 flex items-center justify-center shrink-0">
@@ -10,11 +10,11 @@
         </div>
         <div>
           <h3 class="text-sm font-bold text-white">{{ title || 'Live Logistics & Fleet Map' }}</h3>
-          <p class="text-xs text-slate-400">{{ subtitle || 'Real-time GPS tracking & optimized collection route' }}</p>
+          <p class="text-xs text-gray-400">{{ subtitle || 'Real-time GPS tracking & optimized collection route' }}</p>
         </div>
       </div>
       <div class="flex items-center gap-2 shrink-0">
-        <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-700/60 text-slate-300 border border-slate-600/50">
+        <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-700/60 text-gray-300 border border-slate-600/50">
           {{ mapTypeLabel }}
         </span>
         <span class="text-[11px] font-medium px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center gap-1.5">
@@ -25,21 +25,21 @@
     </div>
 
     <!-- Map Container -->
-    <div class="relative w-full h-[300px] xs:h-[340px] sm:h-[380px] bg-slate-950 rounded-xl overflow-hidden border border-slate-700">
+    <div class="relative w-full h-[300px] xs:h-[340px] sm:h-[380px] bg-[#060A08] rounded-xl overflow-hidden border border-white/10">
       <div ref="mapContainerRef" class="w-full h-full min-h-[300px]"></div>
 
       <!-- Map Floating Overlay Legend -->
-      <div class="absolute bottom-2 left-2 sm:bottom-3 sm:left-3 bg-slate-900/95 backdrop-blur border border-slate-700/80 rounded-xl p-2 sm:p-3 text-[10px] sm:text-xs space-y-1 sm:space-y-1.5 shadow-lg max-w-[210px] sm:max-w-xs z-[1000]">
+      <div class="absolute bottom-2 left-2 sm:bottom-3 sm:left-3 bg-[#0A130E]/95 backdrop-blur border border-white/10 rounded-xl p-2 sm:p-3 text-[10px] sm:text-xs space-y-1 sm:space-y-1.5 shadow-lg max-w-[210px] sm:max-w-xs z-[1000]">
         <div class="font-bold text-white text-[10px] sm:text-[11px] uppercase tracking-wider mb-0.5 sm:mb-1">Route Legend</div>
-        <div class="flex items-center gap-1.5 sm:gap-2 text-slate-300">
+        <div class="flex items-center gap-1.5 sm:gap-2 text-gray-300">
           <span class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-emerald-500 border border-white shrink-0"></span>
           <span class="truncate">Verified FBO Seller Stop</span>
         </div>
-        <div class="flex items-center gap-1.5 sm:gap-2 text-slate-300">
+        <div class="flex items-center gap-1.5 sm:gap-2 text-gray-300">
           <span class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-cyan-400 border border-white shrink-0"></span>
           <span class="truncate">Active Agent Vehicle (EV)</span>
         </div>
-        <div class="flex items-center gap-1.5 sm:gap-2 text-slate-300">
+        <div class="flex items-center gap-1.5 sm:gap-2 text-gray-300">
           <span class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-amber-500 border border-white shrink-0"></span>
           <span class="truncate">Biodiesel Conversion</span>
         </div>
@@ -51,7 +51,7 @@
       <div 
         v-for="stop in stops" 
         :key="stop.id || stop.seller_id"
-        :class="stop.status === 'visited' ? 'bg-emerald-950/30 border-emerald-800/40' : 'bg-slate-900/60 border-slate-700/60'"
+        :class="stop.status === 'visited' ? 'bg-emerald-950/30 border-emerald-800/40' : 'bg-[#060A08] border-white/10'"
         class="p-3 rounded-xl border flex items-start gap-3 transition"
       >
         <div 
@@ -70,8 +70,8 @@
               {{ stop.status }}
             </span>
           </div>
-          <div class="text-[10px] text-slate-400 truncate">{{ stop.seller_address || 'Bengaluru' }}</div>
-          <div class="mt-1.5 flex items-center justify-between gap-2 border-t border-slate-800/80 pt-1">
+          <div class="text-[10px] text-gray-400 truncate">{{ stop.seller_address || 'Bengaluru' }}</div>
+          <div class="mt-1.5 flex items-center justify-between gap-2 border-t border-white/10 pt-1">
             <div class="text-[10px] font-mono text-emerald-400 truncate">
               {{ stop.seller_phone || '+91 99450 78120' }}
             </div>
@@ -87,7 +87,7 @@
               <a 
                 v-if="stop.seller_email"
                 :href="'mailto:' + stop.seller_email" 
-                class="px-1.5 py-0.5 rounded bg-slate-700/60 hover:bg-slate-600 text-slate-300 hover:text-white text-[10px] transition"
+                class="px-1.5 py-0.5 rounded bg-slate-700/60 hover:bg-slate-600 text-gray-300 hover:text-white text-[10px] transition"
                 title="Email Seller"
               >
                 ✉

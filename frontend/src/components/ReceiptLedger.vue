@@ -1,9 +1,9 @@
 <template>
-  <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-4 sm:p-6 shadow-xl space-y-4 sm:space-y-5">
+  <div class="rounded-2xl border border-white/10 bg-[#0A130E] p-4 sm:p-6 shadow-xl space-y-4 sm:space-y-5">
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
       <div>
         <h2 class="text-base font-bold text-white">Master Receipt & Compliance Ledger</h2>
-        <p class="text-xs text-slate-400">Immutable ledger of all collections, FSSAI serials, and payouts</p>
+        <p class="text-xs text-gray-400">Immutable ledger of all collections, FSSAI serials, and payouts</p>
       </div>
 
       <!-- Search & Filters -->
@@ -12,11 +12,11 @@
           v-model="searchQuery" 
           type="text" 
           placeholder="Search receipt, FSSAI, seller..." 
-          class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 w-full sm:w-64 min-h-[40px]"
+          class="bg-[#060A08] border border-white/10 focus:border-[#22C55E] focus:ring-1 focus:ring-[#22C55E]/30 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 w-full sm:w-64 min-h-[40px]"
         />
         <select 
           v-model="statusFilter" 
-          class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500 min-h-[40px]"
+          class="bg-[#060A08] border border-white/10 focus:border-[#22C55E] focus:ring-1 focus:ring-[#22C55E]/30 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500 min-h-[40px]"
         >
           <option value="all">All Statuses</option>
           <option value="settled">Settled</option>
@@ -28,19 +28,19 @@
 
     <!-- Mobile Card Layout (< md) -->
     <div class="block md:hidden space-y-3">
-      <div v-if="!filteredReceipts.length" class="py-8 text-center text-slate-500 text-xs">
+      <div v-if="!filteredReceipts.length" class="py-8 text-center text-gray-500 text-xs">
         No receipts match your search or filter criteria.
       </div>
       <div 
         v-for="r in filteredReceipts" 
         :key="r.id"
-        :class="r.flagged ? 'bg-rose-950/20 border-rose-800/40' : 'bg-slate-900/90 border-slate-700'"
+        :class="r.flagged ? 'bg-rose-950/20 border-rose-800/40' : 'bg-[#060A08] border-white/10'"
         class="rounded-xl p-4 border space-y-3"
       >
         <div class="flex items-start justify-between gap-2">
           <div>
             <div class="font-mono font-bold text-white text-sm">{{ r.id }}</div>
-            <div class="text-[10px] text-slate-400 font-mono">{{ r.receipt_qr }}</div>
+            <div class="text-[10px] text-gray-400 font-mono">{{ r.receipt_qr }}</div>
           </div>
           <div>
             <span 
@@ -60,29 +60,29 @@
           </div>
         </div>
 
-        <div class="bg-slate-950/60 p-2.5 rounded-lg border border-slate-800 text-xs">
+        <div class="bg-[#060A08] p-2.5 rounded-xl border border-white/10 text-xs">
           <div class="font-semibold text-white">{{ r.seller_name || r.seller_id }}</div>
-          <div class="text-[10px] text-slate-400 font-mono mt-0.5">FSSAI: {{ r.seller_fssai || 'N/A' }}</div>
+          <div class="text-[10px] text-gray-400 font-mono mt-0.5">FSSAI: {{ r.seller_fssai || 'N/A' }}</div>
         </div>
 
         <div class="grid grid-cols-3 gap-2 text-center text-xs">
-          <div class="bg-slate-950/60 p-2 rounded-lg border border-slate-800">
-            <span class="text-[9px] uppercase font-bold text-slate-400 block">Volume</span>
+          <div class="bg-[#060A08] p-2 rounded-xl border border-white/10">
+            <span class="text-[9px] uppercase font-bold text-gray-400 block">Volume</span>
             <span class="font-bold font-mono text-white mt-0.5 block">{{ r.settled_volume || r.measured_volume || r.requested_volume }} L</span>
             <span v-if="r.status === 'settled'" class="text-[9px] text-emerald-400">Settled</span>
             <span v-else class="text-[9px] text-amber-400">Req.</span>
           </div>
-          <div class="bg-slate-950/60 p-2 rounded-lg border border-slate-800">
-            <span class="text-[9px] uppercase font-bold text-slate-400 block">TPC</span>
-            <span v-if="r.tpc_reading != null || r.tpc_percentage != null" :class="(r.tpc_reading ?? r.tpc_percentage) <= 22 ? 'text-emerald-400' : ((r.tpc_reading ?? r.tpc_percentage) >= 30 ? 'text-rose-400' : 'text-slate-300')" class="font-bold font-mono mt-0.5 block">
+          <div class="bg-[#060A08] p-2 rounded-xl border border-white/10">
+            <span class="text-[9px] uppercase font-bold text-gray-400 block">TPC</span>
+            <span v-if="r.tpc_reading != null || r.tpc_percentage != null" :class="(r.tpc_reading ?? r.tpc_percentage) <= 22 ? 'text-emerald-400' : ((r.tpc_reading ?? r.tpc_percentage) >= 30 ? 'text-rose-400' : 'text-gray-300')" class="font-bold font-mono mt-0.5 block">
               {{ r.tpc_reading ?? r.tpc_percentage }}%
             </span>
-            <span v-else class="text-slate-500 mt-0.5 block">-</span>
+            <span v-else class="text-gray-500 mt-0.5 block">-</span>
           </div>
-          <div class="bg-slate-950/60 p-2 rounded-lg border border-slate-800">
-            <span class="text-[9px] uppercase font-bold text-slate-400 block">Amount</span>
+          <div class="bg-[#060A08] p-2 rounded-xl border border-white/10">
+            <span class="text-[9px] uppercase font-bold text-gray-400 block">Amount</span>
             <span v-if="getReceiptAmount(r)" class="font-bold text-emerald-400 font-mono mt-0.5 block">₹{{ formatNumber(getReceiptAmount(r)) }}</span>
-            <span v-else class="text-slate-500 mt-0.5 block">Pending</span>
+            <span v-else class="text-gray-500 mt-0.5 block">Pending</span>
           </div>
         </div>
 
@@ -97,9 +97,9 @@
         </div>
 
         <!-- Actions -->
-        <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-800">
+        <div class="flex items-center justify-between gap-2 pt-2 border-t border-white/10">
           <span 
-            :class="(r.payment_status === 'paid' || r.status === 'settled') ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-slate-800 text-slate-300 border-slate-700'"
+            :class="(r.payment_status === 'paid' || r.status === 'settled') ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-slate-800 text-gray-300 border-white/10'"
             class="px-2 py-0.5 rounded-full text-[10px] uppercase font-semibold border font-mono"
           >
             {{ r.payment_status || (r.status === 'settled' ? 'paid' : 'pending') }}
@@ -133,7 +133,7 @@
             <button 
               v-if="userRole === 'admin'"
               @click="$emit('blacklist-user', r.seller_id)"
-              class="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-700 hover:bg-rose-900 text-slate-300 hover:text-rose-200 transition min-h-[36px]"
+              class="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-700 hover:bg-rose-900 text-gray-300 hover:text-rose-200 transition min-h-[36px]"
               title="Suspend or blacklist seller"
             >
               Blacklist
@@ -147,7 +147,7 @@
     <div class="hidden md:block overflow-x-auto">
       <table class="w-full text-left text-xs min-w-[760px]">
         <thead>
-          <tr class="border-b border-slate-700 text-slate-400 text-[11px] uppercase tracking-wider">
+          <tr class="border-b border-white/10 text-gray-400 text-[11px] uppercase tracking-wider">
             <th class="py-3 px-3">Receipt</th>
             <th class="py-3 px-3">Seller / FBO</th>
             <th class="py-3 px-3">Volume</th>
@@ -160,7 +160,7 @@
         </thead>
         <tbody class="divide-y divide-slate-700/60">
           <tr v-if="!filteredReceipts.length">
-            <td colspan="8" class="py-8 text-center text-slate-500">No receipts match your search or filter criteria.</td>
+            <td colspan="8" class="py-8 text-center text-gray-500">No receipts match your search or filter criteria.</td>
           </tr>
           <tr 
             v-for="r in filteredReceipts" 
@@ -171,13 +171,13 @@
             <!-- Receipt & QR -->
             <td class="py-3 px-3">
               <div class="font-mono font-bold text-white">{{ r.id }}</div>
-              <div class="text-[10px] text-slate-400 font-mono">{{ r.receipt_qr }}</div>
+              <div class="text-[10px] text-gray-400 font-mono">{{ r.receipt_qr }}</div>
             </td>
 
             <!-- Seller -->
             <td class="py-3 px-3">
               <div class="font-semibold text-white">{{ r.seller_name || r.seller_id }}</div>
-              <div class="text-[10px] text-slate-400 font-mono">FSSAI: {{ r.seller_fssai || 'N/A' }}</div>
+              <div class="text-[10px] text-gray-400 font-mono">FSSAI: {{ r.seller_fssai || 'N/A' }}</div>
             </td>
 
             <!-- Volume & ESG Impact -->
@@ -197,22 +197,22 @@
 
             <!-- TPC % -->
             <td class="py-3 px-3">
-              <span v-if="r.tpc_reading != null || r.tpc_percentage != null" :class="(r.tpc_reading ?? r.tpc_percentage) <= 22 ? 'text-emerald-400' : ((r.tpc_reading ?? r.tpc_percentage) >= 30 ? 'text-rose-400' : 'text-slate-300')" class="font-semibold font-mono">
+              <span v-if="r.tpc_reading != null || r.tpc_percentage != null" :class="(r.tpc_reading ?? r.tpc_percentage) <= 22 ? 'text-emerald-400' : ((r.tpc_reading ?? r.tpc_percentage) >= 30 ? 'text-rose-400' : 'text-gray-300')" class="font-semibold font-mono">
                 {{ r.tpc_reading ?? r.tpc_percentage }}%
               </span>
-              <span v-else class="text-slate-500">-</span>
+              <span v-else class="text-gray-500">-</span>
             </td>
 
             <!-- Amount -->
             <td class="py-3 px-3">
               <span v-if="getReceiptAmount(r)" class="font-bold text-emerald-400 font-mono">₹{{ formatNumber(getReceiptAmount(r)) }}</span>
-              <span v-else class="text-slate-500">Pending</span>
+              <span v-else class="text-gray-500">Pending</span>
             </td>
 
             <!-- Payment Status -->
             <td class="py-3 px-3">
               <span 
-                :class="(r.payment_status === 'paid' || r.status === 'settled') ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-slate-700 text-slate-300 border-slate-600'"
+                :class="(r.payment_status === 'paid' || r.status === 'settled') ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-slate-700 text-gray-300 border-slate-600'"
                 class="px-2 py-0.5 rounded-full text-[10px] uppercase font-semibold border font-mono"
               >
                 {{ r.payment_status || (r.status === 'settled' ? 'paid' : 'pending') }}
@@ -266,7 +266,7 @@
                 <button 
                   v-if="userRole === 'admin'"
                   @click="$emit('blacklist-user', r.seller_id)"
-                  class="px-2.5 py-1 rounded-lg text-[10px] font-semibold bg-slate-700 hover:bg-rose-900 text-slate-300 hover:text-rose-200 transition"
+                  class="px-2.5 py-1 rounded-lg text-[10px] font-semibold bg-slate-700 hover:bg-rose-900 text-gray-300 hover:text-rose-200 transition"
                   title="Suspend or blacklist seller"
                 >
                   Blacklist

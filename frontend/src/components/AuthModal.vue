@@ -1,10 +1,10 @@
 <template>
-  <div class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-3 sm:p-4">
-    <div class="bg-slate-900 border border-slate-700 rounded-2xl sm:rounded-3xl w-full max-w-lg p-4 sm:p-8 shadow-2xl space-y-5 sm:space-y-6 relative max-h-[92dvh] overflow-y-auto">
+  <div class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-[#0A130E] border border-white/15 rounded-2xl sm:rounded-3xl w-full max-w-lg p-5 sm:p-8 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.8)] space-y-5 sm:space-y-6 relative max-h-[92dvh] overflow-y-auto">
       <!-- Close Button -->
       <button 
         @click="$emit('close')" 
-        class="absolute right-4 top-4 sm:right-5 sm:top-5 text-slate-400 hover:text-white p-2 rounded-xl hover:bg-slate-800 transition min-h-[40px] min-w-[40px] flex items-center justify-center cursor-pointer"
+        class="absolute right-4 top-4 sm:right-5 sm:top-5 text-gray-400 hover:text-white p-2 rounded-xl hover:bg-white/[0.08] transition min-h-[40px] min-w-[40px] flex items-center justify-center cursor-pointer"
         aria-label="Close"
       >
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -13,26 +13,30 @@
       </button>
 
       <!-- Brand Header -->
-      <div class="text-center space-y-1 pt-1 sm:pt-0">
-        <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center font-black text-white text-lg mx-auto shadow-lg shadow-emerald-950/50">
-          G
+      <div class="text-center space-y-2 pt-1 sm:pt-0">
+        <img 
+          src="/brand/geofield-full-logo.png" 
+          alt="GeoField Corp" 
+          class="h-8 sm:h-9 w-auto mx-auto object-contain"
+        />
+        <div>
+          <h2 class="text-base sm:text-lg font-display font-extrabold text-white tracking-tight">GeoField RUCO Trace</h2>
+          <p class="text-xs text-gray-400 font-sans">National Used Cooking Oil Compliance & Traceability System</p>
         </div>
-        <h2 class="text-lg sm:text-xl font-extrabold text-white">GeoField RUCO Trace</h2>
-        <p class="text-xs text-slate-400">National Used Cooking Oil Compliance & Traceability System</p>
       </div>
 
       <!-- Tab Switcher -->
-      <div class="grid grid-cols-2 bg-slate-950 p-1 rounded-2xl border border-slate-800">
+      <div class="grid grid-cols-2 bg-[#060A08] p-1 rounded-2xl border border-white/10 font-sans">
         <button 
           @click="mode = 'login'" 
-          :class="mode === 'login' ? 'bg-slate-800 text-white font-bold shadow' : 'text-slate-400 hover:text-slate-200 font-medium'"
+          :class="mode === 'login' ? 'bg-[#22C55E]/15 text-[#4ADE80] border border-[#22C55E]/30 font-bold shadow-sm' : 'text-gray-400 hover:text-white font-medium border border-transparent'"
           class="py-2.5 text-xs rounded-xl transition min-h-[40px] cursor-pointer"
         >
           Sign In
         </button>
         <button 
           @click="mode = 'register'" 
-          :class="mode === 'register' ? 'bg-slate-800 text-white font-bold shadow' : 'text-slate-400 hover:text-slate-200 font-medium'"
+          :class="mode === 'register' ? 'bg-[#22C55E]/15 text-[#4ADE80] border border-[#22C55E]/30 font-bold shadow-sm' : 'text-gray-400 hover:text-white font-medium border border-transparent'"
           class="py-2.5 text-xs rounded-xl transition min-h-[40px] cursor-pointer"
         >
           New Onboarding
@@ -50,24 +54,24 @@
       <!-- Sign In Form -->
       <form v-if="mode === 'login'" @submit.prevent="handleLogin" class="space-y-4">
         <div>
-          <label class="block text-xs font-semibold text-slate-300 mb-1.5">Registered Email Address</label>
+          <label class="block text-xs font-semibold text-gray-300 mb-1.5">Registered Email Address</label>
           <input 
             v-model="loginForm.email" 
             type="email" 
             required 
             placeholder="e.g. contact@restaurant.com" 
-            class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition"
+            class="w-full bg-[#060A08] border border-white/10 focus:border-[#22C55E] rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-[#22C55E] focus:ring-1 focus:ring-[#22C55E]/30 focus:ring-1 focus:ring-emerald-500 transition"
           />
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-slate-300 mb-1.5">Password</label>
+          <label class="block text-xs font-semibold text-gray-300 mb-1.5">Password</label>
           <input 
             v-model="loginForm.password" 
             type="password" 
             required 
             placeholder="••••••••" 
-            class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition"
+            class="w-full bg-[#060A08] border border-white/10 focus:border-[#22C55E] rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-[#22C55E] focus:ring-1 focus:ring-[#22C55E]/30 focus:ring-1 focus:ring-emerald-500 transition"
           />
         </div>
 
@@ -77,12 +81,12 @@
         <button 
           type="submit" 
           :disabled="loading"
-          class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow-lg hover:shadow-emerald-900/40 transition disabled:opacity-50"
+          class="w-full py-3 bg-[#22C55E] hover:bg-[#16A34A] text-[#050A07] hover:text-white font-bold shadow-[0_0_20px_rgba(34,197,94,0.3)] text-white font-bold text-xs rounded-xl shadow-lg hover:shadow-emerald-900/40 transition disabled:opacity-50"
         >
           {{ loading ? 'Authenticating...' : 'Sign In to Portal' }}
         </button>
 
-        <p class="text-[11px] text-center text-slate-400 pt-2">
+        <p class="text-[11px] text-center text-gray-400 pt-2">
           New Food Business Operator or Field Officer? 
           <a @click.prevent="mode = 'register'" href="#" class="text-emerald-400 font-semibold hover:underline">Apply for Onboarding</a>
         </p>
@@ -92,17 +96,17 @@
       <form v-else @submit.prevent="handleRegister" class="space-y-4">
         <!-- Role Switcher -->
         <div>
-          <label class="block text-xs font-semibold text-slate-300 mb-1">Entity / Role Type</label>
+          <label class="block text-xs font-semibold text-gray-300 mb-1">Entity / Role Type</label>
           <div class="grid grid-cols-2 gap-2">
             <label 
-              :class="regForm.role === 'seller' ? 'bg-emerald-950/50 border-emerald-500 text-emerald-300 font-bold' : 'bg-slate-950 border-slate-700 text-slate-400'"
+              :class="regForm.role === 'seller' ? 'bg-emerald-950/50 border-emerald-500 text-emerald-300 font-bold' : 'bg-slate-950 border-slate-700 text-gray-400'"
               class="p-2.5 rounded-xl border flex items-center justify-center text-xs cursor-pointer transition"
             >
               <input type="radio" v-model="regForm.role" value="seller" class="hidden" />
               <span>Food Business (FBO)</span>
             </label>
             <label 
-              :class="regForm.role === 'agent' ? 'bg-teal-950/50 border-teal-500 text-teal-300 font-bold' : 'bg-slate-950 border-slate-700 text-slate-400'"
+              :class="regForm.role === 'agent' ? 'bg-teal-950/50 border-teal-500 text-teal-300 font-bold' : 'bg-slate-950 border-slate-700 text-gray-400'"
               class="p-2.5 rounded-xl border flex items-center justify-center text-xs cursor-pointer transition"
             >
               <input type="radio" v-model="regForm.role" value="agent" class="hidden" />
@@ -116,16 +120,16 @@
         <!-- =================================================================== -->
         <div v-if="regForm.role === 'seller'" class="space-y-2">
           <!-- Step Progress Indicator -->
-          <div class="flex items-center justify-between text-xs font-semibold text-slate-300">
+          <div class="flex items-center justify-between text-xs font-semibold text-gray-300">
             <span class="flex items-center gap-1.5 text-emerald-400 font-mono">
               <span>Step {{ currentStep }} of 3:</span>
               <span class="text-white">{{ stepTitles[currentStep - 1] }}</span>
             </span>
-            <span class="text-[11px] font-mono text-slate-400">{{ Math.round((currentStep / 3) * 100) }}% Completed</span>
+            <span class="text-[11px] font-mono text-gray-400">{{ Math.round((currentStep / 3) * 100) }}% Completed</span>
           </div>
 
           <!-- Progress Bar Track -->
-          <div class="w-full h-2 bg-slate-950 rounded-full overflow-hidden border border-slate-800">
+          <div class="w-full h-2 bg-slate-950 rounded-full overflow-hidden border border-white/10">
             <div 
               class="h-full bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-400 transition-all duration-300 ease-out"
               :style="{ width: `${(currentStep / 3) * 100}%` }"
@@ -137,14 +141,14 @@
         <!-- SELLER STEP 1: Identity & Credentials                               -->
         <!-- =================================================================== -->
         <div v-if="regForm.role === 'seller' && currentStep === 1" class="space-y-3 animate-fade-in">
-          <div class="p-3 bg-emerald-950/30 border border-emerald-500/20 rounded-xl text-[11px] text-emerald-300 flex items-center gap-2">
+          <div class="p-3 bg-[#0E1B14] border border-[#22C55E]/30 rounded-xl text-[11px] text-emerald-300 flex items-center gap-2">
             <span>🛡️</span>
             <span>Let's start with your restaurant name and primary contact person.</span>
           </div>
 
           <div class="space-y-2.5">
             <div>
-              <label class="block text-[11px] font-semibold text-slate-300 mb-1">
+              <label class="block text-[11px] font-semibold text-gray-300 mb-1">
                 <span class="text-emerald-400 font-mono font-bold mr-1">1.</span>
                 Name of Kitchen or Restaurant <span class="text-rose-400">*</span>
               </label>
@@ -153,13 +157,13 @@
                 type="text" 
                 required 
                 placeholder="e.g. Green Leaf Cafe & Kitchen" 
-                class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                class="w-full bg-[#060A08] border border-white/10 focus:border-[#22C55E] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#22C55E] focus:ring-1 focus:ring-[#22C55E]/30"
               />
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label class="block text-[11px] font-semibold text-slate-300 mb-1">
+                <label class="block text-[11px] font-semibold text-gray-300 mb-1">
                   <span class="text-emerald-400 font-mono font-bold mr-1">3.</span>
                   Official Email ID <span class="text-rose-400">*</span>
                 </label>
@@ -168,12 +172,12 @@
                   type="email" 
                   required 
                   placeholder="accounts@restaurant.com" 
-                  class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                  class="w-full bg-[#060A08] border border-white/10 focus:border-[#22C55E] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#22C55E] focus:ring-1 focus:ring-[#22C55E]/30"
                 />
               </div>
 
               <div>
-                <label class="block text-[11px] font-semibold text-slate-300 mb-1">
+                <label class="block text-[11px] font-semibold text-gray-300 mb-1">
                   Portal Password <span class="text-rose-400">*</span>
                 </label>
                 <input 
@@ -181,14 +185,14 @@
                   type="password" 
                   required 
                   placeholder="Minimum 6 characters" 
-                  class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                  class="w-full bg-[#060A08] border border-white/10 focus:border-[#22C55E] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#22C55E] focus:ring-1 focus:ring-[#22C55E]/30"
                 />
               </div>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label class="block text-[11px] font-semibold text-slate-300 mb-1">
+                <label class="block text-[11px] font-semibold text-gray-300 mb-1">
                   <span class="text-emerald-400 font-mono font-bold mr-1">4.</span>
                   Primary Contact Person <span class="text-rose-400">*</span>
                 </label>
@@ -197,12 +201,12 @@
                   type="text" 
                   required 
                   placeholder="e.g. Suresh Sharma (Manager)" 
-                  class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                  class="w-full bg-[#060A08] border border-white/10 focus:border-[#22C55E] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#22C55E] focus:ring-1 focus:ring-[#22C55E]/30"
                 />
               </div>
 
               <div>
-                <label class="block text-[11px] font-semibold text-slate-300 mb-1">
+                <label class="block text-[11px] font-semibold text-gray-300 mb-1">
                   <span class="text-emerald-400 font-mono font-bold mr-1">5.</span>
                   Primary Contact Number <span class="text-rose-400">*</span>
                 </label>
@@ -211,18 +215,18 @@
                   type="text" 
                   required 
                   placeholder="e.g. +91 98200 12345" 
-                  class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                  class="w-full bg-[#060A08] border border-white/10 focus:border-[#22C55E] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#22C55E] focus:ring-1 focus:ring-[#22C55E]/30"
                 />
               </div>
             </div>
           </div>
 
           <!-- Step 1 Actions -->
-          <div class="pt-3 border-t border-slate-800 flex justify-end">
+          <div class="pt-3 border-t border-white/10 flex justify-end">
             <button 
               type="button" 
               @click="goToStep(2)"
-              class="w-full sm:w-auto px-6 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow-lg transition flex items-center justify-center gap-2 cursor-pointer"
+              class="w-full sm:w-auto px-6 py-2.5 bg-[#22C55E] hover:bg-[#16A34A] text-[#050A07] hover:text-white font-bold shadow-[0_0_20px_rgba(34,197,94,0.3)] text-white font-bold text-xs rounded-xl shadow-lg transition flex items-center justify-center gap-2 cursor-pointer"
             >
               <span>Next: Legal & Regulatory</span>
               <span>&rarr;</span>
@@ -234,7 +238,7 @@
         <!-- SELLER STEP 2: Regulatory & Banking Compliance                      -->
         <!-- =================================================================== -->
         <div v-if="regForm.role === 'seller' && currentStep === 2" class="space-y-3 animate-fade-in">
-          <div class="p-3 bg-teal-950/30 border border-teal-500/20 rounded-xl text-[11px] text-teal-300 flex items-center gap-2">
+          <div class="p-3 bg-[#0E1B14] border border-[#38BDF8]/30 rounded-xl text-[11px] text-teal-300 flex items-center gap-2">
             <span>📜</span>
             <span>Government FSSAI, Tax & Banking verification documents.</span>
           </div>
@@ -242,7 +246,7 @@
           <div class="space-y-2.5">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label class="block text-[11px] font-semibold text-slate-300 mb-1">
+                <label class="block text-[11px] font-semibold text-gray-300 mb-1">
                   <span class="text-emerald-400 font-mono font-bold mr-1">8.</span>
                   FSSAI 14-Digit License <span class="text-rose-400">*</span>
                 </label>
@@ -252,12 +256,12 @@
                   required 
                   maxlength="14"
                   placeholder="e.g. 11521034000123" 
-                  class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white font-mono focus:outline-none focus:border-emerald-500"
+                  class="w-full bg-[#060A08] border border-white/10 focus:border-[#22C55E] rounded-xl px-3 py-2 text-xs text-white font-mono focus:outline-none focus:border-[#22C55E] focus:ring-1 focus:ring-[#22C55E]/30"
                 />
               </div>
 
               <div>
-                <label class="block text-[11px] font-semibold text-slate-300 mb-1">
+                <label class="block text-[11px] font-semibold text-gray-300 mb-1">
                   <span class="text-emerald-400 font-mono font-bold mr-1">9.</span>
                   GST Number (GSTIN) <span class="text-rose-400">*</span>
                 </label>
@@ -267,14 +271,14 @@
                   required 
                   maxlength="15"
                   placeholder="e.g. 27AAAAA0000A1Z5" 
-                  class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white font-mono uppercase focus:outline-none focus:border-emerald-500"
+                  class="w-full bg-[#060A08] border border-white/10 focus:border-[#22C55E] rounded-xl px-3 py-2 text-xs text-white font-mono uppercase focus:outline-none focus:border-[#22C55E] focus:ring-1 focus:ring-[#22C55E]/30"
                 />
               </div>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label class="block text-[11px] font-semibold text-slate-300 mb-1">
+                <label class="block text-[11px] font-semibold text-gray-300 mb-1">
                   <span class="text-emerald-400 font-mono font-bold mr-1">10.</span>
                   Cancel Cheque Ref or UPI ID <span class="text-rose-400">*</span>
                 </label>
@@ -283,12 +287,12 @@
                   type="text" 
                   required 
                   placeholder="e.g. cafe@icici or A/C & IFSC" 
-                  class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                  class="w-full bg-[#060A08] border border-white/10 focus:border-[#22C55E] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#22C55E] focus:ring-1 focus:ring-[#22C55E]/30"
                 />
               </div>
 
               <div>
-                <label class="block text-[11px] font-semibold text-slate-300 mb-1">
+                <label class="block text-[11px] font-semibold text-gray-300 mb-1">
                   <span class="text-emerald-400 font-mono font-bold mr-1">12.</span>
                   MSME / UDYAM Number <span class="text-rose-400">*</span>
                 </label>
@@ -297,14 +301,14 @@
                   type="text" 
                   required 
                   placeholder="e.g. UDYAM-MH-01-0012345" 
-                  class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white font-mono uppercase focus:outline-none focus:border-emerald-500"
+                  class="w-full bg-[#060A08] border border-white/10 focus:border-[#22C55E] rounded-xl px-3 py-2 text-xs text-white font-mono uppercase focus:outline-none focus:border-[#22C55E] focus:ring-1 focus:ring-[#22C55E]/30"
                 />
               </div>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label class="block text-[11px] font-semibold text-slate-300 mb-1">
+                <label class="block text-[11px] font-semibold text-gray-300 mb-1">
                   <span class="text-emerald-400 font-mono font-bold mr-1">6.</span>
                   Alternative Contact Name <span class="text-rose-400">*</span>
                 </label>
@@ -313,12 +317,12 @@
                   type="text" 
                   required 
                   placeholder="e.g. Chef Amit (Head Chef)" 
-                  class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                  class="w-full bg-[#060A08] border border-white/10 focus:border-[#22C55E] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#22C55E] focus:ring-1 focus:ring-[#22C55E]/30"
                 />
               </div>
 
               <div>
-                <label class="block text-[11px] font-semibold text-slate-300 mb-1">
+                <label class="block text-[11px] font-semibold text-gray-300 mb-1">
                   <span class="text-emerald-400 font-mono font-bold mr-1">7.</span>
                   Alternative Contact Phone <span class="text-rose-400">*</span>
                 </label>
@@ -327,25 +331,25 @@
                   type="text" 
                   required 
                   placeholder="e.g. +91 98200 67890" 
-                  class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                  class="w-full bg-[#060A08] border border-white/10 focus:border-[#22C55E] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#22C55E] focus:ring-1 focus:ring-[#22C55E]/30"
                 />
               </div>
             </div>
           </div>
 
           <!-- Step 2 Actions -->
-          <div class="pt-3 border-t border-slate-800 flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-2.5">
+          <div class="pt-3 border-t border-white/10 flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-2.5">
             <button 
               type="button" 
               @click="currentStep = 1"
-              class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold rounded-xl transition cursor-pointer min-h-[44px] flex items-center justify-center"
+              class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-gray-300 text-xs font-semibold rounded-xl transition cursor-pointer min-h-[44px] flex items-center justify-center"
             >
               &larr; Back
             </button>
             <button 
               type="button" 
               @click="goToStep(3)"
-              class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow-lg transition flex items-center justify-center gap-2 cursor-pointer min-h-[44px]"
+              class="px-6 py-2.5 bg-[#22C55E] hover:bg-[#16A34A] text-[#050A07] hover:text-white font-bold shadow-[0_0_20px_rgba(34,197,94,0.3)] text-white font-bold text-xs rounded-xl shadow-lg transition flex items-center justify-center gap-2 cursor-pointer min-h-[44px]"
             >
               <span>Next: Location & GPS</span>
               <span>&rarr;</span>
@@ -365,7 +369,7 @@
           <!-- Street Address, City, Pincode -->
           <div class="space-y-2.5">
             <div>
-              <label class="block text-[11px] font-semibold text-slate-300 mb-1">
+              <label class="block text-[11px] font-semibold text-gray-300 mb-1">
                 <span class="text-emerald-400 font-mono font-bold mr-1">2.</span>
                 Physical Street Address <span class="text-rose-400">*</span>
               </label>
@@ -374,39 +378,39 @@
                 type="text" 
                 required 
                 placeholder="e.g. Shop 12, High Street, Near Station" 
-                class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                class="w-full bg-[#060A08] border border-white/10 focus:border-[#22C55E] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#22C55E] focus:ring-1 focus:ring-[#22C55E]/30"
               />
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label class="block text-[11px] font-semibold text-slate-300 mb-1">City / Region <span class="text-rose-400">*</span></label>
+                <label class="block text-[11px] font-semibold text-gray-300 mb-1">City / Region <span class="text-rose-400">*</span></label>
                 <input 
                   v-model="regForm.city" 
                   type="text" 
                   required 
                   placeholder="e.g. Mumbai" 
-                  class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                  class="w-full bg-[#060A08] border border-white/10 focus:border-[#22C55E] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#22C55E] focus:ring-1 focus:ring-[#22C55E]/30"
                 />
               </div>
 
               <div>
-                <label class="block text-[11px] font-semibold text-slate-300 mb-1">Pincode <span class="text-rose-400">*</span></label>
+                <label class="block text-[11px] font-semibold text-gray-300 mb-1">Pincode <span class="text-rose-400">*</span></label>
                 <input 
                   v-model="regForm.pincode" 
                   type="text" 
                   required 
                   placeholder="e.g. 400052" 
-                  class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                  class="w-full bg-[#060A08] border border-white/10 focus:border-[#22C55E] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#22C55E] focus:ring-1 focus:ring-[#22C55E]/30"
                 />
               </div>
             </div>
 
             <div>
-              <label class="block text-[11px] font-semibold text-slate-300 mb-1">Preferred Pickup Window</label>
+              <label class="block text-[11px] font-semibold text-gray-300 mb-1">Preferred Pickup Window</label>
               <select 
                 v-model="regForm.pickup_preference" 
-                class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                class="w-full bg-[#060A08] border border-white/10 focus:border-[#22C55E] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#22C55E] focus:ring-1 focus:ring-[#22C55E]/30"
               >
                 <option value="Morning (9 AM - 12 PM)">⏰ Morning (9 AM - 12 PM)</option>
                 <option value="Afternoon (1 PM - 4 PM)">⏰ Afternoon (1 PM - 4 PM)</option>
@@ -418,7 +422,7 @@
           </div>
 
           <!-- Live GPS Detection Block -->
-          <div class="p-3 bg-slate-950/90 border border-slate-800 rounded-2xl space-y-2.5">
+          <div class="p-3 bg-slate-950/90 border border-white/10 rounded-2xl space-y-2.5">
             <div class="flex items-center justify-between">
               <div class="flex items-center gap-1.5">
                 <span class="text-emerald-400 font-bold text-xs">📍</span>
@@ -444,38 +448,38 @@
 
             <div class="grid grid-cols-2 gap-2">
               <div>
-                <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Latitude</label>
+                <label class="block text-[10px] font-semibold text-gray-400 mb-0.5">Latitude</label>
                 <input 
                   v-model.number="regForm.latitude" 
                   type="number" 
                   step="any" 
                   placeholder="e.g. 19.0760" 
-                  class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-white font-mono focus:outline-none focus:border-emerald-500"
+                  class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-white font-mono focus:outline-none focus:border-[#22C55E] focus:ring-1 focus:ring-[#22C55E]/30"
                 />
               </div>
               <div>
-                <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Longitude</label>
+                <label class="block text-[10px] font-semibold text-gray-400 mb-0.5">Longitude</label>
                 <input 
                   v-model.number="regForm.longitude" 
                   type="number" 
                   step="any" 
                   placeholder="e.g. 72.8777" 
-                  class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-white font-mono focus:outline-none focus:border-emerald-500"
+                  class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-white font-mono focus:outline-none focus:border-[#22C55E] focus:ring-1 focus:ring-[#22C55E]/30"
                 />
               </div>
             </div>
           </div>
 
-          <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 text-[11px] text-slate-400 leading-relaxed">
+          <div class="p-3 rounded-xl bg-slate-950 border border-white/10 text-[11px] text-gray-400 leading-relaxed">
             🔒 By submitting, your FBO application is logged into our KYC verification queue. A waterproof physical site QR sticker will be assigned upon approval.
           </div>
 
           <!-- Step 3 Actions -->
-          <div class="pt-3 border-t border-slate-800 flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-2.5">
+          <div class="pt-3 border-t border-white/10 flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-2.5">
             <button 
               type="button" 
               @click="currentStep = 2"
-              class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold rounded-xl transition cursor-pointer min-h-[44px] flex items-center justify-center"
+              class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-gray-300 text-xs font-semibold rounded-xl transition cursor-pointer min-h-[44px] flex items-center justify-center"
             >
               &larr; Back
             </button>
@@ -495,69 +499,69 @@
         <div v-if="regForm.role === 'agent'" class="space-y-3 animate-fade-in">
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label class="block text-[11px] font-semibold text-slate-300 mb-1">Full Legal Name <span class="text-rose-400">*</span></label>
+              <label class="block text-[11px] font-semibold text-gray-300 mb-1">Full Legal Name <span class="text-rose-400">*</span></label>
               <input 
                 v-model="regForm.name" 
                 type="text" 
                 required 
                 placeholder="e.g. Rajesh Kumar" 
-                class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                class="w-full bg-[#060A08] border border-white/10 focus:border-[#22C55E] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#22C55E] focus:ring-1 focus:ring-[#22C55E]/30"
               />
             </div>
             <div>
-              <label class="block text-[11px] font-semibold text-slate-300 mb-1">Official Email <span class="text-rose-400">*</span></label>
+              <label class="block text-[11px] font-semibold text-gray-300 mb-1">Official Email <span class="text-rose-400">*</span></label>
               <input 
                 v-model="regForm.email" 
                 type="email" 
                 required 
                 placeholder="rajesh@geofield.com" 
-                class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                class="w-full bg-[#060A08] border border-white/10 focus:border-[#22C55E] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#22C55E] focus:ring-1 focus:ring-[#22C55E]/30"
               />
             </div>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label class="block text-[11px] font-semibold text-slate-300 mb-1">Phone Number <span class="text-rose-400">*</span></label>
+              <label class="block text-[11px] font-semibold text-gray-300 mb-1">Phone Number <span class="text-rose-400">*</span></label>
               <input 
                 v-model="regForm.phone" 
                 type="text" 
                 required 
                 placeholder="+91 98000 12345" 
-                class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                class="w-full bg-[#060A08] border border-white/10 focus:border-[#22C55E] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#22C55E] focus:ring-1 focus:ring-[#22C55E]/30"
               />
             </div>
             <div>
-              <label class="block text-[11px] font-semibold text-slate-300 mb-1">Portal Password <span class="text-rose-400">*</span></label>
+              <label class="block text-[11px] font-semibold text-gray-300 mb-1">Portal Password <span class="text-rose-400">*</span></label>
               <input 
                 v-model="regForm.password" 
                 type="password" 
                 required 
                 placeholder="Minimum 6 characters" 
-                class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                class="w-full bg-[#060A08] border border-white/10 focus:border-[#22C55E] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#22C55E] focus:ring-1 focus:ring-[#22C55E]/30"
               />
             </div>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label class="block text-[11px] font-semibold text-slate-300 mb-1">Vehicle Registration No. <span class="text-rose-400">*</span></label>
+              <label class="block text-[11px] font-semibold text-gray-300 mb-1">Vehicle Registration No. <span class="text-rose-400">*</span></label>
               <input 
                 v-model="regForm.vehicle_no" 
                 type="text" 
                 required 
                 placeholder="e.g. MH-02-EV-4412" 
-                class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white font-mono focus:outline-none focus:border-emerald-500"
+                class="w-full bg-[#060A08] border border-white/10 focus:border-[#22C55E] rounded-xl px-3 py-2 text-xs text-white font-mono focus:outline-none focus:border-[#22C55E] focus:ring-1 focus:ring-[#22C55E]/30"
               />
             </div>
             <div>
-              <label class="block text-[11px] font-semibold text-slate-300 mb-1">Operating City / Base <span class="text-rose-400">*</span></label>
+              <label class="block text-[11px] font-semibold text-gray-300 mb-1">Operating City / Base <span class="text-rose-400">*</span></label>
               <input 
                 v-model="regForm.city" 
                 type="text" 
                 required 
                 placeholder="e.g. Mumbai Central" 
-                class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                class="w-full bg-[#060A08] border border-white/10 focus:border-[#22C55E] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#22C55E] focus:ring-1 focus:ring-[#22C55E]/30"
               />
             </div>
           </div>

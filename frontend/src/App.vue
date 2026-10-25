@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-obsidian text-slate-100 flex flex-col selection:bg-emerald-500 selection:text-white">
+  <div class="min-h-screen bg-organic-dark text-[#F3F5F4] flex flex-col selection:bg-[#22C55E] selection:text-black font-sans">
     <!-- Top Navbar for Authenticated Portal -->
     <Navbar 
       v-if="currentUser"
@@ -15,10 +15,10 @@
     <transition name="fade">
       <div 
         v-if="toastMsg" 
-        class="fixed bottom-6 right-6 z-50 px-5 py-3.5 rounded-2xl bg-slate-800 border border-emerald-500/60 text-white shadow-2xl text-xs font-semibold flex items-center gap-3 max-w-md glow-emerald"
+        class="fixed bottom-6 right-6 z-50 px-5 py-3.5 rounded-2xl bg-[#0A130E]/95 backdrop-blur-xl border border-[#22C55E]/40 text-white shadow-[0_12px_36px_rgba(0,0,0,0.7)] text-xs font-semibold flex items-center gap-3 max-w-md"
       >
-        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-        <span>{{ toastMsg }}</span>
+        <span class="w-2.5 h-2.5 rounded-full bg-[#22C55E] shadow-[0_0_8px_#22C55E] animate-pulse"></span>
+        <span class="font-sans">{{ toastMsg }}</span>
       </div>
     </transition>
 
@@ -36,7 +36,7 @@
         <div 
           v-if="sidebarOpen" 
           @click="sidebarOpen = false" 
-          class="fixed inset-0 bg-slate-950/70 backdrop-blur-xs z-25 lg:hidden"
+          class="fixed inset-0 bg-black/80 backdrop-blur-sm z-25 lg:hidden"
           aria-hidden="true"
         ></div>
       </transition>
@@ -51,7 +51,7 @@
       />
 
       <!-- Main Portal Workspace -->
-      <main class="flex-1 overflow-y-auto p-3.5 sm:p-6 lg:p-8 space-y-5 sm:space-y-6">
+      <main class="flex-1 overflow-y-auto p-3.5 sm:p-6 lg:p-8 space-y-5 sm:space-y-6 bg-organic-dark">
         <!-- 1. Dashboard View (Seller / Agent / Admin) -->
         <div v-if="currentView === 'dashboard'">
           <SellerDashboard 

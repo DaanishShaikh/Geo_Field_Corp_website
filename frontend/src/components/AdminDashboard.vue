@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-5 sm:space-y-6">
     <!-- Super Admin Command Bar -->
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-gradient-to-r from-slate-800/90 to-slate-900/90 p-3.5 sm:p-4 rounded-2xl border border-slate-700/80 shadow-xl">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-gradient-to-r from-[#0E1B14] via-[#0A130E] to-[#080E0B] p-4 sm:p-5 rounded-2xl border border-white/10 shadow-xl">
       <div class="flex items-center gap-3 min-w-0">
         <div class="w-10 h-10 rounded-xl bg-teal-500/10 border border-teal-500/20 text-teal-400 flex items-center justify-center font-bold text-lg shadow-inner shrink-0">
           🏢
@@ -11,11 +11,11 @@
             <span>GeoField Super Admin Command Center</span>
             <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">System Live</span>
           </div>
-          <div class="text-[11px] sm:text-xs text-slate-400 truncate">Total System Oversight: <span class="text-slate-200 font-semibold">{{ approvedSellers.length }} Kitchens</span> &bull; <span class="text-slate-200 font-semibold">{{ activeAgents.length }} Fleet Agents</span></div>
+          <div class="text-[11px] sm:text-xs text-gray-400 truncate">Total System Oversight: <span class="text-gray-200 font-semibold">{{ approvedSellers.length }} Kitchens</span> &bull; <span class="text-gray-200 font-semibold">{{ activeAgents.length }} Fleet Agents</span></div>
         </div>
       </div>
       <div class="flex items-center gap-2 shrink-0">
-        <span class="px-3 py-1.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 text-xs font-semibold flex items-center gap-1.5">
+        <span class="px-3 py-1.5 rounded-xl bg-[#0A130E] border border-white/10 text-gray-300 text-xs font-semibold flex items-center gap-1.5">
           <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
           Fleet Dispatch Ready
         </span>
@@ -24,35 +24,35 @@
 
     <!-- Super Admin Header Stats -->
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-      <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-3.5 sm:p-5 shadow-lg">
-        <div class="text-[10px] sm:text-xs font-semibold text-slate-400 mb-1">PENDING ONBOARDING</div>
-        <div class="text-xl sm:text-2xl font-black text-amber-400">{{ stats.pending_approvals_count || 0 }}</div>
-        <div class="text-[10px] sm:text-[11px] text-slate-400 mt-1.5 sm:mt-2">Sellers & Agents awaiting review</div>
+      <div class="rounded-2xl p-4 sm:p-5 bg-gradient-to-br from-[#0E1B14] via-[#0A130E] to-[#080E0B] border border-white/10 hover:border-[#22C55E]/30 transition-all duration-300 relative overflow-hidden shadow-xl">
+        <div class="text-[10px] sm:text-xs font-semibold text-gray-400 mb-1">PENDING ONBOARDING</div>
+        <div class="text-xl sm:text-2xl font-display font-extrabold text-[#F59E0B]">{{ stats.pending_approvals_count || 0 }}</div>
+        <div class="text-[10px] sm:text-[11px] text-gray-400 mt-1.5 sm:mt-2">Sellers & Agents awaiting review</div>
       </div>
 
-      <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-3.5 sm:p-5 shadow-lg">
-        <div class="text-[10px] sm:text-xs font-semibold text-slate-400 mb-1">TOTAL UCO COLLECTED</div>
-        <div class="text-xl sm:text-2xl font-black text-white">{{ stats.total_volume_collected_liters || 0 }} L</div>
+      <div class="rounded-2xl p-4 sm:p-5 bg-gradient-to-br from-[#0E1B14] via-[#0A130E] to-[#080E0B] border border-white/10 hover:border-[#22C55E]/30 transition-all duration-300 relative overflow-hidden shadow-xl">
+        <div class="text-[10px] sm:text-xs font-semibold text-gray-400 mb-1">TOTAL UCO COLLECTED</div>
+        <div class="text-xl sm:text-2xl font-display font-extrabold text-white">{{ stats.total_volume_collected_liters || 0 }} L</div>
         <div class="text-[10px] sm:text-[11px] text-emerald-400 mt-1.5 sm:mt-2">Platform-wide settled volume</div>
       </div>
 
-      <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-3.5 sm:p-5 shadow-lg">
-        <div class="text-[10px] sm:text-xs font-semibold text-slate-400 mb-1">FLAGGED / DISPUTED</div>
+      <div class="rounded-2xl p-4 sm:p-5 bg-gradient-to-br from-[#0E1B14] via-[#0A130E] to-[#080E0B] border border-white/10 hover:border-[#22C55E]/30 transition-all duration-300 relative overflow-hidden shadow-xl">
+        <div class="text-[10px] sm:text-xs font-semibold text-gray-400 mb-1">FLAGGED / DISPUTED</div>
         <div class="text-xl sm:text-2xl font-black text-rose-400">{{ stats.flagged_receipts_count || 0 }}</div>
-        <div class="text-[10px] sm:text-[11px] text-slate-400 mt-1.5 sm:mt-2">Audited errors & discrepancies</div>
+        <div class="text-[10px] sm:text-[11px] text-gray-400 mt-1.5 sm:mt-2">Audited errors & discrepancies</div>
       </div>
 
-      <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-3.5 sm:p-5 shadow-lg">
-        <div class="text-[10px] sm:text-xs font-semibold text-slate-400 mb-1">ACTIVE FLEET AGENTS</div>
-        <div class="text-xl sm:text-2xl font-black text-cyan-300">{{ stats.active_agents_count || 0 }}</div>
-        <div class="text-[10px] sm:text-[11px] text-slate-400 mt-1.5 sm:mt-2">EV collection trucks deployed</div>
+      <div class="rounded-2xl p-4 sm:p-5 bg-gradient-to-br from-[#0E1B14] via-[#0A130E] to-[#080E0B] border border-white/10 hover:border-[#22C55E]/30 transition-all duration-300 relative overflow-hidden shadow-xl">
+        <div class="text-[10px] sm:text-xs font-semibold text-gray-400 mb-1">ACTIVE FLEET AGENTS</div>
+        <div class="text-xl sm:text-2xl font-display font-extrabold text-[#38BDF8]">{{ stats.active_agents_count || 0 }}</div>
+        <div class="text-[10px] sm:text-[11px] text-gray-400 mt-1.5 sm:mt-2">EV collection trucks deployed</div>
       </div>
     </div>
 
     <!-- Onboarding Approvals Queue & Dynamic Rate Card -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <!-- 1. Onboarding Approvals Queue -->
-      <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-6 shadow-xl space-y-4">
+      <div class="rounded-2xl border border-white/10 bg-[#0A130E] shadow-xl p-6 shadow-xl space-y-4">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2.5">
             <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center font-bold text-xs">
@@ -60,7 +60,7 @@
             </div>
             <div>
               <h2 class="text-sm font-bold text-white">Onboarding Approvals Queue</h2>
-              <p class="text-xs text-slate-400">Review Seller (FBO) and Field Agent sign-ups</p>
+              <p class="text-xs text-gray-400">Review Seller (FBO) and Field Agent sign-ups</p>
             </div>
           </div>
           <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20">
@@ -68,7 +68,7 @@
           </span>
         </div>
 
-        <div v-if="!pendingUsers.length" class="p-6 text-center text-slate-400 text-xs bg-slate-900/60 rounded-xl border border-slate-700/60">
+        <div v-if="!pendingUsers.length" class="p-6 text-center text-gray-400 text-xs bg-[#060A08]/60 rounded-xl border border-white/10/60">
           No pending user registrations. New sign-ups will queue here automatically.
         </div>
 
@@ -76,16 +76,16 @@
           <div 
             v-for="u in pendingUsers" 
             :key="u.id"
-            class="p-4 bg-slate-900/90 rounded-xl border border-slate-700 flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+            class="p-4 bg-[#060A08]/90 rounded-xl border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3"
           >
             <div class="space-y-1 text-xs">
               <div class="flex items-center gap-2">
                 <strong class="text-white text-sm">{{ u.name }}</strong>
-                <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300 uppercase text-[10px] font-bold font-mono">
+                <span class="px-2 py-0.5 rounded bg-[#0A130E] text-gray-300 uppercase text-[10px] font-bold font-mono">
                   {{ u.role }}
                 </span>
               </div>
-              <div class="text-slate-400">{{ u.email }} | {{ u.phone || 'No Phone' }}</div>
+              <div class="text-gray-400">{{ u.email }} | {{ u.phone || 'No Phone' }}</div>
               <div v-if="u.seller_profile" class="text-[11px] text-emerald-400 font-mono">
                 FSSAI: {{ u.seller_profile.fssai_license_no }} | Loc: {{ u.seller_profile.city }}
               </div>
@@ -105,7 +105,7 @@
               </button>
               <button 
                 @click="$emit('update-user-status', u.id, 'approved')"
-                class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold transition shadow min-h-[36px]"
+                class="px-3 py-1.5 btn-green-pill text-xs font-bold transition shadow min-h-[36px]"
               >
                 Approve
               </button>
@@ -118,7 +118,7 @@
               <button 
                 @click="$emit('delete-user', u.id, u.name)"
                 title="Permanently Delete Account"
-                class="px-2.5 py-1.5 bg-slate-800 hover:bg-rose-900/60 text-slate-400 hover:text-rose-300 rounded-lg text-xs font-semibold border border-slate-700 hover:border-rose-500/30 transition min-h-[36px]"
+                class="px-2.5 py-1.5 bg-[#0A130E] hover:bg-rose-900/60 text-gray-400 hover:text-rose-300 rounded-lg text-xs font-semibold border border-white/10 hover:border-rose-500/30 transition min-h-[36px]"
               >
                 🗑️
               </button>
@@ -128,7 +128,7 @@
       </div>
 
       <!-- 2. Dynamic Rate Card & Pricing Controls -->
-      <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-6 shadow-xl space-y-4">
+      <div class="rounded-2xl border border-white/10 bg-[#0A130E] shadow-xl p-6 shadow-xl space-y-4">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2.5">
             <div class="w-8 h-8 rounded-lg bg-teal-500/10 text-teal-400 border border-teal-500/20 flex items-center justify-center font-bold text-xs">
@@ -136,7 +136,7 @@
             </div>
             <div>
               <h2 class="text-sm font-bold text-white">Dynamic Pricing Engine (Rate Card)</h2>
-              <p class="text-xs text-slate-400">Manage base rates and quality-based TPC incentives</p>
+              <p class="text-xs text-gray-400">Manage base rates and quality-based TPC incentives</p>
             </div>
           </div>
           <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-teal-500/10 text-teal-400 border border-teal-500/20">
@@ -147,7 +147,7 @@
         <form @submit.prevent="saveRateCard" class="space-y-4">
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3">
             <div>
-              <label class="block text-xs font-semibold text-slate-300 mb-1">Base Rate / L</label>
+              <label class="block text-xs font-semibold text-gray-300 mb-1">Base Rate / L</label>
               <div class="relative">
                 <input 
                   v-model.number="rateCardForm.base_rate" 
@@ -155,14 +155,14 @@
                   min="1" 
                   step="1" 
                   required 
-                  class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                  class="w-full bg-[#060A08] border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
                 />
-                <span class="absolute right-2.5 top-2 text-[10px] text-slate-500">₹/L</span>
+                <span class="absolute right-2.5 top-2 text-[10px] text-gray-500">₹/L</span>
               </div>
             </div>
 
             <div>
-              <label class="block text-xs font-semibold text-slate-300 mb-1">Low TPC Bonus</label>
+              <label class="block text-xs font-semibold text-gray-300 mb-1">Low TPC Bonus</label>
               <div class="relative">
                 <input 
                   v-model.number="rateCardForm.low_tpc_bonus" 
@@ -170,15 +170,15 @@
                   min="0" 
                   step="0.5" 
                   required 
-                  class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                  class="w-full bg-[#060A08] border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
                 />
                 <span class="absolute right-2.5 top-2 text-[10px] text-emerald-400">+₹</span>
               </div>
-              <span class="text-[10px] text-slate-500">TPC ≤ 22%</span>
+              <span class="text-[10px] text-gray-500">TPC ≤ 22%</span>
             </div>
 
             <div>
-              <label class="block text-xs font-semibold text-slate-300 mb-1">High TPC Penalty</label>
+              <label class="block text-xs font-semibold text-gray-300 mb-1">High TPC Penalty</label>
               <div class="relative">
                 <input 
                   v-model.number="rateCardForm.high_tpc_penalty" 
@@ -186,11 +186,11 @@
                   min="0" 
                   step="0.5" 
                   required 
-                  class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                  class="w-full bg-[#060A08] border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
                 />
                 <span class="absolute right-2.5 top-2 text-[10px] text-rose-400">-₹</span>
               </div>
-              <span class="text-[10px] text-slate-500">TPC ≥ 30%</span>
+              <span class="text-[10px] text-gray-500">TPC ≥ 30%</span>
             </div>
           </div>
 
@@ -204,15 +204,15 @@
         </form>
 
         <!-- Dynamic Ad-hoc Stop Injection -->
-        <div class="pt-4 border-t border-slate-700/60 space-y-3">
+        <div class="pt-4 border-t border-white/10/60 space-y-3">
           <h3 class="text-xs font-bold text-white flex items-center justify-between">
             <span>Inject Ad-Hoc Stop into Field Agent Route</span>
-            <span class="text-[10px] text-slate-400">Dynamic Dispatch</span>
+            <span class="text-[10px] text-gray-400">Dynamic Dispatch</span>
           </h3>
           <form @submit.prevent="handleInjectStop" class="grid grid-cols-1 sm:grid-cols-2 gap-2">
             <div>
-              <label class="block text-[10px] font-semibold text-slate-400 mb-1">Select Field Executive</label>
-              <select v-model="injectForm.agent_id" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-2 text-xs text-white focus:border-emerald-500 focus:outline-none">
+              <label class="block text-[10px] font-semibold text-gray-400 mb-1">Select Field Executive</label>
+              <select v-model="injectForm.agent_id" class="w-full bg-[#060A08] border border-white/10 rounded-lg px-2.5 py-2 text-xs text-white focus:border-emerald-500 focus:outline-none">
                 <option value="" disabled>-- Select Agent --</option>
                 <option v-for="a in activeAgents" :key="a.id" :value="a.id">
                   {{ a.name }} ({{ a.phone || 'No Phone' }})
@@ -220,8 +220,8 @@
               </select>
             </div>
             <div>
-              <label class="block text-[10px] font-semibold text-slate-400 mb-1">Select Food Business (FBO)</label>
-              <select v-model="injectForm.seller_id" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-2 text-xs text-white focus:border-emerald-500 focus:outline-none">
+              <label class="block text-[10px] font-semibold text-gray-400 mb-1">Select Food Business (FBO)</label>
+              <select v-model="injectForm.seller_id" class="w-full bg-[#060A08] border border-white/10 rounded-lg px-2.5 py-2 text-xs text-white focus:border-emerald-500 focus:outline-none">
                 <option value="" disabled>-- Select Seller FBO --</option>
                 <option v-for="s in approvedSellers" :key="s.id" :value="s.id">
                   {{ s.name }} ({{ s.phone || s.id }})
@@ -241,7 +241,7 @@
     </div>
 
     <!-- FBO Pickup Location & Route Preferences Management -->
-    <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-4 sm:p-6 shadow-xl space-y-4">
+    <div class="rounded-2xl border border-white/10 bg-[#0A130E] shadow-xl p-4 sm:p-6 shadow-xl space-y-4">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <div class="flex items-center gap-2.5">
           <div class="w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 flex items-center justify-center text-sm font-bold">
@@ -249,7 +249,7 @@
           </div>
           <div>
             <h2 class="text-sm font-bold text-white">FBO Pickup Location Controls & Preferences</h2>
-            <p class="text-xs text-slate-400">Enable/disable collection sites, configure time slots, and update coordinates</p>
+            <p class="text-xs text-gray-400">Enable/disable collection sites, configure time slots, and update coordinates</p>
           </div>
         </div>
         <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/20 w-fit">
@@ -259,18 +259,18 @@
 
       <!-- Mobile Card Layout (< md) -->
       <div class="block md:hidden space-y-3">
-        <div v-if="!approvedSellers.length" class="py-6 text-center text-slate-500 text-xs">
+        <div v-if="!approvedSellers.length" class="py-6 text-center text-gray-500 text-xs">
           No approved sellers registered yet.
         </div>
         <div 
           v-for="seller in approvedSellers" 
           :key="seller.id"
-          class="bg-slate-900/90 rounded-xl p-4 border border-slate-700 space-y-3"
+          class="bg-[#060A08]/90 rounded-xl p-4 border border-white/10 space-y-3"
         >
           <div class="flex items-start justify-between gap-2">
             <div>
               <div class="font-bold text-white text-sm">{{ seller.name }}</div>
-              <div class="text-[10px] text-slate-400 font-mono">ID: {{ seller.id }} &bull; {{ seller.phone || 'No phone' }}</div>
+              <div class="text-[10px] text-gray-400 font-mono">ID: {{ seller.id }} &bull; {{ seller.phone || 'No phone' }}</div>
             </div>
             <span 
               :class="seller.status === 'blacklisted' ? 'bg-amber-600/20 text-amber-400 border-amber-500/30' : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'"
@@ -280,8 +280,8 @@
             </span>
           </div>
 
-          <div class="text-xs text-slate-300 bg-slate-950/60 p-2.5 rounded-lg border border-slate-800">
-            <div class="text-[10px] text-slate-400 uppercase font-semibold">Address & GPS:</div>
+          <div class="text-xs text-gray-300 bg-[#060A08]/60 p-2.5 rounded-lg border border-white/10">
+            <div class="text-[10px] text-gray-400 uppercase font-semibold">Address & GPS:</div>
             <div class="text-white mt-0.5">{{ seller.seller_profile?.address || 'Address not set' }}</div>
             <div class="text-[10px] font-mono text-cyan-400 mt-0.5">
               {{ (seller.seller_profile?.latitude || 12.9716).toFixed(4) }}, {{ (seller.seller_profile?.longitude || 77.5946).toFixed(4) }}
@@ -289,11 +289,11 @@
           </div>
 
           <div class="space-y-1">
-            <label class="block text-[10px] font-semibold text-slate-400 uppercase">Pickup Window:</label>
+            <label class="block text-[10px] font-semibold text-gray-400 uppercase">Pickup Window:</label>
             <select 
               :value="seller.seller_profile?.pickup_preference || 'Morning (9 AM - 12 PM)'"
               @change="handleUpdatePreference(seller.id, $event.target.value)"
-              class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 focus:border-emerald-500 focus:outline-none"
+              class="w-full bg-[#060A08] border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-gray-200 focus:border-emerald-500 focus:outline-none"
             >
               <option value="Morning (9 AM - 12 PM)">⏰ Morning (9 AM - 12 PM)</option>
               <option value="Afternoon (1 PM - 4 PM)">⏰ Afternoon (1 PM - 4 PM)</option>
@@ -318,7 +318,7 @@
           </div>
 
           <!-- Actions -->
-          <div class="flex flex-wrap items-center gap-1.5 pt-2 border-t border-slate-800">
+          <div class="flex flex-wrap items-center gap-1.5 pt-2 border-t border-white/10">
             <button 
               @click="inspectingSeller = seller"
               class="flex-1 py-1.5 px-2 bg-blue-600/20 hover:bg-blue-600 text-blue-300 hover:text-white rounded-lg text-xs font-semibold border border-blue-500/30 transition text-center min-h-[36px]"
@@ -360,7 +360,7 @@
       <div class="hidden md:block overflow-x-auto">
         <table class="w-full text-left text-xs min-w-[680px]">
           <thead>
-            <tr class="border-b border-slate-700 text-slate-400 text-[11px] uppercase tracking-wider">
+            <tr class="border-b border-white/10 text-gray-400 text-[11px] uppercase tracking-wider">
               <th class="py-3 px-3">FBO / Kitchen</th>
               <th class="py-3 px-3">Address & Pin</th>
               <th class="py-3 px-3">Pickup Window</th>
@@ -370,12 +370,12 @@
           </thead>
           <tbody class="divide-y divide-slate-700/60">
             <tr v-if="!approvedSellers.length">
-              <td colspan="5" class="py-6 text-center text-slate-500">No approved sellers registered yet.</td>
+              <td colspan="5" class="py-6 text-center text-gray-500">No approved sellers registered yet.</td>
             </tr>
             <tr v-for="seller in approvedSellers" :key="seller.id" class="hover:bg-slate-700/30 transition">
               <td class="py-3 px-3">
                 <div class="font-bold text-white">{{ seller.name }}</div>
-                <div class="text-[10px] text-slate-400 font-mono">ID: {{ seller.id }} &bull; {{ seller.phone || 'No phone' }}</div>
+                <div class="text-[10px] text-gray-400 font-mono">ID: {{ seller.id }} &bull; {{ seller.phone || 'No phone' }}</div>
                 <span 
                   :class="seller.status === 'blacklisted' ? 'bg-amber-600/20 text-amber-400 border-amber-500/30' : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'"
                   class="inline-block mt-1 px-2 py-0.5 rounded-full text-[9px] font-bold uppercase border"
@@ -383,7 +383,7 @@
                   {{ seller.status === 'blacklisted' ? '⛔ Blacklisted' : '✓ Active' }}
                 </span>
               </td>
-              <td class="py-3 px-3 text-slate-300 max-w-xs">
+              <td class="py-3 px-3 text-gray-300 max-w-xs">
                 <div class="truncate">{{ seller.seller_profile?.address || 'Address not set' }}</div>
                 <div class="text-[10px] font-mono text-cyan-400">
                   {{ (seller.seller_profile?.latitude || 12.9716).toFixed(4) }}, {{ (seller.seller_profile?.longitude || 77.5946).toFixed(4) }}
@@ -393,7 +393,7 @@
                 <select 
                   :value="seller.seller_profile?.pickup_preference || 'Morning (9 AM - 12 PM)'"
                   @change="handleUpdatePreference(seller.id, $event.target.value)"
-                  class="bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1 text-xs text-slate-200 focus:border-emerald-500 focus:outline-none"
+                  class="bg-[#060A08] border border-white/10 rounded-lg px-2.5 py-1 text-xs text-gray-200 focus:border-emerald-500 focus:outline-none"
                 >
                   <option value="Morning (9 AM - 12 PM)">⏰ Morning (9 AM - 12 PM)</option>
                   <option value="Afternoon (1 PM - 4 PM)">⏰ Afternoon (1 PM - 4 PM)</option>
@@ -465,9 +465,9 @@
     </div>
 
     <!-- 12-Point Seller KYC & Document Verification Dossier Modal -->
-    <div v-if="inspectingSeller" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4">
-      <div class="bg-slate-900 border border-slate-700 rounded-2xl sm:rounded-3xl max-w-2xl w-full p-4 sm:p-6 space-y-4 sm:space-y-5 shadow-2xl max-h-[92dvh] overflow-y-auto">
-        <div class="flex justify-between items-start border-b border-slate-800 pb-3">
+    <div v-if="inspectingSeller" class="fixed inset-0 bg-[#060A08]/80 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4">
+      <div class="bg-[#060A08] border border-white/10 rounded-2xl sm:rounded-3xl max-w-2xl w-full p-4 sm:p-6 space-y-4 sm:space-y-5 shadow-2xl max-h-[92dvh] overflow-y-auto">
+        <div class="flex justify-between items-start border-b border-white/10 pb-3">
           <div>
             <div class="flex items-center gap-2">
               <h3 class="text-base font-bold text-white">{{ inspectingSeller.name }}</h3>
@@ -478,29 +478,29 @@
                 {{ inspectingSeller.status }}
               </span>
             </div>
-            <p class="text-xs text-slate-400 mt-0.5">12-Point Regulatory KYC & Verification Dossier</p>
+            <p class="text-xs text-gray-400 mt-0.5">12-Point Regulatory KYC & Verification Dossier</p>
           </div>
-          <button @click="inspectingSeller = null" class="text-slate-400 hover:text-white text-lg p-1">&times;</button>
+          <button @click="inspectingSeller = null" class="text-gray-400 hover:text-white text-lg p-1">&times;</button>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
           <!-- 1. Kitchen / Restaurant Name -->
-          <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-800">
+          <div class="p-3 bg-[#060A08]/60 rounded-xl border border-white/10">
             <span class="text-[10px] font-mono font-bold text-emerald-400 block mb-0.5">1. NAME OF KITCHEN / RESTAURANT</span>
             <strong class="text-white text-sm">{{ inspectingSeller.name }}</strong>
           </div>
 
           <!-- 2. Address -->
-          <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-800">
+          <div class="p-3 bg-[#060A08]/60 rounded-xl border border-white/10">
             <span class="text-[10px] font-mono font-bold text-emerald-400 block mb-0.5">2. PHYSICAL ADDRESS & REGION</span>
             <div class="text-white font-medium">{{ inspectingSeller.seller_profile?.address || 'Address not set' }}</div>
-            <div class="text-slate-400 text-[11px] mt-0.5">
+            <div class="text-gray-400 text-[11px] mt-0.5">
               {{ inspectingSeller.seller_profile?.city || 'City' }}{{ inspectingSeller.seller_profile?.pincode ? ' - ' + inspectingSeller.seller_profile.pincode : '' }}
             </div>
           </div>
 
           <!-- 3. Email ID -->
-          <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-800">
+          <div class="p-3 bg-[#060A08]/60 rounded-xl border border-white/10">
             <span class="text-[10px] font-mono font-bold text-emerald-400 block mb-0.5">3. OFFICIAL EMAIL ID</span>
             <a :href="`mailto:${inspectingSeller.email}`" class="text-teal-400 hover:underline font-mono">
               ✉ {{ inspectingSeller.email }}
@@ -508,13 +508,13 @@
           </div>
 
           <!-- 4. Contact Person Name -->
-          <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-800">
+          <div class="p-3 bg-[#060A08]/60 rounded-xl border border-white/10">
             <span class="text-[10px] font-mono font-bold text-emerald-400 block mb-0.5">4. PRIMARY CONTACT PERSON</span>
             <strong class="text-white">{{ inspectingSeller.seller_profile?.contact_name || inspectingSeller.name }}</strong>
           </div>
 
           <!-- 5. Contact Number -->
-          <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-800">
+          <div class="p-3 bg-[#060A08]/60 rounded-xl border border-white/10">
             <span class="text-[10px] font-mono font-bold text-emerald-400 block mb-0.5">5. PRIMARY CONTACT NUMBER</span>
             <a :href="`tel:${inspectingSeller.phone}`" class="text-emerald-400 hover:underline font-mono font-bold">
               📞 {{ inspectingSeller.phone || 'N/A' }}
@@ -522,29 +522,29 @@
           </div>
 
           <!-- 6. Alternative Contact Name -->
-          <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-800">
+          <div class="p-3 bg-[#060A08]/60 rounded-xl border border-white/10">
             <span class="text-[10px] font-mono font-bold text-emerald-400 block mb-0.5">6. ALTERNATIVE CONTACT PERSON</span>
             <span class="text-white font-medium">{{ inspectingSeller.seller_profile?.alt_contact_name || 'Not Provided' }}</span>
           </div>
 
           <!-- 7. Alternative Number -->
-          <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-800">
+          <div class="p-3 bg-[#060A08]/60 rounded-xl border border-white/10">
             <span class="text-[10px] font-mono font-bold text-emerald-400 block mb-0.5">7. ALTERNATIVE CONTACT NUMBER</span>
             <a v-if="inspectingSeller.seller_profile?.alt_phone" :href="`tel:${inspectingSeller.seller_profile.alt_phone}`" class="text-emerald-400 hover:underline font-mono font-bold">
               📞 {{ inspectingSeller.seller_profile.alt_phone }}
             </a>
-            <span v-else class="text-slate-500">N/A</span>
+            <span v-else class="text-gray-500">N/A</span>
           </div>
 
           <!-- 8. FSSAI License Number -->
-          <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-800">
+          <div class="p-3 bg-[#060A08]/60 rounded-xl border border-white/10">
             <span class="text-[10px] font-mono font-bold text-emerald-400 block mb-0.5">8. FSSAI LICENSE NUMBER (14 DIGITS)</span>
             <div class="flex items-center justify-between font-mono">
               <span class="text-amber-400 font-bold tracking-wider text-xs">{{ inspectingSeller.seller_profile?.fssai_license_no || 'N/A' }}</span>
               <button 
                 v-if="inspectingSeller.seller_profile?.fssai_license_no"
                 @click="copyText(inspectingSeller.seller_profile.fssai_license_no)"
-                class="text-[10px] text-slate-400 hover:text-white px-2 py-0.5 rounded bg-slate-800 border border-slate-700"
+                class="text-[10px] text-gray-400 hover:text-white px-2 py-0.5 rounded bg-[#0A130E] border border-white/10"
               >
                 Copy
               </button>
@@ -552,14 +552,14 @@
           </div>
 
           <!-- 9. GST Number -->
-          <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-800">
+          <div class="p-3 bg-[#060A08]/60 rounded-xl border border-white/10">
             <span class="text-[10px] font-mono font-bold text-emerald-400 block mb-0.5">9. GST IDENTIFICATION NUMBER (GSTIN)</span>
             <div class="flex items-center justify-between font-mono">
               <span class="text-white font-bold tracking-wider text-xs">{{ inspectingSeller.seller_profile?.gst_no || 'N/A' }}</span>
               <button 
                 v-if="inspectingSeller.seller_profile?.gst_no"
                 @click="copyText(inspectingSeller.seller_profile.gst_no)"
-                class="text-[10px] text-slate-400 hover:text-white px-2 py-0.5 rounded bg-slate-800 border border-slate-700"
+                class="text-[10px] text-gray-400 hover:text-white px-2 py-0.5 rounded bg-[#0A130E] border border-white/10"
               >
                 Copy
               </button>
@@ -567,14 +567,14 @@
           </div>
 
           <!-- 10. Cancel Cheque or UPI ID -->
-          <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-800">
+          <div class="p-3 bg-[#060A08]/60 rounded-xl border border-white/10">
             <span class="text-[10px] font-mono font-bold text-emerald-400 block mb-0.5">10. CANCEL CHEQUE REF OR UPI ID</span>
             <div class="flex items-center justify-between font-mono">
               <span class="text-cyan-400 font-medium text-xs">{{ inspectingSeller.seller_profile?.bank_upi_or_cheque || 'N/A' }}</span>
               <button 
                 v-if="inspectingSeller.seller_profile?.bank_upi_or_cheque"
                 @click="copyText(inspectingSeller.seller_profile.bank_upi_or_cheque)"
-                class="text-[10px] text-slate-400 hover:text-white px-2 py-0.5 rounded bg-slate-800 border border-slate-700"
+                class="text-[10px] text-gray-400 hover:text-white px-2 py-0.5 rounded bg-[#0A130E] border border-white/10"
               >
                 Copy
               </button>
@@ -582,7 +582,7 @@
           </div>
 
           <!-- 11. Location on Map -->
-          <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-800 md:col-span-2">
+          <div class="p-3 bg-[#060A08]/60 rounded-xl border border-white/10 md:col-span-2">
             <span class="text-[10px] font-mono font-bold text-emerald-400 block mb-0.5">11. LOCATION ON MAP (GPS COORDINATES)</span>
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mt-1">
               <span class="font-mono text-white text-xs">
@@ -601,14 +601,14 @@
           </div>
 
           <!-- 12. MSME / UDYAM Number -->
-          <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-800 md:col-span-2">
+          <div class="p-3 bg-[#060A08]/60 rounded-xl border border-white/10 md:col-span-2">
             <span class="text-[10px] font-mono font-bold text-emerald-400 block mb-0.5">12. MSME / UDYAM REGISTRATION NUMBER</span>
             <div class="flex items-center justify-between font-mono">
               <span class="text-white font-bold tracking-wider text-xs">{{ inspectingSeller.seller_profile?.msme_udyam_no || 'N/A' }}</span>
               <button 
                 v-if="inspectingSeller.seller_profile?.msme_udyam_no"
                 @click="copyText(inspectingSeller.seller_profile.msme_udyam_no)"
-                class="text-[10px] text-slate-400 hover:text-white px-2 py-0.5 rounded bg-slate-800 border border-slate-700"
+                class="text-[10px] text-gray-400 hover:text-white px-2 py-0.5 rounded bg-[#0A130E] border border-white/10"
               >
                 Copy
               </button>
@@ -617,11 +617,11 @@
         </div>
 
         <!-- Action Controls inside Modal -->
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 border-t border-slate-800">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 border-t border-white/10">
           <button 
             type="button" 
             @click="inspectingSeller = null" 
-            class="w-full sm:w-auto px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl font-semibold text-xs min-h-[40px]"
+            class="w-full sm:w-auto px-4 py-2 bg-[#0A130E] hover:bg-slate-700 text-gray-300 rounded-xl font-semibold text-xs min-h-[40px]"
           >
             Close Dossier
           </button>
@@ -655,7 +655,7 @@
               </button>
               <button 
                 @click="$emit('update-user-status', inspectingSeller.id, 'approved'); inspectingSeller = null" 
-                class="px-5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition shadow min-h-[40px]"
+                class="px-5 py-2 btn-green-pill text-xs font-bold transition shadow min-h-[40px]"
               >
                 ✓ Approve & Authorize
               </button>
@@ -666,71 +666,71 @@
     </div>
 
     <!-- Edit Location Modal -->
-    <div v-if="editingSeller" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4">
-      <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-md w-full p-4 sm:p-6 space-y-4 shadow-2xl max-h-[92dvh] overflow-y-auto">
+    <div v-if="editingSeller" class="fixed inset-0 bg-[#060A08]/80 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4">
+      <div class="bg-[#060A08] border border-white/10 rounded-2xl max-w-md w-full p-4 sm:p-6 space-y-4 shadow-2xl max-h-[92dvh] overflow-y-auto">
         <div class="flex justify-between items-center">
           <h3 class="text-sm font-bold text-white">Edit Location: {{ editingSeller.name }}</h3>
-          <button @click="editingSeller = null" class="text-slate-400 hover:text-white">&times;</button>
+          <button @click="editingSeller = null" class="text-gray-400 hover:text-white">&times;</button>
         </div>
         <form @submit.prevent="saveLocationEdit" class="space-y-3 text-xs">
           <!-- GPS Detect & Auto-fill -->
-          <div class="p-2.5 bg-slate-950 border border-slate-800 rounded-xl flex items-center justify-between">
+          <div class="p-2.5 bg-[#060A08] border border-white/10 rounded-xl flex items-center justify-between">
             <div>
               <span class="font-bold text-white block text-[11px]">Auto-Detect Location</span>
-              <span class="text-[10px] text-slate-400">Fetch GPS & auto-fill address, city, & pincode</span>
+              <span class="text-[10px] text-gray-400">Fetch GPS & auto-fill address, city, & pincode</span>
             </div>
             <button 
               type="button" 
               @click="detectAdminLocation"
               :disabled="detectingAdminGps"
-              class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-bold text-[10px] flex items-center gap-1 transition"
+              class="px-2.5 py-1 bg-[#22C55E] hover:bg-[#16A34A] text-[#050A07] hover:text-white font-bold transition-all text-white rounded-lg font-bold text-[10px] flex items-center gap-1 transition"
             >
               <span>{{ detectingAdminGps ? '📡' : '🎯' }}</span>
               <span>{{ detectingAdminGps ? 'Resolving...' : 'Detect & Auto-Fill' }}</span>
             </button>
           </div>
-          <div v-if="adminGpsMsg" class="text-[10px] font-mono px-2 py-1 rounded bg-slate-950 text-emerald-400 border border-emerald-500/30">
+          <div v-if="adminGpsMsg" class="text-[10px] font-mono px-2 py-1 rounded bg-[#060A08] text-emerald-400 border border-emerald-500/30">
             {{ adminGpsMsg }}
           </div>
 
           <div>
-            <label class="block text-slate-400 mb-1">Physical Address</label>
-            <input v-model="editLocationForm.address" type="text" required placeholder="Street address or landmark" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white" />
+            <label class="block text-gray-400 mb-1">Physical Address</label>
+            <input v-model="editLocationForm.address" type="text" required placeholder="Street address or landmark" class="w-full bg-[#060A08] border border-white/10 rounded-xl px-3 py-2 text-white" />
           </div>
           <div class="grid grid-cols-2 gap-2">
             <div>
-              <label class="block text-slate-400 mb-1">Latitude</label>
-              <input v-model.number="editLocationForm.latitude" type="number" step="any" required placeholder="e.g. 19.0760" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white font-mono" />
+              <label class="block text-gray-400 mb-1">Latitude</label>
+              <input v-model.number="editLocationForm.latitude" type="number" step="any" required placeholder="e.g. 19.0760" class="w-full bg-[#060A08] border border-white/10 rounded-xl px-3 py-2 text-white font-mono" />
             </div>
             <div>
-              <label class="block text-slate-400 mb-1">Longitude</label>
-              <input v-model.number="editLocationForm.longitude" type="number" step="any" required placeholder="e.g. 72.8777" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white font-mono" />
+              <label class="block text-gray-400 mb-1">Longitude</label>
+              <input v-model.number="editLocationForm.longitude" type="number" step="any" required placeholder="e.g. 72.8777" class="w-full bg-[#060A08] border border-white/10 rounded-xl px-3 py-2 text-white font-mono" />
             </div>
           </div>
           <div>
-            <label class="block text-slate-400 mb-1">Special Instructions / Gate Landmark</label>
-            <input v-model="editLocationForm.special_instructions" type="text" placeholder="e.g. Backdoor loading bay, near Gate 2" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white" />
+            <label class="block text-gray-400 mb-1">Special Instructions / Gate Landmark</label>
+            <input v-model="editLocationForm.special_instructions" type="text" placeholder="e.g. Backdoor loading bay, near Gate 2" class="w-full bg-[#060A08] border border-white/10 rounded-xl px-3 py-2 text-white" />
           </div>
           <div class="grid grid-cols-2 gap-2">
             <div>
-              <label class="block text-slate-400 mb-1">City</label>
-              <input v-model="editLocationForm.city" type="text" placeholder="e.g. Mumbai" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white" />
+              <label class="block text-gray-400 mb-1">City</label>
+              <input v-model="editLocationForm.city" type="text" placeholder="e.g. Mumbai" class="w-full bg-[#060A08] border border-white/10 rounded-xl px-3 py-2 text-white" />
             </div>
             <div>
-              <label class="block text-slate-400 mb-1">Pincode</label>
-              <input v-model="editLocationForm.pincode" type="text" placeholder="e.g. 400001" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white" />
+              <label class="block text-gray-400 mb-1">Pincode</label>
+              <input v-model="editLocationForm.pincode" type="text" placeholder="e.g. 400001" class="w-full bg-[#060A08] border border-white/10 rounded-xl px-3 py-2 text-white" />
             </div>
           </div>
           <div class="flex gap-2 pt-2">
-            <button type="button" @click="editingSeller = null" class="flex-1 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl font-semibold">Cancel</button>
-            <button type="submit" class="flex-1 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-bold">Save Changes</button>
+            <button type="button" @click="editingSeller = null" class="flex-1 py-2 bg-[#0A130E] hover:bg-slate-700 text-gray-300 rounded-xl font-semibold">Cancel</button>
+            <button type="submit" class="flex-1 py-2 bg-[#22C55E] hover:bg-[#16A34A] text-[#050A07] hover:text-white font-bold transition-all text-white rounded-xl font-bold">Save Changes</button>
           </div>
         </form>
       </div>
     </div>
 
     <!-- Active Fleet Agents Directory -->
-    <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-4 sm:p-6 shadow-xl space-y-4">
+    <div class="rounded-2xl border border-white/10 bg-[#0A130E] shadow-xl p-4 sm:p-6 shadow-xl space-y-4">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <div class="flex items-center gap-2.5">
           <div class="w-8 h-8 rounded-lg bg-teal-500/10 text-teal-400 border border-teal-500/20 flex items-center justify-center text-sm font-bold">
@@ -738,7 +738,7 @@
           </div>
           <div>
             <h2 class="text-sm font-bold text-white">Active Field Collection Fleet & Agents Directory</h2>
-            <p class="text-xs text-slate-400">Deployed collection officers, assigned EV vehicles, and direct phone contacts</p>
+            <p class="text-xs text-gray-400">Deployed collection officers, assigned EV vehicles, and direct phone contacts</p>
           </div>
         </div>
         <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-teal-500/10 text-teal-300 border border-teal-500/20 w-fit">
@@ -748,13 +748,13 @@
 
       <!-- Mobile Card Layout (< md) -->
       <div class="block md:hidden space-y-3">
-        <div v-if="!activeAgents.length" class="py-6 text-center text-slate-500 text-xs">
+        <div v-if="!activeAgents.length" class="py-6 text-center text-gray-500 text-xs">
           No active field agents registered. Approve pending agents in the queue above.
         </div>
         <div 
           v-for="agent in activeAgents" 
           :key="agent.id"
-          class="bg-slate-900/90 rounded-xl p-4 border border-slate-700 space-y-3"
+          class="bg-[#060A08]/90 rounded-xl p-4 border border-white/10 space-y-3"
         >
           <div class="flex items-start justify-between gap-2">
             <div>
@@ -774,25 +774,25 @@
           </div>
 
           <div class="grid grid-cols-2 gap-2 text-xs">
-            <div class="bg-slate-950/60 p-2.5 rounded-lg border border-slate-800">
-              <span class="text-[10px] text-slate-400 uppercase font-semibold block mb-0.5">Vehicle:</span>
+            <div class="bg-[#060A08]/60 p-2.5 rounded-lg border border-white/10">
+              <span class="text-[10px] text-gray-400 uppercase font-semibold block mb-0.5">Vehicle:</span>
               <span class="font-mono font-bold text-cyan-300">{{ agent.agent_profile?.vehicle_no || 'N/A' }}</span>
             </div>
-            <div class="bg-slate-950/60 p-2.5 rounded-lg border border-slate-800">
-              <span class="text-[10px] text-slate-400 uppercase font-semibold block mb-0.5">Phone:</span>
+            <div class="bg-[#060A08]/60 p-2.5 rounded-lg border border-white/10">
+              <span class="text-[10px] text-gray-400 uppercase font-semibold block mb-0.5">Phone:</span>
               <a v-if="agent.phone" :href="'tel:' + agent.phone" class="text-emerald-400 font-bold hover:underline font-mono">
                 {{ agent.phone }}
               </a>
-              <span v-else class="text-slate-500">No phone</span>
+              <span v-else class="text-gray-500">No phone</span>
             </div>
           </div>
 
-          <div class="text-xs text-slate-400 truncate">
-            Email: <span class="text-slate-300">{{ agent.email }}</span>
+          <div class="text-xs text-gray-400 truncate">
+            Email: <span class="text-gray-300">{{ agent.email }}</span>
           </div>
 
           <!-- Direct Actions -->
-          <div class="flex flex-wrap items-center gap-1.5 pt-2 border-t border-slate-800">
+          <div class="flex flex-wrap items-center gap-1.5 pt-2 border-t border-white/10">
             <a 
               v-if="agent.phone"
               :href="'tel:' + agent.phone"
@@ -803,7 +803,7 @@
             <a 
               v-if="agent.email"
               :href="'mailto:' + agent.email"
-              class="flex-1 py-1.5 px-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs transition text-center min-h-[36px] flex items-center justify-center"
+              class="flex-1 py-1.5 px-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-gray-200 text-xs transition text-center min-h-[36px] flex items-center justify-center"
             >
               ✉ Email
             </a>
@@ -836,7 +836,7 @@
       <div class="hidden md:block overflow-x-auto">
         <table class="w-full text-left text-xs min-w-[640px]">
           <thead>
-            <tr class="border-b border-slate-700 text-slate-400 text-[11px] uppercase tracking-wider">
+            <tr class="border-b border-white/10 text-gray-400 text-[11px] uppercase tracking-wider">
               <th class="py-3 px-3">Agent Officer</th>
               <th class="py-3 px-3">Vehicle Assigned</th>
               <th class="py-3 px-3">Contact Details</th>
@@ -846,7 +846,7 @@
           </thead>
           <tbody class="divide-y divide-slate-700/60">
             <tr v-if="!activeAgents.length">
-              <td colspan="5" class="py-6 text-center text-slate-500">No active field agents registered. Approve pending agents in the queue above.</td>
+              <td colspan="5" class="py-6 text-center text-gray-500">No active field agents registered. Approve pending agents in the queue above.</td>
             </tr>
             <tr v-for="agent in activeAgents" :key="agent.id" class="hover:bg-slate-700/30 transition">
               <td class="py-3 px-3">
@@ -855,11 +855,11 @@
               </td>
               <td class="py-3 px-3">
                 <div class="font-mono font-bold text-cyan-300">{{ agent.agent_profile?.vehicle_no || 'N/A' }}</div>
-                <div class="text-[10px] text-slate-400">GeoField Electric Bio-Logistics</div>
+                <div class="text-[10px] text-gray-400">GeoField Electric Bio-Logistics</div>
               </td>
               <td class="py-3 px-3">
                 <div class="text-white font-medium">{{ agent.phone || 'No phone' }}</div>
-                <div class="text-[10px] text-slate-400">{{ agent.email }}</div>
+                <div class="text-[10px] text-gray-400">{{ agent.email }}</div>
               </td>
               <td class="py-3 px-3">
                 <span 
@@ -886,7 +886,7 @@
                   <a 
                     v-if="agent.email"
                     :href="'mailto:' + agent.email"
-                    class="px-2 py-1 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-200 text-[10px] transition"
+                    class="px-2 py-1 rounded-lg bg-slate-700 hover:bg-slate-600 text-gray-200 text-[10px] transition"
                   >
                     ✉ Email
                   </a>
@@ -933,15 +933,15 @@
     />
 
     <!-- Downstream Biodiesel Compliance Engine -->
-    <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-4 sm:p-6 shadow-xl space-y-4">
+    <div class="rounded-2xl border border-white/10 bg-[#0A130E] shadow-xl p-4 sm:p-6 shadow-xl space-y-4">
       <div class="flex items-center justify-between gap-2">
         <div>
           <h2 class="text-sm font-bold text-white">Downstream Biodiesel Compliance Batches</h2>
-          <p class="text-xs text-slate-400">Bulk delivery records proving UCO conversion at certified refineries</p>
+          <p class="text-xs text-gray-400">Bulk delivery records proving UCO conversion at certified refineries</p>
         </div>
         <button 
           @click="openBatchModal"
-          class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold transition shadow shrink-0 min-h-[36px]"
+          class="px-3 py-1.5 btn-green-pill text-xs font-bold transition shadow shrink-0 min-h-[36px]"
         >
           + Aggregate Batch
         </button>
@@ -950,7 +950,7 @@
       <div class="overflow-x-auto">
         <table class="w-full text-left text-xs min-w-[500px]">
           <thead>
-            <tr class="border-b border-slate-700 text-slate-400 text-[11px] uppercase tracking-wider">
+            <tr class="border-b border-white/10 text-gray-400 text-[11px] uppercase tracking-wider">
               <th class="py-3 px-3">Batch Code</th>
               <th class="py-3 px-3">Volume</th>
               <th class="py-3 px-3">Refinery Destination</th>
@@ -960,15 +960,15 @@
           </thead>
           <tbody class="divide-y divide-slate-700/60">
             <tr v-if="!batches || !batches.length">
-              <td colspan="5" class="py-6 text-center text-slate-500">
+              <td colspan="5" class="py-6 text-center text-gray-500">
                 No aggregated batches recorded yet. Click "+ Aggregate Batch" above to log a bulk shipment to a certified refinery.
               </td>
             </tr>
             <tr v-for="b in batches" :key="b.id" class="hover:bg-slate-700/30">
               <td class="py-3 px-3 font-mono font-bold text-white">{{ b.batch_code }}</td>
               <td class="py-3 px-3 font-semibold text-emerald-400">{{ b.total_volume }} Liters</td>
-              <td class="py-3 px-3 text-slate-300">{{ b.refinery_destination }}</td>
-              <td class="py-3 px-3 text-slate-400">{{ b.dispatch_date }}</td>
+              <td class="py-3 px-3 text-gray-300">{{ b.refinery_destination }}</td>
+              <td class="py-3 px-3 text-gray-400">{{ b.dispatch_date }}</td>
               <td class="py-3 px-3">
                 <span class="px-2 py-0.5 rounded-full text-[10px] uppercase font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                   {{ b.status }}
@@ -981,46 +981,46 @@
     </div>
 
     <!-- Aggregate Downstream Biodiesel Batch Modal -->
-    <div v-if="showBatchModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4">
-      <div class="bg-slate-900 border border-slate-700 rounded-2xl sm:rounded-3xl max-w-lg w-full p-4 sm:p-6 space-y-4 shadow-2xl max-h-[92dvh] overflow-y-auto">
-        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+    <div v-if="showBatchModal" class="fixed inset-0 bg-[#060A08]/80 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4">
+      <div class="bg-[#060A08] border border-white/10 rounded-2xl sm:rounded-3xl max-w-lg w-full p-4 sm:p-6 space-y-4 shadow-2xl max-h-[92dvh] overflow-y-auto">
+        <div class="flex items-center justify-between border-b border-white/10 pb-3">
           <div class="flex items-center gap-2.5">
             <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center text-sm font-bold shrink-0">
               ⚗️
             </div>
             <div>
               <h3 class="text-sm sm:text-base font-bold text-white">Aggregate Downstream Biodiesel Batch</h3>
-              <p class="text-xs text-slate-400">Record bulk UCO handover to certified conversion refineries</p>
+              <p class="text-xs text-gray-400">Record bulk UCO handover to certified conversion refineries</p>
             </div>
           </div>
-          <button @click="closeBatchModal" class="text-slate-400 hover:text-white text-lg p-1">&times;</button>
+          <button @click="closeBatchModal" class="text-gray-400 hover:text-white text-lg p-1">&times;</button>
         </div>
 
         <form @submit.prevent="handleCreateBatch" class="space-y-3.5 text-xs">
           <!-- Batch Code (Auto-generated or custom) -->
           <div>
-            <label class="block text-slate-300 font-semibold mb-1">Official Batch Tracking Code</label>
+            <label class="block text-gray-300 font-semibold mb-1">Official Batch Tracking Code</label>
             <div class="relative">
               <input 
                 v-model="batchForm.batch_code" 
                 type="text" 
                 required 
-                class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white font-mono text-xs focus:outline-none focus:border-emerald-500"
+                class="w-full bg-[#060A08] border border-white/10 rounded-xl px-3 py-2 text-white font-mono text-xs focus:outline-none focus:border-emerald-500"
               />
               <button 
                 type="button" 
                 @click="regenerateBatchCode"
-                class="absolute right-2 top-1.5 px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-[10px] text-slate-300 border border-slate-700"
+                class="absolute right-2 top-1.5 px-2 py-0.5 rounded bg-[#0A130E] hover:bg-slate-700 text-[10px] text-gray-300 border border-white/10"
               >
                 🔄 Gen
               </button>
             </div>
-            <span class="text-[10px] text-slate-500">Government traceable manifest identifier</span>
+            <span class="text-[10px] text-gray-500">Government traceable manifest identifier</span>
           </div>
 
           <!-- Total Volume to Aggregate -->
           <div>
-            <label class="block text-slate-300 font-semibold mb-1">Total Aggregated Volume (Liters)</label>
+            <label class="block text-gray-300 font-semibold mb-1">Total Aggregated Volume (Liters)</label>
             <div class="relative">
               <input 
                 v-model.number="batchForm.total_volume" 
@@ -1029,20 +1029,20 @@
                 step="1" 
                 required 
                 placeholder="e.g. 1500" 
-                class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white font-mono text-xs focus:outline-none focus:border-emerald-500"
+                class="w-full bg-[#060A08] border border-white/10 rounded-xl px-3 py-2 text-white font-mono text-xs focus:outline-none focus:border-emerald-500"
               />
-              <span class="absolute right-3 top-2 text-[10px] text-slate-500 font-mono">Liters</span>
+              <span class="absolute right-3 top-2 text-[10px] text-gray-500 font-mono">Liters</span>
             </div>
-            <span class="text-[10px] text-slate-500">Total volume pooled across settled FBO collections</span>
+            <span class="text-[10px] text-gray-500">Total volume pooled across settled FBO collections</span>
           </div>
 
           <!-- Certified Refinery Destination -->
           <div>
-            <label class="block text-slate-300 font-semibold mb-1">Destination Biofuel Refinery / Conversion Plant</label>
+            <label class="block text-gray-300 font-semibold mb-1">Destination Biofuel Refinery / Conversion Plant</label>
             <select 
               v-model="batchForm.refinery_destination" 
               required
-              class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-emerald-500"
+              class="w-full bg-[#060A08] border border-white/10 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-emerald-500"
             >
               <option value="Karnataka State Biofuel Board, Bengaluru">🏢 Karnataka State Biofuel Board, Bengaluru</option>
               <option value="BioFuels India Pvt Ltd, Whitefield">🏭 BioFuels India Pvt Ltd, Whitefield</option>
@@ -1055,19 +1055,19 @@
           <!-- Dispatch Date & Status -->
           <div class="grid grid-cols-2 gap-2.5">
             <div>
-              <label class="block text-slate-300 font-semibold mb-1">Dispatch Date</label>
+              <label class="block text-gray-300 font-semibold mb-1">Dispatch Date</label>
               <input 
                 v-model="batchForm.dispatch_date" 
                 type="date" 
                 required 
-                class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-emerald-500"
+                class="w-full bg-[#060A08] border border-white/10 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-emerald-500"
               />
             </div>
             <div>
-              <label class="block text-slate-300 font-semibold mb-1">Batch Status</label>
+              <label class="block text-gray-300 font-semibold mb-1">Batch Status</label>
               <select 
                 v-model="batchForm.status" 
-                class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-emerald-500"
+                class="w-full bg-[#060A08] border border-white/10 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-emerald-500"
               >
                 <option value="Dispatched">Dispatched</option>
                 <option value="Aggregated">Aggregated</option>
@@ -1083,21 +1083,21 @@
               🌱 Verified Batch ESG Impact:
             </div>
             <div class="grid grid-cols-2 gap-2 text-xs font-mono">
-              <div class="text-slate-300">
+              <div class="text-gray-300">
                 CO₂ Offset: <strong class="text-emerald-400">{{ (batchForm.total_volume * 0.0028).toFixed(2) }} t</strong> ({{ (batchForm.total_volume * 2.8).toFixed(1) }} kg)
               </div>
-              <div class="text-slate-300">
+              <div class="text-gray-300">
                 Water Shielded: <strong class="text-cyan-300">{{ formatNumber(batchForm.total_volume * 1000) }} L</strong>
               </div>
             </div>
           </div>
 
           <!-- Actions -->
-          <div class="flex items-center gap-2 pt-2 border-t border-slate-800">
+          <div class="flex items-center gap-2 pt-2 border-t border-white/10">
             <button 
               type="button" 
               @click="closeBatchModal" 
-              class="flex-1 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl font-semibold text-xs transition min-h-[40px]"
+              class="flex-1 py-2.5 bg-[#0A130E] hover:bg-slate-700 text-gray-300 rounded-xl font-semibold text-xs transition min-h-[40px]"
             >
               Cancel
             </button>

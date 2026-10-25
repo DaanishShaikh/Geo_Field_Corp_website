@@ -2,29 +2,29 @@
   <div class="space-y-5 sm:space-y-6">
     <!-- Header Stats & Offline Mode Bar -->
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-      <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-3.5 sm:p-5 shadow-lg">
-        <div class="text-[10px] sm:text-xs font-semibold text-slate-400 mb-1 truncate">ASSIGNED STOPS</div>
-        <div class="text-xl sm:text-2xl font-black text-white">{{ stats.total_assigned_stops || 0 }}</div>
+      <div class="rounded-2xl p-4 sm:p-5 bg-gradient-to-br from-[#0E1B14] via-[#0A130E] to-[#080E0B] border border-white/10 hover:border-[#22C55E]/30 transition-all duration-300 relative overflow-hidden shadow-xl">
+        <div class="text-[10px] sm:text-xs font-semibold text-gray-400 mb-1 truncate">ASSIGNED STOPS</div>
+        <div class="text-xl sm:text-2xl font-display font-extrabold text-white">{{ stats.total_assigned_stops || 0 }}</div>
         <div class="text-[10px] sm:text-[11px] text-emerald-400 mt-1.5 sm:mt-2 truncate">{{ stats.visited_stops || 0 }} visited today</div>
       </div>
 
-      <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-3.5 sm:p-5 shadow-lg">
-        <div class="text-[10px] sm:text-xs font-semibold text-slate-400 mb-1 truncate">OPEN RECEIPTS</div>
-        <div class="text-xl sm:text-2xl font-black text-amber-400">{{ stats.open_receipts_count || 0 }}</div>
-        <div class="text-[10px] sm:text-[11px] text-slate-400 mt-1.5 sm:mt-2 truncate">Ready for collection</div>
+      <div class="rounded-2xl p-4 sm:p-5 bg-gradient-to-br from-[#0E1B14] via-[#0A130E] to-[#080E0B] border border-white/10 hover:border-[#22C55E]/30 transition-all duration-300 relative overflow-hidden shadow-xl">
+        <div class="text-[10px] sm:text-xs font-semibold text-gray-400 mb-1 truncate">OPEN RECEIPTS</div>
+        <div class="text-xl sm:text-2xl font-display font-extrabold text-[#F59E0B]">{{ stats.open_receipts_count || 0 }}</div>
+        <div class="text-[10px] sm:text-[11px] text-gray-400 mt-1.5 sm:mt-2 truncate">Ready for collection</div>
       </div>
 
-      <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-3.5 sm:p-5 shadow-lg flex flex-col justify-between">
+      <div class="rounded-2xl p-4 sm:p-5 bg-gradient-to-br from-[#0E1B14] via-[#0A130E] to-[#080E0B] border border-white/10 hover:border-[#22C55E]/30 transition-all duration-300 relative overflow-hidden shadow-xl flex flex-col justify-between">
         <div>
-          <div class="flex items-center justify-between text-[10px] sm:text-xs font-semibold text-slate-400 mb-1">
+          <div class="flex items-center justify-between text-[10px] sm:text-xs font-semibold text-gray-400 mb-1">
             <span>VEHICLE & GPS</span>
             <span v-if="gpsSynced" class="text-[9px] sm:text-[10px] text-emerald-400 font-mono">Synced ✓</span>
           </div>
           <div class="text-base sm:text-xl font-bold font-mono text-cyan-300 truncate">{{ agent.agent_profile?.vehicle_no || 'EV-COLLECTOR' }}</div>
-          <div class="text-[10px] sm:text-[11px] text-slate-400 mt-1 font-mono flex items-center gap-1 truncate">
+          <div class="text-[10px] sm:text-[11px] text-gray-400 mt-1 font-mono flex items-center gap-1 truncate">
             <span>📍</span>
             <span v-if="agent.agent_profile?.current_lat">{{ Number(agent.agent_profile.current_lat).toFixed(3) }}, {{ Number(agent.agent_profile.current_lng).toFixed(3) }}</span>
-            <span v-else class="text-slate-500">No GPS locked</span>
+            <span v-else class="text-gray-500">No GPS locked</span>
           </div>
         </div>
         <div class="mt-2 sm:mt-2.5">
@@ -40,24 +40,24 @@
       </div>
 
       <div 
-        :class="isOnline ? 'bg-slate-800/80 border-slate-700/80' : 'bg-amber-950/40 border-amber-800/60'"
+        :class="isOnline ? 'bg-[#0A130E] border-white/10' : 'bg-amber-950/40 border-amber-800/60'"
         class="rounded-2xl border p-3.5 sm:p-5 shadow-lg flex flex-col justify-between"
       >
         <div>
-          <div class="text-[10px] sm:text-xs font-semibold text-slate-400 mb-1 truncate">OFFLINE QUEUE</div>
-          <div class="text-xl sm:text-2xl font-black text-white">{{ offlineQueue.length }}</div>
+          <div class="text-[10px] sm:text-xs font-semibold text-gray-400 mb-1 truncate">OFFLINE QUEUE</div>
+          <div class="text-xl sm:text-2xl font-display font-extrabold text-white">{{ offlineQueue.length }}</div>
         </div>
         <div class="flex items-center gap-1.5 sm:gap-2 mt-2">
           <button 
             @click="$emit('toggle-offline')" 
-            class="px-2 py-1 text-[10px] sm:text-[11px] font-semibold rounded bg-slate-700 hover:bg-slate-600 text-slate-200 min-h-[36px] flex items-center justify-center flex-1 cursor-pointer"
+            class="px-2 py-1 text-[10px] sm:text-[11px] font-semibold rounded bg-slate-700 hover:bg-slate-600 text-gray-200 min-h-[36px] flex items-center justify-center flex-1 cursor-pointer"
           >
             {{ isOnline ? 'Offline' : 'Online' }}
           </button>
           <button 
             v-if="offlineQueue.length && isOnline"
             @click="$emit('sync-offline')"
-            class="px-2.5 py-1 text-[10px] sm:text-[11px] font-semibold rounded bg-emerald-600 hover:bg-emerald-500 text-white min-h-[36px] flex items-center justify-center cursor-pointer"
+            class="px-2.5 py-1 text-[10px] sm:text-[11px] font-semibold rounded bg-[#22C55E] hover:bg-[#16A34A] text-[#050A07] hover:text-white font-bold transition-all text-white min-h-[36px] flex items-center justify-center cursor-pointer"
           >
             Sync
           </button>
@@ -76,7 +76,7 @@
       />
 
       <!-- Measurement & Settlement Form -->
-      <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-4 sm:p-6 shadow-xl space-y-4">
+      <div class="rounded-2xl border border-white/10 bg-[#0A130E] shadow-xl p-4 sm:p-6 shadow-xl space-y-4">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2.5">
             <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center font-bold text-xs">
@@ -84,7 +84,7 @@
             </div>
             <div>
               <h2 class="text-sm font-bold text-white">Log Measurements & Settle</h2>
-              <p class="text-xs text-slate-400">Strict validation: Volume & TPC % bounded</p>
+              <p class="text-xs text-gray-400">Strict validation: Volume & TPC % bounded</p>
             </div>
           </div>
           <span 
@@ -93,16 +93,16 @@
           >
             {{ activeReceipt.id }}
           </span>
-          <span v-else class="text-xs text-slate-500 font-medium">Select or Scan Receipt</span>
+          <span v-else class="text-xs text-gray-500 font-medium">Select or Scan Receipt</span>
         </div>
 
         <!-- Selected Seller & Receipt Details Header -->
-        <div v-if="activeSeller || activeReceipt" class="p-3.5 bg-slate-900/90 rounded-xl border border-slate-700 space-y-2.5 text-xs">
+        <div v-if="activeSeller || activeReceipt" class="p-3.5 bg-slate-900/90 rounded-xl border border-white/10 space-y-2.5 text-xs">
           <!-- Rich Scanned Seller Dossier -->
           <div v-if="activeSeller" class="space-y-2">
             <div class="flex items-center justify-between">
               <div>
-                <span class="text-slate-400 font-mono text-[10px] uppercase tracking-wider block">Authenticated FBO Seller</span>
+                <span class="text-gray-400 font-mono text-[10px] uppercase tracking-wider block">Authenticated FBO Seller</span>
                 <strong class="text-white text-sm">{{ activeSeller.name }}</strong>
               </div>
               <span class="px-2 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 font-mono text-[10px] font-bold">
@@ -111,19 +111,19 @@
             </div>
 
             <!-- Key Info Grid -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 border-t border-slate-800 text-[11px]">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 border-t border-white/10 text-[11px]">
               <div>
-                <span class="text-slate-500 block">FSSAI Licence No:</span>
+                <span class="text-gray-500 block">FSSAI Licence No:</span>
                 <strong class="text-amber-400 font-mono">{{ activeSeller.seller_profile?.fssai_license_no || 'Verified' }}</strong>
               </div>
               <div v-if="activeSeller.seller_profile?.gst_no">
-                <span class="text-slate-500 block">GSTIN:</span>
-                <span class="text-slate-200 font-mono">{{ activeSeller.seller_profile.gst_no }}</span>
+                <span class="text-gray-500 block">GSTIN:</span>
+                <span class="text-gray-200 font-mono">{{ activeSeller.seller_profile.gst_no }}</span>
               </div>
               <div>
-                <span class="text-slate-500 block">Primary Contact:</span>
+                <span class="text-gray-500 block">Primary Contact:</span>
                 <div class="flex items-center gap-2 mt-0.5">
-                  <span class="text-slate-200">{{ activeSeller.seller_profile?.contact_name || activeSeller.name }}</span>
+                  <span class="text-gray-200">{{ activeSeller.seller_profile?.contact_name || activeSeller.name }}</span>
                   <a 
                     v-if="activeSeller.phone" 
                     :href="'tel:' + activeSeller.phone"
@@ -134,7 +134,7 @@
                 </div>
               </div>
               <div v-if="activeSeller.seller_profile?.alt_phone">
-                <span class="text-slate-500 block">Alt Contact:</span>
+                <span class="text-gray-500 block">Alt Contact:</span>
                 <a :href="'tel:' + activeSeller.seller_profile.alt_phone" class="text-emerald-400/80 hover:underline font-mono">
                   📞 {{ activeSeller.seller_profile.alt_phone }}
                 </a>
@@ -142,8 +142,8 @@
             </div>
 
             <!-- Address & Actions -->
-            <div class="pt-1 border-t border-slate-800 flex items-center justify-between text-[11px]">
-              <div class="text-slate-300 truncate max-w-[240px]">
+            <div class="pt-1 border-t border-white/10 flex items-center justify-between text-[11px]">
+              <div class="text-gray-300 truncate max-w-[240px]">
                 📍 {{ activeSeller.seller_profile?.address || 'Site Registered' }}, {{ activeSeller.seller_profile?.city || 'Mumbai' }}
               </div>
               <div class="flex items-center gap-2 flex-shrink-0">
@@ -166,8 +166,8 @@
             </div>
           </div>
 
-          <div v-if="activeReceipt" class="flex justify-between border-t border-slate-800 pt-1.5">
-            <span class="text-slate-400">Target Receipt:</span>
+          <div v-if="activeReceipt" class="flex justify-between border-t border-white/10 pt-1.5">
+            <span class="text-gray-400">Target Receipt:</span>
             <span class="font-mono text-emerald-400 font-bold">{{ activeReceipt.id }} ({{ activeReceipt.requested_volume }}L Requested)</span>
           </div>
         </div>
@@ -175,10 +175,10 @@
         <form @submit.prevent="submitSettlement" class="space-y-4">
           <!-- Receipt Selector dropdown if not scanned -->
           <div>
-            <label class="block text-xs font-semibold text-slate-300 mb-1">Open Receipt</label>
+            <label class="block text-xs font-semibold text-gray-300 mb-1">Open Receipt</label>
             <select 
               v-model="selectedReceiptId" 
-              class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500"
+              class="w-full bg-slate-900 border border-white/10 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500"
             >
               <option value="" disabled>-- Select open receipt --</option>
               <option v-for="rct in openReceipts" :key="rct.id" :value="rct.id">
@@ -190,7 +190,7 @@
           <!-- Volume & TPC Inputs with Validation -->
           <div class="grid grid-cols-2 gap-3">
             <div>
-              <label class="block text-xs font-semibold text-slate-300 mb-1">
+              <label class="block text-xs font-semibold text-gray-300 mb-1">
                 Measured Volume (L)
                 <span class="text-rose-400">*</span>
               </label>
@@ -201,13 +201,13 @@
                 step="0.1" 
                 placeholder="e.g. 118" 
                 required 
-                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                class="w-full bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
               />
-              <span class="text-[10px] text-slate-500">Rejects 0 or negative</span>
+              <span class="text-[10px] text-gray-500">Rejects 0 or negative</span>
             </div>
 
             <div>
-              <label class="block text-xs font-semibold text-slate-300 mb-1">
+              <label class="block text-xs font-semibold text-gray-300 mb-1">
                 TPC % Reading
                 <span class="text-rose-400">*</span>
               </label>
@@ -219,16 +219,16 @@
                 step="0.1" 
                 placeholder="e.g. 19.5" 
                 required 
-                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                class="w-full bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
               />
-              <span class="text-[10px] text-slate-500">Valid range: 1.0 - 40.0%</span>
+              <span class="text-[10px] text-gray-500">Valid range: 1.0 - 40.0%</span>
             </div>
           </div>
 
           <!-- Recalculate Rate & Breakdown Card -->
-          <div class="p-3 bg-slate-900/90 rounded-xl border border-slate-700 space-y-2">
+          <div class="p-3 bg-slate-900/90 rounded-xl border border-white/10 space-y-2">
             <div class="flex items-center justify-between">
-              <span class="text-xs font-semibold text-slate-300">Rate & Payout Calculation</span>
+              <span class="text-xs font-semibold text-gray-300">Rate & Payout Calculation</span>
               <button 
                 type="button" 
                 @click="recalculateRate"
@@ -239,25 +239,25 @@
             </div>
 
             <!-- Real-time Rate Breakdown Strip -->
-            <div class="grid grid-cols-3 gap-2 pt-1 border-t border-slate-800 text-center font-mono">
-              <div class="bg-slate-800/60 p-2 rounded-lg">
-                <span class="text-[9px] uppercase text-slate-400 block">Base Rate</span>
-                <span class="text-xs font-bold text-slate-200">₹55.00/L</span>
+            <div class="grid grid-cols-3 gap-2 pt-1 border-t border-white/10 text-center font-mono">
+              <div class="bg-[#0A130E]/60 p-2 rounded-lg">
+                <span class="text-[9px] uppercase text-gray-400 block">Base Rate</span>
+                <span class="text-xs font-bold text-gray-200">₹55.00/L</span>
               </div>
-              <div class="bg-slate-800/60 p-2 rounded-lg">
-                <span class="text-[9px] uppercase text-slate-400 block">TPC Adjustment</span>
+              <div class="bg-[#0A130E]/60 p-2 rounded-lg">
+                <span class="text-[9px] uppercase text-gray-400 block">TPC Adjustment</span>
                 <span class="text-xs font-bold" :class="rateBreakdown.color">
                   {{ rateBreakdown.bonus }}
                 </span>
               </div>
-              <div class="bg-slate-800/60 p-2 rounded-lg border border-bio/30">
-                <span class="text-[9px] uppercase text-slate-400 block">Calculated Rate</span>
+              <div class="bg-[#0A130E]/60 p-2 rounded-lg border border-bio/30">
+                <span class="text-[9px] uppercase text-gray-400 block">Calculated Rate</span>
                 <span class="text-xs font-bold text-bio">₹{{ calculatedRate }}.00/L</span>
               </div>
             </div>
 
-            <div class="text-[11px] text-slate-400 flex items-center justify-between pt-0.5">
-              <span>Rule: <strong class="text-slate-300">{{ rateBreakdown.label }}</strong></span>
+            <div class="text-[11px] text-gray-400 flex items-center justify-between pt-0.5">
+              <span>Rule: <strong class="text-gray-300">{{ rateBreakdown.label }}</strong></span>
               <span class="font-mono text-emerald-400 font-bold text-xs">Total: ₹{{ formatNumber(estimatedPayout) }}</span>
             </div>
 
@@ -269,18 +269,18 @@
           <!-- Payment Settlement Option -->
           <div class="grid grid-cols-2 gap-3">
             <div>
-              <label class="block text-xs font-semibold text-slate-300 mb-1">Settlement Mode</label>
+              <label class="block text-xs font-semibold text-gray-300 mb-1">Settlement Mode</label>
               <select 
                 v-model="form.payment_status" 
-                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                class="w-full bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
               >
                 <option value="paid">Paid Now (Instant)</option>
                 <option value="pending">To Be Paid Later</option>
               </select>
             </div>
             <div>
-              <label class="block text-xs font-semibold text-slate-300 mb-1">Estimated Payout</label>
-              <div class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-emerald-400 font-bold">
+              <label class="block text-xs font-semibold text-gray-300 mb-1">Estimated Payout</label>
+              <div class="bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-xs text-emerald-400 font-bold">
                 ₹{{ formatNumber(estimatedPayout) }}
               </div>
             </div>
@@ -425,7 +425,7 @@ const rateBreakdown = computed(() => {
   const tpc = Number(form.value.tpc_percentage) || 20;
   if (tpc <= 22) return { bonus: '+₹5.00/L', label: 'Premium Grade (Low TPC ≤ 22%)', color: 'text-bio' };
   if (tpc >= 30) return { bonus: '-₹8.00/L', label: 'High Degradation (TPC ≥ 30%)', color: 'text-rose-400' };
-  return { bonus: '₹0.00', label: 'Standard Compliant Grade', color: 'text-slate-300' };
+  return { bonus: '₹0.00', label: 'Standard Compliant Grade', color: 'text-gray-300' };
 });
 
 const estimatedPayout = computed(() => {

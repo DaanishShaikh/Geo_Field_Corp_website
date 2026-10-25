@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-4 sm:p-5 shadow-xl">
+  <div class="rounded-2xl border border-white/10 bg-[#0A130E] p-4 sm:p-5 shadow-xl">
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
       <div class="flex items-center gap-2.5">
         <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center shrink-0">
@@ -9,7 +9,7 @@
         </div>
         <div>
           <h3 class="text-sm font-bold text-white">{{ title || 'RUCO QR Scanner' }}</h3>
-          <p class="text-xs text-slate-400">{{ subtitle || 'Point camera at Site or Receipt QR code' }}</p>
+          <p class="text-xs text-gray-400">{{ subtitle || 'Point camera at Site or Receipt QR code' }}</p>
         </div>
       </div>
       <div class="flex gap-2">
@@ -24,10 +24,10 @@
     </div>
 
     <!-- Scanner Video Region -->
-    <div class="relative bg-slate-950 rounded-xl overflow-hidden min-h-[220px] flex flex-col items-center justify-center border border-slate-700">
+    <div class="relative bg-[#060A08] rounded-xl overflow-hidden min-h-[220px] flex flex-col items-center justify-center border border-white/10">
       <div id="qr-reader-viewport" class="w-full max-w-sm"></div>
       
-      <div v-if="!isCameraActive" class="p-6 text-center text-slate-400 space-y-2">
+      <div v-if="!isCameraActive" class="p-6 text-center text-gray-400 space-y-2">
         <svg class="w-12 h-12 mx-auto text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
@@ -37,14 +37,14 @@
     </div>
 
     <!-- Quick Scan Simulation Picker for Field Testing -->
-    <div class="mt-4 pt-4 border-t border-slate-700/60 space-y-2">
-      <label class="text-xs font-medium text-slate-300 block">Instant QR Selector / Testing Preset:</label>
+    <div class="mt-4 pt-4 border-t border-white/10 space-y-2">
+      <label class="text-xs font-medium text-gray-300 block">Instant QR Selector / Testing Preset:</label>
       <div class="flex flex-wrap gap-2">
         <button 
           v-for="preset in presets" 
           :key="preset.code"
           @click="onScanSuccess(preset.code)"
-          class="px-2.5 py-1 text-xs rounded-lg bg-slate-700/60 hover:bg-slate-700 text-slate-200 border border-slate-600/50 transition flex items-center gap-1.5"
+          class="px-2.5 py-1 text-xs rounded-lg bg-white/[0.06] hover:bg-white/[0.12] text-gray-200 border border-white/10 transition flex items-center gap-1.5"
         >
           <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
           {{ preset.label }}
@@ -57,7 +57,7 @@
           v-model="manualCode" 
           type="text" 
           placeholder="Or paste QR payload (e.g. RUCO-SITE-GEO-9082)" 
-          class="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 min-h-[40px]"
+          class="flex-1 bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 min-h-[40px]"
         />
         <button 
           type="submit" 

@@ -3,13 +3,13 @@
     <!-- Header Hero Stats -->
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
       <!-- Volume Sold -->
-      <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-3.5 sm:p-5 shadow-lg relative overflow-hidden">
-        <div class="flex items-center justify-between text-slate-400 text-[10px] sm:text-xs font-semibold mb-1.5 sm:mb-2">
+      <div class="rounded-2xl p-4 sm:p-5 bg-gradient-to-br from-[#0E1B14] via-[#0A130E] to-[#080E0B] border border-white/10 hover:border-[#22C55E]/30 transition-all duration-300 relative overflow-hidden shadow-xl">
+        <div class="flex items-center justify-between text-gray-400 text-[10px] sm:text-xs font-semibold mb-1.5 sm:mb-2">
           <span>VOLUME SOLD</span>
           <span class="p-1 sm:p-1.5 rounded-lg bg-emerald-500/10 text-emerald-400">🛢️</span>
         </div>
-        <div class="text-xl sm:text-2xl font-black text-white tracking-tight">
-          {{ stats.total_volume_liters || 0 }} <span class="text-xs sm:text-sm font-medium text-slate-400">L</span>
+        <div class="text-xl sm:text-2xl font-display font-extrabold text-white tracking-tight">
+          {{ stats.total_volume_liters || 0 }} <span class="text-xs sm:text-sm font-medium text-gray-400">L</span>
         </div>
         <div class="text-[10px] sm:text-[11px] text-emerald-400 mt-1.5 sm:mt-2 flex items-center gap-1 font-medium truncate">
           <span>✓ 100% RUCO Certified</span>
@@ -17,43 +17,43 @@
       </div>
 
       <!-- Cumulative Earnings -->
-      <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-3.5 sm:p-5 shadow-lg relative overflow-hidden">
-        <div class="flex items-center justify-between text-slate-400 text-[10px] sm:text-xs font-semibold mb-1.5 sm:mb-2">
+      <div class="rounded-2xl p-4 sm:p-5 bg-gradient-to-br from-[#0E1B14] via-[#0A130E] to-[#080E0B] border border-white/10 hover:border-[#22C55E]/30 transition-all duration-300 relative overflow-hidden shadow-xl">
+        <div class="flex items-center justify-between text-gray-400 text-[10px] sm:text-xs font-semibold mb-1.5 sm:mb-2">
           <span>CUMULATIVE EARNINGS</span>
           <span class="p-1 sm:p-1.5 rounded-lg bg-teal-500/10 text-teal-400 font-bold">₹</span>
         </div>
-        <div class="text-xl sm:text-2xl font-black text-white tracking-tight truncate">
+        <div class="text-xl sm:text-2xl font-display font-extrabold text-white tracking-tight truncate">
           ₹{{ formatNumber(stats.total_earnings_inr || 0) }}
         </div>
-        <div class="text-[10px] sm:text-[11px] text-slate-400 mt-1.5 sm:mt-2 truncate">
+        <div class="text-[10px] sm:text-[11px] text-gray-400 mt-1.5 sm:mt-2 truncate">
           {{ stats.settled_count || 0 }} settled payouts
         </div>
       </div>
 
       <!-- CO2 Prevented -->
-      <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-3.5 sm:p-5 shadow-lg relative overflow-hidden">
-        <div class="flex items-center justify-between text-slate-400 text-[10px] sm:text-xs font-semibold mb-1.5 sm:mb-2">
+      <div class="rounded-2xl p-4 sm:p-5 bg-gradient-to-br from-[#0E1B14] via-[#0A130E] to-[#080E0B] border border-white/10 hover:border-[#22C55E]/30 transition-all duration-300 relative overflow-hidden shadow-xl">
+        <div class="flex items-center justify-between text-gray-400 text-[10px] sm:text-xs font-semibold mb-1.5 sm:mb-2">
           <span>CO₂ PREVENTED</span>
           <span class="p-1 sm:p-1.5 rounded-lg bg-emerald-500/10 text-emerald-400">🌱</span>
         </div>
-        <div class="text-xl sm:text-2xl font-black text-emerald-400 tracking-tight">
-          {{ stats.esg?.co2_prevented_tons || 0 }} <span class="text-xs sm:text-sm font-medium text-slate-400">t</span>
+        <div class="text-xl sm:text-2xl font-display font-extrabold text-[#22C55E] tracking-tight">
+          {{ stats.esg?.co2_prevented_tons || 0 }} <span class="text-xs sm:text-sm font-medium text-gray-400">t</span>
         </div>
-        <div class="text-[10px] sm:text-[11px] text-slate-400 mt-1.5 sm:mt-2 truncate">
+        <div class="text-[10px] sm:text-[11px] text-gray-400 mt-1.5 sm:mt-2 truncate">
           Emissions stopped
         </div>
       </div>
 
       <!-- Water Saved -->
-      <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-3.5 sm:p-5 shadow-lg relative overflow-hidden">
-        <div class="flex items-center justify-between text-slate-400 text-[10px] sm:text-xs font-semibold mb-1.5 sm:mb-2">
+      <div class="rounded-2xl p-4 sm:p-5 bg-gradient-to-br from-[#0E1B14] via-[#0A130E] to-[#080E0B] border border-white/10 hover:border-[#22C55E]/30 transition-all duration-300 relative overflow-hidden shadow-xl">
+        <div class="flex items-center justify-between text-gray-400 text-[10px] sm:text-xs font-semibold mb-1.5 sm:mb-2">
           <span>WATER PROTECTED</span>
           <span class="p-1 sm:p-1.5 rounded-lg bg-cyan-500/10 text-cyan-400">💧</span>
         </div>
-        <div class="text-xl sm:text-2xl font-black text-cyan-300 tracking-tight truncate">
-          {{ formatNumber(stats.esg?.water_saved_liters || 0) }} <span class="text-xs sm:text-sm font-medium text-slate-400">L</span>
+        <div class="text-xl sm:text-2xl font-display font-extrabold text-[#38BDF8] tracking-tight truncate">
+          {{ formatNumber(stats.esg?.water_saved_liters || 0) }} <span class="text-xs sm:text-sm font-medium text-gray-400">L</span>
         </div>
-        <div class="text-[10px] sm:text-[11px] text-slate-400 mt-1.5 sm:mt-2 truncate">
+        <div class="text-[10px] sm:text-[11px] text-gray-400 mt-1.5 sm:mt-2 truncate">
           Water shielded
         </div>
       </div>
@@ -61,7 +61,7 @@
 
     <!-- Assigned Field Executive Contact Card -->
     <div 
-      :class="assignedAgent ? 'bg-gradient-to-r from-slate-800/90 to-teal-950/40 border-teal-500/40' : 'bg-slate-800/60 border-slate-700/60'"
+      :class="assignedAgent ? 'bg-gradient-to-r from-[#0E1B14] via-[#0A130E] to-[#080E0B] border-[#22C55E]/40' : 'bg-[#0A130E] border-white/10'"
       class="rounded-2xl border p-4 sm:p-5 shadow-lg flex flex-col sm:flex-row sm:items-center justify-between gap-4"
     >
       <div class="flex items-start sm:items-center gap-3.5 min-w-0">
@@ -70,14 +70,14 @@
         </div>
         <div class="min-w-0">
           <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
-            <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Assigned Collection Officer</span>
+            <span class="text-xs font-semibold uppercase tracking-wider text-gray-400">Assigned Collection Officer</span>
             <span 
               v-if="assignedAgent" 
               class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 uppercase"
             >
               {{ assignedAgent.status || 'En Route' }} (Stop #{{ assignedAgent.stop_order || 1 }})
             </span>
-            <span v-else class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-700 text-slate-300 uppercase">
+            <span v-else class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-700 text-gray-300 uppercase">
               Pending Dispatch
             </span>
           </div>
@@ -86,12 +86,12 @@
               <span>{{ assignedAgent.name }}</span>
               <span class="font-mono text-cyan-300 text-xs">&bull; {{ assignedAgent.vehicle_no }}</span>
             </h3>
-            <p class="text-xs text-slate-300 mt-0.5">
+            <p class="text-xs text-gray-300 mt-0.5">
               Direct Contact: <strong class="text-white">{{ assignedAgent.phone }}</strong>
-              <span class="text-slate-400 hidden sm:inline"> &bull; {{ assignedAgent.email }}</span>
+              <span class="text-gray-400 hidden sm:inline"> &bull; {{ assignedAgent.email }}</span>
             </p>
           </div>
-          <div v-else class="mt-1 text-xs text-slate-400">
+          <div v-else class="mt-1 text-xs text-gray-400">
             Our logistics coordinator will assign an executive for your scheduled collection shortly.
           </div>
         </div>
@@ -106,13 +106,13 @@
         </button>
         <a 
           :href="'tel:' + assignedAgent.phone"
-          class="flex-1 sm:flex-none px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition shadow-lg flex items-center justify-center gap-1.5 min-h-[40px]"
+          class="flex-1 sm:flex-none px-4 py-2.5 btn-green-pill text-xs font-bold transition shadow-lg flex items-center justify-center gap-1.5 min-h-[40px]"
         >
           <span>📞</span> Call Officer
         </a>
         <a 
           :href="'mailto:' + assignedAgent.email"
-          class="flex-1 sm:flex-none px-3 py-2.5 bg-slate-700 hover:bg-slate-600 text-slate-200 hover:text-white rounded-xl text-xs font-semibold transition flex items-center justify-center gap-1.5 border border-slate-600 min-h-[40px]"
+          class="flex-1 sm:flex-none px-3 py-2.5 bg-slate-700 hover:bg-slate-600 text-gray-200 hover:text-white rounded-xl text-xs font-semibold transition flex items-center justify-center gap-1.5 border border-slate-600 min-h-[40px]"
         >
           <span>✉</span> Email
         </a>
@@ -132,7 +132,7 @@
     <!-- Main Two Column Grid -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <!-- 1. Site Identity (Static QR Code) -->
-      <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-4 sm:p-6 shadow-xl space-y-4">
+      <div class="rounded-2xl border border-white/10 bg-[#0A130E] shadow-xl p-4 sm:p-6 shadow-xl space-y-4">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2.5">
             <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center font-bold text-xs shrink-0">
@@ -140,7 +140,7 @@
             </div>
             <div>
               <h2 class="text-sm font-bold text-white">Permanent Site Identity QR</h2>
-              <p class="text-xs text-slate-400">Scanned on-site by Approval Agent to authenticate FBO</p>
+              <p class="text-xs text-gray-400">Scanned on-site by Approval Agent to authenticate FBO</p>
             </div>
           </div>
           <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shrink-0">
@@ -148,12 +148,12 @@
           </span>
         </div>
 
-        <div class="p-3.5 sm:p-5 bg-slate-900/90 rounded-xl border border-slate-700 flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
+        <div class="p-3.5 sm:p-5 bg-slate-900/90 rounded-xl border border-white/10 flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
           <div class="p-3 bg-white rounded-xl shadow-lg shrink-0 text-center">
             <img :src="siteQr.data_url" alt="Site QR" class="w-32 h-32 sm:w-36 sm:h-36 object-contain" />
             <span class="text-[9px] text-slate-600 font-mono block mt-1">Live FBO Verification QR</span>
           </div>
-          <div class="space-y-2 text-xs text-slate-300 flex-1 min-w-0 w-full sm:w-auto">
+          <div class="space-y-2 text-xs text-gray-300 flex-1 min-w-0 w-full sm:w-auto">
             <div class="flex items-center justify-between gap-2">
               <div class="min-w-0">
                 <span class="text-slate-500 uppercase tracking-wider font-semibold text-[10px] block">Company / Kitchen Name</span>
@@ -167,20 +167,20 @@
               </span>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 border-t border-slate-800">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 border-t border-white/10">
               <div class="min-w-0">
                 <span class="text-slate-500 uppercase tracking-wider font-semibold text-[10px] block">Primary Contact</span>
                 <span class="text-white truncate block">{{ seller.seller_profile?.contact_name || seller.name }}</span>
-                <span class="text-[11px] text-slate-400 block font-mono truncate">{{ seller.phone || 'N/A' }}</span>
+                <span class="text-[11px] text-gray-400 block font-mono truncate">{{ seller.phone || 'N/A' }}</span>
               </div>
               <div class="min-w-0">
                 <span class="text-slate-500 uppercase tracking-wider font-semibold text-[10px] block">Alternative Contact</span>
                 <span class="text-white truncate block">{{ seller.seller_profile?.alt_contact_name || 'Not specified' }}</span>
-                <span class="text-[11px] text-slate-400 block font-mono truncate">{{ seller.seller_profile?.alt_phone || 'N/A' }}</span>
+                <span class="text-[11px] text-gray-400 block font-mono truncate">{{ seller.seller_profile?.alt_phone || 'N/A' }}</span>
               </div>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1 border-t border-slate-800 font-mono text-[11px]">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1 border-t border-white/10 font-mono text-[11px]">
               <div>
                 <span class="text-slate-500 uppercase tracking-wider font-semibold text-[10px] block">FSSAI No.</span>
                 <span class="text-amber-400 break-all">{{ seller.seller_profile?.fssai_license_no || 'N/A' }}</span>
@@ -195,15 +195,15 @@
               </div>
             </div>
 
-            <div class="pt-1 border-t border-slate-800">
+            <div class="pt-1 border-t border-white/10">
               <span class="text-slate-500 uppercase tracking-wider font-semibold text-[10px] block">Settlement Account (Cheque / UPI)</span>
               <span class="text-cyan-400 font-mono text-xs break-all">{{ seller.seller_profile?.bank_upi_or_cheque || 'N/A' }}</span>
             </div>
 
-            <div class="pt-1 border-t border-slate-800">
+            <div class="pt-1 border-t border-white/10">
               <span class="text-slate-500 uppercase tracking-wider font-semibold text-[10px] block">Site Location</span>
               <div class="text-white font-medium">{{ seller.seller_profile?.address || 'Address Pending' }}</div>
-              <div class="text-[11px] text-slate-400">{{ seller.seller_profile?.city || 'Custom Region' }}{{ seller.seller_profile?.pincode ? ' - ' + seller.seller_profile.pincode : '' }}</div>
+              <div class="text-[11px] text-gray-400">{{ seller.seller_profile?.city || 'Custom Region' }}{{ seller.seller_profile?.pincode ? ' - ' + seller.seller_profile.pincode : '' }}</div>
             </div>
 
             <div>
@@ -220,7 +220,7 @@
                   Map ↗
                 </a>
               </div>
-              <div class="text-[10px] text-slate-400 mt-0.5">
+              <div class="text-[10px] text-gray-400 mt-0.5">
                 Preferred Slot: <strong class="text-white">{{ seller.seller_profile?.pickup_preference || 'Morning (9 AM - 12 PM)' }}</strong>
               </div>
             </div>
@@ -245,7 +245,7 @@
           </button>
           <button 
             @click="copyVerificationUrl"
-            class="py-2.5 px-3 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-semibold transition flex items-center justify-center gap-1.5 cursor-pointer min-h-[44px]"
+            class="py-2.5 px-3 bg-slate-800 hover:bg-slate-700 text-gray-200 rounded-xl text-xs font-semibold transition flex items-center justify-center gap-1.5 cursor-pointer min-h-[44px]"
           >
             <span>🔗</span>
             <span>{{ copiedVerificationLink ? 'Link Copied!' : 'Copy Link' }}</span>
@@ -263,7 +263,7 @@
       </div>
 
       <!-- 2. Create Collection Receipt -->
-      <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-4 sm:p-6 shadow-xl space-y-4">
+      <div class="rounded-2xl border border-white/10 bg-[#0A130E] shadow-xl p-4 sm:p-6 shadow-xl space-y-4">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2.5">
             <div class="w-8 h-8 rounded-lg bg-teal-500/10 text-teal-400 border border-teal-500/20 flex items-center justify-center font-bold text-xs">
@@ -271,7 +271,7 @@
             </div>
             <div>
               <h2 class="text-sm font-bold text-white">Create Collection Receipt</h2>
-              <p class="text-xs text-slate-400">Generate fresh receipt QR for field agent inspection</p>
+              <p class="text-xs text-gray-400">Generate fresh receipt QR for field agent inspection</p>
             </div>
           </div>
           <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-teal-500/10 text-teal-400 border border-teal-500/20">
@@ -281,7 +281,7 @@
 
         <form @submit.prevent="handleCreateReceipt" class="space-y-4">
           <div>
-            <label class="block text-xs font-semibold text-slate-300 mb-1">
+            <label class="block text-xs font-semibold text-gray-300 mb-1">
               Estimated UCO Volume for Collection (Liters)
             </label>
             <div class="relative">
@@ -292,11 +292,11 @@
                 step="1" 
                 placeholder="e.g. 120" 
                 required 
-                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition"
+                class="w-full bg-slate-900 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition"
               />
               <span class="absolute right-4 top-3 text-xs font-semibold text-slate-500">Liters</span>
             </div>
-            <p class="text-[11px] text-slate-400 mt-1">Field agent will measure exact volume & TPC % on collection.</p>
+            <p class="text-[11px] text-gray-400 mt-1">Field agent will measure exact volume & TPC % on collection.</p>
             
             <!-- Live ESG Offset Preview -->
             <div v-if="requestedVolume > 0" class="mt-2.5 flex flex-wrap items-center gap-3 p-2.5 bg-emerald-950/40 border border-emerald-800/50 rounded-xl text-xs font-mono">
@@ -327,13 +327,13 @@
           </div>
           <div class="flex items-center gap-4">
             <img :src="lastCreatedReceipt.qr_data_url" alt="Receipt QR" class="w-24 h-24 bg-white p-2 rounded-lg" />
-            <div class="text-xs text-slate-300 space-y-1">
+            <div class="text-xs text-gray-300 space-y-1">
               <div>Requested: <strong>{{ lastCreatedReceipt.requested_volume }} L</strong></div>
               <div>QR Code: <code class="text-[10px] text-emerald-400 font-mono">{{ lastCreatedReceipt.receipt_qr }}</code></div>
               <div class="text-emerald-400 font-mono text-[11px] pt-0.5">
                 🌱 Est. CO₂ Offset: {{ (lastCreatedReceipt.requested_volume * 2.8).toFixed(1) }} kg &bull; 💧 Water Shielded: {{ formatNumber(lastCreatedReceipt.requested_volume * 1000) }} L
               </div>
-              <div class="text-slate-400 text-[11px]">Show this to GeoField collection agent.</div>
+              <div class="text-gray-400 text-[11px]">Show this to GeoField collection agent.</div>
             </div>
           </div>
         </div>
@@ -341,11 +341,11 @@
     </div>
 
     <!-- Recent Collections & Compliance Hub -->
-    <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-4 sm:p-6 shadow-xl space-y-4">
+    <div class="rounded-2xl border border-white/10 bg-[#0A130E] shadow-xl p-4 sm:p-6 shadow-xl space-y-4">
       <div class="flex items-center justify-between">
         <div>
           <h2 class="text-sm font-bold text-white">Recent Collections & Compliance Hub</h2>
-          <p class="text-xs text-slate-400">Download official FSSAI RUCO Disposal Certificates</p>
+          <p class="text-xs text-gray-400">Download official FSSAI RUCO Disposal Certificates</p>
         </div>
         <button 
           @click="$emit('view-ledger')" 
@@ -363,7 +363,7 @@
         <div 
           v-for="receipt in recentReceipts" 
           :key="'mobile-' + receipt.id" 
-          class="p-3.5 bg-slate-900/90 border border-slate-700/70 rounded-xl space-y-2.5"
+          class="p-3.5 bg-slate-900/90 border border-white/10/70 rounded-xl space-y-2.5"
         >
           <div class="flex items-center justify-between">
             <span class="font-mono font-bold text-white text-xs">{{ receipt.id }}</span>
@@ -377,15 +377,15 @@
 
           <div class="grid grid-cols-3 gap-2 text-center bg-slate-800/50 p-2 rounded-lg font-mono text-xs">
             <div>
-              <span class="text-[9px] uppercase text-slate-400 block font-sans">Volume</span>
+              <span class="text-[9px] uppercase text-gray-400 block font-sans">Volume</span>
               <span class="font-bold text-white">{{ receipt.settled_volume || receipt.measured_volume || receipt.requested_volume }} L</span>
             </div>
             <div>
-              <span class="text-[9px] uppercase text-slate-400 block font-sans">TPC %</span>
-              <span class="font-bold text-slate-300">{{ (receipt.tpc_reading != null || receipt.tpc_percentage != null) ? (receipt.tpc_reading ?? receipt.tpc_percentage) + '%' : (receipt.status === 'settled' ? '18%' : '-') }}</span>
+              <span class="text-[9px] uppercase text-gray-400 block font-sans">TPC %</span>
+              <span class="font-bold text-gray-300">{{ (receipt.tpc_reading != null || receipt.tpc_percentage != null) ? (receipt.tpc_reading ?? receipt.tpc_percentage) + '%' : (receipt.status === 'settled' ? '18%' : '-') }}</span>
             </div>
             <div>
-              <span class="text-[9px] uppercase text-slate-400 block font-sans">Payout</span>
+              <span class="text-[9px] uppercase text-gray-400 block font-sans">Payout</span>
               <span class="font-bold text-emerald-400">{{ getReceiptAmount(receipt) ? '₹' + formatNumber(getReceiptAmount(receipt)) : 'Pending' }}</span>
             </div>
           </div>
@@ -400,13 +400,13 @@
             </span>
           </div>
 
-          <div class="flex items-center justify-between text-[11px] text-slate-400 pt-1">
+          <div class="flex items-center justify-between text-[11px] text-gray-400 pt-1">
             <span>{{ formatDate(receipt.created_at) }}</span>
             <div class="flex items-center gap-2">
               <button 
                 v-if="receipt.qr_data_url || receipt.receipt_qr"
                 @click="viewReceiptQr(receipt)"
-                class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-lg text-xs font-semibold transition border border-slate-600 min-h-[36px] cursor-pointer"
+                class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-slate-700 hover:bg-slate-600 text-gray-200 rounded-lg text-xs font-semibold transition border border-slate-600 min-h-[36px] cursor-pointer"
               >
                 <span>📱</span> QR
               </button>
@@ -426,7 +426,7 @@
       <div class="hidden md:block overflow-x-auto">
         <table class="w-full text-left text-xs">
           <thead>
-            <tr class="border-b border-slate-700 text-slate-400 text-[11px] uppercase tracking-wider">
+            <tr class="border-b border-white/10 text-gray-400 text-[11px] uppercase tracking-wider">
               <th class="py-3 px-3">Receipt ID</th>
               <th class="py-3 px-3">Date</th>
               <th class="py-3 px-3">Volume</th>
@@ -439,8 +439,8 @@
           <tbody class="divide-y divide-slate-700/60">
             <tr v-for="receipt in recentReceipts" :key="receipt.id" class="hover:bg-slate-700/30 transition">
               <td class="py-3 px-3 font-mono font-bold text-white">{{ receipt.id }}</td>
-              <td class="py-3 px-3 text-slate-300">{{ formatDate(receipt.created_at) }}</td>
-              <td class="py-3 px-3 text-slate-200 font-mono">
+              <td class="py-3 px-3 text-gray-300">{{ formatDate(receipt.created_at) }}</td>
+              <td class="py-3 px-3 text-gray-200 font-mono">
                 <div>{{ receipt.settled_volume || receipt.measured_volume || receipt.requested_volume }} L</div>
                 <div class="mt-0.5 space-y-0.5 text-[10px] whitespace-nowrap">
                   <span class="text-emerald-400 flex items-center gap-1" title="CO2 Offset">
@@ -451,7 +451,7 @@
                   </span>
                 </div>
               </td>
-              <td class="py-3 px-3 text-slate-300 font-mono">{{ (receipt.tpc_reading != null || receipt.tpc_percentage != null) ? (receipt.tpc_reading ?? receipt.tpc_percentage) + '%' : (receipt.status === 'settled' ? '18%' : 'Pending') }}</td>
+              <td class="py-3 px-3 text-gray-300 font-mono">{{ (receipt.tpc_reading != null || receipt.tpc_percentage != null) ? (receipt.tpc_reading ?? receipt.tpc_percentage) + '%' : (receipt.status === 'settled' ? '18%' : 'Pending') }}</td>
               <td class="py-3 px-3 font-semibold text-emerald-400 font-mono">
                 {{ getReceiptAmount(receipt) ? '₹' + formatNumber(getReceiptAmount(receipt)) : 'Pending' }}
               </td>
@@ -468,7 +468,7 @@
                   <button 
                     v-if="receipt.qr_data_url || receipt.receipt_qr"
                     @click="viewReceiptQr(receipt)"
-                    class="inline-flex items-center gap-1 px-2.5 py-1 bg-slate-700/80 hover:bg-slate-600 text-slate-200 hover:text-white rounded-lg text-[10px] font-semibold transition border border-slate-600 cursor-pointer"
+                    class="inline-flex items-center gap-1 px-2.5 py-1 bg-slate-700/80 hover:bg-slate-600 text-gray-200 hover:text-white rounded-lg text-[10px] font-semibold transition border border-slate-600 cursor-pointer"
                     title="Show Receipt QR to Agent"
                   >
                     <span>📱</span>
@@ -493,29 +493,29 @@
     </div>
 
     <!-- Edit Location & Collection Preferences Modal -->
-    <div v-if="showLocationModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4">
-      <div class="bg-slate-900 border border-slate-700 rounded-2xl sm:rounded-3xl w-full max-w-lg p-4 sm:p-6 shadow-2xl space-y-4 max-h-[92dvh] overflow-y-auto">
+    <div v-if="showLocationModal" class="fixed inset-0 bg-[#060A08]/80 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4">
+      <div class="bg-slate-900 border border-white/10 rounded-2xl sm:rounded-3xl w-full max-w-lg p-4 sm:p-6 shadow-2xl space-y-4 max-h-[92dvh] overflow-y-auto">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2">
             <span class="text-emerald-400 text-lg">📍</span>
             <h3 class="text-sm font-bold text-white">Update Kitchen Pickup Location & GPS</h3>
           </div>
-          <button @click="showLocationModal = false" class="text-slate-400 hover:text-white p-1 rounded-lg">✕</button>
+          <button @click="showLocationModal = false" class="text-gray-400 hover:text-white p-1 rounded-lg">✕</button>
         </div>
 
         <form @submit.prevent="handleSaveLocation" class="space-y-3 text-xs">
           <!-- GPS Coordinates with Detect & Auto-Fill Button -->
-          <div class="p-3 bg-slate-950 border border-slate-800 rounded-2xl space-y-2">
+          <div class="p-3 bg-[#060A08] border border-white/10 rounded-2xl space-y-2">
             <div class="flex items-center justify-between">
               <div>
-                <span class="font-semibold text-slate-200 block text-xs">Device GPS & Address Lookup</span>
-                <span class="text-[10px] text-slate-400">Locks GPS and automatically fills street address, city, & pincode</span>
+                <span class="font-semibold text-gray-200 block text-xs">Device GPS & Address Lookup</span>
+                <span class="text-[10px] text-gray-400">Locks GPS and automatically fills street address, city, & pincode</span>
               </div>
               <button 
                 type="button" 
                 @click="detectDeviceLocation" 
                 :disabled="detectingGps"
-                class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow"
+                class="px-3 py-1.5 btn-green-pill text-xs font-bold transition flex items-center gap-1.5 shadow"
               >
                 <span>{{ detectingGps ? '📡' : '🎯' }}</span>
                 <span>{{ detectingGps ? 'Resolving...' : 'Detect & Auto-Fill' }}</span>
@@ -528,68 +528,68 @@
 
             <div class="grid grid-cols-2 gap-2 pt-1">
               <div>
-                <label class="block text-[10px] text-slate-400 mb-0.5">Latitude</label>
+                <label class="block text-[10px] text-gray-400 mb-0.5">Latitude</label>
                 <input 
                   v-model.number="locationForm.latitude" 
                   type="number" 
                   step="any" 
                   required
                   placeholder="e.g. 19.0760"
-                  class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-1.5 text-white font-mono"
+                  class="w-full bg-slate-900 border border-white/10 rounded-xl px-3 py-1.5 text-white font-mono"
                 />
               </div>
               <div>
-                <label class="block text-[10px] text-slate-400 mb-0.5">Longitude</label>
+                <label class="block text-[10px] text-gray-400 mb-0.5">Longitude</label>
                 <input 
                   v-model.number="locationForm.longitude" 
                   type="number" 
                   step="any" 
                   required
                   placeholder="e.g. 72.8777"
-                  class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-1.5 text-white font-mono"
+                  class="w-full bg-slate-900 border border-white/10 rounded-xl px-3 py-1.5 text-white font-mono"
                 />
               </div>
             </div>
           </div>
 
           <div>
-            <label class="block text-slate-300 font-semibold mb-1">Street Address / Landmark</label>
+            <label class="block text-gray-300 font-semibold mb-1">Street Address / Landmark</label>
             <input 
               v-model="locationForm.address" 
               type="text" 
               required
               placeholder="e.g. Shop 4, Linking Road, Near Station"
-              class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-emerald-500"
+              class="w-full bg-[#060A08] border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-emerald-500"
             />
           </div>
 
           <div class="grid grid-cols-2 gap-2">
             <div>
-              <label class="block text-slate-300 font-semibold mb-1">City / Region</label>
+              <label class="block text-gray-300 font-semibold mb-1">City / Region</label>
               <input 
                 v-model="locationForm.city" 
                 type="text" 
                 required
                 placeholder="e.g. Mumbai"
-                class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-emerald-500"
+                class="w-full bg-[#060A08] border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-emerald-500"
               />
             </div>
             <div>
-              <label class="block text-slate-300 font-semibold mb-1">Pincode</label>
+              <label class="block text-gray-300 font-semibold mb-1">Pincode</label>
               <input 
                 v-model="locationForm.pincode" 
                 type="text" 
                 placeholder="e.g. 400052"
-                class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-emerald-500"
+                class="w-full bg-[#060A08] border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-emerald-500"
               />
             </div>
           </div>
 
           <div>
-            <label class="block text-slate-300 font-semibold mb-1">Collection Window Preference</label>
+            <label class="block text-gray-300 font-semibold mb-1">Collection Window Preference</label>
             <select 
               v-model="locationForm.pickup_preference" 
-              class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-emerald-500"
+              class="w-full bg-[#060A08] border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-emerald-500"
             >
               <option value="Morning (9 AM - 12 PM)">Morning (9 AM - 12 PM)</option>
               <option value="Afternoon (1 PM - 4 PM)">Afternoon (1 PM - 4 PM)</option>
@@ -603,14 +603,14 @@
             <button 
               type="button" 
               @click="showLocationModal = false"
-              class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl font-semibold transition"
+              class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-gray-300 rounded-xl font-semibold transition"
             >
               Cancel
             </button>
             <button 
               type="submit" 
               :disabled="savingLocation"
-              class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-bold transition shadow disabled:opacity-50"
+              class="px-4 py-2 bg-[#22C55E] hover:bg-[#16A34A] text-[#050A07] hover:text-white font-bold transition-all text-white rounded-xl font-bold transition shadow disabled:opacity-50"
             >
               {{ savingLocation ? 'Saving Location...' : 'Save Pickup Location' }}
             </button>
@@ -620,22 +620,22 @@
     </div>
 
     <!-- View Receipt QR Modal -->
-    <div v-if="receiptQrModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div class="bg-slate-900 border border-slate-700 rounded-3xl w-full max-w-sm p-6 shadow-2xl space-y-4 text-center">
+    <div v-if="receiptQrModal" class="fixed inset-0 bg-[#060A08]/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <div class="bg-slate-900 border border-white/10 rounded-3xl w-full max-w-sm p-6 shadow-2xl space-y-4 text-center">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2">
             <span class="text-emerald-400 font-bold text-sm">Collection Receipt QR</span>
           </div>
-          <button @click="receiptQrModal = null" class="text-slate-400 hover:text-white p-1 rounded-lg">✕</button>
+          <button @click="receiptQrModal = null" class="text-gray-400 hover:text-white p-1 rounded-lg">✕</button>
         </div>
         <div class="p-4 bg-white rounded-2xl shadow-inner inline-block mx-auto">
           <img :src="receiptQrModal.qr_data_url" alt="Receipt QR" class="w-48 h-48 object-contain mx-auto" />
         </div>
         <div class="space-y-1">
           <div class="text-white font-mono font-bold text-sm">{{ receiptQrModal.id }}</div>
-          <div class="text-xs text-slate-300">Requested Volume: <strong>{{ receiptQrModal.requested_volume }} Liters</strong></div>
+          <div class="text-xs text-gray-300">Requested Volume: <strong>{{ receiptQrModal.requested_volume }} Liters</strong></div>
           <div class="text-[10px] text-emerald-400 font-mono">{{ receiptQrModal.receipt_qr }}</div>
-          <p class="text-[11px] text-slate-400 pt-2">Show this code to the GeoField field agent to authenticate and measure your batch.</p>
+          <p class="text-[11px] text-gray-400 pt-2">Show this code to the GeoField field agent to authenticate and measure your batch.</p>
         </div>
         <button 
           @click="receiptQrModal = null" 

@@ -1,13 +1,13 @@
 <template>
   <div 
-    class="fixed inset-0 bg-slate-950/75 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4 overflow-y-auto"
+    class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4 overflow-y-auto"
     @click.self="$emit('close')"
   >
-    <div class="relative w-full max-w-2xl bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-8 shadow-2xl border-2 border-emerald-400/40 text-slate-900 my-4 sm:my-8 max-h-[92dvh] overflow-y-auto">
+    <div class="relative w-full max-w-2xl bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-8 shadow-2xl border border-[#22C55E]/40 text-slate-900 my-4 sm:my-8 max-h-[92dvh] overflow-y-auto">
       <!-- Modal Top Title Bar -->
       <div class="flex items-center justify-between pb-3 sm:pb-4 border-b border-slate-100 gap-2">
         <div class="flex items-center gap-3">
-          <img src="/brand/logo.svg" alt="GeoField Corp" class="h-6 sm:h-7 w-auto" />
+          <img src="/brand/geofield-full-logo.png" alt="GeoField Corp" class="h-6 sm:h-7 w-auto" />
         </div>
         <div class="text-right">
           <div class="flex items-center justify-end gap-2">
@@ -16,7 +16,7 @@
               Verified
             </span>
           </div>
-          <p class="text-[11px] sm:text-xs text-slate-400 mt-0.5">Repurpose Used Cooking Oil (RUCO) Initiative</p>
+          <p class="text-[11px] sm:text-xs text-gray-400 mt-0.5">Repurpose Used Cooking Oil (RUCO) Initiative</p>
         </div>
       </div>
 
@@ -29,7 +29,7 @@
               <img src="/brand/logo-icon.svg" alt="" class="w-6 h-6 shrink-0" />
               <span class="font-display font-extrabold text-slate-900 text-base">GeoField Corp</span>
             </div>
-            <p class="text-[11px] text-slate-500 mt-0.5">Authorized UCO Bio-Aggregator Partner</p>
+            <p class="text-[11px] text-gray-500 mt-0.5">Authorized UCO Bio-Aggregator Partner</p>
           </div>
 
           <div class="text-right">
@@ -37,7 +37,7 @@
               <span>🏅</span>
               <span>RUCO Compliant</span>
             </div>
-            <p class="font-mono text-[11px] text-slate-500 mt-1">Ref: {{ certificateRef }}</p>
+            <p class="font-mono text-[11px] text-gray-500 mt-1">Ref: {{ certificateRef }}</p>
           </div>
         </div>
 
@@ -54,7 +54,7 @@
         <!-- FBO & License Section Box -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 rounded-xl border border-slate-200 bg-slate-50/70 p-4">
           <div>
-            <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-gray-400 block mb-1">
               Food Business Operator (FBO)
             </span>
             <div class="flex items-center gap-2">
@@ -69,7 +69,7 @@
           </div>
 
           <div class="sm:text-right">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-gray-400 block mb-1">
               FSSAI License No.
             </span>
             <div class="font-mono font-bold text-slate-900 bg-white border border-slate-200 px-3 py-1.5 rounded-lg inline-block text-xs sm:text-sm shadow-xs">
@@ -82,7 +82,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <!-- Volume Handled -->
           <div class="rounded-xl border border-slate-200 bg-slate-50/70 p-3.5">
-            <div class="flex items-center gap-1.5 text-xs text-slate-500 mb-1">
+            <div class="flex items-center gap-1.5 text-xs text-gray-500 mb-1">
               <span class="text-amber-500">💧</span>
               <span>Volume Handled</span>
             </div>
@@ -93,7 +93,7 @@
 
           <!-- Pickup Date -->
           <div class="rounded-xl border border-slate-200 bg-slate-50/70 p-3.5">
-            <div class="flex items-center gap-1.5 text-xs text-slate-500 mb-1">
+            <div class="flex items-center gap-1.5 text-xs text-gray-500 mb-1">
               <span class="text-blue-500">📅</span>
               <span>Pickup Date</span>
             </div>
@@ -104,7 +104,7 @@
 
           <!-- Payout Settled -->
           <div class="rounded-xl border border-slate-200 bg-slate-50/70 p-3.5">
-            <div class="flex items-center gap-1.5 text-xs text-slate-500 mb-1">
+            <div class="flex items-center gap-1.5 text-xs text-gray-500 mb-1">
               <span class="text-emerald-500">✨</span>
               <span>Payout Settled</span>
             </div>
@@ -130,9 +130,9 @@
                 🌱
               </div>
               <div class="min-w-0">
-                <span class="text-[10px] uppercase font-bold text-slate-500 block">Carbon Dioxide (CO₂) Offset</span>
+                <span class="text-[10px] uppercase font-bold text-gray-500 block">Carbon Dioxide (CO₂) Offset</span>
                 <span class="text-base sm:text-lg font-black text-emerald-700 font-mono block leading-tight">{{ co2OffsetFormatted }}</span>
-                <span class="text-[10px] text-slate-500 block truncate">Displaced vs fossil petroleum diesel</span>
+                <span class="text-[10px] text-gray-500 block truncate">Displaced vs fossil petroleum diesel</span>
               </div>
             </div>
             <div class="bg-white/90 rounded-xl p-3 border border-cyan-200/90 shadow-2xs flex items-center gap-3">
@@ -140,9 +140,9 @@
                 💧
               </div>
               <div class="min-w-0">
-                <span class="text-[10px] uppercase font-bold text-slate-500 block">Clean Water Shielded</span>
+                <span class="text-[10px] uppercase font-bold text-gray-500 block">Clean Water Shielded</span>
                 <span class="text-base sm:text-lg font-black text-cyan-700 font-mono block leading-tight">{{ waterOffsetFormatted }} Liters</span>
-                <span class="text-[10px] text-slate-500 block truncate">Protected from toxic oil drainage</span>
+                <span class="text-[10px] text-gray-500 block truncate">Protected from toxic oil drainage</span>
               </div>
             </div>
           </div>
@@ -166,14 +166,14 @@
               <span class="text-emerald-600">🛡️</span>
               <span>Government RUCO Traceable</span>
             </div>
-            <p class="text-[11px] text-slate-500">Chain of custody verified by GeoField Corp</p>
-            <p class="text-[11px] font-mono text-slate-400">support@geofieldcorp.com</p>
+            <p class="text-[11px] text-gray-500">Chain of custody verified by GeoField Corp</p>
+            <p class="text-[11px] font-mono text-gray-400">support@geofieldcorp.com</p>
           </div>
 
           <div class="sm:text-right space-y-0.5">
-            <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Authorized Signatory</p>
+            <p class="text-[10px] font-bold uppercase tracking-wider text-gray-400">Authorized Signatory</p>
             <p class="font-serif font-bold text-slate-900 text-sm tracking-wide">GeoField Compliance Dept.</p>
-            <p class="text-[11px] font-mono text-slate-400">office@geofieldcorp.com</p>
+            <p class="text-[11px] font-mono text-gray-400">office@geofieldcorp.com</p>
           </div>
         </div>
       </div>
