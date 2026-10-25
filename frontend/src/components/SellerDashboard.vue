@@ -5,56 +5,56 @@
       <!-- Volume Sold -->
       <div class="rounded-2xl p-4 sm:p-5 bg-gradient-to-br from-[#0E1B14] via-[#0A130E] to-[#080E0B] border border-white/10 hover:border-[#22C55E]/30 transition-all duration-300 relative overflow-hidden shadow-xl">
         <div class="flex items-center justify-between text-gray-400 text-[10px] sm:text-xs font-semibold mb-1.5 sm:mb-2">
-          <span>VOLUME SOLD</span>
+          <span>{{ $t('seller.volumeSold') }}</span>
           <span class="p-1 sm:p-1.5 rounded-lg bg-emerald-500/10 text-emerald-400">🛢️</span>
         </div>
         <div class="text-xl sm:text-2xl font-display font-extrabold text-white tracking-tight">
           {{ stats.total_volume_liters || 0 }} <span class="text-xs sm:text-sm font-medium text-gray-400">L</span>
         </div>
         <div class="text-[10px] sm:text-[11px] text-emerald-400 mt-1.5 sm:mt-2 flex items-center gap-1 font-medium truncate">
-          <span>✓ 100% RUCO Certified</span>
+          <span>✓ {{ $t('seller.rucoCertifiedBadge') }}</span>
         </div>
       </div>
 
       <!-- Cumulative Earnings -->
       <div class="rounded-2xl p-4 sm:p-5 bg-gradient-to-br from-[#0E1B14] via-[#0A130E] to-[#080E0B] border border-white/10 hover:border-[#22C55E]/30 transition-all duration-300 relative overflow-hidden shadow-xl">
         <div class="flex items-center justify-between text-gray-400 text-[10px] sm:text-xs font-semibold mb-1.5 sm:mb-2">
-          <span>CUMULATIVE EARNINGS</span>
+          <span>{{ $t('seller.cumulativeEarnings') }}</span>
           <span class="p-1 sm:p-1.5 rounded-lg bg-teal-500/10 text-teal-400 font-bold">₹</span>
         </div>
         <div class="text-xl sm:text-2xl font-display font-extrabold text-white tracking-tight truncate">
           ₹{{ formatNumber(stats.total_earnings_inr || 0) }}
         </div>
         <div class="text-[10px] sm:text-[11px] text-gray-400 mt-1.5 sm:mt-2 truncate">
-          {{ stats.settled_count || 0 }} settled payouts
+          {{ stats.settled_count || 0 }} {{ $t('seller.settledPayouts') }}
         </div>
       </div>
 
       <!-- CO2 Prevented -->
       <div class="rounded-2xl p-4 sm:p-5 bg-gradient-to-br from-[#0E1B14] via-[#0A130E] to-[#080E0B] border border-white/10 hover:border-[#22C55E]/30 transition-all duration-300 relative overflow-hidden shadow-xl">
         <div class="flex items-center justify-between text-gray-400 text-[10px] sm:text-xs font-semibold mb-1.5 sm:mb-2">
-          <span>CO₂ PREVENTED</span>
+          <span>{{ $t('seller.co2Prevented') }}</span>
           <span class="p-1 sm:p-1.5 rounded-lg bg-emerald-500/10 text-emerald-400">🌱</span>
         </div>
         <div class="text-xl sm:text-2xl font-display font-extrabold text-[#22C55E] tracking-tight">
           {{ stats.esg?.co2_prevented_tons || 0 }} <span class="text-xs sm:text-sm font-medium text-gray-400">t</span>
         </div>
         <div class="text-[10px] sm:text-[11px] text-gray-400 mt-1.5 sm:mt-2 truncate">
-          Emissions stopped
+          {{ $t('seller.emissionsStopped') }}
         </div>
       </div>
 
       <!-- Water Saved -->
       <div class="rounded-2xl p-4 sm:p-5 bg-gradient-to-br from-[#0E1B14] via-[#0A130E] to-[#080E0B] border border-white/10 hover:border-[#22C55E]/30 transition-all duration-300 relative overflow-hidden shadow-xl">
         <div class="flex items-center justify-between text-gray-400 text-[10px] sm:text-xs font-semibold mb-1.5 sm:mb-2">
-          <span>WATER PROTECTED</span>
+          <span>{{ $t('seller.waterProtected') }}</span>
           <span class="p-1 sm:p-1.5 rounded-lg bg-cyan-500/10 text-cyan-400">💧</span>
         </div>
         <div class="text-xl sm:text-2xl font-display font-extrabold text-[#38BDF8] tracking-tight truncate">
           {{ formatNumber(stats.esg?.water_saved_liters || 0) }} <span class="text-xs sm:text-sm font-medium text-gray-400">L</span>
         </div>
         <div class="text-[10px] sm:text-[11px] text-gray-400 mt-1.5 sm:mt-2 truncate">
-          Water shielded
+          {{ $t('seller.waterShielded') }}
         </div>
       </div>
     </div>
@@ -70,7 +70,7 @@
         </div>
         <div class="min-w-0">
           <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
-            <span class="text-xs font-semibold uppercase tracking-wider text-gray-400">Assigned Collection Officer</span>
+            <span class="text-xs font-semibold uppercase tracking-wider text-gray-400">{{ $t('seller.assignedOfficer') }}</span>
             <span 
               v-if="assignedAgent" 
               class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 uppercase"
@@ -78,7 +78,7 @@
               {{ assignedAgent.status || 'En Route' }} (Stop #{{ assignedAgent.stop_order || 1 }})
             </span>
             <span v-else class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-700 text-gray-300 uppercase">
-              Pending Dispatch
+              {{ $t('seller.pendingDispatch') }}
             </span>
           </div>
           <div v-if="assignedAgent" class="mt-1">
@@ -108,7 +108,7 @@
           :href="'tel:' + assignedAgent.phone"
           class="flex-1 sm:flex-none px-4 py-2.5 btn-green-pill text-xs font-bold transition shadow-lg flex items-center justify-center gap-1.5 min-h-[40px]"
         >
-          <span>📞</span> Call Officer
+          <span>📞</span> {{ $t('seller.callOfficer') }}
         </a>
         <a 
           :href="'mailto:' + assignedAgent.email"
@@ -139,8 +139,8 @@
               QR
             </div>
             <div>
-              <h2 class="text-sm font-bold text-white">Permanent Site Identity QR</h2>
-              <p class="text-xs text-gray-400">Scanned on-site by Approval Agent to authenticate FBO</p>
+              <h2 class="text-sm font-bold text-white">{{ $t('seller.siteQrTitle') }}</h2>
+              <p class="text-xs text-gray-400">{{ $t('seller.siteQrSubtitle') }}</p>
             </div>
           </div>
           <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shrink-0">
@@ -270,7 +270,7 @@
               +
             </div>
             <div>
-              <h2 class="text-sm font-bold text-white">Create Collection Receipt</h2>
+              <h2 class="text-sm font-bold text-white">{{ $t('seller.createReceiptTitle') }}</h2>
               <p class="text-xs text-gray-400">Generate fresh receipt QR for field agent inspection</p>
             </div>
           </div>

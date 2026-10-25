@@ -2,8 +2,8 @@
   <div class="rounded-2xl border border-white/10 bg-[#0A130E] p-4 sm:p-6 shadow-xl space-y-4 sm:space-y-5">
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
       <div>
-        <h2 class="text-base font-bold text-white">Master Receipt & Compliance Ledger</h2>
-        <p class="text-xs text-gray-400">Immutable ledger of all collections, FSSAI serials, and payouts</p>
+        <h2 class="text-base font-bold text-white">{{ $t('receipts.title') }}</h2>
+        <p class="text-xs text-gray-400">{{ $t('receipts.subtitle') }}</p>
       </div>
 
       <!-- Search & Filters -->
@@ -11,17 +11,17 @@
         <input 
           v-model="searchQuery" 
           type="text" 
-          placeholder="Search receipt, FSSAI, seller..." 
+          :placeholder="$t('receipts.searchPlaceholder')" 
           class="bg-[#060A08] border border-white/10 focus:border-[#22C55E] focus:ring-1 focus:ring-[#22C55E]/30 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 w-full sm:w-64 min-h-[40px]"
         />
         <select 
           v-model="statusFilter" 
           class="bg-[#060A08] border border-white/10 focus:border-[#22C55E] focus:ring-1 focus:ring-[#22C55E]/30 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500 min-h-[40px]"
         >
-          <option value="all">All Statuses</option>
-          <option value="settled">Settled</option>
-          <option value="created">Created (Open)</option>
-          <option value="flagged">Flagged Only</option>
+          <option value="all">{{ $t('receipts.allStatuses') }}</option>
+          <option value="settled">{{ $t('receipts.settled') }}</option>
+          <option value="created">{{ $t('receipts.created') }}</option>
+          <option value="flagged">{{ $t('receipts.flaggedOnly') }}</option>
         </select>
       </div>
     </div>
@@ -148,14 +148,14 @@
       <table class="w-full text-left text-xs min-w-[760px]">
         <thead>
           <tr class="border-b border-white/10 text-gray-400 text-[11px] uppercase tracking-wider">
-            <th class="py-3 px-3">Receipt</th>
-            <th class="py-3 px-3">Seller / FBO</th>
-            <th class="py-3 px-3">Volume</th>
-            <th class="py-3 px-3">TPC %</th>
-            <th class="py-3 px-3">Amount</th>
+            <th class="py-3 px-3">{{ $t('receipts.colReceiptId') }}</th>
+            <th class="py-3 px-3">{{ $t('receipts.colSeller') }}</th>
+            <th class="py-3 px-3">{{ $t('receipts.colVolume') }}</th>
+            <th class="py-3 px-3">{{ $t('receipts.colTpc') }}</th>
+            <th class="py-3 px-3">{{ $t('receipts.colAmount') }}</th>
             <th class="py-3 px-3">Payment</th>
-            <th class="py-3 px-3">Status</th>
-            <th class="py-3 px-3 text-right">Actions</th>
+            <th class="py-3 px-3">{{ $t('receipts.colStatus') }}</th>
+            <th class="py-3 px-3 text-right">{{ $t('receipts.colActions') }}</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-slate-700/60">

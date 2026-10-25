@@ -20,8 +20,8 @@
           class="h-8 sm:h-9 w-auto mx-auto object-contain"
         />
         <div>
-          <h2 class="text-base sm:text-lg font-display font-extrabold text-white tracking-tight">GeoField RUCO Trace</h2>
-          <p class="text-xs text-gray-400 font-sans">National Used Cooking Oil Compliance & Traceability System</p>
+          <h2 class="text-base sm:text-lg font-display font-extrabold text-white tracking-tight">{{ $t('auth.title') }}</h2>
+          <p class="text-xs text-gray-400 font-sans">{{ $t('auth.subtitle') }}</p>
         </div>
       </div>
 
@@ -54,23 +54,23 @@
       <!-- Sign In Form -->
       <form v-if="mode === 'login'" @submit.prevent="handleLogin" class="space-y-4">
         <div>
-          <label class="block text-xs font-semibold text-gray-300 mb-1.5">Registered Email Address</label>
+          <label class="block text-xs font-semibold text-gray-300 mb-1.5">{{ $t('auth.emailLabel') }}</label>
           <input 
             v-model="loginForm.email" 
             type="email" 
             required 
-            placeholder="e.g. contact@restaurant.com" 
+            :placeholder="$t('auth.emailPlaceholder')" 
             class="w-full bg-[#060A08] border border-white/10 focus:border-[#22C55E] rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-[#22C55E] focus:ring-1 focus:ring-[#22C55E]/30 focus:ring-1 focus:ring-emerald-500 transition"
           />
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-gray-300 mb-1.5">Password</label>
+          <label class="block text-xs font-semibold text-gray-300 mb-1.5">{{ $t('auth.passwordLabel') }}</label>
           <input 
             v-model="loginForm.password" 
             type="password" 
             required 
-            placeholder="••••••••" 
+            :placeholder="$t('auth.passwordPlaceholder')" 
             class="w-full bg-[#060A08] border border-white/10 focus:border-[#22C55E] rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-[#22C55E] focus:ring-1 focus:ring-[#22C55E]/30 focus:ring-1 focus:ring-emerald-500 transition"
           />
         </div>
@@ -83,12 +83,12 @@
           :disabled="loading"
           class="w-full py-3 bg-[#22C55E] hover:bg-[#16A34A] text-[#050A07] hover:text-white font-bold shadow-[0_0_20px_rgba(34,197,94,0.3)] text-white font-bold text-xs rounded-xl shadow-lg hover:shadow-emerald-900/40 transition disabled:opacity-50"
         >
-          {{ loading ? 'Authenticating...' : 'Sign In to Portal' }}
+          {{ loading ? $t('auth.authenticating') : $t('auth.signInBtn') }}
         </button>
 
         <p class="text-[11px] text-center text-gray-400 pt-2">
-          New Food Business Operator or Field Officer? 
-          <a @click.prevent="mode = 'register'" href="#" class="text-emerald-400 font-semibold hover:underline">Apply for Onboarding</a>
+          {{ $t('auth.newFboQuestion') }} 
+          <a @click.prevent="mode = 'register'" href="#" class="text-emerald-400 font-semibold hover:underline">{{ $t('auth.applyOnboarding') }}</a>
         </p>
       </form>
 
@@ -96,21 +96,21 @@
       <form v-else @submit.prevent="handleRegister" class="space-y-4">
         <!-- Role Switcher -->
         <div>
-          <label class="block text-xs font-semibold text-gray-300 mb-1">Entity / Role Type</label>
+          <label class="block text-xs font-semibold text-gray-300 mb-1">{{ $t('auth.roleTypeLabel') }}</label>
           <div class="grid grid-cols-2 gap-2">
             <label 
               :class="regForm.role === 'seller' ? 'bg-emerald-950/50 border-emerald-500 text-emerald-300 font-bold' : 'bg-slate-950 border-slate-700 text-gray-400'"
               class="p-2.5 rounded-xl border flex items-center justify-center text-xs cursor-pointer transition"
             >
               <input type="radio" v-model="regForm.role" value="seller" class="hidden" />
-              <span>Food Business (FBO)</span>
+              <span>{{ $t('auth.fboRole') }}</span>
             </label>
             <label 
               :class="regForm.role === 'agent' ? 'bg-teal-950/50 border-teal-500 text-teal-300 font-bold' : 'bg-slate-950 border-slate-700 text-gray-400'"
               class="p-2.5 rounded-xl border flex items-center justify-center text-xs cursor-pointer transition"
             >
               <input type="radio" v-model="regForm.role" value="agent" class="hidden" />
-              <span>Field Executive</span>
+              <span>{{ $t('auth.agentRole') }}</span>
             </label>
           </div>
         </div>
@@ -122,7 +122,7 @@
           <!-- Step Progress Indicator -->
           <div class="flex items-center justify-between text-xs font-semibold text-gray-300">
             <span class="flex items-center gap-1.5 text-emerald-400 font-mono">
-              <span>Step {{ currentStep }} of 3:</span>
+              <span>{{ $t('auth.stepIndicator', { step: currentStep }) }}</span>
               <span class="text-white">{{ stepTitles[currentStep - 1] }}</span>
             </span>
             <span class="text-[11px] font-mono text-gray-400">{{ Math.round((currentStep / 3) * 100) }}% Completed</span>
@@ -143,20 +143,20 @@
         <div v-if="regForm.role === 'seller' && currentStep === 1" class="space-y-3 animate-fade-in">
           <div class="p-3 bg-[#0E1B14] border border-[#22C55E]/30 rounded-xl text-[11px] text-emerald-300 flex items-center gap-2">
             <span>🛡️</span>
-            <span>Let's start with your restaurant name and primary contact person.</span>
+            <span>{{ $t('auth.step1Info') }}</span>
           </div>
 
           <div class="space-y-2.5">
             <div>
               <label class="block text-[11px] font-semibold text-gray-300 mb-1">
                 <span class="text-emerald-400 font-mono font-bold mr-1">1.</span>
-                Name of Kitchen or Restaurant <span class="text-rose-400">*</span>
+                {{ $t('auth.kitchenNameLabel') }} <span class="text-rose-400">*</span>
               </label>
               <input 
                 v-model="regForm.name" 
                 type="text" 
                 required 
-                placeholder="e.g. Green Leaf Cafe & Kitchen" 
+                :placeholder="$t('auth.kitchenNamePlaceholder')" 
                 class="w-full bg-[#060A08] border border-white/10 focus:border-[#22C55E] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#22C55E] focus:ring-1 focus:ring-[#22C55E]/30"
               />
             </div>
@@ -165,7 +165,7 @@
               <div>
                 <label class="block text-[11px] font-semibold text-gray-300 mb-1">
                   <span class="text-emerald-400 font-mono font-bold mr-1">3.</span>
-                  Official Email ID <span class="text-rose-400">*</span>
+                  {{ $t('auth.officialEmailLabel') }} <span class="text-rose-400">*</span>
                 </label>
                 <input 
                   v-model="regForm.email" 
@@ -194,7 +194,7 @@
               <div>
                 <label class="block text-[11px] font-semibold text-gray-300 mb-1">
                   <span class="text-emerald-400 font-mono font-bold mr-1">4.</span>
-                  Primary Contact Person <span class="text-rose-400">*</span>
+                  {{ $t('auth.contactNameLabel') }} <span class="text-rose-400">*</span>
                 </label>
                 <input 
                   v-model="regForm.contact_name" 
@@ -208,7 +208,7 @@
               <div>
                 <label class="block text-[11px] font-semibold text-gray-300 mb-1">
                   <span class="text-emerald-400 font-mono font-bold mr-1">5.</span>
-                  Primary Contact Number <span class="text-rose-400">*</span>
+                  {{ $t('auth.contactPhoneLabel') }} <span class="text-rose-400">*</span>
                 </label>
                 <input 
                   v-model="regForm.phone" 
@@ -228,7 +228,7 @@
               @click="goToStep(2)"
               class="w-full sm:w-auto px-6 py-2.5 bg-[#22C55E] hover:bg-[#16A34A] text-[#050A07] hover:text-white font-bold shadow-[0_0_20px_rgba(34,197,94,0.3)] text-white font-bold text-xs rounded-xl shadow-lg transition flex items-center justify-center gap-2 cursor-pointer"
             >
-              <span>Next: Legal & Regulatory</span>
+              <span>{{ $t('auth.nextLegal') }}</span>
               <span>&rarr;</span>
             </button>
           </div>
@@ -240,7 +240,7 @@
         <div v-if="regForm.role === 'seller' && currentStep === 2" class="space-y-3 animate-fade-in">
           <div class="p-3 bg-[#0E1B14] border border-[#38BDF8]/30 rounded-xl text-[11px] text-teal-300 flex items-center gap-2">
             <span>📜</span>
-            <span>Government FSSAI, Tax & Banking verification documents.</span>
+            <span>{{ $t('auth.step2Info') }}</span>
           </div>
 
           <div class="space-y-2.5">
@@ -248,7 +248,7 @@
               <div>
                 <label class="block text-[11px] font-semibold text-gray-300 mb-1">
                   <span class="text-emerald-400 font-mono font-bold mr-1">8.</span>
-                  FSSAI 14-Digit License <span class="text-rose-400">*</span>
+                  {{ $t('auth.fssaiLicenseLabel') }} <span class="text-rose-400">*</span>
                 </label>
                 <input 
                   v-model="regForm.fssai_license_no" 
@@ -263,7 +263,7 @@
               <div>
                 <label class="block text-[11px] font-semibold text-gray-300 mb-1">
                   <span class="text-emerald-400 font-mono font-bold mr-1">9.</span>
-                  GST Number (GSTIN) <span class="text-rose-400">*</span>
+                  {{ $t('auth.gstLabel') }} <span class="text-rose-400">*</span>
                 </label>
                 <input 
                   v-model="regForm.gst_no" 
@@ -280,7 +280,7 @@
               <div>
                 <label class="block text-[11px] font-semibold text-gray-300 mb-1">
                   <span class="text-emerald-400 font-mono font-bold mr-1">10.</span>
-                  Cancel Cheque Ref or UPI ID <span class="text-rose-400">*</span>
+                  {{ $t('auth.bankUpiLabel') }} <span class="text-rose-400">*</span>
                 </label>
                 <input 
                   v-model="regForm.bank_upi_or_cheque" 
@@ -294,7 +294,7 @@
               <div>
                 <label class="block text-[11px] font-semibold text-gray-300 mb-1">
                   <span class="text-emerald-400 font-mono font-bold mr-1">12.</span>
-                  MSME / UDYAM Number <span class="text-rose-400">*</span>
+                  {{ $t('auth.msmeLabel') }} <span class="text-rose-400">*</span>
                 </label>
                 <input 
                   v-model="regForm.msme_udyam_no" 
@@ -310,7 +310,7 @@
               <div>
                 <label class="block text-[11px] font-semibold text-gray-300 mb-1">
                   <span class="text-emerald-400 font-mono font-bold mr-1">6.</span>
-                  Alternative Contact Name <span class="text-rose-400">*</span>
+                  {{ $t('auth.altContactName') }} <span class="text-rose-400">*</span>
                 </label>
                 <input 
                   v-model="regForm.alt_contact_name" 
@@ -324,7 +324,7 @@
               <div>
                 <label class="block text-[11px] font-semibold text-gray-300 mb-1">
                   <span class="text-emerald-400 font-mono font-bold mr-1">7.</span>
-                  Alternative Contact Phone <span class="text-rose-400">*</span>
+                  {{ $t('auth.altPhone') }} <span class="text-rose-400">*</span>
                 </label>
                 <input 
                   v-model="regForm.alt_phone" 
@@ -344,14 +344,14 @@
               @click="currentStep = 1"
               class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-gray-300 text-xs font-semibold rounded-xl transition cursor-pointer min-h-[44px] flex items-center justify-center"
             >
-              &larr; Back
+              &larr; {{ $t('auth.backBtn') }}
             </button>
             <button 
               type="button" 
               @click="goToStep(3)"
               class="px-6 py-2.5 bg-[#22C55E] hover:bg-[#16A34A] text-[#050A07] hover:text-white font-bold shadow-[0_0_20px_rgba(34,197,94,0.3)] text-white font-bold text-xs rounded-xl shadow-lg transition flex items-center justify-center gap-2 cursor-pointer min-h-[44px]"
             >
-              <span>Next: Location & GPS</span>
+              <span>{{ $t('auth.nextLocation') }}</span>
               <span>&rarr;</span>
             </button>
           </div>
@@ -363,7 +363,7 @@
         <div v-if="regForm.role === 'seller' && currentStep === 3" class="space-y-3 animate-fade-in">
           <div class="p-3 bg-cyan-950/30 border border-cyan-500/20 rounded-xl text-[11px] text-cyan-300 flex items-center gap-2">
             <span>📍</span>
-            <span>Where should our electric collection vehicles pick up your oil containers?</span>
+            <span>{{ $t('auth.step3Info') }}</span>
           </div>
 
           <!-- Street Address, City, Pincode -->
@@ -371,7 +371,7 @@
             <div>
               <label class="block text-[11px] font-semibold text-gray-300 mb-1">
                 <span class="text-emerald-400 font-mono font-bold mr-1">2.</span>
-                Physical Street Address <span class="text-rose-400">*</span>
+                {{ $t('auth.pickupAddressLabel') }} <span class="text-rose-400">*</span>
               </label>
               <input 
                 v-model="regForm.address" 
@@ -384,7 +384,7 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label class="block text-[11px] font-semibold text-gray-300 mb-1">City / Region <span class="text-rose-400">*</span></label>
+                <label class="block text-[11px] font-semibold text-gray-300 mb-1">{{ $t('auth.cityLabel') }} <span class="text-rose-400">*</span></label>
                 <input 
                   v-model="regForm.city" 
                   type="text" 
@@ -395,7 +395,7 @@
               </div>
 
               <div>
-                <label class="block text-[11px] font-semibold text-gray-300 mb-1">Pincode <span class="text-rose-400">*</span></label>
+                <label class="block text-[11px] font-semibold text-gray-300 mb-1">{{ $t('auth.pincodeLabel') }} <span class="text-rose-400">*</span></label>
                 <input 
                   v-model="regForm.pincode" 
                   type="text" 
@@ -407,7 +407,7 @@
             </div>
 
             <div>
-              <label class="block text-[11px] font-semibold text-gray-300 mb-1">Preferred Pickup Window</label>
+              <label class="block text-[11px] font-semibold text-gray-300 mb-1">{{ $t('auth.pickupWindow') }}</label>
               <select 
                 v-model="regForm.pickup_preference" 
                 class="w-full bg-[#060A08] border border-white/10 focus:border-[#22C55E] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#22C55E] focus:ring-1 focus:ring-[#22C55E]/30"
@@ -428,7 +428,7 @@
                 <span class="text-emerald-400 font-bold text-xs">📍</span>
                 <span class="text-[11px] font-bold text-white">
                   <span class="text-emerald-400 font-mono mr-1">11.</span>
-                  Kitchen GPS Spot Coordinates <span class="text-rose-400">*</span>
+                  {{ $t('auth.gpsTitle') }} <span class="text-rose-400">*</span>
                 </span>
               </div>
               <button 
@@ -438,7 +438,7 @@
                 class="px-2.5 py-1 bg-emerald-600/20 hover:bg-emerald-600 text-emerald-300 hover:text-white rounded-lg text-[10px] font-bold transition flex items-center gap-1 border border-emerald-500/30 cursor-pointer active:scale-95"
               >
                 <span>{{ detectingGps ? '📡' : '🎯' }}</span>
-                <span>{{ detectingGps ? 'Locking GPS...' : 'Detect Exact Spot' }}</span>
+                <span>{{ detectingGps ? $t('auth.lockingGps') : $t('auth.detectSpot') }}</span>
               </button>
             </div>
 
@@ -471,7 +471,7 @@
           </div>
 
           <div class="p-3 rounded-xl bg-slate-950 border border-white/10 text-[11px] text-gray-400 leading-relaxed">
-            🔒 By submitting, your FBO application is logged into our KYC verification queue. A waterproof physical site QR sticker will be assigned upon approval.
+            🔒 {{ $t('auth.kycNotice') }}
           </div>
 
           <!-- Step 3 Actions -->
@@ -481,14 +481,14 @@
               @click="currentStep = 2"
               class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-gray-300 text-xs font-semibold rounded-xl transition cursor-pointer min-h-[44px] flex items-center justify-center"
             >
-              &larr; Back
+              &larr; {{ $t('auth.backBtn') }}
             </button>
             <button 
               type="submit" 
               :disabled="loading"
               class="px-6 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-bold text-xs rounded-xl shadow-lg transition disabled:opacity-50 cursor-pointer min-h-[44px] flex items-center justify-center"
             >
-              {{ loading ? 'Submitting Application...' : 'Complete & Submit Application' }}
+              {{ loading ? $t('auth.submitting') : $t('auth.submitApplication') }}
             </button>
           </div>
         </div>
@@ -499,7 +499,7 @@
         <div v-if="regForm.role === 'agent'" class="space-y-3 animate-fade-in">
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label class="block text-[11px] font-semibold text-gray-300 mb-1">Full Legal Name <span class="text-rose-400">*</span></label>
+              <label class="block text-[11px] font-semibold text-gray-300 mb-1">{{ $t('auth.agentName') }} <span class="text-rose-400">*</span></label>
               <input 
                 v-model="regForm.name" 
                 type="text" 
@@ -522,7 +522,7 @@
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label class="block text-[11px] font-semibold text-gray-300 mb-1">Phone Number <span class="text-rose-400">*</span></label>
+              <label class="block text-[11px] font-semibold text-gray-300 mb-1">{{ $t('auth.agentPhone') }} <span class="text-rose-400">*</span></label>
               <input 
                 v-model="regForm.phone" 
                 type="text" 
@@ -545,7 +545,7 @@
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label class="block text-[11px] font-semibold text-gray-300 mb-1">Vehicle Registration No. <span class="text-rose-400">*</span></label>
+              <label class="block text-[11px] font-semibold text-gray-300 mb-1">{{ $t('auth.agentVehicle') }} <span class="text-rose-400">*</span></label>
               <input 
                 v-model="regForm.vehicle_no" 
                 type="text" 
@@ -555,7 +555,7 @@
               />
             </div>
             <div>
-              <label class="block text-[11px] font-semibold text-gray-300 mb-1">Operating City / Base <span class="text-rose-400">*</span></label>
+              <label class="block text-[11px] font-semibold text-gray-300 mb-1">{{ $t('auth.agentCity') }} <span class="text-rose-400">*</span></label>
               <input 
                 v-model="regForm.city" 
                 type="text" 
@@ -571,7 +571,7 @@
             :disabled="loading"
             class="w-full py-3 bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs rounded-xl shadow-lg transition disabled:opacity-50 cursor-pointer"
           >
-            {{ loading ? 'Submitting Application...' : 'Register Field Officer Account' }}
+            {{ loading ? $t('auth.submitting') : $t('auth.agentSubmit') }}
           </button>
         </div>
       </form>
@@ -581,7 +581,9 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
+import { useI18n } from '../services/i18n';
+const { t } = useI18n();
 
 const props = defineProps({
   initialMode: {
@@ -598,11 +600,11 @@ const errorMessage = ref('');
 
 // Multi-Step Wizard State for FBO Registration
 const currentStep = ref(1);
-const stepTitles = [
-  'Identity & Credentials',
-  'Regulatory & Banking Compliance',
-  'Pickup Location & GPS Setup'
-];
+const stepTitles = computed(() => [
+  t('auth.step1Title'),
+  t('auth.step2Title'),
+  t('auth.step3Title')
+]);
 
 function goToStep(step) {
   errorMessage.value = '';

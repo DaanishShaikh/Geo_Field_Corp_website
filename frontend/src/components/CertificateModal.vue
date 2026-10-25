@@ -191,7 +191,7 @@
           class="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer shadow-xs min-h-[44px]"
         >
           <span>🖨️</span>
-          <span>Download & Print Certificate</span>
+          <span>{{ ('seller.downloadCert') }}</span>
         </button>
       </div>
     </div>

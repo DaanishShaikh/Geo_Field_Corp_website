@@ -3,13 +3,13 @@
     <!-- Header Stats & Offline Mode Bar -->
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
       <div class="rounded-2xl p-4 sm:p-5 bg-gradient-to-br from-[#0E1B14] via-[#0A130E] to-[#080E0B] border border-white/10 hover:border-[#22C55E]/30 transition-all duration-300 relative overflow-hidden shadow-xl">
-        <div class="text-[10px] sm:text-xs font-semibold text-gray-400 mb-1 truncate">ASSIGNED STOPS</div>
+        <div class="text-[10px] sm:text-xs font-semibold text-gray-400 mb-1 truncate">{{ $t('agent.assignedStops') }}</div>
         <div class="text-xl sm:text-2xl font-display font-extrabold text-white">{{ stats.total_assigned_stops || 0 }}</div>
         <div class="text-[10px] sm:text-[11px] text-emerald-400 mt-1.5 sm:mt-2 truncate">{{ stats.visited_stops || 0 }} visited today</div>
       </div>
 
       <div class="rounded-2xl p-4 sm:p-5 bg-gradient-to-br from-[#0E1B14] via-[#0A130E] to-[#080E0B] border border-white/10 hover:border-[#22C55E]/30 transition-all duration-300 relative overflow-hidden shadow-xl">
-        <div class="text-[10px] sm:text-xs font-semibold text-gray-400 mb-1 truncate">OPEN RECEIPTS</div>
+        <div class="text-[10px] sm:text-xs font-semibold text-gray-400 mb-1 truncate">{{ $t('agent.openReceipts') }}</div>
         <div class="text-xl sm:text-2xl font-display font-extrabold text-[#F59E0B]">{{ stats.open_receipts_count || 0 }}</div>
         <div class="text-[10px] sm:text-[11px] text-gray-400 mt-1.5 sm:mt-2 truncate">Ready for collection</div>
       </div>
@@ -17,7 +17,7 @@
       <div class="rounded-2xl p-4 sm:p-5 bg-gradient-to-br from-[#0E1B14] via-[#0A130E] to-[#080E0B] border border-white/10 hover:border-[#22C55E]/30 transition-all duration-300 relative overflow-hidden shadow-xl flex flex-col justify-between">
         <div>
           <div class="flex items-center justify-between text-[10px] sm:text-xs font-semibold text-gray-400 mb-1">
-            <span>VEHICLE & GPS</span>
+            <span>{{ $t('agent.vehicleGps') }}</span>
             <span v-if="gpsSynced" class="text-[9px] sm:text-[10px] text-emerald-400 font-mono">Synced ✓</span>
           </div>
           <div class="text-base sm:text-xl font-bold font-mono text-cyan-300 truncate">{{ agent.agent_profile?.vehicle_no || 'EV-COLLECTOR' }}</div>
@@ -34,7 +34,7 @@
             class="w-full py-1.5 px-2 bg-cyan-600/30 hover:bg-cyan-600 text-cyan-200 hover:text-white rounded-lg text-[9px] sm:text-[10px] font-bold transition flex items-center justify-center gap-1 border border-cyan-500/30 shadow active:scale-95 min-h-[36px] cursor-pointer"
           >
             <span>{{ syncingGps ? '📡' : '🎯' }}</span>
-            <span class="truncate">{{ syncingGps ? 'Acquiring...' : 'Broadcast GPS' }}</span>
+            <span class="truncate">{{ syncingGps ? $t('agent.acquiringGps') : $t('agent.broadcastGps') }}</span>
           </button>
         </div>
       </div>
@@ -44,7 +44,7 @@
         class="rounded-2xl border p-3.5 sm:p-5 shadow-lg flex flex-col justify-between"
       >
         <div>
-          <div class="text-[10px] sm:text-xs font-semibold text-gray-400 mb-1 truncate">OFFLINE QUEUE</div>
+          <div class="text-[10px] sm:text-xs font-semibold text-gray-400 mb-1 truncate">{{ $t('agent.offlineQueue') }}</div>
           <div class="text-xl sm:text-2xl font-display font-extrabold text-white">{{ offlineQueue.length }}</div>
         </div>
         <div class="flex items-center gap-1.5 sm:gap-2 mt-2">
@@ -69,8 +69,8 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <!-- QR Scanner Component -->
       <QrScanner 
-        title="Field QR Scanner"
-        subtitle="1. Scan Site QR to authenticate FBO -> 2. Scan Receipt QR to settle"
+        :title="$t('agent.scannerTitle')"
+        :subtitle="$t('agent.scannerSubtitle')"
         :presets="qrPresets"
         @scanned="handleQrScanned"
       />
@@ -83,8 +83,8 @@
               ⚡
             </div>
             <div>
-              <h2 class="text-sm font-bold text-white">Log Measurements & Settle</h2>
-              <p class="text-xs text-gray-400">Strict validation: Volume & TPC % bounded</p>
+              <h2 class="text-sm font-bold text-white">{{ $t('agent.logSettleTitle') }}</h2>
+              <p class="text-xs text-gray-400">{{ $t('agent.logSettleSubtitle') }}</p>
             </div>
           </div>
           <span 

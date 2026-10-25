@@ -8,7 +8,7 @@
         </div>
         <div class="min-w-0">
           <div class="text-xs sm:text-sm font-bold text-white flex flex-wrap items-center gap-1.5 sm:gap-2">
-            <span>GeoField Super Admin Command Center</span>
+            <span>{{ $t('admin.commandCenter') }}</span>
             <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">System Live</span>
           </div>
           <div class="text-[11px] sm:text-xs text-gray-400 truncate">Total System Oversight: <span class="text-gray-200 font-semibold">{{ approvedSellers.length }} Kitchens</span> &bull; <span class="text-gray-200 font-semibold">{{ activeAgents.length }} Fleet Agents</span></div>
@@ -25,25 +25,25 @@
     <!-- Super Admin Header Stats -->
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
       <div class="rounded-2xl p-4 sm:p-5 bg-gradient-to-br from-[#0E1B14] via-[#0A130E] to-[#080E0B] border border-white/10 hover:border-[#22C55E]/30 transition-all duration-300 relative overflow-hidden shadow-xl">
-        <div class="text-[10px] sm:text-xs font-semibold text-gray-400 mb-1">PENDING ONBOARDING</div>
+        <div class="text-[10px] sm:text-xs font-semibold text-gray-400 mb-1">{{ $t('admin.pendingApprovals') }}</div>
         <div class="text-xl sm:text-2xl font-display font-extrabold text-[#F59E0B]">{{ stats.pending_approvals_count || 0 }}</div>
         <div class="text-[10px] sm:text-[11px] text-gray-400 mt-1.5 sm:mt-2">Sellers & Agents awaiting review</div>
       </div>
 
       <div class="rounded-2xl p-4 sm:p-5 bg-gradient-to-br from-[#0E1B14] via-[#0A130E] to-[#080E0B] border border-white/10 hover:border-[#22C55E]/30 transition-all duration-300 relative overflow-hidden shadow-xl">
-        <div class="text-[10px] sm:text-xs font-semibold text-gray-400 mb-1">TOTAL UCO COLLECTED</div>
+        <div class="text-[10px] sm:text-xs font-semibold text-gray-400 mb-1">{{ $t('admin.totalCollected') }}</div>
         <div class="text-xl sm:text-2xl font-display font-extrabold text-white">{{ stats.total_volume_collected_liters || 0 }} L</div>
         <div class="text-[10px] sm:text-[11px] text-emerald-400 mt-1.5 sm:mt-2">Platform-wide settled volume</div>
       </div>
 
       <div class="rounded-2xl p-4 sm:p-5 bg-gradient-to-br from-[#0E1B14] via-[#0A130E] to-[#080E0B] border border-white/10 hover:border-[#22C55E]/30 transition-all duration-300 relative overflow-hidden shadow-xl">
-        <div class="text-[10px] sm:text-xs font-semibold text-gray-400 mb-1">FLAGGED / DISPUTED</div>
+        <div class="text-[10px] sm:text-xs font-semibold text-gray-400 mb-1">{{ $t('admin.flaggedDisputed') }}</div>
         <div class="text-xl sm:text-2xl font-black text-rose-400">{{ stats.flagged_receipts_count || 0 }}</div>
         <div class="text-[10px] sm:text-[11px] text-gray-400 mt-1.5 sm:mt-2">Audited errors & discrepancies</div>
       </div>
 
       <div class="rounded-2xl p-4 sm:p-5 bg-gradient-to-br from-[#0E1B14] via-[#0A130E] to-[#080E0B] border border-white/10 hover:border-[#22C55E]/30 transition-all duration-300 relative overflow-hidden shadow-xl">
-        <div class="text-[10px] sm:text-xs font-semibold text-gray-400 mb-1">ACTIVE FLEET AGENTS</div>
+        <div class="text-[10px] sm:text-xs font-semibold text-gray-400 mb-1">{{ $t('admin.activeAgents') }}</div>
         <div class="text-xl sm:text-2xl font-display font-extrabold text-[#38BDF8]">{{ stats.active_agents_count || 0 }}</div>
         <div class="text-[10px] sm:text-[11px] text-gray-400 mt-1.5 sm:mt-2">EV collection trucks deployed</div>
       </div>
@@ -59,7 +59,7 @@
               ⏳
             </div>
             <div>
-              <h2 class="text-sm font-bold text-white">Onboarding Approvals Queue</h2>
+              <h2 class="text-sm font-bold text-white">{{ $t('admin.approvalsQueue') }}</h2>
               <p class="text-xs text-gray-400">Review Seller (FBO) and Field Agent sign-ups</p>
             </div>
           </div>
@@ -135,7 +135,7 @@
               💳
             </div>
             <div>
-              <h2 class="text-sm font-bold text-white">Dynamic Pricing Engine (Rate Card)</h2>
+              <h2 class="text-sm font-bold text-white">{{ $t('admin.rateCardTitle') }}</h2>
               <p class="text-xs text-gray-400">Manage base rates and quality-based TPC incentives</p>
             </div>
           </div>

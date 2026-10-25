@@ -8,7 +8,7 @@
     <div class="space-y-5">
       <!-- Mobile Close Row -->
       <div class="flex items-center justify-between lg:hidden pb-1 border-b border-white/10">
-        <span class="text-xs font-bold text-gray-400 uppercase tracking-wider font-mono">Navigation Menu</span>
+        <span class="text-xs font-bold text-gray-400 uppercase tracking-wider font-mono">{{ $t('nav.navigationMenu') }}</span>
         <button 
           @click="$emit('close')"
           class="p-2 rounded-xl text-gray-400 hover:text-white hover:bg-white/[0.06] min-h-[40px] min-w-[40px] flex items-center justify-center cursor-pointer transition-colors"
@@ -43,7 +43,7 @@
       <!-- Navigation Links -->
       <div class="space-y-1">
         <div class="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em] font-mono px-3 mb-2">
-          Management
+          {{ $t('nav.management') }}
         </div>
         <nav class="space-y-1">
           <button 
@@ -54,7 +54,7 @@
             <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
             </svg>
-            Dashboard
+            {{ $t('nav.dashboard') }}
           </button>
 
           <button 
@@ -65,7 +65,7 @@
             <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
             </svg>
-            Receipt Ledger & Certs
+            {{ $t('nav.receiptLedgerCerts') }}
           </button>
 
           <button 
@@ -77,7 +77,7 @@
             <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path>
             </svg>
-            {{ user?.role === 'admin' ? 'Fleet GPS & Dynamic Routing' : 'Daily Collection Manifest' }}
+            {{ user?.role === 'admin' ? $t('nav.fleetGpsDynamicRouting') : $t('nav.dailyCollectionManifest') }}
           </button>
 
           <button 
@@ -89,7 +89,7 @@
             <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
-            Append-Only Audit Trail
+            {{ $t('nav.appendOnlyAuditTrail') }}
           </button>
         </nav>
       </div>
@@ -97,11 +97,17 @@
       <!-- Regulatory Notice & Compliance Standard -->
       <div class="p-3.5 rounded-2xl bg-[#0E1B14]/80 border border-[#22C55E]/20 text-[11px] text-gray-300 space-y-1.5">
         <div class="font-bold text-[#22C55E] flex items-center gap-1.5 font-display">
-          <span>🛡️</span> FSSAI RUCO Compliant
+          <span>🛡️</span> {{ $t('nav.fssaiRucoCompliant') }}
         </div>
         <p class="text-[10px] text-gray-400 leading-relaxed font-sans">
-          Every collection is logged with quality parameters (TPC %) and tamper-evident SHA-256 integrity verification.
+          {{ $t('nav.rucoComplianceNotice') }}
         </p>
+      </div>
+
+      <!-- Language Switcher in Sidebar (Visible on mobile / small devices) -->
+      <div class="lg:hidden p-3 rounded-2xl bg-white/[0.03] border border-white/10 flex items-center justify-between">
+        <span class="text-xs text-gray-400 font-medium">Language / भाषा</span>
+        <LanguageSwitcher />
       </div>
     </div>
 
@@ -114,6 +120,11 @@
 </template>
 
 <script setup>
+import LanguageSwitcher from './LanguageSwitcher.vue';
+import { useI18n } from '../services/i18n';
+
+const { t } = useI18n();
+
 defineProps({
   user: Object,
   currentView: String,
@@ -127,9 +138,9 @@ function navigate(view) {
 }
 
 function roleBadge(role) {
-  if (role === 'admin') return 'Super Admin';
-  if (role === 'agent') return 'Field Agent';
-  if (role === 'seller') return 'FBO Partner';
+  if (role === 'admin') return t('nav.superAdmin');
+  if (role === 'agent') return t('nav.fieldExecutive');
+  if (role === 'seller') return t('nav.foodBusinessOperator');
   return role;
 }
 </script>

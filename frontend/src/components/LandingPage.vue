@@ -13,10 +13,10 @@
 
       <!-- Center: Clean Navigation Links -->
       <nav id="landingNavLinks" class="hidden xl:flex items-center gap-7 font-sans text-xs font-semibold tracking-[0.14em] uppercase text-gray-300">
-        <a href="#threatSection" data-nav-sec="threatSection" class="nav-scroll-link hover:text-[#22C55E] transition">THE CRISIS</a>
-        <a href="#solutionSection" data-nav-sec="solutionSection" class="nav-scroll-link hover:text-[#22C55E] transition">THE PROCESS</a>
-        <a href="#impactSection" data-nav-sec="impactSection" class="nav-scroll-link hover:text-[#22C55E] transition">IMPACT</a>
-        <a href="#contactSection" data-nav-sec="contactSection" class="nav-scroll-link hover:text-[#22C55E] transition">CONTACT</a>
+        <a href="#threatSection" data-nav-sec="threatSection" class="nav-scroll-link hover:text-[#22C55E] transition">{{ $t('nav.theCrisis') }}</a>
+        <a href="#solutionSection" data-nav-sec="solutionSection" class="nav-scroll-link hover:text-[#22C55E] transition">{{ $t('nav.theProcess') }}</a>
+        <a href="#impactSection" data-nav-sec="impactSection" class="nav-scroll-link hover:text-[#22C55E] transition">{{ $t('nav.impact') }}</a>
+        <a href="#contactSection" data-nav-sec="contactSection" class="nav-scroll-link hover:text-[#22C55E] transition">{{ $t('nav.contact') }}</a>
       </nav>
 
       <!-- Right: Distinctly Differentiated Role Previews (Seller Emerald vs Customer Sky-Cyan) + SIGN IN + JOIN NETWORK -->
@@ -29,7 +29,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 21h18M5 21V7l8-4v18m6 0V11l-6-4"/>
               </svg>
             </span>
-            <span>Seller Kitchen</span>
+            <span>{{ $t('nav.sellerKitchen') }}</span>
             <span class="px-1.5 py-0.5 rounded bg-[#22C55E]/20 text-[10px] font-bold">₹40/L</span>
           </button>
           <button id="navPreviewCustomerBtn" type="button" class="touch-reactive px-3.5 py-2 rounded-xl bg-[#38BDF8]/15 hover:bg-[#38BDF8] text-[#38BDF8] hover:text-[#050A07] border border-[#38BDF8]/40 font-display font-bold tracking-tight transition-all flex items-center gap-2 shadow-sm">
@@ -38,11 +38,12 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
               </svg>
             </span>
-            <span>Buyer Refinery</span>
+            <span>{{ $t('nav.buyerRefinery') }}</span>
             <span class="px-1.5 py-0.5 rounded bg-[#38BDF8]/20 text-[10px] font-bold">ISCC</span>
           </button>
         </div>
 
+        <LanguageSwitcher />
         <button id="modePortalBtn" type="button" @click="$emit('open-login')" class="font-mono text-[11px] tracking-[0.18em] uppercase text-gray-300 hover:text-[#22C55E] transition cursor-pointer">
           SIGN IN
         </button>
@@ -51,7 +52,7 @@
         </button>
 
         <button id="navRegisterBtn" type="button" @click="$emit('open-register')" class="btn-green-pill touch-reactive px-4 sm:px-5 py-2.5 rounded-full font-mono text-[11px] sm:text-xs font-bold tracking-[0.14em] uppercase flex items-center gap-1.5 cursor-pointer">
-          <span>JOIN NETWORK</span>
+          <span>{{ $t('common.joinNetwork') }}</span>
           <span>&#8599;</span>
         </button>
       </div>
@@ -75,21 +76,21 @@
           <div class="lg:col-span-7 space-y-7">
             <div style="--delay: 40ms" class="reveal reveal-up inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-white/[0.03] border border-white/15 font-mono text-[11px] tracking-[0.22em] uppercase text-[#4ADE80]">
               <span class="w-3.5 h-[1.5px] bg-[#22C55E]"></span>
-              <span>RUCO AGGREGATION NETWORK &mdash; INDIA</span>
+              <span>{{ $t('hero.badge') }}</span>
             </div>
 
             <!-- Razor-Sharp High-Clarity Headline (No Underline, No Shadow) -->
             <div id="heroSpatialChamber" class="hero-spatial-chamber">
               <h1 id="heroKineticHeadline" class="hero-kinetic-stage select-none font-display text-4xl sm:text-5xl lg:text-[4.55rem] font-extrabold tracking-[-0.025em] leading-[1.08]">
-                <span style="--line-delay: 80ms" class="hero-pop-line is-popped"><span class="hero-solid-white">Stop the</span></span>
-                <span style="--line-delay: 260ms" class="hero-pop-line is-popped mt-0.5"><span class="hero-toxic-highlight">Toxic Cycle.</span></span>
-                <span style="--line-delay: 480ms" class="hero-pop-line is-popped mt-2 sm:mt-3"><span class="hero-solid-white">Start the</span></span>
-                <span style="--line-delay: 680ms" class="hero-pop-line is-popped mt-0.5"><span class="hero-green-highlight">Green Revenue.</span></span>
+                <span style="--line-delay: 80ms" class="hero-pop-line is-popped"><span class="hero-solid-white">{{ $t('hero.stopThe') }}</span></span>
+                <span style="--line-delay: 260ms" class="hero-pop-line is-popped mt-0.5"><span class="hero-toxic-highlight">{{ $t('hero.toxicCycle') }}</span></span>
+                <span style="--line-delay: 480ms" class="hero-pop-line is-popped mt-2 sm:mt-3"><span class="hero-solid-white">{{ $t('hero.startThe') }}</span></span>
+                <span style="--line-delay: 680ms" class="hero-pop-line is-popped mt-0.5"><span class="hero-green-highlight">{{ $t('hero.greenRevenue') }}</span></span>
               </h1>
             </div>
 
             <p style="--delay: 160ms" class="reveal reveal-up text-base sm:text-lg text-gray-300 leading-relaxed max-w-xl font-normal">
-              Join India’s smartest RUCO aggregation network. We take the hassle out of FSSAI compliance with instant QR-based disposal, cluster-based pickups, and real-time environmental tracking.
+              {{ $t('hero.subtitle') }}
             </p>
 
             <!-- Hero Dual Role Preview Cards & Registration CTA (Visually Distinct Seller vs Customer Options) -->
@@ -105,11 +106,11 @@
                     </div>
                     <div>
                       <div class="flex items-center gap-1.5">
-                        <span class="px-2 py-0.5 rounded-md bg-[#22C55E]/20 text-[#4ADE80] font-sans text-[10px] font-bold uppercase tracking-wider">For Kitchens</span>
+                        <span class="px-2 py-0.5 rounded-md bg-[#22C55E]/20 text-[#4ADE80] font-sans text-[10px] font-bold uppercase tracking-wider">{{ $t('hero.forKitchens') }}</span>
                         <span class="text-[#FDE68A] font-sans text-[11px] font-bold">₹40/L Avg</span>
                       </div>
-                      <div class="font-display font-extrabold text-base text-white mt-0.5">Seller Dashboard</div>
-                      <div class="font-sans text-xs text-gray-300">Schedule QR Pickups &amp; NEFT</div>
+                      <div class="font-display font-extrabold text-base text-white mt-0.5">{{ $t('hero.sellerDashboard') }}</div>
+                      <div class="font-sans text-xs text-gray-300">{{ $t('hero.schedulePickups') }}</div>
                     </div>
                   </div>
                   <span class="w-7 h-7 rounded-full bg-[#22C55E]/20 text-[#4ADE80] flex items-center justify-center font-bold text-sm group-hover:translate-x-0.5 transition-transform shrink-0">&#8599;</span>
@@ -1107,8 +1108,8 @@
         </div>
 
         <h2 style="--delay: 60ms" class="reveal reveal-pop font-display text-4xl sm:text-6xl lg:text-[4.25rem] font-extrabold tracking-tight leading-[1.05]">
-          <span class="block text-white">Ready to clean up</span>
-          <span class="block text-white">your kitchen &mdash; and</span>
+          <span class="block text-white">{{ $t('join.title1') }}</span>
+          <span class="block text-white">{{ $t('join.title2') }}</span>
           <span class="block text-[#22C55E]">your conscience?</span>
         </h2>
 
@@ -1118,7 +1119,7 @@
 
         <div style="--delay: 180ms" class="reveal reveal-pop pt-3">
           <button id="footerRegisterBtn" type="button" @click="$emit('open-register')" class="btn-green-pill touch-reactive px-10 py-4 rounded-full font-mono text-xs sm:text-sm font-bold tracking-[0.2em] uppercase inline-flex items-center gap-3 cursor-pointer">
-            <span>REGISTER NOW</span>
+            <span>{{ $t('join.registerNow') }}</span>
             <span>&#8599;</span>
           </button>
         </div>
@@ -2185,6 +2186,9 @@
 
 <script setup>
 import { onMounted, onUnmounted } from 'vue';
+import LanguageSwitcher from './LanguageSwitcher.vue';
+import { useI18n } from '../services/i18n';
+const { t, currentLang } = useI18n();
 
 const emit = defineEmits(['open-register', 'open-login']);
 
@@ -3437,13 +3441,22 @@ onMounted(() => {
       function openDiseaseModal(diseaseId) {
         const data = diseaseData[diseaseId];
         if (!data || !diseaseModal) return;
-        document.getElementById('modalDiseaseCode').textContent = data.code;
-        document.getElementById('modalDiseaseTitle').textContent = data.title;
+        const diseaseInfo = currentLang.value === 'hi' ? {
+          code: t(`crisis.diseases.${diseaseId}.code`),
+          title: `${t(`crisis.diseases.${diseaseId}.name`)} (${t(`crisis.diseases.${diseaseId}.desc`)})`,
+          mechanism: t(`crisis.diseases.${diseaseId}.mechanism`),
+          biomarker: t(`crisis.diseases.${diseaseId}.biomarker`),
+          tpc: t(`crisis.diseases.${diseaseId}.tpc`),
+          prevention: t(`crisis.diseases.${diseaseId}.prevention`),
+        } : data;
+
+        document.getElementById('modalDiseaseCode').textContent = diseaseInfo.code || data.code;
+        document.getElementById('modalDiseaseTitle').textContent = diseaseInfo.title || data.title;
         document.getElementById('modalDiseaseIconContainer').innerHTML = data.icon;
-        document.getElementById('modalDiseaseMechanism').textContent = data.mechanism;
-        document.getElementById('modalDiseaseBiomarker').textContent = data.biomarker;
-        document.getElementById('modalDiseaseTpc').textContent = data.tpc;
-        document.getElementById('modalDiseasePrevention').textContent = data.prevention;
+        document.getElementById('modalDiseaseMechanism').textContent = diseaseInfo.mechanism || data.mechanism;
+        document.getElementById('modalDiseaseBiomarker').textContent = diseaseInfo.biomarker || data.biomarker;
+        document.getElementById('modalDiseaseTpc').textContent = diseaseInfo.tpc || data.tpc;
+        document.getElementById('modalDiseasePrevention').textContent = diseaseInfo.prevention || data.prevention;
         diseaseModal.classList.remove('hidden');
         diseaseModal.classList.add('flex');
         syncModalBodyScrollLock();

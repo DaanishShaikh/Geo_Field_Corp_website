@@ -20,7 +20,7 @@
         />
         <div class="min-w-0 hidden md:block">
           <span class="geo-badge-emerald text-[9px] uppercase tracking-[0.14em] font-mono px-2 py-0.5">
-            RUCO National Network
+            {{ $t('nav.rucoNetwork') }}
           </span>
         </div>
       </a>
@@ -37,8 +37,11 @@
           :class="isOnline ? 'bg-[#22C55E] shadow-[0_0_8px_#22C55E]' : 'bg-[#F59E0B] shadow-[0_0_8px_#F59E0B] animate-pulse'"
           class="w-2 h-2 rounded-full shrink-0"
         ></span>
-        <span class="hidden sm:inline">{{ isOnline ? 'Network Online' : `${offlineCount} Pending Sync` }}</span>
+        <span class="hidden sm:inline">{{ isOnline ? $t('common.online') : `${offlineCount} ${$t('common.syncPending')}` }}</span>
       </div>
+
+      <!-- Language Selector -->
+      <LanguageSwitcher />
 
       <!-- Authenticated User Menu -->
       <div v-if="user" class="flex items-center gap-2 sm:gap-3">
@@ -52,7 +55,7 @@
           @click="$emit('logout')" 
           class="geo-btn-secondary px-3.5 py-1.5 text-xs font-semibold rounded-xl min-h-[40px] flex items-center justify-center cursor-pointer"
         >
-          Sign Out
+          {{ $t('common.signOut') }}
         </button>
       </div>
 
@@ -62,13 +65,13 @@
           @click="$emit('open-auth', 'login')" 
           class="geo-btn-secondary px-3.5 py-1.5 text-xs font-semibold rounded-xl min-h-[40px] flex items-center justify-center cursor-pointer"
         >
-          Sign In
+          {{ $t('common.signIn') }}
         </button>
         <button 
           @click="$emit('open-auth', 'register')" 
           class="btn-green-pill px-4 py-2 text-xs font-bold rounded-full shadow-[0_0_20px_rgba(34,197,94,0.3)] transition-all min-h-[40px] flex items-center justify-center cursor-pointer whitespace-nowrap"
         >
-          Register FBO
+          {{ $t('common.registerFBO') }}
         </button>
       </div>
     </div>
@@ -76,6 +79,11 @@
 </template>
 
 <script setup>
+import LanguageSwitcher from './LanguageSwitcher.vue';
+import { useI18n } from '../services/i18n';
+
+const { t } = useI18n();
+
 defineProps({
   user: Object,
   isOnline: Boolean,
@@ -84,9 +92,9 @@ defineProps({
 defineEmits(['toggle-sidebar', 'logout', 'open-auth']);
 
 function userRoleLabel(role) {
-  if (role === 'admin') return 'Super Admin';
-  if (role === 'agent') return 'Field Executive';
-  if (role === 'seller') return 'Food Business Operator';
+  if (role === 'admin') return t('nav.superAdmin');
+  if (role === 'agent') return t('nav.fieldExecutive');
+  if (role === 'seller') return t('nav.foodBusinessOperator');
   return role;
 }
 </script>
