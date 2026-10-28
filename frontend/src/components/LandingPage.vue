@@ -288,9 +288,10 @@
                   data-receipt="#GF-0421"
                   data-co2="31.1"
                   data-i18n="cluster_btn_1"
-                  class="hero-cluster-pill touch-reactive px-3 py-2 rounded-xl bg-[#22C55E]/20 border border-[#22C55E]/55 font-mono text-[10px] text-[#4ADE80] font-semibold transition text-center"
+                  class="hero-cluster-pill touch-reactive flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-[#22C55E]/20 border border-[#22C55E]/55 font-mono text-[10px] text-[#4ADE80] font-semibold transition text-left"
                 >
-                  04 Andheri
+                  <img src="/images/kitchen.jpeg" alt="04 Andheri" class="w-6 h-6 rounded-md object-cover border border-[#22C55E]/40 shrink-0" />
+                  <span class="truncate">04 Andheri</span>
                 </button>
                 <button
                   type="button"
@@ -303,9 +304,10 @@
                   data-receipt="#GF-0819"
                   data-co2="48.2"
                   data-i18n="cluster_btn_2"
-                  class="hero-cluster-pill touch-reactive px-3 py-2 rounded-xl bg-white/[0.04] border border-white/10 font-mono text-[10px] text-gray-300 hover:text-white transition text-center"
+                  class="hero-cluster-pill touch-reactive flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-white/[0.04] border border-white/10 font-mono text-[10px] text-gray-300 hover:text-white transition text-left"
                 >
-                  01 Lower Parel
+                  <img src="/images/burner.jpeg" alt="01 Lower Parel" class="w-6 h-6 rounded-md object-cover border border-white/20 shrink-0" />
+                  <span class="truncate">01 Lower Parel</span>
                 </button>
                 <button
                   type="button"
@@ -318,9 +320,10 @@
                   data-receipt="#GF-1104"
                   data-co2="64.5"
                   data-i18n="cluster_btn_3"
-                  class="hero-cluster-pill touch-reactive px-3 py-2 rounded-xl bg-white/[0.04] border border-white/10 font-mono text-[10px] text-gray-300 hover:text-white transition text-center"
+                  class="hero-cluster-pill touch-reactive flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-white/[0.04] border border-white/10 font-mono text-[10px] text-gray-300 hover:text-white transition text-left"
                 >
-                  02 Pune
+                  <img src="/images/drum.jpeg" alt="02 Pune" class="w-6 h-6 rounded-md object-cover border border-white/20 shrink-0" />
+                  <span class="truncate">02 Pune</span>
                 </button>
                 <button
                   type="button"
@@ -333,9 +336,10 @@
                   data-receipt="#GF-1592"
                   data-co2="81.0"
                   data-i18n="cluster_btn_4"
-                  class="hero-cluster-pill touch-reactive px-3 py-2 rounded-xl bg-white/[0.04] border border-white/10 font-mono text-[10px] text-gray-300 hover:text-white transition text-center"
+                  class="hero-cluster-pill touch-reactive flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-white/[0.04] border border-white/10 font-mono text-[10px] text-gray-300 hover:text-white transition text-left"
                 >
-                  03 BKC Hub
+                  <img src="/images/hub.jpeg" alt="03 BKC Hub" class="w-6 h-6 rounded-md object-cover border border-white/20 shrink-0" />
+                  <span class="truncate">03 BKC Hub</span>
                 </button>
               </div>
             </div>
@@ -2665,9 +2669,11 @@ const clusterImageBank = {
           animateHeroBadges(liters, co2, receipt, cluster, imgSrc, station);
 
           document.querySelectorAll('.hero-cluster-pill').forEach(b => {
-            b.className = 'hero-cluster-pill touch-reactive px-3 py-2 rounded-xl bg-white/[0.04] border border-white/10 font-mono text-[10px] text-gray-300 hover:text-white transition text-center';
+            b.classList.remove('bg-[#22C55E]/20', 'border-[#22C55E]/55', 'text-[#4ADE80]', 'font-semibold');
+            b.classList.add('bg-white/[0.04]', 'border-white/10', 'text-gray-300');
           });
-          btn.className = 'hero-cluster-pill touch-reactive px-3 py-2 rounded-xl bg-[#22C55E]/20 border border-[#22C55E]/55 font-mono text-[10px] text-[#4ADE80] font-semibold transition text-center';
+          btn.classList.remove('bg-white/[0.04]', 'border-white/10', 'text-gray-300');
+          btn.classList.add('bg-[#22C55E]/20', 'border-[#22C55E]/55', 'text-[#4ADE80]', 'font-semibold');
         });
       });
 
@@ -4918,6 +4924,18 @@ const clusterImageBank = {
     /* ULTRA-SHARP HIGH-CLARITY HERO HEADLINE (ZERO RUNTIME FILTER JITTER)   */
     /* "Stop the Toxic Cycle. Start the Green Revenue."                      */
     /* ===================================================================== */
+    /* Razor-Sharp Ultra-Clarity Hero Headline - Zero Blur / Zero Filter Jitter */
+    .hero-spatial-chamber,
+    .hero-kinetic-stage,
+    .hero-pop-line,
+    .hero-solid-white,
+    .hero-toxic-highlight,
+    .hero-green-highlight {
+      filter: none !important;
+      -webkit-filter: none !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
     .hero-spatial-chamber {
       position: relative;
       padding: 0.25rem 0 0.5rem 0;
@@ -4933,26 +4951,17 @@ const clusterImageBank = {
     .hero-pop-line {
       display: block;
       overflow: visible;
-      opacity: 0;
-      transform: translate3d(0, 22px, 0) scale(0.975);
+      opacity: 1 !important;
+      transform: none !important;
+      filter: none !important;
+      -webkit-filter: none !important;
     }
     .hero-pop-line.is-popped {
-      animation: heroKineticPop 0.95s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-      animation-delay: var(--line-delay, 0ms);
-    }
-    @keyframes heroKineticPop {
-      0% {
-        opacity: 0;
-        transform: translate3d(0, 22px, 0) scale(0.975);
-      }
-      70% {
-        opacity: 1;
-        transform: translate3d(0, -1px, 0) scale(1.004);
-      }
-      100% {
-        opacity: 1;
-        transform: translate3d(0, 0, 0) scale(1);
-      }
+      opacity: 1 !important;
+      transform: none !important;
+      filter: none !important;
+      -webkit-filter: none !important;
+      animation: none !important;
     }
 
     @keyframes heroChromaticSweep {
