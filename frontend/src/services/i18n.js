@@ -6,7 +6,7 @@ const dictionaries = { en, hi };
 
 // Initialize persisted language with fallback to 'en'
 const initialLang = (typeof window !== 'undefined' && localStorage.getItem('geofield_lang')) || 'en';
-export const currentLang = ref(initialLang === 'hi' ? 'hi' : 'en');
+export const currentLang = ref((initialLang === 'hi' || initialLang === 'mr') ? initialLang : 'en');
 
 if (typeof document !== 'undefined') {
   document.documentElement.lang = currentLang.value;
@@ -14,11 +14,12 @@ if (typeof document !== 'undefined') {
 
 export const availableLanguages = [
   { code: 'en', label: 'English', native: 'English' },
-  { code: 'hi', label: 'Hindi', native: 'हिन्दी' }
+  { code: 'hi', label: 'Hindi', native: 'हिन्दी' },
+  { code: 'mr', label: 'Marathi', native: 'मराठी' }
 ];
 
 export function setLanguage(lang) {
-  if (lang !== 'en' && lang !== 'hi') lang = 'en';
+  if (lang !== 'en' && lang !== 'hi' && lang !== 'mr') lang = 'en';
   currentLang.value = lang;
   if (typeof window !== 'undefined') {
     localStorage.setItem('geofield_lang', lang);
@@ -30,13 +31,13 @@ export function setLanguage(lang) {
 export function t(key, params = {}) {
   if (!key) return '';
   const lang = currentLang.value;
-  const dict = dictionaries[lang] || dictionaries.en;
+  const dict = dictionaries[lang] || dictionaries.hi || dictionaries.en;
   
   // Resolve dot path in active dictionary
   const keys = key.split('.');
   let val = keys.reduce((obj, k) => (obj && obj[k] !== undefined ? obj[k] : undefined), dict);
   
-  // Fallback to English if key missing in current language
+  // Fallback to Hindi or English if key missing in current language
   if (val === undefined && lang !== 'en') {
     val = keys.reduce((obj, k) => (obj && obj[k] !== undefined ? obj[k] : undefined), dictionaries.en);
   }
@@ -69,7 +70,7 @@ export function t(key, params = {}) {
 export function useI18n() {
   return {
     currentLang,
-    isHindi: computed(() => currentLang.value === 'hi'),
+    isHindi: computed(() => currentLang.value === 'hi' || currentLang.value === 'mr'),
     availableLanguages,
     setLanguage,
     t
